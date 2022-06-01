@@ -157,7 +157,7 @@
 
   > 1 在Linux上面使用 `top` 命令进程查询 CPU100% 进程ID[pid]![linux-top](../images/linux-top.png)
   >
-  > ![](/Users/stevenobelia/Desktop/knownledges/images/linux-top.png)
+  > 
   >
   >
   > 2  使用`top -Hp 23198` 查看具体线程所占用CPU,然后将线程通过`printf "%x\n" 23208` 记录线程ID ![](../images/linux-thread-0x.jpg)
