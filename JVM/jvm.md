@@ -151,13 +151,33 @@
 
   > 回收的对象是废弃的常量及无用的类
   
-* 卡表
+* [卡表](https://blog.csdn.net/lishe9452/article/details/108215214)
 
     > jvm 进行GC的时候有一种特殊情况，比如老年代引用了新生代的对象，俗称跨代引用。这样只按照GCROOT进行标记的话，跨代引用对象肯定就干掉了。所以jvm引入了一个新概念叫记忆集，在hotspot实现中叫卡表（CardTable，简单字节数组），将整个堆划分为多个卡页（card page）一般512字节[2^9]。当堆中存在跨代引用时，将此卡页对应卡表下表中的值置为1，也就是脏页。这样，GC回收的时候除了GCROOT，也对脏页中的对象进行扫描。避免全堆扫描。
     >
     > 如何判断对象是那个代的？ 估计跟对象头有关。比如对象头中的年龄。
 
-* 内存逃逸
+* JIT优化技术
+
+    * 方法内联：把目标方法复制到调用方法中。避免发声真实调用带来的性能损耗
+
+    * 逃逸分析：reference: [1](https://blog.csdn.net/qq_32649581/article/details/123206658) [2](https://blog.csdn.net/o9109003234/article/details/101365108) [3](https://blog.csdn.net/qq_43227967/article/details/106103658) [4](https://zhuanlan.zhihu.com/p/401057707) [5](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html) [6](https://juejin.cn/post/7034669867286396958)
+
+      > 逃逸：指的是变量引用是否被其他方法或者线程访问。
+
+      * 栈上分配
+      * 标量替换/分离对象
+      * 锁消除
+
+* [既时编译JIT](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html)
+
+    > java为了实现一次编译，处处运行。将编译分为两部，首先它由javac 编译成中间代码-字节码。然后由解释器逐条将字节码解释为机器码[本地代码]来执行。所以在性能上Java通常不如C++这样的编译类型语言。为了优化Java的性能。JVM在解释器之外引入了即时（just in time）编译。先由解释器解释执行，达到阈值后，编译成字节码，存入codeCache中。当下次执行，再遇到这段代码，就会从codeCache中读取机器码，直接执行。
+    >
+    > `-Xint ` 解释执行
+    >
+    > `-Xcomp` 编译执行
+    >
+    > JVM1.8 Macon 默认 mixed .混合执行。
 
 * 面试官问数据量多大
 
