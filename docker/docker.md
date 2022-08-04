@@ -10,7 +10,7 @@
 	+ 流程
 		
 		* 构建Dockerfile	
-			```
+			```docker
 			# Dockerfile
 			FROM busybox
 			LABEL maintainer xhsgg12302@126.com
@@ -30,7 +30,7 @@
 			CMD ["sh"]
 			```
 			> *添加entrypoint.sh 是因为需要容器启动后执行移动相应文件到挂载目录的操作*
-			```
+			```bash
 			#!/bin/sh
 			# vim:sw=4:ts=4:et
 			# entrypoint.sh
@@ -43,13 +43,13 @@
 			```
 		* build镜像 `$ docker build -f .\Dockerfile -t busybox-with-scrt:8.x . `
 		* 推送镜像
-			```shell
+			```bash
 			$ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
 			$ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
 			$ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
 			```
 		* 运行容器挂载文件使用
-			```sh
+			```bash
 			$ docker run -v C:\Users\neddn\Desktop\package:/data --rm -it [imageId]
 			```
 
