@@ -75,6 +75,7 @@
 >
 > [Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
 
+* [垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
 * 垃圾回收器图解
 
   ![](../images/gcor.jpeg)
@@ -113,7 +114,7 @@
   1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。
   2. 动态对象年龄判断：survivor区域中年龄从低到高对象大小总和大于-XX:TargetSurvivorRatio[:50%]，则将当前年龄及大雨当前年龄的对象晋升。[误区](https://wenku.baidu.com/view/e90d99cc142ded630b1c59eef8c75fbfc77d94a0.html )
   3. 大对象直接进入老年代：-XX:PretenureSizeThreshold。超过这个值的对象直接放在老年代。
-  4. 空间分配担保机制：![](../images/HandlerPromotionFailure.png)
+  4. 空间分配担保机制：[src](https://blog.csdn.net/qq_40662405/article/details/114783644)![](../images/HandlerPromotionFailure.png)
 
 * GCROOT 对象
   1. 每个帧栈[局部变量表](https://hllvm-group.iteye.com/group/topic/25858)
