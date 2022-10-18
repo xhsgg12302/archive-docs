@@ -1,3 +1,196 @@
+## MAVEN分享
+> 今天这次分享的主要就是maven构建工具使用的一些经验， 和大家起分享，交流一下。也是为了日后能够更加灵活的使用。内容中也包括我原来对maven存在的误解和疑问的一些答疑。以交流学习，整理归纳为主。
+
++ ### Tips
+
+	1. 运行mvn compile 会执行 clean 吗? 运行 package 会执行 compile吗?
+	2. optional,provided 区别?
+	3. 既然maven有自带的依赖仲裁机制，为什么还会出现依赖冲突?
+	4. mvn 依赖可以定义的位置及加载顺序，远程仓库定义的位置及加载顺序。mirrorOf实际意义? 
+
++ ### 介绍（一笔带过）
+
+    ```
+    maven 是继 ant 之后apache开源的软件构建工具，由绑定在生命周期上的插件辅助完成构建任务，主要的
+    功能包括解决依赖，集成测试，编译项目，定制化资源打包发布等。
+    介绍，下载地址，使用方式。
+    ```
+
++ ### settings.xml 介绍
+
+    ```
+    <localRepository>
+    <pluginGroups>
+        配置插件的groupId。为的是单独执行插件的时候，可以简单调用。
+        1，全路径执行。2，如何配置省略执行，3，自带的没有配置，为什么可以省略执行 4,prefix
+    <proxies>
+    <servers> 将pluginGroups中默认的标签解释一下
+    <mirrors>
+        <mirror>
+            <mirrorOf>
+    <profile>  -- 属性压制
+    ```
++ ### POM.xml介绍
+
+    ```
+    <relativePath/>
+        查找parent路径优先级； 指定的位置 > 本地仓库 > 远程仓库 
+        1,当为空标签得时候，默认从本地仓库查找没有的话再从远程，
+        2,不写得时候这个值默认为 ../pom.xml，也就是他上级路径得pom.xml.
+    
+    <properties>
+    <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <scope>
+            <type>
+            <classifier>
+    <build>
+        <filters>
+            <filter>
+        <resource>
+            <filtering>true|false
+        <plugins>
+    ```
+
++ ### properties 引用的各种形式，${},@@
+    
+    ```
+    https://maven.apache.org/pom.html#properties
+    
+    resources 过滤或加载顺序
+    1,基本使用。
+    2，属性优先级
+    ```
++ ### maven特性
+
+    ```
+    生命周期，
+    继承与聚合，，
+    https://maven.apache.org/pom.html#a-final-note-on-inheritance-v-aggregation
+        继承通过申明<parent>标签来定义。
+    依赖机制
+    
+    ```
++ ### 问题答疑
+    
+    ```
+    1,  运行mvn compile 会执行 clean吗？运行package 会执行 compile吗？
+        不会，因为查看文档发现 compile 阶段 跟 clean 阶段不属于同一个声明周期【分组】。
+        或者执行命令也可发现在compile命令下，不会调用clean相关插件。
+    
+    2,  optional ,provided 区别，
+        optional 表示可选依赖传递，可以理解为默认排除
+        provided 表示依赖必选，但是使用方提供，
+        
+    3，既然maven有自带的依赖仲裁机制，为什么还会出现依赖冲突？
+        
+        
+    4，mvn 依赖可以在哪些地方定义？最终生效的是那部分？
+        1, <dependency> , <repository> 的定义是有顺序的。
+        <dependency source> like repository,mirror,<profile>
+        pom.dependency  > profile.dependency > parent
+        
+        2,远程仓库定义
+        settings > pom.profile > pom.repository
+    ```
+    
+    ![](../images/maven/project-dependency.png '项目结构')
+    
+    ![nihao](../images/maven/pull-process.png 'repo')
+
++ ### 常用命令
+
+    ```
+    构建命令[phase]： mvn [ clean, compile, package, install, deploy, site ] 
+    查看插件帮助：mvn [plugin:help]
+        mvn dependency:tree -Dverbose=true -Dincludes=commons-lang:commons-lang
+    构建命令[插件：goals]：mvn [clean:clean, spring-boot:repackage ] 
+    直接命令[options]: mvn [-Da=b, -emp, -ep, -X]
+    ```
+
++ ### 插件介绍(插件，resources)
+    
+    ```
+    1, 打jar包-> exe文件，
+        -- maven-shade-plugin 配合 launch4j-maven-plugin
+        -- spring-boot-maven-plugin 配合 launch4j-maven-plugin
+        
+    2，远程部署tomcat插件
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://test.wtfu.site/manager/text</url>
+                    <server>tomcat7</server>
+                    <path>/test##2.1</path>
+                    <charset>utf8</charset>
+                    <update>true</update>
+                </configuration>
+            </plugin>
+        </plugins>
+        
+    3，代码生成插件
+        <plugin>
+				<!-- _12302_2021/9/7_< https://gitee.com/xhsgg12302/haohuo-component.git > -->
+				<groupId>com.haohuo.framework</groupId>
+				<artifactId>gencode-maven-plugin</artifactId>
+				<version>1.0.3-SNAPSHOT</version>
+				<executions>
+					<!-- _12302_2021/9/7_< 不跟任何生命周期绑定，
+					命令行 mvn com.haohuo.framework:gencode-maven-plugin:product
+					或者maven任务栏插件，goal,执行 > -->
+				</executions>
+				<configuration>
+				.....
+		        </configuration>
+		</plugin>
+    ```
+
++ ### maven私服及免费的maven仓库
+
+    ```
+    自己搭建
+    开源镜像（163, huawei, alibaba, tencent)
+        163: http://mirrors.163.com/.help/maven.html
+        huawei: https://mirrors.huaweicloud.com/home
+        alibaba: https://developer.aliyun.com/mvn/guide
+        tencent: https://mirrors.cloud.tencent.com/help/maven.html
+    github提供的package
+    云效maven 私服 
+    旧版：https://repomanage.rdc.aliyun.com/
+    新版：https://packages.aliyun.com/maven （有覆盖 release版本的设置）
+    ```
++ ### 项目中的log4j[CVE-2021-44228] 漏洞修复思路及复现
+
+    ```
+    解决思路：
+        一，访问log4j官网，查看最新响应漏洞及解决版本。替换相应的版本即可。（可能需要即时跟踪log4j动    态，最近漏洞更新挺快）
+        二，以假乱真，移花接木
+            1，根据全局需要的排除得jar定制高版本fake包，上传到私服，
+            2，由于maven得仲裁机制压制真正得log4j包。
+            3，引入三方开源得桥接包，将输出流重新路由到slf4j->logback.
+    
+    注意点：log4j分为log4j 1和2版本，而且它们的groupId 也不一样。 
+        引入 log4j1 只需要一个 log4j:log4j:1.2.17, 爆出漏洞得不是log4j1
+        而log4j2 需要引入连个：org.apache.logging.log4j:log4j-api:2.14.1 【门面接口包】
+                               org.apache.logging.log4j:log4j-core:2.14.1 【实现包(出问题的包)】
+    
+    
+        
+    扩展：    
+        1, logj漏洞原理的简单介绍，及两种方式复现
+        2, 实际中的log4j攻击现象（nginx日志）。
+    ```
+    
++ ### deploy
+
+    ```
+    mvn clean deploy -Dmaven.test.skip=true -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
+    ```
+
 ## 配置文件
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
