@@ -1,5 +1,5 @@
 ## 凭据管理
-* `git credential [fill|approve|reject]`
+* ### `git credential [fill|approve|reject]`
 	> 用来取回和存储用户凭据。
 	>
 	> `credential-helper`系统的根命令是`git credential`,也可以说是credential最基本的命令。实际上调用的是`git-credential` 可执行文件。
@@ -23,7 +23,7 @@
 	> 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
 
 * 内置的两种基本helper(`store`,`cache`)
-	```
+	```shell
 	# 可以通过命令进行查看 
 	$ find /Library/Developer/CommandLineTools/usr/libexec/git-core -name "git-credential*"
 	/Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential-store
@@ -50,6 +50,56 @@
 		helper = store --file ~/.git-credentials
 		helper = shell
 		# helper = cache --timeout 900   // 900 min
+	```
+	> git-credential-shell
+	```shell
+	#!/bin/bash
+
+	# 显示帮助
+	Usage()
+	{
+	echo 'Usage:'
+	cat <<EOF
+		echo 'hello world'
+		bet <input> <output> [options]
+		# -d debug (do not delte temporary intermediate images)
+	EOF
+		exit 1
+	}
+
+	nargs=$#
+	set -- `getopt a:b:c: $*`
+
+	result=$?
+	if [ $nargs -eq 0 ] || [ $result != 0 ] ; then
+		Usage
+	fi
+
+	param_len=$#
+	command=${!param_len}
+
+	# while [ -n "$1" ]
+	# do
+		# case "$1" in
+			# -a) echo "param = $2"
+				# shift ;;
+			# -b) echo "param = $2"
+				# shift ;;
+			# -c) echo "param = $2"
+				# shift ;;
+			# --) ;;
+			# *)  echo "what's this?"
+				# break ;;
+		# esac
+		# shift
+	# done
+
+	if [ $command = 'get' ] ; then
+	cat << EOF
+	password=demo12345
+	username=test12302
+	EOF
+	fi
 	```
 	
 * helper配置格式
