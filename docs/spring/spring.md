@@ -77,10 +77,17 @@
                 // 调用在上下文中已注册为bean的工厂处理器，来增加或修改属性。
                 // 比如ConfigurationClassPostProcessor。创建了一个org.springframework.context.annotation.internalConfigurationAnnotationProcessor对象。
                 // 且给beanFactory的属性：beanPostProcessors 增加了一个 ImportAwareBeanPostProcessor。
+  
+                // 1027追加注释 
+                // 内部逻辑先找 实现了BeanDefinitionRegistryPostProcessor接口的 实例化然后按顺序进行接口调用。因为这个接口继承自BeanFactoryPostProcessor.所以还会对这个接口也进行调用。
+                // 然后是其余的BeanFactoryPostProcessor 这个接口 实例化后再按照顺序进行接口调用
                 invokeBeanFactoryPostProcessors(beanFactory);
 
                 // Register bean processors that intercept bean creation.
                 // 向容器中实例化BeanPostProcessor，并追加到beacFactory的属性：beanPostProcessors中。
+  
+                // 1027追加注释 
+                // 和上面调用一样，不过这次找的是BeanPostProcessor接口，另外会追加属性 到 beanPostProcessors中。因为这个接口的功能是对Bean的创建进行拦截处理实例用的。而不是修改beanDefinition用的。
                 registerBeanPostProcessors(beanFactory);
 
                 // Initialize message source for this context.
@@ -111,6 +118,86 @@
     ![](../../.images/spring/xmlac-load-bd.png ':size=65%') ![](../../.images/spring/xmlac-load-bd.png ':size=30%')
 
 ## spring bean生命周期
+
+<table>
+	<tr>
+	    <td >step</td>
+	    <td>invoke</td>
+	    <td>invoke</td>
+	    <td>output</td>  
+	</tr >
+	<tr >
+	    <td>createBeanInstance</td>
+        <td>-</td>
+        <td>-</td>
+	    <td> Book initializing </td>
+	</tr>
+    <tr >
+	    <td>populateBean</td>
+        <td>-</td>
+        <td>-</td>
+	    <td> setBookName: Book name has set.  </td>
+	</tr>
+    <tr >
+	    <td rowspan="8">initializeBean</td>
+        <td rowspan="2"> invokeAwareMethods</td>
+        <td> BeanNameAware </td>
+	    <td> BeanNameAware.setBeanName() invoke  </td>
+	</tr>
+    <tr >
+        <td> BeanFactoryAware </td>
+	    <td> BeanFactoryAware.setBeanFactory() invoke  </td>
+	</tr>
+	<tr>
+	    <td rowspan="3">applyBeanPostProcessorsBeforeInitialization</td>
+        <td>ApplicationContextAwareProcessor</td>
+        <td>ApplicationContextAware.setApplicationContext() invoke</td>
+	</tr>
+	<tr>
+        <td>MyBeanPostProcessor  implements BeanPostProcessor</td>
+        <td>MyBeanPostProcessor.postProcessBeforeInitialization invoke</td>
+	</tr>
+	<tr>
+        <td>CommonAnnotationBeanPostProcessor</td>
+        <td>@PostConstruct</td>
+	</tr>
+	<tr>
+        <td rowspan="2">invokeInitMethods</td>
+	    <td>initializingBean</td>
+        <td>initializingBean.afterPropertiesSet() invoke</td>
+	</tr>
+	<tr>
+	    <td>invokeCustomInitMethod</td>
+        <td>define constructor invoke</td>
+	</tr>
+	<tr>
+	    <td>applyBeanPostProcessorsAfterInitialization</td>
+	    <td>-</td>
+        <td>MyBeanPostProcessor.postProcessAfterInitialization invoke</td>
+	</tr>
+    <tr>
+        <td>using</td>
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td rowspan="3">destroy</td>
+        <td>-</td>
+        <td>@predestroy</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>-</td>
+        <td>DisposableBean.destroy() invoke</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>-</td>
+        <td>define destroy invoke</td>
+        <td>-</td>
+    </tr>
+</table>
+
+
 
 ## spring 循环依赖
 
