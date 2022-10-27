@@ -7,6 +7,10 @@
 
 ## 配置文件
 
+## 隔离级别，以及实现原理
+
+## 解决幻读。
+
 ## MVCC[ multi-version concurrency control]
 1. #### 实现原理
 	> mvcc实现隔离级别依赖于记录中的三个隐藏字段,undolog,read view来实现
@@ -29,3 +33,8 @@
 ## 事务
 
 ## 执行计划，优化器 ，预编译，
+
+
+
+## Reference
+* https://blog.csdn.net/qq_33652147/article/details/92734987

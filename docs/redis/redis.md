@@ -210,7 +210,7 @@
         - ##### 图列
             > 下图展示了channel1 和订阅它的三个客户端
             
-            ```
+            ```mermaid
             graph BT
             
             client2--sub-->id2((channel1))
@@ -220,7 +220,7 @@
             ```
             > 当有新消息通过PUBLISH命令发送给频道channel1时，这个消息就会被发送给订阅它的三个客户端
             
-            ```
+            ```mermaid
             graph TB
             id3>PUBLISH channel1 message]-.send.->id2((channel1))
             id2((channel1))-.pub.->client2
@@ -233,25 +233,48 @@
             > PUSBLISH c2 hello-redis 【消息发布 <br>
             > SUBCSCRIBE new* 【订阅多个使用通配符* <br>
             > PUBLISH new1 redis2021  【发布消息
-        
+    
     + #### 淘汰策略
+        |index|opt|
+        |---|---|
+        | noeviction      | 不进行数据淘汰，也是Redis的默认配置。这时，当缓存被写满时，再有写请求进来，Redis不再提供服务，直接返回错误。|
+        | volatile-ttl    | 缓存满了之后，会针对设置了过期时间的键值对中，根据过期时间的先后顺序进行删除,越早过期的越先被删除。|
+        | volatile-random | 缓存满了之后，在设置了过期时间的键值对中进行随机删除。|
+        | volatile-lru    | 缓存满了之后，针对设置了过期时间的键值对，采用LRU算法进行淘汰。最近最少使用 |
+        | volatile-lfu    | 缓存满了之后，针对设置了过期时间的键值对，采用LFU的算法进行淘汰。经常最少使用 |
+        | allkeys-random  | 缓存满了之后，从所有键值对中随机选择并删除数据。|
+        | allkeys-lru     | 缓存满之后，使用LRU算法在所有的数据中进行筛选删除。|
+        | allkeys-lfu     | 缓存满了之后，使用LFU算法在所有的数据中进行筛选删除。|
 
-    + #### 缓存穿透
-        > 用户构造恶意数据，直逼数据库。
-        > 解决： 参数校验，缓存空值
+    + #### zset实现：
+        > 小于阈值 用 ziplist, 当不满足以下任意条件时，使用skiplist
+        - zset-max-ziplist-entries 128 //元素个数超过128，将用skiplist编码
+        - zset-max-ziplist-value 64 //单个元素大小超过64byte，将用skiplist编码
 
-    + #### 缓存击穿
-        > 大量访问同时到来 的时候缓存失效，直逼数据库
-        > 解决： 加锁，自动续期，不让热点数据过期手动维护。
+    + #### 缓存问题
+        - ##### 缓存穿透
+            > 用户构造恶意数据，直逼数据库。
+            > 解决： 参数校验，缓存空值
 
-    + #### 缓存雪崩
-        > 多个缓存击穿，redis服务器宕机
-        > 过期值加随机数，高可用。
+        - ##### 缓存击穿
+            > 大量访问同时到来 的时候缓存失效，直逼数据库
+            > 解决： 加锁，自动续期，不让热点数据过期手动维护。
 
-    + #### 主从复制
-        * ##### 一主二从 A <--- B, A <---- C
-        * ##### 薪火相传 A <--- B <---- C
-        * ##### 反客为主 slave no one
+        - ##### 缓存雪崩
+            > 多个缓存击穿，redis服务器宕机
+            > 过期值加随机数，高可用。
+
+    + #### 集群模式
+        * 主从复制
+            - 两种工作模式
+                + 全量复制
+                + 增量复制
+            - 三种工作方式
+                + 一主二从 A <--- B , A <--- C
+                + 薪火相传 A <--- B <--- C
+                + 反客为主 salve no one
+        * Sentinel 哨兵模式
+        * cluster 模式
 
     + #### 哨兵机制
         > redis-sentinel sentinel.conf ,主挂了，剩余选取，主恢复，slave身份加入
@@ -261,3 +284,10 @@
 * [周阳-尚硅谷reids视频教程](https://www.bilibili.com/video/BV1J4411x7U1 )
 * [阮一峰-CAP 定理的含义](http://www.ruanyifeng.com/blog/2018/07/cap.html )
 * [缓存穿透，击穿，雪崩](https://blog.csdn.net/lzy194/article/details/122231010 )
+* [Redis Ziplist（压缩列表）](https://blog.csdn.net/solo_jm/article/details/118520888)
+* [理解redis调表](https://www.cnblogs.com/zh718594493/p/12111949.html)
+* [redis的MULTI与PIPELINE](https://cloud.tencent.com/developer/article/1757465)
+* [redis主从复制原理](https://baijiahao.baidu.com/s?id=1744453281342133616)
+* [Redis三种集群模式详解](https://www.jb51.net/article/224568.htm)
+* [reids 事务错误图解](https://blog.csdn.net/weixin_37548768/article/details/124538778)
+* [缓存穿透、缓存击穿、缓存雪崩的理解和解决方案](https://blog.csdn.net/a898712940/article/details/116212825)
