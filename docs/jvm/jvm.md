@@ -204,3 +204,6 @@
 * 内存超标
 
 * 频繁FGC导致线上程序运行缓慢
+
+## Reference
+* [\[Java基础\]-- Java GC 垃圾回收器的分类和优缺点](https://blog.csdn.net/high2011/article/details/80177473)
