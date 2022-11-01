@@ -79,6 +79,102 @@
                 CMD [ "nginx", "-g", "daemon off;" ]
                 ```
             - 基于docker compose 进行编排
+                * docker-compose.yml
+                    ```yaml
+                    version: "3.7"
+                    services:
+                        app:
+                            container_name: insuranceName
+                            image: awesome/webapp
+                            build: ./
+                            ports:
+                                - "9017:9017"
+                            environment:
+                                - TZ=Asia/Shanghai
+                            networks:
+                                - demo-net
+                            depends_on:
+                                - mysql
+                                - redis
+                                - zoo
+
+                        mysql:
+                            hostname: mysql
+                            image: mysql:5.7.26
+                            # network_mode: "host" # 如果需要容器使用宿主机IP(内网IP)，则可以配置此项
+                            container_name: mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
+                            restart: always # 设置容器自启模式
+                            command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci # 设置utf8字符集
+                            environment:
+                                - TZ=Asia/Shanghai # 设置容器时区与宿主机保持一致
+                                - MYSQL_ROOT_PASSWORD=root # 设置root密码
+                            # volumes:
+                                # - /etc/localtime:/etc/localtime:ro # 设置容器时区与宿主机保持一致
+                                # - ./mysql/data:/var/lib/mysql/data # 映射数据库保存目录到宿主机，防止数据丢失
+                                # - ./mysql/my.cnf:/etc/mysql/my.cnf # 映射数据库配置文件
+                            ports:
+                                - "3306:3306"
+                            privileged: true
+                            networks:
+                                demo-net:
+                                    aliases:
+                                        - mysql
+
+                        redis:
+                            hostname: redis-compose
+                            image: redis:6.2.7
+                            container_name: redis-compose
+                            restart: always
+                            # command: redis-server /etc/redis.conf # 启动redis命令
+                            environment:
+                                - TZ=Asia/Shanghai
+                            volumes:
+                                # - /etc/localtime:/etc/localtime:ro # 设置容器时区与宿主机保持一致
+                                - redis:/data
+                                # - ./redis/redis.conf:/etc/redis.conf
+                            ports:
+                                - "6379:6379"
+                            privileged: true
+                            networks:
+                                demo-net:
+                                    aliases:
+                                        - redis
+
+                        zoo:
+                            image: zookeeper:3.6.3
+                            restart: always
+                            container_name: zoo-compose
+                            ports:
+                                - "2181:2181"
+                            networks:
+                                demo-net:
+                                    aliases:
+                                        - zookeeper
+
+                    volumes:
+                        redis:
+
+                    networks:
+                        demo-net: 
+                    ```
+                * 基本命令
+                    ```shell
+                    # 指定文件在后台启动
+                    $ docker-compose -f docker-compose.yml up -d [--build/是否重新构建]           
+                    # 查看运行状态：
+                    $ docker-compose ps
+                    # 停止运行：
+                    $ docker-compose down # Stop and remove containers, networks, images, and volumes
+                    $ docker-compose stop $ Stop services
+                    # 重启:
+                    $ docker-compose restart
+                    # 重启单个服务：
+                    $ docker-compose restart service-name
+                    # 进入容器命令行：
+                    $ docker-compose exec service-name sh
+                    # 查看容器运行log：
+                    $ docker-compose logs [service-name]
+                    ```
         * 分开单独打包
             1. 创建docker网络
                 ```shell
@@ -116,4 +212,5 @@
 
 - [docker docs](https://docs.docker.com/engine/reference/run/)
 - [容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instance/repositories)
+- [docker volume 与bind的区别 和注意事项](https://codeantenna.com/a/YdJdiIFSh7)
 
