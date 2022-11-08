@@ -1217,7 +1217,7 @@
     2022-11-08 21:26:12 6036 [Note] Shutting down plugin 'CSV'
     2022-11-08 21:26:12 6036 [Note] Shutting down plugin 'MyISAM'
     ```
-    </detials>
+    </details>
 
 ## Reference
 * https://dev.mysql.com/downloads/mysql/
