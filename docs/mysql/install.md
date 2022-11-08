@@ -25,7 +25,7 @@
         ```
     - 正式安装
         ```shell
-        # 安装
+        # 初始化
         ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql-5.6.49 --datadir=/usr/local/mysql-5.6.49/mysql_data/mysql --explicit_defaults_for_timestamp
         # 自启动
         $ cp ./support-files/mysql.server /etc/rc.d/init.d/mysqld
@@ -47,6 +47,11 @@
         # 设置远程登录
         $ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;
         $ FLUSH PRIVILEGES;
+        ```
+    - 注意事项
+        ```shell
+        1. 通过 systemctl 或者 service 启动mysql服务的时候，是通过调用 bin/mysqld_safe 作为守护进程去启动 bin/mysqld 进程来启动服务。
+        2. bin/mysqld 通过 bin/mysqld --help --verbose 可以查看启动配置参数。其中my.cnf配置文件的查找过程就在输出中可以看见。
         ```
 
 ## 配置文件
@@ -1168,16 +1173,53 @@
 
 ## 修改密码的几种方式
 * 用SET PASSWORD命令
-    > `SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass'); FLUSH PRIVILEGES;`
+    > SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass'); FLUSH PRIVILEGES;
 * 用mysqladmin
-    > `mysqladmin -u root password "newpass"` <br>
-    > `如果设置过 mysqladmin -u root password oldpass "newpass"`
+    > mysqladmin -u root password "newpass" <br>
+    > 如果设置过 mysqladmin -u root password oldpass "newpass"
 * 用UPDATE直接编辑user表
-    > `UPDATE user SET Password = PASSWORD('newpass') WHERE user = 'root'; FLUSH PRIVILEGES;`
+    > UPDATE user SET Password = PASSWORD('newpass') WHERE user = 'root'; FLUSH PRIVILEGES;
 * 在丢失root密码的时候，可以这样
-    > `mysqld_safe --skip-grant-tables & mysql -u root mysql` <br>
-    > `UPDATE user SET password=PASSWORD("new password") WHERE user='root'; FLUSH PRIVILEGES;`
-    
+    > mysqld_safe --skip-grant-tables & mysql -u root mysql <br>
+    > UPDATE user SET password=PASSWORD("new password") WHERE user='root'; FLUSH PRIVILEGES;
+
+## 注意事项
+1. `通过 systemctl 或者 service 启动mysql服务的时候，是通过调用 bin/mysqld_safe 作为守护进程去启动 bin/mysqld 进程来启动服务。`
+2. `bin/mysqld 通过 bin/mysqld --help --verbose 可以查看启动配置参数。`
+3. `其中my.cnf配置文件的查找过程就在输出中可以看见。 比如：` `$ bin/mysqld --help --verbose | head -n 20`
+    <details><summary>output</summary>
+
+    ```text
+    2022-11-08 21:26:12 0 [Note] --secure-file-priv is set to NULL. Operations related to importing and exporting data are disabled
+    2022-11-08 21:26:12 0 [Note] bin/mysqld (mysqld 5.6.49) starting as process 6036 ...
+    2022-11-08 21:26:12 6036 [Note] Plugin 'FEDERATED' is disabled.
+    bin/mysqld  Ver 5.6.49 for linux-glibc2.12 on x86_64 (MySQL Community Server (GPL))
+    Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+    Oracle is a registered trademark of Oracle Corporation and/or its
+    affiliates. Other names may be trademarks of their respective
+    owners.
+
+    Starts the MySQL database server.
+
+    Usage: bin/mysqld [OPTIONS]
+
+    Default options are read from the following files in the given order:
+    /etc/my.cnf /etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf ~/.my.cnf
+    The following groups are read: mysqld server mysqld-5.6
+    The following options may be given as the first argument:
+    --print-defaults        Print the program argument list and exit.
+    --no-defaults           Don't read default options from any option file,
+                            except for login file.
+    --defaults-file=#       Only read default options from the given file #.
+    --defaults-extra-file=# Read this file after the global files are read.
+    2022-11-08 21:26:12 6036 [Note] Binlog end
+    2022-11-08 21:26:12 6036 [Note] Shutting down plugin 'CSV'
+    2022-11-08 21:26:12 6036 [Note] Shutting down plugin 'MyISAM'
+    ```
+    </detials>
+
 ## Reference
 * https://dev.mysql.com/downloads/mysql/
 * https://developer.aliyun.com/article/951525
+* [mysqld unknown option '--initialize'](https://stackoverflow.com/questions/46670368/mysqld-unknown-option-initialize)
