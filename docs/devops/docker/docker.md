@@ -202,6 +202,37 @@
         ```
     6. 启动镜像启动镜像并检查是否正常 `$ docker run -d -p 9017:9017 --name insurance-center --net demo-net insurance-center:5.0.1`
 
+## MySQL数据卷容器
+* 简要说明
+    > 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
+
+* 流程
+    1. 获取 MySQL datadir目录中的数据
+    2. 构建Dockerfile
+        ```docker
+        # Dockerfile
+        FROM busybox:1.34.1
+        LABEL maintainer = xhsgg12302@126.com
+        ENV DATADIR /mysql-data/mysql
+        RUN mkdir -p $DATADIR
+        # 此处的mysql文件夹就是datadir指定的路径
+        ADD mysql $DATADIR
+        VOLUME $DATADIR
+        COPY Dockerfile /
+        CMD /bin/sh
+        ```
+    3. build 数据卷镜像 `$ docker build -f Dockerfile -t mysql-data:1.0.0 . `
+        > push到仓库
+        ```shell
+        $ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
+        $ docker tag mysql-data:1.0.0 registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.0.0
+        $ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.0.0
+        ```
+    4. 启动数据卷容器 `$ docker run -dit --rm --name mysql-data mysql-data:1.0.0`
+    5. 挂载数据卷容器启动MySQL服务 `$ docker run -d -p 3336:3336  --name mysql-5.6.49 --volumes-from mysql-data  mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336 --rm `
+
+
+
 ## Reference
 
 - [docker docs](https://docs.docker.com/engine/reference/run/)
