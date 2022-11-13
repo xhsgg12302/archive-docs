@@ -16,7 +16,20 @@
   > `String s = new String("ABC")` 这行单纯代码层面来说，只创建一个对象。如果包含类加载的过程，有可能会创建两个，一个在常量池中，一个在堆里面。堆里面的引用常量池中的value。[参考](https://stackoverflow.com/questions/19672427/string-s-new-stringxyz-how-many-objects-has-been-made-after-this-line-of)
   >
   > `String.intern()` 方法首先会在常量池中查找等值字符串，找到了，返回引用。没找到，常量池创建并返回引用。
-  > JDK1.7之前。不存在创建的是等值字符串，之后，创建的是堆中的引用。
+  > JDK1.7之前。不存在创建的是等值字符串，之后，创建的是堆中的引用。[参考](https://blog.csdn.net/tyyking/article/details/82496901)
+    ```java
+    // 代码片段1
+    String str2 = new String("str")+new String("01"); // 创建string对象 0x02912。
+    str2.intern(); // jdk1.7及以下。 str2.intern()如果常量池中没有的话，会创建 str2 0x02912。 . 所以 str2.intern() == str2
+    String str1 = "str01"; // 现在常量池中有了，直接返回引用 0x02912。
+    System.out.println(str2==str1); // 所以相等
+
+    // 代码片段2
+    String str2 = new String("str")+new String("01"); // 创建string对象 0x02912。
+    String str1 = "str01"; // 常量池中没有，创建"str01"字符串并返回引用 0xbc0cf
+    str2.intern(); // 常量池中有字符串 ”str01" 所以返回引用 0xbc0cf .所以 str2.intern()== str01 == 0xbc0cf 
+    System.out.println(str2==str1); // 不相等。因为str2 == 0x2912 ,str1 = oxbc0cf
+    ```
 
 - 堆
 
