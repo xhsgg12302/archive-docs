@@ -95,9 +95,9 @@
         settings > pom.profile > pom.repository
     ```
     
-    ![](../../.images/maven/project-dependency.png '项目结构')
+    ![](../../../.images/maven/project-dependency.png '项目结构')
     
-    ![nihao](../../.images/maven/pull-process.png 'repo')
+    ![nihao](../../../.images/maven/pull-process.png 'repo')
 
 + ### 常用命令
 
