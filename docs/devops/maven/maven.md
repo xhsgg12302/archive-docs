@@ -191,7 +191,9 @@
     mvn clean deploy -Dmaven.test.skip=true -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
     ```
 
-## 配置文件
+## settings.xml
+<details><summary>示例</summary>
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -518,12 +520,147 @@ under the License.
 	</activeProfiles>-->
 </settings>
 ```
+</details>
 
+## pom.xml
+<details><summary>示例</summary>
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--<parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.3.RELEASE</version>
+        <relativePath/>
+    </parent>-->
+    
+    <groupId>com.haohuo.framework</groupId>
+    <artifactId>haohuo-component</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>haohuo-component</name>
+    <url>https://wtfu.site/</url>
+
+    <modules>
+        <module>hh-cpt-executor</module>
+        <module>hh-cpt-test</module>
+        <module>hh-cpt-fake-log4j</module>
+        <module>hh-cpt-fake-jcl</module>
+        <module>hh-cpt-log4j-CVE</module>
+        <module>hh-cpt-maven-conflict</module>
+        <module>hh-cpt-maven-dependency</module>
+        <module>hh-cpt-maven-plugin</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <prod.config.url>http://120.26.161.40:8888/</prod.config.url>
+        <test.config.url>http://112.124.46.254:8888/</test.config.url>
+        <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
+        <spring.cloud.version>Finchley.RELEASE</spring.cloud.version>
+        <haohuo.sleuth.starter.version>0.0.1.RELEASE</haohuo.sleuth.starter.version>
+        <curator.version>2.10.0</curator.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency> 
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.0.3.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>5.0.7.RELEASE</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <repositories>
+        
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 发布到私服插件<mvn deploy> 的配置 -->
+    <distributionManagement>
+        <!--<repository>
+            <id>rdc-releases</id>
+            <name>Internal releases</name>
+            <url>https://packages.aliyun.com/maven/repository/2066950-release-cbvBqh/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <name>Internal snapshots</name>
+            <url>https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/</url>
+        </snapshotRepository>-->
+
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/138059-release-UHEMVy/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/138059-snapshot-uQQQPY/</url>
+        </snapshotRepository>
+
+        <!--<repository>
+            <id>releases</id>
+            <name>Internal releases</name>
+            <url>http://mvn.wtfu.site/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Internal snapshots</name>
+            <url>http://mvn.wtfu.site/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>-->
+
+    </distributionManagement>
+</project>
+```
+</details>
 
 ## 插件篇
 ### maven-assembly-plugin
 ```xml
+<!-- pom.xml -->
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-assembly-plugin</artifactId>
@@ -569,10 +706,94 @@ under the License.
   </configuration>
 </plugin>
 ```
+```xml
+<!-- assembly/assembly.xml -->
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>${pom.version}</id>
+    <formats>
+        <!-- 指定打包格式。maven-assembly-plugin插件支持的打包格式有zip、tar、tar.gz (or tgz)、tar.bz2 (or tbz2)、jar、dir、war，可以同时指定多个打包格式 -->
+        <format>jar</format>
+    </formats>
+    <!--指定打的包是否包含打包层目录，比如finalName是terminal-dispatch，当值为true，所有文件被放在包内的terminal-dispatch目录下，否则直接放在包的根目录下，-->
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <!--将target class下 的打包到conf 因为我们可能用resource占位-->
+            <directory>./target/classes</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
+</assembly>
+```
 
 ### maven-shade-plugin
 ```xml
 <hello></hello>
+```
+
+
+### spring-boot-maven-plugin
+```xml
+<plugin>
+    <!--
+      package org.springframework.boot.maven;
+      @Mojo(
+          name = "repackage",
+          defaultPhase = LifecyclePhase.PACKAGE,
+          requiresProject = true,
+          threadSafe = true,
+          requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
+          requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME
+      )
+      public class RepackageMojo extends AbstractDependencyFilterMojo {
+     -->
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <version>2.0.3.RELEASE</version>
+    <configuration>
+        <mainClass>${Main.class}</mainClass>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>repackage</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+### maven-dependency-plugin
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <!-- 把依赖的所有maven jar包拷贝到lib目录中 -->
+                <outputDirectory>${project.build.directory}/archive-demo/lib</outputDirectory>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
 ```
 
 ## OTHER
