@@ -570,4 +570,9 @@ under the License.
 </plugin>
 ```
 
+### maven-shade-plugin
+```xml
+<hello></hello>
+```
+
 ## OTHER
