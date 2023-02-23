@@ -95,9 +95,9 @@
         settings > pom.profile > pom.repository
     ```
     
-    ![](../../.images/maven/project-dependency.png '项目结构')
+    ![](../../../.images/maven/project-dependency.png '项目结构')
     
-    ![nihao](../../.images/maven/pull-process.png 'repo')
+    ![nihao](../../../.images/maven/pull-process.png 'repo')
 
 + ### 常用命令
 
@@ -519,5 +519,55 @@ under the License.
 </settings>
 ```
 
+
+
+## 插件篇
+### maven-assembly-plugin
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-assembly-plugin</artifactId>
+  <version>3.4.2</version>
+  <executions>
+      <execution>
+          <id>make-assembly</id>
+          <phase>package</phase>
+          <goals>
+              <goal>single</goal>
+          </goals>
+      </execution>
+  </executions>
+  <configuration>
+      <!--<descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+      </descriptorRefs>-->
+      <descriptors>
+          <descriptor>src/main/assembly/assembly.xml</descriptor>
+      </descriptors>
+
+      <finalName>youzan-crawler</finalName>
+      <appendAssemblyId>true</appendAssemblyId>
+      <outputDirectory>${project.build.directory}/archive-demo</outputDirectory>
+
+      <!-- see: https://stackoverflow.com/questions/15530453/how-to-stop-the-maven-assembly-plugin-from-deploying-the-artifact-it-creates -->
+      <attach>false</attach>
+
+      <!--<archiveBaseDirectory>${pom.build.}/src</archiveBaseDirectory>-->
+      <archive>
+          <addMavenDescriptor>true</addMavenDescriptor>
+          <manifest>
+              <mainClass>com.test.youzan.Main2</mainClass>
+              <addClasspath>false</addClasspath>
+
+              <!--
+                  see: https://docs.oracle.com/javase/tutorial/deployment/jar/downman.html
+                  jar文件中的jar的加载必须由自定义的类加载器去完成,所以在fat-jar模式下 jar包内部的 lib/*.jar 不会生效。
+              -->
+              <classpathPrefix>lib/</classpathPrefix>
+          </manifest>
+      </archive>
+  </configuration>
+</plugin>
+```
 
 ## OTHER
