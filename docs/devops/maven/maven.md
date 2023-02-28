@@ -675,6 +675,7 @@ under the License.
       </execution>
   </executions>
   <configuration>
+      <!-- see: https://github.com/apache/maven-assembly-plugin/blob/master/src/main/resources/assemblies/jar-with-dependencies.xml -->
       <!--<descriptorRefs>
           <descriptorRef>jar-with-dependencies</descriptorRef>
       </descriptorRefs>-->
