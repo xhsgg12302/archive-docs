@@ -795,5 +795,59 @@ under the License.
     </executions>
 </plugin>
 ```
+### 
+```xml
+<profile>
+    <id>code-generator</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>gen-repo_id</id>
+            <name>gen-repo-name</name>
+            <url>https://mvn.wtfu.site/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases><enabled>false</enabled></releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.haohuo.framework</groupId>
+                <artifactId>gencode-maven-plugin</artifactId>
+                <version>1.0.8-SNAPSHOT</version>
+
+                <configuration>
+                    <author>gen-code</author>
+                    <info>false</info>
+                    <swagger2>true</swagger2>
+                    <output>${basedir}/src/main/java</output>
+                    <username>username</username>
+                    <password>{jXe28vG2lYEHY+7IlnlBVT0Mb3WSP+XUcKT1mlJrDHY=}</password>
+                    <url><![CDATA[
+                    jdbc:mysql://aliyuncs.com:3306/frame-dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+                            ]]></url>
+                    <companySuffix>com.msb</companySuffix>
+                    <moduleName>frame.admin</moduleName>
+                    <contains>entity, mapper, service, impl, xml</contains>
+                    <entityPkgName>domain</entityPkgName>
+
+                    <tables>youzan_trade_record,</tables>
+
+                    <settings>/Users/mac/software/apache-maven-3.3.9/conf/settings.xml</settings>
+                    <accessKey>***</accessKey>
+
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
 
 ## OTHER
