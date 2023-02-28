@@ -796,7 +796,7 @@ under the License.
     </executions>
 </plugin>
 ```
-### 
+### gencode-maven-plugin
 ```xml
 <profile>
     <id>code-generator</id>
