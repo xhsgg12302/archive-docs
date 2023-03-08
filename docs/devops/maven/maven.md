@@ -852,3 +852,50 @@ under the License.
 ```
 
 ## OTHER
+
+<!-- tabs:start -->
+
+#### **C**
+
+```c
+# include <cstdio>
+int main()
+{
+    printf("hello world");
+}
+```
+
+
+
+#### **C++**
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    count << "hello world";
+    return 0;
+}
+```
+
+
+#### **java**
+
+```java
+class Demo
+{
+  public static void main(String[] args)
+      ｛
+            System.out.println("Hello Java");
+       ｝ 
+}
+```
+
+#### **python**
+
+```python
+print ("hello world")
+```
+<!-- tabs:end -->
