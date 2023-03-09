@@ -165,7 +165,7 @@
 
 * 非公平锁与公平锁 `获取锁图例`
 
-    ![](../../.images/base/NonfairSync.png ':size=50%') ![](../../.images/base/FairSync.png ':size=46%')
+    ![](../../../.images/base/NonfairSync.png ':size=50%') ![](../../../.images/base/FairSync.png ':size=46%')
 
 * 代码片段
     <details><summary>Sync#nonfairTryAcquire</summary>
