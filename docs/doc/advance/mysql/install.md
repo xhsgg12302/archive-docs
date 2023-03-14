@@ -54,6 +54,9 @@
         2. bin/mysqld 通过 bin/mysqld --help --verbose 可以查看启动配置参数。其中my.cnf配置文件的查找过程就在输出中可以看见。
         ```
 
+## 源码安装
+!> mysql的大部分安装包都包含了额服务器程序和客户端程序，不过在Linux下使用RPM包时会有单独的服务器RPM包和客户端RPM包需要分别安装。
+
 ## 配置文件
 * ### my.cnf
     <details><summary>配置样例</summary>
