@@ -7,45 +7,24 @@
 
     /usr/local/opt/mysql@5.7/bin/
     ├── innochecksum
-    ├── lz4_decompress
-    ├── my_print_defaults
-    ├── myisam_ftdump
-    ├── myisamchk
-    ├── myisamlog
-    ├── myisampack
     ├── mysql
     ├── mysql.server -> ../support-files/mysql.server
     ├── mysql_client_test
     ├── mysql_client_test_embedded
-    ├── mysql_config
-    ├── mysql_config_editor
-    ├── mysql_embedded
     ├── mysql_install_db
     ├── mysql_plugin
     ├── mysql_secure_installation
-    ├── mysql_ssl_rsa_setup
-    ├── mysql_tzinfo_to_sql
     ├── mysql_upgrade
     ├── mysqladmin
     ├── mysqlbinlog
-    ├── mysqlcheck
     ├── mysqld
     ├── mysqld_multi
     ├── mysqld_safe
     ├── mysqldump
     ├── mysqldumpslow
-    ├── mysqlimport
-    ├── mysqlpump
     ├── mysqlshow
-    ├── mysqlslap
     ├── mysqltest
-    ├── mysqltest_embedded
-    ├── mysqlxtest
-    ├── perror
-    ├── replace
-    ├── resolve_stack_dump
-    ├── resolveip
-    └── zlib_decompress
+    └── ...
     ```
 
 
