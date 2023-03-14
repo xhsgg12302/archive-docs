@@ -46,10 +46,22 @@
         $ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
         $ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
         ```
-    - 运行容器挂载文件使用
+    
+    - 映射容器中的文件到宿主机的方式
+        <!-- tabs:start -->
+        #### **自动移动**
         ```bash
+        # 有entrypoint.sh加持
         $ docker run -v C:\Users\neddn\Desktop\package:/data --rm -it [imageId]
         ```
+
+        #### **手动移动**
+        ```bash
+        # docker pull registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-pdf-books:1.0.0
+        $ docker run -v ~/Desktop/books:/data --rm --name books -[d]it 5f1c5a7b06e9
+        $ mv books/* /data/
+        ```
+        <!-- tabs:end -->
 
 ## 项目打包
 * 简要说明
