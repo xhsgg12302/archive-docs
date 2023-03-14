@@ -2,10 +2,10 @@
 
 ## 存储安装包
 
-* 简要说明
+* ### 简要说明
     > 将一些日常工作中用到的常用软件或者破解工具以及流程做个记录，利用公共仓库进行存储，使用的时候直接docker拉取镜像运行，然后挂载容器内文件到本地，直接进行安装。
 
-* 流程
+* ### 流程
     
     - 构建Dockerfile	
         ```docker
@@ -64,10 +64,10 @@
         <!-- tabs:end -->
 
 ## 项目打包
-* 简要说明
+* ### 简要说明
     > 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
 
-* 方式一：(把依赖组件(redis,zk,mysql)编排，一次性构建)
+* ### 方式一：(把依赖组件(redis,zk,mysql)编排，一次性构建)
     - 基于依赖镜像构建，比如：
         ```docker
         # ---- Dependencies ----
@@ -184,7 +184,7 @@
             # 查看容器运行log：
             $ docker-compose logs [service-name]
             ```
-* 方式2：（分开单独打包）
+* ### 方式2：（分开单独打包）
     1. 创建docker网络
         ```shell
         # 创建网络
@@ -215,10 +215,10 @@
     6. 启动镜像启动镜像并检查是否正常 `$ docker run -d -p 9017:9017 --name insurance-center --net demo-net insurance-center:5.0.1`
 
 ## MySQL数据卷容器
-* 简要说明
+* ### 简要说明
     > 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
 
-* 流程
+* ### 流程
     1. 获取 MySQL datadir目录中的数据
     2. 构建Dockerfile
         ```docker
