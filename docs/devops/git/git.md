@@ -22,7 +22,7 @@
 
 	> 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
 
-* 内置的两种基本helper(`store`,`cache`)
+* ### 内置的两种基本helper(`store`,`cache`)
 	```shell
 	# 可以通过命令进行查看 
 	$ find /Library/Developer/CommandLineTools/usr/libexec/git-core -name "git-credential*"
@@ -102,7 +102,7 @@
 	fi
 	```
 	
-* helper配置格式
+* ### helper配置格式
 	> 上文之所以说git credential是根命令，最基本命令，是因为具体干活的是其他的，比如store，cache等，至于哪一个工具，就看配置了哪些
 	| conf	| des	|
 	| --	| -- 	|
@@ -110,61 +110,17 @@
 	| foo -a --opt=bcd	| Runs git-credential-foo -a --opt=bcd |
 	| /absolute/path/foo -xyz	| Runs /absolute/path/foo -xyz | 
 	| !f() { echo "password=s3cre7"; }; f	| Code after ! evaluated in shell |
-* 具体helper使用格式：`git-credential-foo [args] <action>`
+* ### 具体helper使用格式：`git-credential-foo [args] <action>`
 	> action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject.
 	>
 	> 也就是执行 git credential fill 的时候会在配置的credential helper中找到每个具体实现依次执行他们的get.
 	>
 	> git credential approve 依次执行每个具体helper的 store，reject -> erase同理。
 
-* 自定义helper
+* ### 自定义helper
 	> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
-## GIT文件查看
-* 暂存区文件
-	1. 简介
-	> `git ls-files` 命令是用来查看暂存区中文件信息
-	
-	2.  常用参数
-		| index | explain|
-		|--|--|
-		|`--cached(-c)`|显示暂存区中文件，`git ls-files`命令默认的参数|
-		|`--delete(-d)`|显示删除的文件|
-		|`--modified(-m)`|显示修改过的文件|
-		|`--other(-o)`|显示没有被git跟踪的文件|
-		|`--stage(-s)`|显示mode以及文件对应的Blob对象，进而可以获取文件内容|
-	3. 实例
-		* 查看暂存区中有哪些文件
-			`git ls-files`
-		* 查看文件内容
-			+ 查看file对应的Blob 对象，like this:
-				`git ls-files -s -- FILE`
-			+ 然后通过Blob对象，查看里面的内容
-				`git cat-file -p PREFIX`
-* 本地仓库文件
-	1. 实例（未验证）
-	>  `git show master:FILE`
-
-* 分支重命名
-	1. 本地分支改名
-		`git branch -m test-branch learning`
-	2. 推送新分支
-		`git push origin learning`
-	3. 删除远程分支（两种方式）
-		* `git push origin :test-branch`
-		* `git push --delete origin test-branch`
-* 标签操作
-	* 列出本地标签
-		` git tag `
-	* 新建标签(`-f 强制覆盖`)
-		` git tag -a TAGNAME -m 'COMMENT'`
-	* 删除本地标签
-		` git tag -d TAGNAME`
-	* 删除远程标签
-		` git push origin :refs/tags/TAGNAME `
-	* 推送标签
-		` git push origin TAGNAME`
 
 ## GIT仓库迁移
 	
@@ -182,7 +138,92 @@
 # 解决办法
 # 清除.idea的git缓存
 # git rm -r --cached .idea
+
+# 同理，取消其他文件追踪也一样。
 ```
+
+## GIT基本操作
+* ### 文件查看
+	1. 简介
+	> `git ls-files` 命令是用来查看暂存区中文件信息
+	
+	2.  常用参数
+		| index | explain|
+		|--|--|
+		|`--cached(-c)`|显示暂存区中文件，`git ls-files`命令默认的参数|
+		|`--delete(-d)`|显示删除的文件|
+		|`--modified(-m)`|显示修改过的文件|
+		|`--other(-o)`|显示没有被git跟踪的文件|
+		|`--stage(-s)`|显示mode以及文件对应的Blob对象，进而可以获取文件内容|
+	3. 实例
+		* 查看暂存区中有哪些文件
+			`git ls-files`
+		* 查看文件内容
+			+ 查看file对应的Blob 对象，like this:
+				`git ls-files -s -- FILE`
+
+			+ 查看本地仓库文件
+				`git ls-tree --full-tree HEAD`
+				```
+				git ls-tree --full-tree -r HEAD -- cherry-pick.txt
+				git ls-files -s -- cherry-pick.txt
+				```
+			+ 然后通过Blob对象，查看里面的内容
+				`git cat-file -p PREFIX`
+    4. 本地仓库文件
+     	1. 实例（未验证）
+		>  `git show master:FILE`
+		>  `git show :cherry-pick.txt`  查看 暂存区文件
+		>  `git show cherry:cherry-pick.txt` 
+		>  `git show 61ea06c341fcfe80ddd10cbabdf8e9283851753b:cherry-pick.txt` 
+
+	5. 回退文件
+		```
+		# 使用本地仓库的文件覆盖 暂存区
+		$ git restore --staged cherry-pick.txt
+		# 
+		$ git restore <file>..." to discard changes in working directory
+		```
+
+* ### [分支](https://git-scm.com/docs/git-branch)
+	```shell
+	# 创建分支
+	git branch prod
+	# 查看分支
+	git branch -vv
+	# 分支重命名
+	git branch -m prod prod-rename
+	# 删除分支
+	git branch -d prod
+
+	# 关联上游
+	git branch --set-upstream-to=origin/newb prod
+	# 断联上游
+	git branch --unset-upstream prod
+
+	```
+	1. 创建分支
+	2. 
+	3. 本地分支改名
+		`git branch -m test-branch learning`
+	4. 推送新分支
+		`git push origin learning`
+	5. 删除远程分支（两种方式）
+		* `git push origin :test-branch`
+		* `git push --delete origin test-branch`
+* ### 标签操作
+	* 列出本地标签
+		` git tag `
+	* 新建标签(`-f 强制覆盖`)
+		` git tag -a TAGNAME -m 'COMMENT'`
+	* 删除本地标签
+		` git tag -d TAGNAME`
+	* 删除远程标签
+		` git push origin :refs/tags/TAGNAME `
+	* 推送标签
+		` git push origin TAGNAME`
+
+
 ## Reference
 * https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
 * https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
