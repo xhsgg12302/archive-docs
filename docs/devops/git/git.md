@@ -121,17 +121,15 @@
 	> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
-
 ## GIT仓库迁移
-	
-	```
-	$ git clone --bare https://github.com/XHS-12302/helloworld.git
-	$ cd helloworld.git
-	$ git push --mirror https://github.com/new.git
-	```
+```shell
+$ git clone --bare https://github.com/XHS-12302/helloworld.git
+$ cd helloworld.git
+$ git push --mirror https://github.com/new.git
+```
 
 ## GIT忽略文件提交
-```
+```shell
 # 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
 # 原因
 # .idea已经被git跟踪，之后再加入.gitignore后是没有作用的
@@ -198,7 +196,7 @@
 
 	# 强制修改分支位置
 	git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
-	git branch -f bugFix C6
+	git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
 
 	# reset
 	git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
@@ -209,6 +207,10 @@
 	# 强制回退远程分支(在别人未拉取最新远程之前可以。之后的话，如果对方处理不好，则又会将上一个版本的东西带入当前分支)
 	git reset --hard rebs^
 	git push -f origin rebs:rebs 
+
+	# 在任意位置创建分支
+	git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
+	git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
 
 	# comment
 	git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
@@ -241,7 +243,8 @@
 	5. 删除远程分支（两种方式）
 		* `git push origin :test-branch`
 		* `git push --delete origin test-branch`
-* ### 标签操作
+
+* ### 标签
 	* 列出本地标签
 		` git tag `
 	* 新建标签(`-f 强制覆盖`)
@@ -253,6 +256,17 @@
 	* 推送标签
 		` git push origin TAGNAME`
 
+* ### 修复本地提交
+	```shell
+	# 修改commit message
+	git commit --amend  # 其实类似于重新做了一次提交
+
+	# cherry-pick
+	# 将一些提交记录复制到当前所在位置
+	*test $ git cherry-pick C2 C4
+
+	# 交互式rebase -i
+	```
 
 ## Reference
 * https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
