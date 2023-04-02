@@ -262,8 +262,32 @@ $ git push --mirror https://github.com/new.git
 	git commit --amend  # 其实类似于重新做了一次提交
 
 	# cherry-pick
-	# 将一些提交记录复制到当前所在位置
-	*test $ git cherry-pick C2 C4
+	# 将一些提交记录复制到HEAD指向的节点
+	*main $ git cherry-pick C2 C4
+		   main 															  main
+		   C5													   C5---C2'---C4'
+		  /														/
+	C0---C1---C2---C3---C4			$(git cherry-pick C2 C4)	C0---C1---C2---C3---C4	
+						\														 \
+						side													  side
+
+	# git rebase [commit | branch]
+	# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
+	*bugFix $ git rebase main  # 会将bugFix上与main分之差异节点复制到main分之上。
+	# 指定节点rebase. 将指定节点或分支 与 main的差异复制到main 上。
+	*bugFix $ git rebase main bugFix
+	*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准
+
+		   main													     main      HEAD
+		   C5										                   C5---C2'---C3'
+		  /						git rebase main C3					/
+	C0---C1---C2---C3---C4        ----------------------->             C0---C1---C2---C3---C4 
+						\															 \
+						bugFix														 bugFix
+	⭕️ main*
+	|
+	⭕️ bugFix
+	* main $ git rebase bugFix # 会将main分之直接移动到bugFix,由于继承关系。fast-forward
 
 	# 交互式rebase -i
 	# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)
