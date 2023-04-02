@@ -222,7 +222,7 @@ $ git push --mirror https://github.com/new.git
 	git branch prod
 	git branch -b newBranch # 创建并检出分支
 	# 查看分支
-	git branch -v  [-vv 包括upstream info]
+	git branch -v  [-vv 包括upstream info]  # https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
 	# 分支重命名
 	git branch -m prod prod-rename
 	# 删除分支
