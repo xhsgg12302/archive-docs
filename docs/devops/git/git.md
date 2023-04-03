@@ -342,6 +342,26 @@ git rm -r --cached .idea
 	git commit --amend
 	git cherry-pick C3
 	```
+* ### 高级
+	![](../../../.images/git/advanced1.png ':size=33%') ![](../../../.images/git/advanced2.png ':size=33%') ![](../../../.images/git/advanced3.png ':size=33%')
+	```shell
+	# 多分支rebase
+	git rebase main bugFix
+	git rebase bugFix side
+	git rebase side
+	git rebase another main
+
+	# 两个父节点
+	# 操作符 ^ 与 ~ 符一样，后面也可以跟一个数字。但是该操作符后面的数字与 ~ 后面的不同，并不是用来指定向上返回几代，而是指定合并提交记录的某个父提交
+	git branch bugWork HEAD~^2~1
+
+	# 纠缠不清的分支 cherry-pick
+	git checkout one
+	git cherry-pick C4 C3 C2
+	git checkout two
+	git cherry-pick C5 C4 C3 C2
+	git branch -f three C2
+	```
 
 ## Reference
 * https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
