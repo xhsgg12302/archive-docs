@@ -121,17 +121,15 @@
 	> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
-
 ## GIT仓库迁移
-	
-	```
-	$ git clone --bare https://github.com/XHS-12302/helloworld.git
-	$ cd helloworld.git
-	$ git push --mirror https://github.com/new.git
-	```
+```shell
+$ git clone --bare https://github.com/XHS-12302/helloworld.git
+$ cd helloworld.git
+$ git push --mirror https://github.com/new.git
+```
 
 ## GIT忽略文件提交
-```
+```shell
 # 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
 # 原因
 # .idea已经被git跟踪，之后再加入.gitignore后是没有作用的
@@ -185,12 +183,46 @@
 		$ git restore <file>..." to discard changes in working directory
 		```
 
-* ### [分支](https://git-scm.com/docs/git-branch)
+* ### HEAD分离 
+	```shell
+	# HEAD 指向当前工作的commit 节点。不一定指向分支（比如分离状态下）
+
+	*main $ git chekcout main # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
+
+	# 相对引用
+	# 使用 ^ 向上移动 1 个提交记录
+	# 使用 ~<num> 向上移动多个提交记录，如 ~3
+	git checkout main^  # 标识移动至 main 指向提交记录的上一个提交
+
+	# 强制修改分支位置
+	git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
+	git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
+
+	# reset
+	git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
+
+	# revert
+	git revert HEAD
+
+	# 强制回退远程分支(在别人未拉取最新远程之前可以。之后的话，如果对方处理不好，则又会将上一个版本的东西带入当前分支)
+	git reset --hard rebs^
+	git push -f origin rebs:rebs 
+
+	# 在任意位置创建分支
+	git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
+	git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
+
+	# comment
+	git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
+	```
+
+* ### 分支  &nbsp;[doc](https://git-scm.com/docs/git-branch)
 	```shell
 	# 创建分支
 	git branch prod
+	git branch -b newBranch # 创建并检出分支
 	# 查看分支
-	git branch [-vv | -v | -r | -a | --list]
+	git branch [-vv | -v | -r | -a | --list] [-vv 包括upstream info]  # https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
 	# 分支重命名
 	git branch -m prod prod-rename
 	# 删除分支
@@ -219,7 +251,8 @@
 	5. 删除远程分支（两种方式）
 		* `git push origin :test-branch`
 		* `git push --delete origin test-branch`
-* ### 标签操作
+
+* ### 标签
 	* 列出本地标签
 		` git tag `
 	* 新建标签(`-f 强制覆盖`)
@@ -231,7 +264,63 @@
 	* 推送标签
 		` git push origin TAGNAME`
 
+* ### 修复本地提交
+	```shell
+	# 修改commit message
+	git commit --amend  # 其实类似于重新做了一次提交
+
+	# cherry-pick
+	# 将一些提交记录复制到HEAD指向的节点
+	*main $ git cherry-pick C2 C4
+		   main 															  main
+		   C5													   C5---C2'---C4'
+		  /														/
+	C0---C1---C2---C3---C4			$(git cherry-pick C2 C4)	C0---C1---C2---C3---C4	
+						\														 \
+						side													  side
+
+	# git rebase [commit | branch]
+	# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
+	*bugFix $ git rebase main  # 会将bugFix上与main分之差异节点复制到main分之上。
+	# 指定节点rebase. 将指定节点或分支 与 main的差异复制到main 上。
+	*bugFix $ git rebase main bugFix
+	*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准
+
+		   main													     main      HEAD
+		   C5										                   C5---C2'---C3'
+		  /						git rebase main C3					/
+	C0---C1---C2---C3---C4        ----------------------->             C0---C1---C2---C3---C4 
+						\															 \
+						bugFix														 bugFix
+	⭕️ main*
+	|
+	⭕️ bugFix
+	* main $ git rebase bugFix # 会将main分之直接移动到bugFix,由于继承关系。fast-forward
+
+	# 交互式rebase -i
+	# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)
+	#
+	# Commands:
+	# p, pick <commit> = use commit
+	# r, reword <commit> = use commit, but edit the commit message
+	# e, edit <commit> = use commit, but stop for amending
+	# s, squash <commit> = use commit, but meld into previous commit
+	# f, fixup <commit> = like "squash", but discard this commit's log message
+	# x, exec <command> = run command (the rest of the line) using shell
+	# b, break = stop here (continue rebase later with 'git rebase --continue')
+	# d, drop <commit> = remove commit
+	# l, label <label> = label current HEAD with a name
+	# t, reset <label> = reset HEAD to a label
+	# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+	# .       create a merge commit using the original merge commit's
+	# .       message (or the oneline, if no original merge commit was
+	# .       specified). Use -c <commit> to reword the commit message.
+	#
+	# These lines can be re-ordered; they are executed from top to bottom.
+
+	```
 
 ## Reference
 * https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
 * https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
+* https://learngitbranching.js.org/?locale=zh_CN
