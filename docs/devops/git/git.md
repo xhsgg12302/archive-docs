@@ -135,17 +135,18 @@ $ git push --mirror https://github.com/new.git
 # .idea已经被git跟踪，之后再加入.gitignore后是没有作用的
 # 解决办法
 # 清除.idea的git缓存
-# git rm -r --cached .idea
+git rm -r --cached .idea
 
 # 同理，取消其他文件追踪也一样。
 ```
 
 ## GIT基本操作
+
 * ### 文件查看
-	1. 简介
-	> `git ls-files` 命令是用来查看暂存区中文件信息
+	> `git ls-files` show information about files in the index and the working tree <br>
+	`git ls-tree ` list the contents of a tree object
 	
-	2.  常用参数
+	1. `ls-files` 常用参数
 		| index | explain|
 		|--|--|
 		|`--cached(-c)`|显示暂存区中文件，`git ls-files`命令默认的参数|
@@ -153,35 +154,28 @@ $ git push --mirror https://github.com/new.git
 		|`--modified(-m)`|显示修改过的文件|
 		|`--other(-o)`|显示没有被git跟踪的文件|
 		|`--stage(-s)`|显示mode以及文件对应的Blob对象，进而可以获取文件内容|
-	3. 实例
-		* 查看暂存区中有哪些文件
-			`git ls-files`
-		* 查看文件内容
-			+ 查看file对应的Blob 对象，like this:
-				`git ls-files -s -- FILE`
 
-			+ 查看本地仓库文件
-				`git ls-tree --full-tree HEAD`
-				```
-				git ls-tree --full-tree -r HEAD -- cherry-pick.txt
-				git ls-files -s -- cherry-pick.txt
-				```
-			+ 然后通过Blob对象，查看里面的内容
-				`git cat-file -p PREFIX`
-    4. 本地仓库文件
-     	1. 实例（未验证）
-		>  `git show master:FILE`
-		>  `git show :cherry-pick.txt`  查看 暂存区文件
-		>  `git show cherry:cherry-pick.txt` 
-		>  `git show 61ea06c341fcfe80ddd10cbabdf8e9283851753b:cherry-pick.txt` 
+	2. 实例
+        ```shell
+		# 查看暂存区中有哪些文件
+		git ls-files
 
-	5. 回退文件
-		```
-		# 使用本地仓库的文件覆盖 暂存区
-		$ git restore --staged cherry-pick.txt
-		# 
-		$ git restore <file>..." to discard changes in working directory
-		```
+		# 查看file对应的Blob对象
+		git ls-files -s -- FILE
+
+		# 查看本地仓库文件Blob属性
+		git ls-tree --full-tree HEAD
+		git ls-tree --full-tree -r HEAD -- cherry-pick.txt
+
+		# 通过Blob属性，查看文件内容
+		git cat-file -p BLOB
+
+		# show 方式
+		git show master:FILE   # 查看本地仓库文件
+		git show :cherry-pick.txt # 查看暂存区文件
+		git show cherry:cherry-pick.txt
+		git show 61ea06c341fcfe80ddd10cbabdf8e9283851753b:cherry-pick.txt
+		``` 
 
 * ### HEAD分离 
 	```shell
@@ -222,7 +216,8 @@ $ git push --mirror https://github.com/new.git
 	git branch prod
 	git branch -b newBranch # 创建并检出分支
 	# 查看分支
-	git branch [-vv | -v | -r | -a | --list] [-vv 包括upstream info]  # https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
+	# https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
+	git branch [-vv | -v | -r | -a | --list] [-vv 包括upstream info]  
 	# 分支重命名
 	git branch -m prod prod-rename
 	# 删除分支
@@ -242,32 +237,44 @@ $ git push --mirror https://github.com/new.git
 	git push --delete origin prod-test
 
 	```
-	1. 创建分支
-	2. 
-	3. 本地分支改名
-		`git branch -m test-branch learning`
-	4. 推送新分支
-		`git push origin learning`
-	5. 删除远程分支（两种方式）
-		* `git push origin :test-branch`
-		* `git push --delete origin test-branch`
 
 * ### 标签
-	* 列出本地标签
-		` git tag `
-	* 新建标签(`-f 强制覆盖`)
-		` git tag -a TAGNAME -m 'COMMENT'`
-	* 删除本地标签
-		` git tag -d TAGNAME`
-	* 删除远程标签
-		` git push origin :refs/tags/TAGNAME `
-	* 推送标签
-		` git push origin TAGNAME`
+	```shell
+	# 列出本地标签
+	git tag
+	# 验证tag
+	git tag -v tagName
+
+	# 新建标签
+	# -a 创建一个无符号、带注释的标记对象 默认打开vim提交message。也可以通过 -m 一次性传递参数给message
+	git tag [-f(强制覆盖)] -a tagName -m 'COMMENT'
+	git tag 1.0.2-PRE C3
+
+	# 删除本地标签
+	git tag -d tagName
+
+	# 推送标签
+	git push origin tagName
+
+	# 删除远程标签
+	git push origin :[refs/tags/tagNme | tagName]
+	git push --delete origin tagName
+
+	# git describe
+	git describe <ref> # <ref> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会使用你目前所在的位置（HEAD）
+	output: <tag>_<numCommits>_g<hash>  # tag表示的是离ref最近的标签,numCommits表示相差有多少个提交记录,hash表示提交记录hash值。 如果ref上有标签，则只输出标签名。
+
+	```
 
 * ### 修复本地提交
 	```shell
 	# 修改commit message
 	git commit --amend  # 其实类似于重新做了一次提交
+
+	# 使用本地仓库的文件覆盖 暂存区
+	$ git restore --staged cherry-pick.txt
+	# 
+	$ git restore <file>... to discard changes in working directory
 
 	# cherry-pick
 	# 将一些提交记录复制到HEAD指向的节点
