@@ -123,7 +123,7 @@
 
 ## GIT仓库迁移
 ```shell
-$ git clone --bare https://github.com/XHS-12302/helloworld.git
+$ git clone --bare https://github.com/xhsgg12302/helloworld.git
 $ cd helloworld.git
 $ git push --mirror https://github.com/new.git
 ```
@@ -277,7 +277,7 @@ git rm -r --cached .idea
 	$ git restore <file>... to discard changes in working directory
 
 	# cherry-pick
-	# 将一些提交记录复制到HEAD指向的节点
+	# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
 	*main $ git cherry-pick C2 C4
 		   main 															  main
 		   C5													   C5---C2'---C4'
@@ -325,6 +325,22 @@ git rm -r --cached .idea
 	#
 	# These lines can be re-ordered; they are executed from top to bottom.
 
+	```
+* ### 提交技巧
+	![skill 1](../../../.images/git/mixed2.png ':size=48%') ![skill 2](../../../.images/git/mixed3.png ':size=48%')
+	```shell
+	# 如果在main分支上新建分支newImage并做提交C2，并且在newImage分支上创建分支caption并做提交C3。
+	# 假如需要将C2修复 比如 修改提交信息。则可以如下尝试
+	git rebase -i  # 将提交重新排序，把需要修改的记录挪到最前
+	git commit --amend # 进行修改
+	git rebase -i  # 调回原来的顺序
+	# 最后将main 移动到修改的最前端。
+
+	# 通过cherry-pick
+	git checkout main
+	git cherry-pick C2
+	git commit --amend
+	git cherry-pick C3
 	```
 
 ## Reference
