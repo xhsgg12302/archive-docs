@@ -190,7 +190,7 @@
 	# 创建分支
 	git branch prod
 	# 查看分支
-	git branch -vv
+	git branch [-vv | -v | -r | -a | --list]
 	# 分支重命名
 	git branch -m prod prod-rename
 	# 删除分支
@@ -200,6 +200,14 @@
 	git branch --set-upstream-to=origin/newb prod
 	# 断联上游
 	git branch --unset-upstream prod
+
+	# 推送分支
+	git push origin prod-test    // prod-test -> prod-test
+	git push origin newb:newb-fake [-u | --set-upstream]
+
+	# 删除远程分支
+	git push origin :prod-test
+	git push --delete origin prod-test
 
 	```
 	1. 创建分支
