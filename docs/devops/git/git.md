@@ -214,12 +214,16 @@ git rm -r --cached .idea
 	```shell
 	# 创建分支
 	git branch prod
-	git branch -b newBranch # 创建并检出分支
+	git branch -b newBranch [origin/main] # 创建并检出分支 [可以同时设置追踪的远程分支] | 也可参见HEAD 分离中的 `在任意位置创建分支`
+	git branch -u origin/main foo # 如果当前在 foo 分支，则可以省略foo
+
 	# 查看分支
 	# https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
 	git branch [-vv | -v | -r | -a | --list] [-vv 包括upstream info]  
+	
 	# 分支重命名
 	git branch -m prod prod-rename
+	
 	# 删除分支
 	git branch -d prod
 
