@@ -766,6 +766,9 @@ under the License.
 ```
 
 ### maven-release-plugin
+```shell
+mvn -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dswagger2markup.skip=true -Dasciidoctor.skip=true -DautoVersionSubmodules=true -DscmCommentPrefix='[3.0.0-M5]' -DscmDevelopmentCommitComment='@{prefix} next development iteration @{releaseLabel}...' -DscmReleaseCommitComment='@{prefix} release @{releaseLabel}...' org.apache.maven.plugins:maven-release-plugin:3.0.0-M5:clean
+```
 ```xml
 <!--
 解决 java版本过高，然后Lombok兼容的问题。
