@@ -743,6 +743,459 @@ under the License.
 <hello></hello>
 ```
 
+### maven-dependency-plugin
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <!-- 把依赖的所有maven jar包拷贝到lib目录中 -->
+                <outputDirectory>${project.build.directory}/archive-demo/lib</outputDirectory>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+### maven-release-plugin
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-release-plugin</artifactId>
+    <!--<version>2.3.2</version>-->
+    <version>3.0.0-M1</version>
+    <configuration>
+        <autoVersionSubmodules>true</autoVersionSubmodules>
+        <scmCommentPrefix>[xhsgg12302]</scmCommentPrefix>
+        <scmReleaseCommitComment>@{prefix} release @{releaseLabel}</scmReleaseCommitComment>
+        <scmDevelopmentCommitComment>@{prefix} next development @{releaseLabel}</scmDevelopmentCommitComment>
+    </configuration>
+</plugin>
+```
+[执行顺序](https://maven.apache.org/maven-release/maven-release-manager/#prepare)
+<details><summary>mvn release:clean release:prepare</summary>
+
+```shell
+➜  haohuo-component git:(master) ✗ mvn release:clean release:prepare
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] haohuo-component                                                   [pom]
+[INFO] hh-cpt-executor                                                    [jar]
+[INFO] hh-cpt-test                                                        [jar]
+[INFO] log4j                                                              [jar]
+[INFO] commons-logging                                                    [jar]
+[INFO] hh-cpt-log4j-CVE                                                   [jar]
+[INFO] hh-cpt-maven-dependency                                            [jar]
+[INFO] 
+[INFO] ---------------< com.haohuo.framework:haohuo-component >----------------
+[INFO] Building haohuo-component 1.1.1-SNAPSHOT                           [1/7]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-release-plugin:3.0.0-M1:clean (default-cli) @ haohuo-component ---
+[INFO] phase cleanup
+[INFO] Cleaning up after release...
+[INFO] 
+[INFO] --- maven-release-plugin:3.0.0-M1:prepare (default-cli) @ haohuo-component ---
+[INFO] phase verify-release-configuration
+[INFO] starting prepare goal, composed of 17 phases: check-poms, scm-check-modifications, check-dependency-snapshots, create-backup-poms, map-release-versions, input-variables, map-development-versions, rewrite-poms-for-release, generate-release-poms, run-preparation-goals, scm-commit-release, scm-tag, rewrite-poms-for-development, remove-release-poms, run-completion-goals, scm-commit-development, end-release
+[INFO] [prepare] 1/17 check-poms
+[INFO] [prepare] 2/17 scm-check-modifications
+[INFO] Verifying that there are no local modifications...
+[INFO]   ignoring changes on: **/pom.xml.releaseBackup, **/pom.xml.next, **/pom.xml.tag, **/pom.xml.branch, **/release.properties, **/pom.xml.backup
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git rev-parse --show-prefix
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git status --porcelain .
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-executor/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-jcl/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-log4j/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-log4j-CVE/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-common/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo1/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo2/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-test/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-dependency/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-plugin/gencode-maven-plugin/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-test/target/
+[WARNING] Ignoring unrecognized line: ?? release.properties
+[INFO] [prepare] 3/17 check-dependency-snapshots
+[INFO] Checking dependencies and plugins for snapshots ...
+[INFO] [prepare] 4/17 create-backup-poms
+[INFO] [prepare] 5/17 map-release-versions
+What is the release version for "haohuo-component"? (com.haohuo.framework:haohuo-component) 1.1.1: : 
+What is the release version for "hh-cpt-executor"? (com.haohuo.framework:hh-cpt-executor) 1.1.1: : 
+What is the release version for "hh-cpt-test"? (com.haohuo.framework:hh-cpt-test) 1.1.1: : 
+What is the release version for "log4j"? (log4j:log4j) 1.1.1: : 
+What is the release version for "commons-logging"? (commons-logging:commons-logging) 1.1.1: : 
+What is the release version for "hh-cpt-log4j-CVE"? (com.haohuo.framework:hh-cpt-log4j-CVE) 1.1.1: : 
+What is the release version for "hh-cpt-maven-dependency"? (com.haohuo.framework:hh-cpt-maven-dependency) 1.1.1: : 
+[INFO] [prepare] 6/17 input-variables
+What is the SCM release tag or label for "haohuo-component"? (com.haohuo.framework:haohuo-component) haohuo-component-1.1.1: : 1.1.1.release
+[INFO] [prepare] 7/17 map-development-versions
+What is the new development version for "haohuo-component"? (com.haohuo.framework:haohuo-component) 1.1.2-SNAPSHOT: : 
+What is the new development version for "hh-cpt-executor"? (com.haohuo.framework:hh-cpt-executor) 1.1.2-SNAPSHOT: : 
+What is the new development version for "hh-cpt-test"? (com.haohuo.framework:hh-cpt-test) 1.1.2-SNAPSHOT: : 
+What is the new development version for "log4j"? (log4j:log4j) 1.1.2-SNAPSHOT: : 
+What is the new development version for "commons-logging"? (commons-logging:commons-logging) 1.1.2-SNAPSHOT: : 
+What is the new development version for "hh-cpt-log4j-CVE"? (com.haohuo.framework:hh-cpt-log4j-CVE) 1.1.2-SNAPSHOT: : 
+What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.framework:hh-cpt-maven-dependency) 1.1.2-SNAPSHOT: : 
+[INFO] [prepare] 8/17 rewrite-poms-for-release
+[INFO] Transforming 'haohuo-component'...
+[INFO] Transforming 'hh-cpt-executor'...
+[INFO] Transforming 'hh-cpt-test'...
+[INFO] Transforming 'log4j'...
+[INFO] Transforming 'commons-logging'...
+[INFO] Transforming 'hh-cpt-log4j-CVE'...
+[INFO] Transforming 'hh-cpt-maven-dependency'...
+[INFO] [prepare] 9/17 generate-release-poms
+[INFO] Not generating release POMs
+[INFO] [prepare] 10/17 run-preparation-goals
+[INFO] Executing goals 'clean verify'...
+[WARNING] Maven will be executed in interactive mode, but no input stream has been configured for this MavenInvoker instance.
+[INFO] [INFO] Scanning for projects...
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [INFO] Reactor Build Order:
+[INFO] [INFO] 
+[INFO] [INFO] haohuo-component                                                   [pom]
+[INFO] [INFO] hh-cpt-executor                                                    [jar]
+[INFO] [INFO] hh-cpt-test                                                        [jar]
+[INFO] [INFO] log4j                                                              [jar]
+[INFO] [INFO] commons-logging                                                    [jar]
+[INFO] [INFO] hh-cpt-log4j-CVE                                                   [jar]
+[INFO] [INFO] hh-cpt-maven-dependency                                            [jar]
+[INFO] [INFO] 
+[INFO] [INFO] ---------------< com.haohuo.framework:haohuo-component >----------------
+[INFO] [INFO] Building haohuo-component 1.1.1                                    [1/7]
+[INFO] [INFO] --------------------------------[ pom ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ haohuo-component ---
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ haohuo-component ---
+[INFO] [INFO] 
+[INFO] [INFO] ----------------< com.haohuo.framework:hh-cpt-executor >----------------
+[INFO] [INFO] Building hh-cpt-executor 1.1.1                                     [2/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ hh-cpt-executor ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ hh-cpt-executor ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/src/main/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ hh-cpt-executor ---
+[INFO] [INFO] Changes detected - recompiling the module!
+[INFO] [INFO] Compiling 17 source files to /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/target/classes
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ hh-cpt-executor ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ hh-cpt-executor ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ hh-cpt-executor ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ hh-cpt-executor ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/target/hh-cpt-executor-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ hh-cpt-executor ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-executor/target/hh-cpt-executor-1.1.1-sources.jar
+[INFO] [INFO] 
+[INFO] [INFO] ------------------< com.haohuo.framework:hh-cpt-test >------------------
+[INFO] [INFO] Building hh-cpt-test 1.1.1                                         [3/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ hh-cpt-test ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-test/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ hh-cpt-test ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] Copying 3 resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ hh-cpt-test ---
+[INFO] [INFO] Changes detected - recompiling the module!
+[INFO] [INFO] Compiling 3 source files to /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-test/target/classes
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ hh-cpt-test ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-test/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ hh-cpt-test ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ hh-cpt-test ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ hh-cpt-test ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-test/target/hh-cpt-test-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ hh-cpt-test ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-test/target/hh-cpt-test-1.1.1-sources.jar
+[INFO] [INFO] 
+[INFO] [INFO] ----------------------------< log4j:log4j >-----------------------------
+[INFO] [INFO] Building log4j 1.1.1                                               [4/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ log4j ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-log4j/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ log4j ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-log4j/src/main/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ log4j ---
+[INFO] [INFO] Nothing to compile - all classes are up to date
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ log4j ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-log4j/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ log4j ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ log4j ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ log4j ---
+[INFO] [WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-log4j/target/log4j-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ log4j ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-log4j/target/log4j-1.1.1-sources.jar
+[INFO] [INFO] 
+[INFO] [INFO] ------------------< commons-logging:commons-logging >-------------------
+[INFO] [INFO] Building commons-logging 1.1.1                                     [5/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ commons-logging ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-jcl/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ commons-logging ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-jcl/src/main/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ commons-logging ---
+[INFO] [INFO] Nothing to compile - all classes are up to date
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ commons-logging ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-jcl/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ commons-logging ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ commons-logging ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ commons-logging ---
+[INFO] [WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-jcl/target/commons-logging-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ commons-logging ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-fake-jcl/target/commons-logging-1.1.1-sources.jar
+[INFO] [INFO] 
+[INFO] [INFO] ---------------< com.haohuo.framework:hh-cpt-log4j-CVE >----------------
+[INFO] [INFO] Building hh-cpt-log4j-CVE 1.1.1                                    [6/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Changes detected - recompiling the module!
+[INFO] [INFO] Compiling 14 source files to /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/target/classes
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[3,32] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[3,32] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[3,32] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[3,32] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[3,32] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[28,8] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [WARNING] /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/main/java/com/haohuo/framework/jndi/RMIRefServer.java:[28,48] ReferenceWrapper是内部专用 API, 可能会在未来发行版中删除
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/target/hh-cpt-log4j-CVE-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ hh-cpt-log4j-CVE ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-log4j-CVE/target/hh-cpt-log4j-CVE-1.1.1-sources.jar
+[INFO] [INFO] 
+[INFO] [INFO] ------------< com.haohuo.framework:hh-cpt-maven-dependency >------------
+[INFO] [INFO] Building hh-cpt-maven-dependency 1.1.1                             [7/7]
+[INFO] [INFO] --------------------------------[ jar ]---------------------------------
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] Deleting /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-maven-dependency/target
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] Copying 2 resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] [INFO] skip non existing resourceDirectory /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-maven-dependency/src/test/resources
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] No sources to compile
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] No tests to run.
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-maven-dependency/target/hh-cpt-maven-dependency-1.1.1.jar
+[INFO] [INFO] 
+[INFO] [INFO] --- maven-source-plugin:2.1.1:jar-no-fork (attach-sources) @ hh-cpt-maven-dependency ---
+[INFO] [INFO] Building jar: /Users/mac/Documents/idea-projects/haohuo-component/hh-cpt-maven-dependency/target/hh-cpt-maven-dependency-1.1.1-sources.jar
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [INFO] Reactor Summary for haohuo-component 1.1.1:
+[INFO] [INFO] 
+[INFO] [INFO] haohuo-component ................................... SUCCESS [  0.396 s]
+[INFO] [INFO] hh-cpt-executor .................................... SUCCESS [  3.177 s]
+[INFO] [INFO] hh-cpt-test ........................................ SUCCESS [  1.619 s]
+[INFO] [INFO] log4j .............................................. SUCCESS [  0.042 s]
+[INFO] [INFO] commons-logging .................................... SUCCESS [  0.042 s]
+[INFO] [INFO] hh-cpt-log4j-CVE ................................... SUCCESS [  1.938 s]
+[INFO] [INFO] hh-cpt-maven-dependency ............................ SUCCESS [  0.572 s]
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [INFO] BUILD SUCCESS
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [INFO] Total time:  8.157 s
+[INFO] [INFO] Finished at: 2023-04-07T11:56:32+08:00
+[INFO] [INFO] ------------------------------------------------------------------------
+[INFO] [prepare] 11/17 scm-commit-release
+[INFO] Checking in modified POMs...
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git add -- pom.xml hh-cpt-executor/pom.xml hh-cpt-test/pom.xml hh-cpt-fake-log4j/pom.xml hh-cpt-fake-jcl/pom.xml hh-cpt-log4j-CVE/pom.xml hh-cpt-maven-dependency/pom.xml
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git rev-parse --show-prefix
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git status --porcelain .
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-executor/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-executor/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-jcl/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-jcl/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-log4j/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-log4j/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-log4j-CVE/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-log4j-CVE/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-common/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo1/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo2/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-test/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-dependency/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-dependency/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-plugin/gencode-maven-plugin/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-test/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-test/target/
+[WARNING] Ignoring unrecognized line: ?? pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? release.properties
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git commit --verbose -F /var/folders/g8/1p6zv3xs00x2b9h8fd6h8nr80000gn/T/maven-scm-2145511670.commit
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git symbolic-ref HEAD
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git push https://gitee.com/xhsgg12302/haohuo-component refs/heads/master:refs/heads/master
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] [prepare] 12/17 scm-tag
+[INFO] Tagging release with the label 1.1.1.release...
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git tag -F /var/folders/g8/1p6zv3xs00x2b9h8fd6h8nr80000gn/T/maven-scm-1550821822.commit 1.1.1.release
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git push https://gitee.com/xhsgg12302/haohuo-component refs/tags/1.1.1.release
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git ls-files
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] [prepare] 13/17 rewrite-poms-for-development
+[INFO] Transforming 'haohuo-component'...
+[INFO] Transforming 'hh-cpt-executor'...
+[INFO] Transforming 'hh-cpt-test'...
+[INFO] Transforming 'log4j'...
+[INFO] Transforming 'commons-logging'...
+[INFO] Transforming 'hh-cpt-log4j-CVE'...
+[INFO] Transforming 'hh-cpt-maven-dependency'...
+[INFO] [prepare] 14/17 remove-release-poms
+[INFO] Not removing release POMs
+[INFO] [prepare] 15/17 run-completion-goals
+[INFO] [prepare] 16/17 scm-commit-development
+[INFO] Checking in modified POMs...
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git add -- pom.xml hh-cpt-executor/pom.xml hh-cpt-test/pom.xml hh-cpt-fake-log4j/pom.xml hh-cpt-fake-jcl/pom.xml hh-cpt-log4j-CVE/pom.xml hh-cpt-maven-dependency/pom.xml
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git rev-parse --show-prefix
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git status --porcelain .
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-executor/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-executor/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-jcl/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-jcl/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-log4j/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-fake-log4j/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-log4j-CVE/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-log4j-CVE/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-common/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo1/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-demo2/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-conflict/hh-cpt-project-test/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-dependency/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-dependency/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-maven-plugin/gencode-maven-plugin/target/
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-test/pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? hh-cpt-test/target/
+[WARNING] Ignoring unrecognized line: ?? pom.xml.releaseBackup
+[WARNING] Ignoring unrecognized line: ?? release.properties
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git commit --verbose -F /var/folders/g8/1p6zv3xs00x2b9h8fd6h8nr80000gn/T/maven-scm-1390995692.commit
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git symbolic-ref HEAD
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] Executing: /bin/sh -c cd /Users/mac/Documents/idea-projects/haohuo-component && git push https://gitee.com/xhsgg12302/haohuo-component refs/heads/master:refs/heads/master
+[INFO] Working directory: /Users/mac/Documents/idea-projects/haohuo-component
+[INFO] [prepare] 17/17 end-release
+[INFO] Release preparation complete.
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for haohuo-component 1.1.1-SNAPSHOT:
+[INFO] 
+[INFO] haohuo-component ................................... SUCCESS [01:39 min]
+[INFO] hh-cpt-executor .................................... SKIPPED
+[INFO] hh-cpt-test ........................................ SKIPPED
+[INFO] log4j .............................................. SKIPPED
+[INFO] commons-logging .................................... SKIPPED
+[INFO] hh-cpt-log4j-CVE ................................... SKIPPED
+[INFO] hh-cpt-maven-dependency ............................ SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:39 min
+[INFO] Finished at: 2023-04-07T11:56:37+08:00
+[INFO] ------------------------------------------------------------------------
+➜  haohuo-component git:(master) ✗ 
+```
+</details>
+
 
 ### spring-boot-maven-plugin
 ```xml
@@ -775,27 +1228,6 @@ under the License.
 </plugin>
 ```
 
-### maven-dependency-plugin
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-dependency-plugin</artifactId>
-    <version>3.1.0</version>
-    <executions>
-        <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-                <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-                <!-- 把依赖的所有maven jar包拷贝到lib目录中 -->
-                <outputDirectory>${project.build.directory}/archive-demo/lib</outputDirectory>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-```
 ### gencode-maven-plugin
 ```xml
 <profile>
