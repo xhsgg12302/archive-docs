@@ -422,12 +422,17 @@ git rm -r --cached .idea
 	```
 	* #### fetch 参数
 	```shell
-	# 与push 类似，只是方向相反
+	# 与push 类似，只是方向相反 git fetch origin <remote>:<source>
+	# 一般不会直接更新本地分支，比如 git fetch origin foo~1:bar
+	# 不存在本地，新建更新。
+	# 没有参数，直接 git fetch，会更新远程所有分支
 	```
-	* #### git push 参数
+	* #### 没有source
 	```shell
+	git push origin :main # 删除远程分支
+	git fetch origin :bar # 创建本地分支
 	```
-	* #### git push 参数
+	* #### pull 参数
 	```shell
 	```
 
