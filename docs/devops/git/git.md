@@ -434,6 +434,16 @@ git rm -r --cached .idea
 	```
 	* #### pull 参数
 	```shell
+	# 下面两者等价（需要注意合并的对象，因为fetch默认不会更新本地分支，所以，第一个是 merge o/foo, 而第二个指明了 更新本地分支，所以会 merge bugFix）
+	git pull origin foo
+	git fetch origin foo; git merge o/foo
+
+	git pull origin bar~1:bugFix
+	git fetch origin bar~1:bugFix; git merge bugFix
+	```
+	* #### 下载并合并
+	```shell
+	*main : git pull origin bar:foo # 将远程bar分支 更新到本地foo分支，并且与main分支进行merge。
 	```
 
 ## Reference
