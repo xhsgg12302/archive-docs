@@ -208,6 +208,11 @@ git rm -r --cached .idea
 
 	# comment
 	git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
+
+	# HEAD位置
+	git cherry-pick 	# 命令后，HEAD 在当前新节点上。
+	git rebase        	# 命令后，HEAD 在当前新节点上。
+	git merge		  	# 命令后，HEAD 在当前新节点上。
 	```
 
 * ### 分支  &nbsp;[doc](https://git-scm.com/docs/git-branch)
@@ -365,6 +370,65 @@ git rm -r --cached .idea
 	git checkout two
 	git cherry-pick C5 C4 C3 C2
 	git branch -f three C2
+	```
+
+* ### 远程
+	* #### 同步远程
+	```shell
+	git fetch; git rebase origin/main; git push
+	git pull --rebase; git push
+
+	git fetch; git merge origin/main; git push
+	git pull; git push
+	```
+	* #### 受保护的main分支
+	```shell
+	# 由于 main分支的保护特性，一般不会直接让开发人员推送到 main分支，需要用其他分支提交push到远程，再创建pull request请求合并。
+	# 例如在main分支上做了本地提交，则应当
+	git checkout -b feature  # 在当前节点创建并拉取新分支
+	git push origin feature	 # 提交当前分支到远程， 此时可以创建PR
+	git branch -f main origin/main  # 回退main分支。与远程保持一致。
+	```
+	* #### 推送主分支
+	```shell
+	# 多分支合并
+	git fetch
+	git rebase o/main side1
+	git rebase side1 side2
+	git rebase side2 side3
+	git rebase side3 main
+	git push
+
+	git checkout main
+	git pull
+	git merge side1
+	git merge side2
+	git merge side3
+	git push
+	```
+	* #### 远程追踪
+	```shell
+	# 方式1：自己在创建分支时指定
+	git checkout -b totallyNotMain o/main
+	# 方式2：对于已经创建的分支指定
+	git branch -u o/main foo
+	```
+	* #### push 参数
+	```shell
+	# git push 默认推送当前分支，如果不单独指定的话
+	# 如果默认远程和本地分支名不一致，则使用 [:] ,git push origin <source>:<destination> ,参数实际上是 refspec, 比如：git push origin foo^:bar
+	# 如果推送的远程分支不存在，则会在远程创建一个。 git push origin main:notexist
+	# 如果省略source, 则表示删除远程分支
+	```
+	* #### fetch 参数
+	```shell
+	# 与push 类似，只是方向相反
+	```
+	* #### git push 参数
+	```shell
+	```
+	* #### git push 参数
+	```shell
 	```
 
 ## Reference
