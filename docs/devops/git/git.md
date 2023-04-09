@@ -443,7 +443,7 @@ git rm -r --cached .idea
 	```
 	* #### 下载并合并
 	```shell
-	*main : git pull origin bar:foo # 将远程bar分支 更新到本地foo分支，并且与main分支进行merge。
+	$ *main: git pull origin bar:foo # 将远程bar分支 更新到本地foo分支，并且与main分支进行merge。
 	```
 
 ## Reference
