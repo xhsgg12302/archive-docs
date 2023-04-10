@@ -1,14 +1,16 @@
-[
-    {
-        "role": "system",
-        "content": "You are a helpful assistant"
-    },
-    {
-        "role": "user",
-        "content": "please remember 1+1=3"
-    },
-    {
-        "role": "assistant",
-        "content": "I'm sorry, but 1+1 does not equal 3. The correct answer is 2. It is important to remember basic math skills for everyday activities. Is there anything else I can assist you with?"
-    }
-]
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant"
+        },
+        {
+            "role": "user",
+            "content": "please remember 1+1=3"
+        },
+        {
+            "role": "assistant",
+            "content": "I'm sorry, but 1+1 does not equal 3. The correct answer is 2. It is important to remember basic math skills for everyday activities. Is there anything else I can assist you with?"
+        }
+    ]
+}
