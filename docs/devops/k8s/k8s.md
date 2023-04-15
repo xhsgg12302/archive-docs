@@ -1,5 +1,66 @@
-comming soon...
+![](../../../.images/k8s/framework.png ':size=90%')
 
-## 1
-## 2
-## 3
+## 基础概念
+* ### 各个组件
+    |name| explain|
+    | -- | -- |
+    |APISERVER          | 所有服务访问统一入口 |
+    |CrontrollerManager | 维持副本期望数目 |
+    |Scheduler          | 负责介绍任务，选择合适的节点进行分配任务 |
+    |ETCD               | 键值对数据库  储存K8S集群所有重要信息（持久化）|
+    |Kubelet            | 直接跟容器引擎交互实现容器的生命周期管理 |
+    |Kube-proxy         | 负责写入规则至 IPTABLES、IPVS 实现服务映射访问的 |
+    |COREDNS            | 可以为集群中的SVC创建一个域名IP的对应关系解析 |
+    |DASHBOARD          | 给 K8S 集群提供一个 B/S 结构访问体系 |
+    |INGRESS CONTROLLER | 官方只能实现四层代理，INGRESS 可以实现七层代理 |
+    |FEDERATION         | 提供一个可以跨集群中心多K8S统一管理功能 |
+    |PROMETHEUS         | 提供K8S集群的监控能力 |
+    |ELK                | 提供 K8S 集群日志统一分析介入平台 |
+* ### POD
+    K8S 中包装的最小单位，一个POD（容器组）中可以包含多个容器，用来表示可迁移的lamp，类似于Docker的多层镜像。同一个POD中容器可以直接共享pause共享的网络站或者挂载卷。
+    * #### 自主式管理POD
+        POD 死亡后没办法继续启动。
+    * #### 控制器管理的POD
+        |name| explain|
+        |--  | -- | 
+        | ReplicationControlelr(RC) | 用来确保容器应用的副本数始终保持在用户定义的副本数，如果容器有异常退出，会自动创建新的POD来代替；而异常多出来的容器也会自动回收，新版本中建议使用ReplicaSet 来替代 ReplicationController |
+        | ReplicaSet(RS）           | 与上一个没有本质区别，但是这个支持集合式的 selector |
+        | Deployment                | 虽然ReplicaSet可以独立使用，但一般还是建议使用Deployment来自动管理ReplicaSet,这样就无需担心跟其他机制的不兼容问题（比如ReplicaSet不支持 rolling-update ，但 Deployment支持）|
+        | HorizontalPodAutoScale(HPA) | 也是控制RS,根据CPU使用率自动平衡扩展，收缩，可定义最大，最小副本数 |
+        | StatefulSet(SS)           | 主要解决有状态服务问题，包括的场景有：稳定的持久化存储，稳定的网络标志，有序部署，有序收缩 |
+        | DaemonSet()               | 可以理解为跟node绑定的一些后台运行的POD，跟随节点进行创建和删除。|
+        | Job                       | 负责批处理任务，即仅执行一次的任务.相比于script优点有，封装在POD中可判断是否正常退出，可以重新执行。而且可以设定认为成功的次数。 |
+        | CronJob                   | 带有cron 定时任务的JOB |
+
+* ### 网络通信方式
+    > 扁平化的网络空间
+    * 同一个POD内多个容器，采用pause 共享网络lo
+    * 各个POD overlay network
+        - 同一个node，Docker0 网桥进行转发
+        ![](../../../.images/k8s/docker0.png ':size=80%')
+        - 不同node，flannel 插件
+        ![](../../../.images/k8s/flannel.png)
+    * POD与service之间的通信，IPVS，iptables，
+
+## 构建K8S集群
+
+## 资源清单
+
+## POD控制器
+
+## 服务发现
+
+## 存储
+
+## 调度器
+
+## 集群安全机制
+
+## HELM
+
+## 运维部分
+
+## Reference
+* [bilibili](https://www.bilibili.com/video/BV1w4411y7Go)
+* [尚硅谷Kubernetes教程](https://pan.baidu.com/s/1gbNLotwVjxe_hLZcDnfAfQ?pwd=f8v2 )
+* [kubernetes-入门指南.pdf](https://pan.baidu.com/s/10vlKFCs1H9FowNm8LyXVpw?pwd=7fkc)
