@@ -39,7 +39,7 @@ net.ipv6.conf.all.disable_ipv6=1
 net.netfilter.nf_conntrack_max=2310720
 EOF
 cp kubernetes.conf /etc/sysctl.d/kubernetes.conf
-sysctl -p /etc/sysctl.d/kubernetes.conf
+sysctl -p /etc/sysctl.d/kubernetes.conf  # sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: 没有那个文件或目录 ----》 modprobe br_netfilter
 
 # 调整系统时区
 #设置系统时区为中国/上海
