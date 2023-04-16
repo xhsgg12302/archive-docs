@@ -90,7 +90,8 @@ systemctl restart systemd-journald
     1： awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
     2： # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核menuentry中是否包含initrd16配置，如果没有，再安装一次！
 #设置开机从新内核启动
-grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
+# grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
+grub2-set-default 'CentOS Linux (4.4.213-1.el7.elrepo.x86_64) 7 (Core)'
 ```
 
 ## KUBEADM部署安装
@@ -141,11 +142,13 @@ EOF
 yum -y install kubeadm-1.15.1 kubectl-1.15.1 kubelet-1.15.1
 systemctl enable kubelet.service
 
-# 初始化主节点
+# 初始化主节点 另外一种初始化方式参见（https://k8s.easydoc.net/docs/dRiQjyTY/28366845/6GiNOzyZ/nd7yOvdY）
 kubeadm config print init-defaults > kubeadm-config.yaml
 kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
 # 加入主节点以及其余工作节点
 # 执行安装日志中的加入命令即可
 # 部署网络
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
 ```
