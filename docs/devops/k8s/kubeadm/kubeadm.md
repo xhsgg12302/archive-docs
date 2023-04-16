@@ -20,7 +20,7 @@ systemctl stop firewalld && systemctl disable firewalld
 yum -y install iptables-services && systemctl start iptables && systemctl enable iptables && iptables -F && service iptables save
 
 # 关闭SELINUX
-swapoff -a && sed -i '/ swap /s/^\(.*\)$/#\1/g' /etc/fstab setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+swapoff -a && sed -i '/ swap /s/^\(.*\)$/#\1/g' /etc/fstab && setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 
 # 调整内核参数，对于K8S
 cat > kubernetes.conf <<EOF
@@ -78,9 +78,17 @@ systemctl restart systemd-journald
 
 # 升级系统内核为4.44
 # CentOS 7.x系统自带的3.10.x内核存在一些Bugs，导致运行的Docker、Kubernetes不稳定，例如：rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
-rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
-#安装完成后检查 /boot/grub2/grub.cfg 中对应内核menuentry中是否包含initrd16配置，如果没有，再安装一次！
-yum --enablerepo=elrepo-kernel install -y kernel-lt
+    # 方式一：最新的
+    rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+    yum --enablerepo=elrepo-kernel install -y kernel-lt
+
+    # 方式二：google 下载rpm包进行安装
+    wget https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-lt-4.4.213-1.el7.elrepo.x86_64.rpm
+    yum  install  kernel-lt-4.4.213-1.el7.elrepo.x86_64.rpm
+
+    # 查看已经安装的内核
+    1： awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
+    2： # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核menuentry中是否包含initrd16配置，如果没有，再安装一次！
 #设置开机从新内核启动
 grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
 ```
