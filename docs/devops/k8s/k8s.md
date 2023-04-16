@@ -62,5 +62,6 @@
 
 ## Reference
 * [bilibili](https://www.bilibili.com/video/BV1w4411y7Go)
-* [尚硅谷Kubernetes教程](https://pan.baidu.com/s/1gbNLotwVjxe_hLZcDnfAfQ?pwd=f8v2 )
+* [百度云-尚硅谷Kubernetes教程](https://pan.baidu.com/s/1gbNLotwVjxe_hLZcDnfAfQ?pwd=f8v2 )
 * [kubernetes-入门指南.pdf](https://pan.baidu.com/s/10vlKFCs1H9FowNm8LyXVpw?pwd=7fkc)
+* [易文档K8s教程](https://k8s.easydoc.net/docs/dRiQjyTY/28366845/6GiNOzyZ/9EX8Cp45)
