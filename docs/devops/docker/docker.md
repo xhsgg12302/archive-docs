@@ -39,7 +39,7 @@
         # echo "$@"  ==>  sh
         exec "$@"
         ```
-    - build镜像 `$ docker build -f .\Dockerfile -t busybox-with-scrt:8.x . `
+    - build镜像 `$ docker build -f .\Dockerfile -t busybox-with-scrt:8.x  [--network host .] . `
     - 推送镜像
         ```bash
         $ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
