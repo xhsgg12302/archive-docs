@@ -39,7 +39,7 @@ net.ipv6.conf.all.disable_ipv6=1
 net.netfilter.nf_conntrack_max=2310720
 EOF
 cp kubernetes.conf /etc/sysctl.d/kubernetes.conf
-sysctl -p /etc/sysctl.d/kubernetes.conf
+sysctl -p /etc/sysctl.d/kubernetes.conf  # sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: 没有那个文件或目录 ----》 modprobe br_netfilter
 
 # 调整系统时区
 #设置系统时区为中国/上海
@@ -90,7 +90,8 @@ systemctl restart systemd-journald
     1： awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
     2： # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核menuentry中是否包含initrd16配置，如果没有，再安装一次！
 #设置开机从新内核启动
-grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
+# grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
+grub2-set-default 'CentOS Linux (4.4.213-1.el7.elrepo.x86_64) 7 (Core)'
 ```
 
 ## KUBEADM部署安装
@@ -117,6 +118,7 @@ mkdir /etc/docker
 cat > /etc/docker/daemon.json <<EOF
 {
     "exec-opts":["native.cgroupdriver=systemd"],
+    "registry-mirrors": ["https://ud6340vz.mirror.aliyuncs.com"],
     "log-driver":"json-file",
     "log-opts":{
         "max-size":"100m"
@@ -141,24 +143,39 @@ EOF
 yum -y install kubeadm-1.15.1 kubectl-1.15.1 kubelet-1.15.1
 systemctl enable kubelet.service
 
-# 初始化主节点
+# 初始化主节点 另外一种初始化方式参见（https://k8s.easydoc.net/docs/dRiQjyTY/28366845/6GiNOzyZ/nd7yOvdY）
 kubeadm config print init-defaults > kubeadm-config.yaml
 kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
+kubeadm init --pod-network-cidr=10.244.0.0/16 --image-repository=registry.aliyuncs.com/google_containers
+# 忘记了重新获取：
+kubeadm token create --print-join-command
 # 加入主节点以及其余工作节点
 # 执行安装日志中的加入命令即可
 # 部署网络
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
+# NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml# NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
+
+# 重置k8s集群
+sudo kubeadm reset && rm -rf /var/lib/cni/ && sudo rm -rf /var/lib/cni/ && systemctl daemon-reload && systemctl restart kubelet &&
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+
+# 查看当前集群配置
+kubeadm config view
+
+# 安装dashboard
+wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
 ```
 
-`sudo kubeadm reset && rm -rf /var/lib/cni/ && sudo rm -rf /var/lib/cni/ && systemctl daemon-reload && systemctl restart kubelet &&
-sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X`
 
+## Reference
 * https://zhuanlan.zhihu.com/p/579730438
 * https://stackoverflow.com/questions/53525975/kubernetes-error-uploading-crisocket-timed-out-waiting-for-the-condition
 * https://blog.csdn.net/qq_29385297/article/details/127682552
 * https://blog.csdn.net/Wuli_SmBug/article/details/104712653
-
-```shell
-kubeadm config view
-```
+* https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
+* https://lzwgiter.github.io/posts/eed4a979.html#/flannel%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6---error-registering-network-failed-to-acquire-lease-node-xxx-pod-cidr-not-assigned
+* https://blog.csdn.net/weixin_43822977/article/details/118942882
+* https://stackoverflow.com/questions/58276969/k8s-convert-kubeadm-init-command-line-arguments-to-config-yaml
+* https://blog.csdn.net/qq_21816375/article/details/79193011
