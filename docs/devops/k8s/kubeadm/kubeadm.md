@@ -148,4 +148,17 @@ kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs | tee kube
 # 执行安装日志中的加入命令即可
 # 部署网络
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
+```
+
+`sudo kubeadm reset && rm -rf /var/lib/cni/ && sudo rm -rf /var/lib/cni/ && systemctl daemon-reload && systemctl restart kubelet &&
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X`
+
+* https://zhuanlan.zhihu.com/p/579730438
+* https://stackoverflow.com/questions/53525975/kubernetes-error-uploading-crisocket-timed-out-waiting-for-the-condition
+* https://blog.csdn.net/qq_29385297/article/details/127682552
+* https://blog.csdn.net/Wuli_SmBug/article/details/104712653
+
+```shell
+kubeadm config view
 ```
