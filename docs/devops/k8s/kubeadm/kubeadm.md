@@ -152,30 +152,46 @@ kubeadm token create --print-join-command
 # 加入主节点以及其余工作节点
 # 执行安装日志中的加入命令即可
 # 部署网络
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml（这个文件对于当前集群好像不适用）
 # NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml# NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml # NotReady （https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized）
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
 
 # 重置k8s集群
 sudo kubeadm reset && rm -rf /var/lib/cni/ && sudo rm -rf /var/lib/cni/ && systemctl daemon-reload && systemctl restart kubelet &&
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 
+# 主节点继续执行
+mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# 子节点也需要重置(方法同上)
+# rm -f /etc/kubernetes/kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/pki/ca.crt && systemctl restart kubelet
+
+# 容器二进制可执行插件
+wget https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-amd64-v0.8.6.tgz # 注意这个必须在子节点也安装，立竿见影。（捣鼓好一会）
+
 # 查看当前集群配置
 kubeadm config view
 
 # 安装dashboard
 wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+# 修改service type: NodePort，不指定端口的随机分配 通过svc 查看
+# seccompProfile 规范出错了注释即可
+# 通过token进行登录
+# 创建账户
+kubectl create serviceaccount dashboard-admin -n kube-system
+kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+# 通过下面命令查看token
+kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk '/dashboard-admin/{print $1}')
 ```
 
 
 ## Reference
-* https://zhuanlan.zhihu.com/p/579730438
+* [K8S集群中安装Dashboard](https://zhuanlan.zhihu.com/p/579730438)
 * https://stackoverflow.com/questions/53525975/kubernetes-error-uploading-crisocket-timed-out-waiting-for-the-condition
-* https://blog.csdn.net/qq_29385297/article/details/127682552
-* https://blog.csdn.net/Wuli_SmBug/article/details/104712653
+* [failed to find plugin “flannel” in path [/opt/cni/bin]，k8sNotReady解决方案](https://blog.csdn.net/qq_29385297/article/details/127682552)
+* [解决k8s"failed to set bridge addr: "cni0" already has an IP address different from 10.244.1.1/24"](https://blog.csdn.net/Wuli_SmBug/article/details/104712653)
 * https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
 * https://lzwgiter.github.io/posts/eed4a979.html#/flannel%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6---error-registering-network-failed-to-acquire-lease-node-xxx-pod-cidr-not-assigned
-* https://blog.csdn.net/weixin_43822977/article/details/118942882
+* [部署k8s的dashboard访问页面时Client sent an HTTP request to an HTTPS server.](https://blog.csdn.net/weixin_43822977/article/details/118942882)
 * https://stackoverflow.com/questions/58276969/k8s-convert-kubeadm-init-command-line-arguments-to-config-yaml
-* https://blog.csdn.net/qq_21816375/article/details/79193011
+* [kubernetes启动Pod遇到CrashLoopBackOff的解决思路](https://blog.csdn.net/qq_21816375/article/details/79193011)
