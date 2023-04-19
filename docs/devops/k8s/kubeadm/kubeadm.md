@@ -94,7 +94,7 @@ systemctl restart systemd-journald
 grub2-set-default 'CentOS Linux (4.4.213-1.el7.elrepo.x86_64) 7 (Core)'
 ```
 
-## KUBEADM部署安装
+## 部署安装-kubeadm
 ```shell
 # kube-proxy开启ipvs的前置条件
 modprobe br_netfilter
@@ -172,6 +172,10 @@ wget https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni
 # 查看当前集群配置
 kubeadm config view
 
+```
+
+## 集群面板-dashboard
+```shell
 # 安装dashboard
 wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
 # 修改service type: NodePort，不指定端口的随机分配 通过svc 查看
@@ -182,16 +186,45 @@ kubectl create serviceaccount dashboard-admin -n kube-system
 kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
 # 通过下面命令查看token
 kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk '/dashboard-admin/{print $1}')
+
+# 或者使用如下的yaml文件创建
+# kubectl apply -f kube-admin.yaml
+# kubectl -n kubernetes-dashboard create token admin-user[对于v1.15不适用]
+kubectl -n kubernetes-dashboard get secret
+kubectl -n kubernetes-dashboard describe secret admin-user-token-dxj54
+```
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
 ```
 
 
 ## Reference
-* [K8S集群中安装Dashboard](https://zhuanlan.zhihu.com/p/579730438)
-* https://stackoverflow.com/questions/53525975/kubernetes-error-uploading-crisocket-timed-out-waiting-for-the-condition
-* [failed to find plugin “flannel” in path [/opt/cni/bin]，k8sNotReady解决方案](https://blog.csdn.net/qq_29385297/article/details/127682552)
-* [解决k8s"failed to set bridge addr: "cni0" already has an IP address different from 10.244.1.1/24"](https://blog.csdn.net/Wuli_SmBug/article/details/104712653)
-* https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
-* https://lzwgiter.github.io/posts/eed4a979.html#/flannel%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6---error-registering-network-failed-to-acquire-lease-node-xxx-pod-cidr-not-assigned
-* [部署k8s的dashboard访问页面时Client sent an HTTP request to an HTTPS server.](https://blog.csdn.net/weixin_43822977/article/details/118942882)
-* https://stackoverflow.com/questions/58276969/k8s-convert-kubeadm-init-command-line-arguments-to-config-yaml
-* [kubernetes启动Pod遇到CrashLoopBackOff的解决思路](https://blog.csdn.net/qq_21816375/article/details/79193011)
+* ### common
+    * https://stackoverflow.com/questions/53525975/kubernetes-error-uploading-crisocket-timed-out-waiting-for-the-condition
+    * [failed to find plugin “flannel” in path [/opt/cni/bin]，k8sNotReady解决方案](https://blog.csdn.net/qq_29385297/article/details/127682552)
+    * [解决k8s"failed to set bridge addr: "cni0" already has an IP address different from 10.244.1.1/24"](https://blog.csdn.net/Wuli_SmBug/article/details/104712653)
+    * https://stackoverflow.com/questions/52675934/network-plugin-is-not-ready-cni-config-uninitialized
+    * https://lzwgiter.github.io/posts/eed4a979.html#/flannel%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6---error-registering-network-failed-to-acquire-lease-node-xxx-pod-cidr-not-assigned
+    * https://stackoverflow.com/questions/58276969/k8s-convert-kubeadm-init-command-line-arguments-to-config-yaml
+    * [kubernetes启动Pod遇到CrashLoopBackOff的解决思路](https://blog.csdn.net/qq_21816375/article/details/79193011)
+* ### dashboard
+    * [K8S集群中安装Dashboard](https://zhuanlan.zhihu.com/p/579730438)
+    * [部署k8s的dashboard访问页面时Client sent an HTTP request to an HTTPS server.](https://blog.csdn.net/weixin_43822977/article/details/118942882)
+    * [Internal error (500): Not enough data to create auth info structure.](https://stackoverflow.com/questions/70287656/kubernetes-dashboard-internal-error-500-not-enough-data-to-create-auth-info)
