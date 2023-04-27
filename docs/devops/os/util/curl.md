@@ -89,46 +89,6 @@ curl http://www.example.com -F "file=@_path_"
             not match the domain name in the URL).
             If you'd like to turn off curl's verification of the certificate, use
             the -k (or --insecure) option.
-            HTTPS-proxy has similar options --proxy-cacert and --proxy-insecure.curl -v -x http://127.0.0.1:7070 https://www.baidu.com                                                       ~/Desktop
-            * Rebuilt URL to: https://www.baidu.com/
-            *   Trying 127.0.0.1...
-            * TCP_NODELAY set
-            * Connected to 127.0.0.1 (127.0.0.1) port 7070 (#0)
-            * Establish HTTP proxy tunnel to www.baidu.com:443
-            > CONNECT www.baidu.com:443 HTTP/1.1
-            > Host: www.baidu.com:443
-            > User-Agent: curl/7.54.0
-            > Proxy-Connection: Keep-Alive
-            >
-            < HTTP/1.0 200 Connection established
-            <
-            * Proxy replied OK to CONNECT request
-            * ALPN, offering h2
-            * ALPN, offering http/1.1
-            * Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
-            * successfully set certificate verify locations:
-            *   CAfile: /etc/ssl/cert.pem
-            CApath: none
-            * TLSv1.2 (OUT), TLS handshake, Client hello (1):
-            * TLSv1.2 (IN), TLS handshake, Server hello (2):
-            * TLSv1.2 (IN), TLS handshake, Certificate (11):
-            * TLSv1.2 (OUT), TLS alert, Server hello (2):
-            * SSL certificate problem: self signed certificate in certificate chain
-            * stopped the pause stream!
-            * Closing connection 0
-            curl: (60) SSL certificate problem: self signed certificate in certificate chain
-            More details here: https://curl.haxx.se/docs/sslcerts.html
-
-            curl performs SSL certificate verification by default, using a "bundle"
-            of Certificate Authority (CA) public keys (CA certs). If the default
-            bundle file isn't adequate, you can specify an alternate file
-            using the --cacert option.
-            If this HTTPS server uses a certificate signed by a CA represented in
-            the bundle, the certificate verification probably failed due to a
-            problem with the certificate (it might be expired, or the name might
-            not match the domain name in the URL).
-            If you'd like to turn off curl's verification of the certificate, use
-            the -k (or --insecure) option.
             HTTPS-proxy has similar options --proxy-cacert and --proxy-insecure.
             ```  
         3. curl 使用 -k 忽略不受信问题，继续使用不受信任证书访问。
