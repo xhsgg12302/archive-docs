@@ -22,6 +22,7 @@
         <dict>
             <key>PATH</key>
             <string>/usr/local/bin</string>
+            <!-- <string>/usr/local/bin:/usr/local/opt/node@18/bin</string> -->
         </dict>
         <key>StandardOutPath</key>
         <string>/tmp/docs.wtfu.site.log</string>
