@@ -32,6 +32,27 @@
 </plist>
 ```
 
+```shell
+alias reload='source ~/.zshrc \!:1'
+
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/stevenobelia/.oh-my-zsh"
+export RANGER_LOAD_DEFAULT_RC=FALSE
+
+if [ $# -eq 2 ]; then
+	ZSH_THEME=$2
+else
+	ZSH_THEME="random"
+fi
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+source ~/.bash_profile
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+#export PATH="/usr/local/lib/ruby/gems/3.1.0/bin:$PATH"
+___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_VMOPTIONS_SHELL_FILE}" ]; then . "${___MY_VMOPTIONS_SHELL_FILE}"; fi
+```
 
 ## Reference
 * [Mac OS 增加开机自启动脚本](https://www.xiaocaicai.com/2021/11/mac-os-%E5%A2%9E%E5%8A%A0%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/)
