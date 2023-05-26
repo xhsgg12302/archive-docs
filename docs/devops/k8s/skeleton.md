@@ -128,3 +128,7 @@
 * [百度云-尚硅谷Kubernetes教程](https://pan.baidu.com/s/1gbNLotwVjxe_hLZcDnfAfQ?pwd=f8v2 )
 * [kubernetes-入门指南.pdf](https://pan.baidu.com/s/10vlKFCs1H9FowNm8LyXVpw?pwd=7fkc)
 * [易文档K8s教程](https://k8s.easydoc.net/docs/dRiQjyTY/28366845/6GiNOzyZ/9EX8Cp45)
+
+* [yaml1](https://gist.githubusercontent.com/jmalloc/f52dc743aaa59339c3eda0ec0a7b0f53/raw/864beb88d739467f54ce01e48d20a8064dc70fce/echo-k8s.yaml)
+* [yaml2](https://raw.githubusercontent.com/Ealenn/Echo-Server/master/docs/examples/echo.kube.yaml)
+* [ingress-controller](https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml)
