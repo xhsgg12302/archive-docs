@@ -528,6 +528,25 @@
 </plugin>
 ```
 
+### maven-source-plugin
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-source-plugin</artifactId>
+    <version>3.2.1</version>
+    <!-- 配置插件参数 -->
+    <executions>
+        <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+                <goal>jar-no-fork</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
 ### maven-release-plugin
 !> 需要注意release插件直接使用-D系统变量不会生效，需要通过 -Darguments="" 传递。[参见引用](https://stackoverflow.com/questions/28948048/how-to-make-maven-release-plugin-skip-tests)。
 ```shell
