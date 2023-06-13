@@ -9,6 +9,12 @@ ls -l | awk 'NR>1{cmd="stat --printf \"%a\t\" "$9;system(cmd) ;print $0}'
 
 ```shell
 #!/bin/bash
+# 批量删除统一后缀文件
+find . -name "*.txt" -type f -delete
+```
+
+```shell
+#!/bin/bash
 # 文件最好用""包起来，另外"使用\转义
 # 批量文件重命名
 ls -l | awk 'NR>1{origin=substr($0,57);now=substr($0,105);cmd="mv " "\"" origin "\"" " "  "\"" now "\"";system(cmd);}'
