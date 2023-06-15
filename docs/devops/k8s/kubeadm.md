@@ -228,3 +228,6 @@ subjects:
     * [K8S集群中安装Dashboard](https://zhuanlan.zhihu.com/p/579730438)
     * [部署k8s的dashboard访问页面时Client sent an HTTP request to an HTTPS server.](https://blog.csdn.net/weixin_43822977/article/details/118942882)
     * [Internal error (500): Not enough data to create auth info structure.](https://stackoverflow.com/questions/70287656/kubernetes-dashboard-internal-error-500-not-enough-data-to-create-auth-info)
+
+* ### coredns
+    * https://stackoverflow.com/questions/60666170/how-to-get-into-coredns-pod-kuberrnetes
