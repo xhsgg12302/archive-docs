@@ -51,11 +51,13 @@ sed [option] -f 'sed script' file
         sed -n '1,2!p' file   >取反打印内容
 
         # 相对首次（注释） > '/var/,/nologin/p' 下面的内容会一直匹配到行尾，处理每行时只要匹配到第一个pattern，后面的就不管了，所以一直没有碰见 nologin,直到文件末尾。
-        # libstoragemgmt:/var/run/lsm:/sbin/nologin
-        # rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
-        # sshd:x:74:74:Privilege-separated
-        # SSH:/var/empty/sshd:/sbin/nologin
-        # eli:x:1000:1000::/home/eli:/bin/bash
+        cat > file <<EOF
+        libstoragemgmt:/var/run/lsm:/sbin/nologin
+        rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
+        sshd:x:74:74:Privilege-separated
+        SSH:/var/empty/sshd:/sbin/nologin
+        eli:x:1000:1000::/home/eli:/bin/bash
+        EOF
         ```
     
         - ##### 2）使用正则或扩展正则（-r）
@@ -166,7 +168,6 @@ sed [option] -f 'sed script' file
             
             sed -i 's/IPADDR/ip/w ip.txt' test
             > ip.txt
-            
             ip=172.16.10.12
             ```
             
@@ -185,8 +186,7 @@ sed [option] -f 'sed script' file
             
             sed -i '/ip/r myfile' ip.txt
             
-            > ip.txt
-            
+            > ip.txt 
             ip=172.16.10.12
             hello world
             I am fine 
