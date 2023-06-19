@@ -1,5 +1,6 @@
 !> 用于参数转换，与不支持管道输入的命令搭配使用，比如 `ls`.
 
+## Options
 | options | explain |
  - | -
 | -a | file 从文件中读入作为stdin |
