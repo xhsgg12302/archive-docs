@@ -1,3 +1,143 @@
+## Shell环境
+> Shell 变成跟JavaScript，php编程一样，只要有一个能编写代码的文本编辑器和一个能解释执行的脚本解释器就可以了。Linux下面的shell很多，常见的又：
+>
+> 检查是否存在某个文件的命令：
+>
+> ```shell
+> # test命令检测
+> test -e ./shizi.jpg && echo 'found' || echo "not"
+> 
+> # [] 方括号检测 *括号内前后都有空格
+> [ -f ./shizi.jpg ] && echo  'found' || echo  'not'
+> ```
+
+| 名称               | 路径                       |
+| ------------------ | -------------------------- |
+| Bourne Shell       | `/usr/bin/sh 或者 /bin/sh` |
+| Bourne Again Shell | `/bin/bash`                |
+| C Shell            | `/usr/bin/csh`             |
+| K Shell            | `/usr/bin/ksh`             |
+| Shell for Root     | `/sbin/sh`                 |
+| ……                 | `……`                       |
+
+>  *`#!`后面跟解释器路径*
+>
+> #!/bin/sh	#!/sbin/sh #!/bin/bash
+
+
+## Shell变量
+
+### 定义变量
+
+> 定义变量时，变量名不加美元符号（$) ，而且变量之间不能有空格。
+>
+> 变量命名遵循以下原则：
+>
+> - 只能使用英文字母，数字和下划线，首字母不能数字开头
+> - 不能使用标点符号
+> - 不可使用关键字（help查看）
+
+*除了显示赋值外，还可以使用语句给变量赋值*
+
+```shell
+for file in `ls /etc` ;do  echo ${file}; done
+#或者
+for file in $(ls /etc); do echo $file; done
+```
+
+### 变量类型
+
+> 运行shell时，会同时存在三种变量
+>
+> * 局部变量 ，再脚本或命令中定义，仅在当前shell实例中有效
+> * 环境变量 ，所有程序，包括shell启动的程序
+> * shell变量，
+
+### 使用变量
+
+> 使用一个定义过的变量，只要在变量名前面加美元符即可。变量名外的花括号是可选的，加不加都行，加是为了帮助解释器识别变量的边界。例：
+
+*已定义的变量可以重新赋值*
+
+```shell
+name = "elizabeth"
+echo $name
+echo ${name}
+```
+
+### 只读变量
+
+> 使用`readonly`命令可以将变量定义为只读变量，只读变量的值不能被改变
+>
+> 修改只读变量会出现如下错误
+>
+> `bash: name: readonly variable`
+
+```shell
+name=elizabeth
+readonly name
+```
+
+### 删除变量
+
+> 使用`unset`命令可以删除变量，删除后变量不可再次使用，unset命令不能删除只读变量
+>
+> (`unset -f name`)
+
+```shell
+#!/bin/bash
+mySite="https://wtfo.gitee.io"
+unset mySite
+echo $mySite
+```
+
+## Shell字符串
+
+> 字符床是shell编程中最常用最有用的数据类型，字符串可以用单引号，也可以用双引号，也可以不用引号。
+
+### 单引号
+
+```shell
+str='this is a string'
+```
+
+* <u>单引号里的任何字符都会原样输出，也就是单引号中的变量是无效的</u>
+* <u>单引号字符串中不能出现单独一个的单引号（转义后的也不行），但可以成对出现，作为字符串拼接使用</u>
+
+### 双引号
+
+```shell
+name='elizabeth'
+str="Hello,I know you are \"$name\"! \n"
+echo -e $str
+
+#output
+Hello,I know you are "runoob"!
+```
+
+- <u>双引号里可以有变量</u>
+- <u>双引号里面可以出现转义字符</u>
+
+### 拼接字符串
+
+```shell
+name="elizabeth"
+
+greeting="hello,"$name" !"
+greeting_1="hello,${name} !"
+echo $greeting  $greeting_1
+
+abc='hello,'$name' !'
+def='hello,${name} !'
+echo $abc $def
+
+#output
+hello,elizabeth ! hello,elizabeth !
+hello,elizabeth ! hello,${name}
+```
+
+<img src="C:\Users\elizabeth\AppData\Roaming\Typora\typora-user-images\image-20191106201830508.png" alt="image-20191106201830508" style="zoom:150%;" />
+
 ## 检测是否存在某个文件的命令
 
 ```shell
@@ -6,8 +146,6 @@ test -e ./shizi.jpg && echo 'found' || echo "not"
 # [] 方括号检测 *括号内前后都有空格
 [ -f ./shizi.jpg ] && echo  'found' || echo  'not'
 ```
-
-
 
 ## Shell 中的中括号用法总结
 
@@ -41,8 +179,6 @@ test -e ./shizi.jpg && echo 'found' || echo "not"
 | [[ -z ]]                  | 空字符串   |
 | [[ -n ]]                  | 非空字符串 |
 
-
-
 ## 运行Shell 脚本的两种方法
 
 - 作为可执行程序
@@ -54,7 +190,6 @@ test -e ./shizi.jpg && echo 'found' || echo "not"
   > `/bin/sh test.sh`
   >
   > `/bin/bash test.sh`
-
 
 
 ## Linux文件权限
@@ -89,8 +224,6 @@ test -e ./shizi.jpg && echo 'found' || echo "not"
 > ```
 >
 > 
-
-
 
 ## linux：帮助命令help,man,info
 
