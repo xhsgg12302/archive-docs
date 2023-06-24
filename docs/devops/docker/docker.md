@@ -1,4 +1,20 @@
 ## 基本命令
+```shell
+# 提交镜像
+docker commit -a "xhsgg12302@gmail.com" -m "with requirements.txt" 44f357ee68bc  eli/anaconda3:v1.0
+# 加载镜像
+docker load -i  /path/tmp/docker-build.tar
+# 删除容器
+docker ps -qa | xargs -n 1 docker rm -f
+# 这将列出所有没有被任何标签或容器引用的镜像。这些镜像通常被称为悬空镜像，因为它们没有被命名或引用，而且也没有被垃圾回收机制删除。
+docker image ls -f "dangling=true"
+# 删除所有没有被标记或容器引用的悬空镜像
+docker image prune
+# 查找标记为 NONE 的镜像。运行以下命令：
+docker images | grep '<none>' | awk '{print $3}'
+# 删除标记为 NONE 的镜像。使用以下命令删除这些镜像：
+docker rmi $(docker images | grep '<none>' | awk '{print $3}')
+```
 
 ## 存储安装包
 
