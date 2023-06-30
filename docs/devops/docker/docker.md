@@ -72,6 +72,7 @@
     - build镜像 
         + `$ docker build -f .\Dockerfile -t busybox-with-scrt:8.x  [--network host .] . ` 
         + `$ docker build -f Dockerfile -t wechat-chatgpt-base:v1.0 --network host --build-arg "HTTP_PROXY=http://192.168.164.191:7890" --build-arg "HTTPS_PROXY=http://192.168.164.191:7890" . `
+        + `$ docker run -it -e http_proxy=192.168.164.191:7890 -e https_proxy=192.168.164.191:7890 demo:v1.0`
     - 推送镜像
         ```bash
         $ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
