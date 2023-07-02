@@ -89,8 +89,6 @@
     
 ## 方式二，（chkconfig）启动说明
 
-- 知识点
-
   > 简介
   ```shell
     Linux的运行级别有7个，而这7个运行级都有各自的功能，某个程序在一个运行级别里面运行在
@@ -111,47 +109,39 @@
     这6种模式还有许多功能，比如说如果忘记了root密码就可以进入单用户模式，
     在启动后的提示符界面下输入init = /bin/sh rw就进入了模式1，把root文件挂为读写就可以跳过
     系统认证，直接用passwd程序来更改root用户口令了，然后再启动到正常的运行级去即可
-
-
   ```
   > 制作启动脚本
-  
-  1 `vim /etc/init.d/zentao`
-  
-  ```shell
-    #!/bin/bash
-    
-    # chkconfig: 2345 85 15
-    # description: auto luanch service of zentao
-    #              It has a lot of features
-    # processname: zentao
-    
-    case "$1" in
-        start  ) echo 'start'  ;;
-        stop   ) echo 'stop'   ;;
-        restart) echo 'restart';;
-        status ) echo 'status' ;;
-        *      ) echo 'invalid';;
-    esac
-  ```
-  
-  
-  2 `将启动脚本权限改为可执行`
-  
-    > chmod a+x /etc/init.d/zentao
 
-  3 `添加启动项并启动`
-  
-    > chkconfig --add zentao
+    1 `vim /etc/init.d/zentao`
+    ```shell
+      #!/bin/bash
+      
+      # chkconfig: 2345 85 15
+      # description: auto luanch service of zentao
+      #              It has a lot of features
+      # processname: zentao
+      
+      case "$1" in
+          start  ) echo 'start'  ;;
+          stop   ) echo 'stop'   ;;
+          restart) echo 'restart';;
+          status ) echo 'status' ;;
+          *      ) echo 'invalid';;
+      esac
+    ```
     
-    > chkconfig --zentao on
     
-  4 `检查是否设置成功`
-    
-    > chkconfig –list |grep zentao
+    2 `将启动脚本权限改为可执行`
+      $ chmod a+x /etc/init.d/zentao
 
-  5 `需要注意`
-  
+    3 `添加启动项并启动`
+      $ chkconfig --add zentao
+      $ chkconfig --zentao on
+      
+    4 `检查是否设置成功`
+      $ chkconfig –list |grep zentao
+
+    5 `需要注意`
     ```shell
     在这个脚本的编写过程中，其中开头有几个虽然是以注释形式出现的属性，
     但是要注册服务的话必须拥有，其中chkconfig 2345 85 15 这三个数字表示。
