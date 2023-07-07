@@ -15,6 +15,10 @@
         docker images | grep '<none>' | awk '{print $3}'
         # 删除标记为 NONE 的镜像。使用以下命令删除这些镜像：
         docker rmi $(docker images | grep '<none>' | awk '{print $3}')
+
+        # 启动时去除基础镜像的entryponit  https://stackoverflow.com/questions/40122152/how-to-remove-entrypoint-from-parent-image-on-dockerfile
+        docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"
+        # 或者在Dockerfile中 写入 ENTRYPOINT []  
         ```
     + ### MIRRORS
         ```shell
