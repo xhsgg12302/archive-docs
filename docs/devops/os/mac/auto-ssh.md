@@ -2,10 +2,9 @@
 
 !> 使用密码自动登录
 
+### /usr/local/bin/ssh
 ```shell
 #!/bin/zsh
-
-# > /usr/local/bin/ssh
 
 host=$1
 #password=`awk "/#Password/ && inhost { print \\\$2 } /Host/ { inhost=0 } /Host $host/ { inhost=1 }" ~/.ssh/config`
@@ -16,6 +15,33 @@ if [[ -z "$password" ]]; then
 else
   sshpass -p $password /usr/bin/ssh $*
 fi
+```
+
+```shell
+Host local
+    HostName 127.0.0.1
+    User root
+    Port 23
+
+Host rein
+    HostName 47.98.226.149
+    User rein
+    Port 13322
+    IdentityFile ~/.ssh/rein_id
+    #Password 123022
+
+Host meta
+    HostName 10.28.4.2
+    User root
+    Port 22
+    IdentityFile ~/.ssh/meta-just.pem
+
+Host msb1v1
+    HostName msb1v1-secure.meishubao.com
+    User wangtangfu
+    Port 2220
+    #Password ********!
+    # ProxyCommand sshpass -p *******! ssh -t -p %p %r@%h
 ```
 
 
