@@ -28,7 +28,7 @@ Host rein
     User rein
     Port 13322
     IdentityFile ~/.ssh/rein_id
-    #Password 123022
+    #Password 1***********0
 
 Host meta
     HostName 10.28.4.2
@@ -37,8 +37,8 @@ Host meta
     IdentityFile ~/.ssh/meta-just.pem
 
 Host msb1v1
-    HostName msb1v1-secure.meishubao.com
-    User wangtangfu
+    HostName m.meishubao.com
+    User wtf
     Port 2220
     #Password ********!
     # ProxyCommand sshpass -p *******! ssh -t -p %p %r@%h
