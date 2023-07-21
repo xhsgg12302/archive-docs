@@ -4,6 +4,11 @@
 
 ### /usr/local/bin/ssh
 ```shell
+# 先安装 sshpass 
+brew install hudochenkov/sshpass/sshpass
+```
+
+```shell
 #!/bin/zsh
 
 host=$1
