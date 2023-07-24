@@ -53,3 +53,6 @@ Host msb1v1
 ## Reference
 * https://askubuntu.com/questions/87956/can-you-set-passwords-in-ssh-config-to-allow-automatic-login
 * https://stackoverflow.com/questions/32255660/how-to-install-sshpass-on-mac
+* https://www.ohse.de/uwe/software/lrzsz.html
+* https://github.com/trzsz/trzsz
+* https://github.com/trzsz/trzsz/tree/main/trzsz-iterm2
