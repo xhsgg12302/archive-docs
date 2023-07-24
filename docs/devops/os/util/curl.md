@@ -16,6 +16,9 @@ curl http://www.example.com -b "JSESSIONID=************;time=***"
 curl http://www.example.com -H "Content-Type:application/json"
 # 7、-F,--form 表单的内容，可以上传文件
 curl http://www.example.com -F "file=@_path_"
+
+# 使用curl 代替 telnet
+curl telnet://wtfu.site:30000 --connect-timeout 1
 ```
 
 ## 实例
