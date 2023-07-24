@@ -17,8 +17,8 @@ curl http://www.example.com -H "Content-Type:application/json"
 # 7、-F,--form 表单的内容，可以上传文件
 curl http://www.example.com -F "file=@_path_"
 
-# 使用curl 代替 telnet
-curl telnet://wtfu.site:30000 --connect-timeout 1
+# 使用curl 实现 telnet .追加超时时间是因为，有的服务器有安全策略阻止，会一直等待链接超时，效果跟端口开放相差无几，造成误解。
+curl --connect-timeout 1 telnet://wtfu.site:30000
 ```
 
 ## 实例
