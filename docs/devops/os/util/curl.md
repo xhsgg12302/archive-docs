@@ -167,5 +167,6 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
     - #### 总结
     !> 服务器证书中包含：明文信息（若干），一段CA签名（用来验证当前证书的有效性）。例如：PortSwigger的CA公匙信息在cacert.der这个证书中。如果可以解密CA签名，则表示就是PortSwigger这个证书机构签发的。也进一步说明明文信息中的服务器公匙没问题. 
 
-* ## Reference
-    * [curl 的用法指南](http://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
+## Reference
+* [curl 的用法指南](http://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
+* https://everything.curl.dev/
