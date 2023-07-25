@@ -7,7 +7,9 @@
         docker load -i  /path/tmp/docker-build.tar
         # 删除容器
         docker ps -qa | xargs -n 1 docker rm -f
+
         # 这将列出所有没有被任何标签或容器引用的镜像。这些镜像通常被称为悬空镜像，因为它们没有被命名或引用，而且也没有被垃圾回收机制删除。
+        # https://docs.docker.com/engine/reference/commandline/images/#filter
         docker image ls -f "dangling=true"
         # 删除所有没有被标记或容器引用的悬空镜像
         docker image prune
@@ -16,9 +18,10 @@
         # 删除标记为 NONE 的镜像。使用以下命令删除这些镜像：
         docker rmi $(docker images | grep '<none>' | awk '{print $3}')
 
-        # 启动时去除基础镜像的entryponit  https://stackoverflow.com/questions/40122152/how-to-remove-entrypoint-from-parent-image-on-dockerfile
-        docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"
+        # 启动时去除基础镜像的entryponit  
+        # https://stackoverflow.com/questions/40122152/how-to-remove-entrypoint-from-parent-image-on-dockerfile
         # 或者在Dockerfile中 写入 ENTRYPOINT []  
+        docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"
         ```
     + ### MIRRORS
         ```shell
