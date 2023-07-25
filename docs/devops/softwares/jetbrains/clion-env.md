@@ -30,4 +30,4 @@ g++ -v
 * https://sourceware.org/gdb/wiki/PermissionsDarwin
 * https://apple.stackexchange.com/questions/420492/gdb-hangs-after-new-thread-on-macos
 * https://stackoverflow.com/questions/60499508/why-does-gdb-hang-after-running
-* [gdb hangs [New Thread of process ]](https://www.google.com.hk/search?q=gdb+hangs+%5BNew+Thread+of+process+%5D&newwindow=1&source=hp&ei=2uC9ZLiSCtLU4-EP8YaCCA&iflsig=AD69kcEAAAAAZL3u6kX9p3fVZ5__fzwBuI3iXkRwueBJ&ved=0ahUKEwi45-OBpaaAAxVS6jgGHXGDAAEQ4dUDCAk&uact=5&oq=gdb+hangs+%5BNew+Thread+of+process+%5D&gs_lp=Egdnd3Mtd2l6IiJnZGIgaGFuZ3MgW05ldyBUaHJlYWQgb2YgcHJvY2VzcyBdMgcQIRigARgKSJt5UABYm3dwAngAkAEAmAHSBKABgFaqAQsyLTIxLjEyLjEuMbgBA8gBAPgBAcICBxAAGIoFGEPCAgsQLhiABBjHARjRA8ICBRAAGIAEwgIJEAAYigUYChhDwgIFEC4YgATCAgsQABiKBRgKGEMYKsICBxAAGIAEGArCAgcQABgMGIAEwgIHEC4YDBiABMICBRAhGKABwgIHEAAYExiABMICBhAAGB4YE8ICCBAAGAUYHhgTwgIEEAAYHg&sclient=gws-wiz)
+* [gdb hangs [New Thread of process ]](https://www.google.com.hk/search?q=gdb+hangs+%5BNew+Thread+of+process+%5D)
