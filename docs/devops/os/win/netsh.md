@@ -17,4 +17,4 @@ route delete [traget]
 route add [-p] 0.0.0.0 mask 0.0.0.0 192.168.1.1 metric 2 if 2
 ```
 
-![](../../../../.images/os/util/netsh.png)
+![](../../../../.images/devops/os/util/netsh.png)
