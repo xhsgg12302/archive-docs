@@ -330,7 +330,7 @@ sudo systemctl enable docker
 
 ## Reference
 
-- [docker docs](https://docs.docker.com/engine/reference/run/)
-- [容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instance/repositories)
-- [docker volume 与bind的区别 和注意事项](https://codeantenna.com/a/YdJdiIFSh7)
+* https://docs.docker.com/engine/reference/run
+* https://cr.console.aliyun.com/cn-hangzhou/instance/repositories
+* [docker volume 与bind的区别 和注意事项](https://codeantenna.com/a/YdJdiIFSh7)
 
