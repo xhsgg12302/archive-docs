@@ -288,6 +288,7 @@
 https://docs.docker.com/engine/install/ubuntu/ </br>
 https://zhuanlan.zhihu.com/p/628536643 </br>
 https://help.aliyun.com/document_detail/51853.html
+
 <!-- tabs:start -->
 #### **Ubuntu:20.4**
 ```shell
@@ -326,6 +327,26 @@ sudo systemctl start docker
 sudo systemctl status docker
 sudo systemctl enable docker
 ```
+
+#### **GPU**
+```shell
+# https://developer.nvidia.com/blog/gpu-containers-runtime/
+# https://github.com/NVIDIA/nvidia-container-runtime
+# http://imyhq.com/cloud-native/41210.html
+
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update
+sudo apt-get install -y nvidia-docker2
+# sudo pkill -SIGHUP dockerd
+# sudo systemctl restart docker
+sudo nvidia-container-cli --load-kmods info
+sudo docker run -it --rm --runtime=nvidia nvidia/cuda:12.2.0-base-ubuntu20.04
+    nvidia-smi   # output
+```
+![](../../../.images/devops/docker/docker-with-GPU.png)
 <!-- tabs:end -->
 
 ## Reference
