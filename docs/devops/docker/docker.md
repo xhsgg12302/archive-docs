@@ -283,7 +283,50 @@
             4. 启动数据卷容器 `$ docker run -dit --rm --name mysql-data mysql-data:1.0.0`
             5. 挂载数据卷容器启动MySQL服务 `$ docker run -d -p 3336:3336  --name mysql-5.6.49 --volumes-from mysql-data  mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336 --rm `
 
+## 安装
+?> 参考链接： </br>
+https://docs.docker.com/engine/install/ubuntu/ </br>
+https://zhuanlan.zhihu.com/p/628536643 </br>
+https://help.aliyun.com/document_detail/51853.html
+<!-- tabs:start -->
+#### **Ubuntu:20.4**
+```shell
+# 卸载旧版
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
+# Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+# Add Docker’s official GPG key:
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Use the following command to set up the repository:
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd
+# sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+#### **Centos7.x**
+```shell
+# 运行以下命令，下载docker-ce的yum源。
+sudo wget -O /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# 运行以下命令，安装Docker。
+sudo yum -y install docker-ce
+
+sudo docker -v
+sudo systemctl start docker
+sudo systemctl status docker
+sudo systemctl enable docker
+```
+<!-- tabs:end -->
 
 ## Reference
 
