@@ -91,7 +91,7 @@
 * [垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
 * 垃圾回收器图解
 
-  ![](../../../../.images/gcor.jpeg)
+  ![](../../../../../.images/doc/advance/jvm/gcor.jpeg)
 
   | 名称              | 模式      | 分代  | 说明                                                         |
   | ----------------- | --------- | ----- | ------------------------------------------------------------ |
@@ -127,14 +127,14 @@
   1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。
   2. 动态对象年龄判断：survivor区域中年龄从低到高对象大小总和大于-XX:TargetSurvivorRatio[:50%]，则将当前年龄及大雨当前年龄的对象晋升。[误区](https://wenku.baidu.com/view/e90d99cc142ded630b1c59eef8c75fbfc77d94a0.html )
   3. 大对象直接进入老年代：-XX:PretenureSizeThreshold。超过这个值的对象直接放在老年代。
-  4. 空间分配担保机制：[src](https://blog.csdn.net/qq_40662405/article/details/114783644)![](../../../../.images/HandlerPromotionFailure.png)
+  4. 空间分配担保机制：[src](https://blog.csdn.net/qq_40662405/article/details/114783644)![](../../../../../.images/doc/advance/jvm/handler-promotion-failure.png)
 
 * GCROOT 对象
   1. 每个帧栈[局部变量表](https://hllvm-group.iteye.com/group/topic/25858)
   2. 常量池中引用的对象。
   3. 方法区中静态变量引用的对象。
 
-* 同一个版本的[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)在不同的平台上使用的垃圾回收器不一样。![](../../../../.images/diff-jdk-version-gc-condition.jpg)
+* 同一个版本的[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)在不同的平台上使用的垃圾回收器不一样。![](../../../../../.images/doc/advance/jvm/diff-jdk-version-gc-condition.jpg)
 
 * `-XX:+UseParallelGC / -XX:-UseParallelOldGC` 选项[link](https://docs.oracle.com/javase/10/gctuning/available-collectors.htm#JSGCT-GUID-F215A508-9E58-40B4-90A5-74E29BF3BD3C)
 
@@ -159,7 +159,7 @@
   - [日志字段解释](https://blog.gceasy.io/2016/02/22/understand-garbage-collection-log/) 
   - [图片来源](https://blog.csdn.net/qq_41816702/article/details/108352220)
 
-  ![](../../../../.images/print-gc-details.jpeg)
+  ![](../../../../../.images/doc/advance/jvm/print-gc-details.jpeg)
 
 * [永久代回收](https://www.nowcoder.com/questionTerminal/8f393a761e0f4b67b1c442d092eb484d)
 
@@ -203,16 +203,16 @@
 
 * CPU 100% 问题排查
 
-  > 1 在Linux上面使用 `top` 命令进程查询 CPU100% 进程ID[pid]![linux-top](../../../../.images/linux-top.png)
+  > 1 在Linux上面使用 `top` 命令进程查询 CPU100% 进程ID[pid]![linux-top](../../../../../.images/doc/advance/jvm/linux-top.png)
   >
   > 
   >
   >
-  > 2  使用`top -Hp 23198` 查看具体线程所占用CPU,然后将线程通过`printf "%x\n" 23208` 记录线程ID ![](../../../../.images/linux-thread-0x.jpg)
+  > 2  使用`top -Hp 23198` 查看具体线程所占用CPU,然后将线程通过`printf "%x\n" 23208` 记录线程ID ![](../../../../../.images/doc/advance/jvm/linux-thread-0x.jpg)
   >
   >
   > 
-  > 3 使用`jstack 23198` 打印进程下线程状态。根据上一步获取的十六进制的线程ID 查找是那个线程栈导致。![](../../../../.images/find-nid-check.jpg)
+  > 3 使用`jstack 23198` 打印进程下线程状态。根据上一步获取的十六进制的线程ID 查找是那个线程栈导致。![](../../../../../.images/doc/advance/jvm/find-nid-check.jpg)
 
 * 内存超标
 
