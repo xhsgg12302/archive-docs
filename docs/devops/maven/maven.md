@@ -95,9 +95,9 @@
         settings > pom.profile > pom.repository
     ```
     
-    ![](../../../.images/maven/project-dependency.png '项目结构 :size=70%')
+    ![](../../../.images/devops/maven/project-dependency.png '项目结构 :size=70%')
     
-    ![nihao](../../../.images/maven/pull-process.png 'repo :size=70%')
+    ![nihao](../../../.images/devops/maven/pull-process.png 'repo :size=70%')
 
 + ### 常用命令
 
@@ -1101,50 +1101,3 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
 ```
 
 ## OTHER
-
-<!-- tabs:start -->
-
-#### **C**
-
-```c
-# include <cstdio>
-int main()
-{
-    printf("hello world");
-}
-```
-
-
-
-#### **C++**
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int main()
-{
-    count << "hello world";
-    return 0;
-}
-```
-
-
-#### **java**
-
-```java
-class Demo
-{
-  public static void main(String[] args)
-      ｛
-            System.out.println("Hello Java");
-       ｝ 
-}
-```
-
-#### **python**
-
-```python
-print ("hello world")
-```
-<!-- tabs:end -->
