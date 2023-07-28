@@ -5,6 +5,7 @@
 # TAP=...     # <org>/<repo>, for example "my-org/homebrew-old"
 # MODULE=...  # name of module you want to install, e.g. "hugo"
 # VERS=...    # version of $MODULE you want to install, e.g., "0.80.0"
+
 brew tap-new 12302/gdb
 # 在最新的仓库中提取原来的版本到新建的tap.
 brew extract --version 13.1 gdb 12302/gdb
