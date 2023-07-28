@@ -349,6 +349,50 @@ nvidia-smi   # output
 # docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
 ```
 ![](../../../.images/devops/docker/docker-with-GPU.png)
+
+#### **cuda**
+```shell
+# 检查是否可以访问到硬件设备:(apt install pciutils)
+lspci | grep -i nvidia # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#verify-you-have-a-cuda-capable-gpu
+# lsmod | grep nvidia 可以验证驱动是否安装。
+
+# https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts
+# apt-get install vim
+
+https://gitlab.com/nvidia/container-images/cuda/blob/master/dist/12.2.0/ubuntu2004/base/Dockerfile
+
+
+
+apt-get update
+apt-get install -y --no-install-recommends cuda-cudart-12-2=12.2.53-1  cuda-compat-12-2
+rm -rf /var/lib/apt/lists/*
+
+export NVARCH=x86_64 && \
+export NVIDIA_REQUIRE_CUDA="cuda>=12.2 brand=tesla,driver>=450,driver<451 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526" && \
+export NV_CUDA_CUDART_VERSION=12.2.53-1 && \
+export NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-2 &&\
+
+export CUDA_VERSION=12.2.0 && \
+export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH} && \
+export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64 && \
+export NVIDIA_VISIBLE_DEVICES=all && \
+export NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+export NVARCH=x86_64
+export NVIDIA_REQUIRE_CUDA="cuda>=12.2 brand=tesla,driver>=450,driver<451 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526"
+export NV_CUDA_CUDART_VERSION=12.2.53-1
+export NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-2
+
+export CUDA_VERSION=12.2.0
+export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64
+export NVIDIA_VISIBLE_DEVICES=all
+export NVIDIA_DRIVER_CAPABILITIES=compute,utility
+```
+- Reference
+    * https://linux.how2shout.com/how-to-install-cuda-on-ubuntu-20-04-lts-linux/
+    * https://askubuntu.com/questions/1398568/installing-python-who-is-deadsnakes-and-why-should-i-trust-them
+    * https://itsfoss.com/add-apt-repository-command-not-found/
 <!-- tabs:end -->
 
 ## Reference
