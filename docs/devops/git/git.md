@@ -1,28 +1,29 @@
 ## 凭据管理
-* ### `git credential [fill|approve|reject]`
-	> 用来取回和存储用户凭据。
-	>
-	> `credential-helper`系统的根命令是`git credential`,也可以说是credential最基本的命令。实际上调用的是`git-credential` 可执行文件。
-	```shell
-	# 查找可执行文件位置
-	$ find / -name "git-credential" 2> /dev/null
-	/Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential
+1. ### 基本操作
+	* > 用来取回和存储用户凭据。</br>
+	`git credential [fill|approve|reject]` </br>
+	`credential-helper`系统的根命令是`git credential`,也可以说是credential最基本的命令。实际上调用的是`git-credential` 可执行文件。
 
-	# 验证`git credential`等价`/path/to/git-credential`,以下两条命令执行结果相同
-	$ git credential -h
-	$ /Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential -h
-	```
-	> 查看git credential 帮助信息`git help credential`
+		```shell
+		# 查找可执行文件位置
+		find / -name "git-credential" 2> /dev/null
+		/Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential
 
-	| option | des |
-	|-- | -- |
-	| fill   	| 根据标准输入获取的数据顺序匹配所有helper,匹配到立马返回，如何没有匹配到，会要求用户输入并打印 |
-	| approve 	| 将标准输入发送到所有helper保存起来，方便后续使用 |
-	| reject	| 将标准输入匹配到的所有helper中的描述行删除 |
+		# 验证`git credential`等价`/path/to/git-credential`,以下两条命令执行结果相同
+		git credential -h
+		/Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential -h
+		```
+    * ?> 查看git credential 帮助信息`git help credential`
 
-	> 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
+		| option | des |
+		|-- | -- |
+		| fill   	| 根据标准输入获取的数据顺序匹配所有helper,匹配到立马返回，如何没有匹配到，会要求用户输入并打印 |
+		| approve 	| 将标准输入发送到所有helper保存起来，方便后续使用 |
+		| reject	| 将标准输入匹配到的所有helper中的描述行删除 |
 
-* ### 内置的两种基本helper(`store`,`cache`)
+	* ?> 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
+
+2. ### 内置的两种基本helper(`store`,`cache`)
 	```shell
 	# 可以通过命令进行查看 
 	$ find /Library/Developer/CommandLineTools/usr/libexec/git-core -name "git-credential*"
@@ -102,7 +103,7 @@
 	fi
 	```
 	
-* ### helper配置格式
+3. ### helper配置格式
 	> 上文之所以说git credential是根命令，最基本命令，是因为具体干活的是其他的，比如store，cache等，至于哪一个工具，就看配置了哪些
 	| conf	| des	|
 	| --	| -- 	|
@@ -110,15 +111,14 @@
 	| foo -a --opt=bcd	| Runs git-credential-foo -a --opt=bcd |
 	| /absolute/path/foo -xyz	| Runs /absolute/path/foo -xyz | 
 	| !f() { echo "password=s3cre7"; }; f	| Code after ! evaluated in shell |
-* ### 具体helper使用格式：`git-credential-foo [args] <action>`
-	> action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject.
-	>
-	> 也就是执行 git credential fill 的时候会在配置的credential helper中找到每个具体实现依次执行他们的get.
-	>
-	> git credential approve 依次执行每个具体helper的 store，reject -> erase同理。
 
-* ### 自定义helper
-	> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
+4. ### 具体helper使用格式：`git-credential-foo [args] <action>`
+?> action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject. </br>
+也就是执行 git credential fill 的时候会在配置的credential helper中找到每个具体实现依次执行他们的get. </br>
+git credential approve 依次执行每个具体helper的 store，reject -> erase同理。
+
+5. ### 自定义helper
+?> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
 ## GIT仓库迁移
