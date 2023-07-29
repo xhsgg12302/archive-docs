@@ -132,8 +132,10 @@
         ```shell
         SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
         SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+        ```
 
         7. ?> 指定安装目录
+
             * (1)makefile中如何写安装目录
                 ```shell
                 DESTDIR=    # 安装目录
@@ -145,7 +147,7 @@
                 常见到命令行中运行 ./configure -prefix=/usr，其实就是修改 `PREFIX`
 
             * (2)Cmake中如何写安装目录
-            
+
                 **CMAKE_INSTALL_PREFIX**：安装目录的默认前缀，作用类似于 PREFIX，常见的用法如：`cmake -CMAKE_INSTALL_PREFIX=/usr`，只要安装目录不是以/开头，则会默认是以该目录为前缀。如果未定义，则默认为`/usr/local`。在主目录的CMakeLists.txt中添加SET语句来设置它，也可以执行cmake时设置。
 
                 **INSTALL**:指令用于定义安装规则，安装的内容包括：二进制，动态库，静态库及文件，目录，脚本等，使的格式为：
