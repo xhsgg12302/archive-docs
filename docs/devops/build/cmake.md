@@ -39,6 +39,46 @@
         >    * ***PROJECT_SOURCE_DIR*** : 源文件目录
 
         2. ##### 指令
+        ?> 指令就是CMake里的函数。它的名称不区分大小写，调用的格式如下:
+            * 指令名（参数1，参数2，参数3） 
+        参数之间用空格或者分号隔开。
+        如果参数中包含括号，可以使用双引号将参数分开，如下所示：
+        ```shell
+        SET(val fu n.c)     # 指令会认为是'fu n.c'是两个参数
+        SET(val "fu n.c")   # 使用双引号避免错误
+        ```
+
+        3. ##### 使用
+        ?> CMake命令用于生成中间文件，使用时要传入CmakeLists.txt文件所在的目录。如果在主目录下直接生成配置文件，**内部构建**，这样做的坏处是使代码文件与中间文件相互混淆，因此最好的做法时**外部构件**。<br>
+        如下所示：在主目录下
+        ```shell
+        mkdir build && cd build     # 用于存放中间文件
+        cmake ..                    # 因为CmakeLists.txt再上一层目录中
+        make
+        ```
+
+        4. 工程目录结构
+        ```shell
+        hello/	                # 根目录
+        ├── CMakeLists.txt	    # 工程的cmakelists
+        ├── CopyRight	        # 版权声明 
+        ├── README		        # 说明
+        ├── runhello.sh		    # 调用二进制文件的脚本
+        ├── bin/		        # 存放编译生成二进制文件			
+        ├── build/		        # 存放cmake生成的中间配置文件
+        ├── doc/		        # 存放文本文档
+        └── src/		        # 存放代码文档
+            ├── hello.c
+            └── CMakeLists.txt  # 要为任何代码目录添加Cmakelists
+        ```
+        ?> 最终安装工程时，如下操作：
+        ```shell
+        # 把bin/下文件和runhello.sh撞到可执行文件目录下面
+        mv bin/* runhello.sh -t /usr/bin
+        # 把doc/*，README，CopyRight装到/usr/share/doc/hello下面
+        sudo mkdir /usr/share/doc/hell
+        mv doc/* README CopyRight -t /usr/share/doc/hell
+        ```
 
     * #### 具体指令
 
