@@ -80,7 +80,36 @@
         mv doc/* README CopyRight -t /usr/share/doc/hell
         ```
 
+    <!-- * #### 具体指令
+    ?> 1. 最低CMake版本（每个CmakeLists.txt文件都必须有）</br>
+    `CMAKE_MINIMUM_PREQUIRED(VERSION 2.6)` </br> 2. 指定工程名 </br>
+    `PROJECT(PRJNAME)` <br> 3. 输出提示信息 </br>
+    `MESSAGE(STATUS "This is binary dir" ${PROJECT_BINARY_DIR})` -->
+
     * #### 具体指令
+        1. ?> 最低CMake版本（每个CmakeLists.txt文件都必须有）
+        
+        `CMAKE_MINIMUM_PREQUIRED(VERSION 2.6)`
+        2. ?> 指定工程名
+        
+        `PROJECT(PRJNAME)`
+        3. ?> 输出提示信息
+
+        `MESSAGE(STATUS "This is binary dir" ${PROJECT_BINARY_DIR})`
+
+        第一个参数表示输出的信息类型，有三中选项：
+            * **STATUS**: 输出前缀为--的信息。
+            * **SEND_ERROR**: 产生错误，生成过程中被跳过
+            * **FATAL_ERROR**: 重要错误，CMake进城终止。
+        
+        4. ?> 添加要编译的可执行程序
+
+        `ADD_EXECUTABLE(hello main.c src1.c)`  # hello为一个target
+        等效于在makefile里写
+        ```shell
+        hello: main.c src1.c
+            gcc -o hello main.c src1.c
+        ```
 
 ## Reference
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%9F%BA%E7%A1%80.md
