@@ -191,7 +191,7 @@
                 ```
 
                 + 目录的安装
-                ```cmake
+                ```shell
                 INSTALL(DIRECTORY dirs... # DIRECTORY 要移动的相对路径，注意dir和dir/有区别，一个是整个目录，另一个是dir/下的文件
                     DESTINATION <dir>  # DESTINATION 后面接的是要移动到的相对路径
                     [FILE_PERMISSIONS permissions...]
@@ -205,7 +205,7 @@
                     ] [...])
                 ```
                 例子：
-                ```cmake
+                ```shell
                 INSTALL(DIRECTORY icons scripts/ # 安装icons整个目录和scripts的下属文件
                     DESTINATION share/myproj
                     PATTERN "CVS" EXCLUDE  # 排除CVS目录
