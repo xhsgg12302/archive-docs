@@ -346,6 +346,9 @@ sudo nvidia-container-cli --load-kmods info
 sudo docker run -it --rm --runtime=nvidia nvidia/cuda:12.2.0-base-ubuntu20.04
 nvidia-smi   # output
 
+# 另外一种访问方式：（也可以使用nvidia-smi）
+docker run --rm -it -e NVIDIA_VISIBLE_DEVICES=all --runtime nvidia ubuntu:20.04 /bin/bash
+
 # docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
 ```
 ![](../../../.images/devops/docker/docker-with-GPU.png)
