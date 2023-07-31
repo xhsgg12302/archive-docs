@@ -259,15 +259,18 @@
         ?> 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
 
         * #### 流程
+            1. 获取 MySQL datadir目录中的数据
+             
+            ?> 第一种可以直接获取到存储数据的mysql`${datadir}`目录。</br>
+            第二种是根据文件进行导入的，如下： 
             ```shell
-            # office-site: https://hub.docker.com/_/mysql
+            # offical site: https://hub.docker.com/_/mysql
             # 启动对应版本的mysql空实例
             docker run -d -p 3336:3336 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysql-instance mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336
             # 链接实例，导入数据，生成数据目录
             # 从容器中导出数据
             docker cp d6b8e9a751e7:/mysql-data ./mysql-data
             ```
-            1. 获取 MySQL datadir目录中的数据
             2. 构建Dockerfile
                 ```docker
                 # Dockerfile
