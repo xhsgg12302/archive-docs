@@ -308,7 +308,7 @@
                 --collation-server=utf8mb4_unicode_ci \
                 --port=3336
                 ```
-            6. 使用docker进行测试
+            6. 使用docker内部`mysql客户端`进行测试
              
             ?> `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
 
