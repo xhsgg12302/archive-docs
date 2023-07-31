@@ -1,4 +1,4 @@
-## CMAKE
+## CMAKE :100:
 
 - ### 基础
     *  #### 简介
@@ -59,7 +59,7 @@
         ```
 
         4. 工程目录结构
-        ```shell
+        ```text
         hello/	                # 根目录
         ├── CMakeLists.txt	    # 工程的cmakelists
         ├── CopyRight	        # 版权声明 
