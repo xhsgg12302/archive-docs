@@ -25,6 +25,8 @@
 
         # docker 不使用缓存构建镜像
         docker build -t **:1.00 --no-cache -f Dockerfile . 
+        # docker 清理构建缓存
+        docker builder prune
         ```
     + ### MIRRORS
         ```shell
