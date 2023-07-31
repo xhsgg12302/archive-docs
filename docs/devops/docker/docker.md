@@ -259,6 +259,14 @@
         ?> 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
 
         * #### 流程
+            ```shell
+            # office-site: https://hub.docker.com/_/mysql
+            # 启动对应版本的mysql空实例
+            docker run -d -p 3336:3336 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysql-instance mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336
+            # 链接实例，导入数据，生成数据目录
+            # 从容器中导出数据
+            docker cp d6b8e9a751e7:/mysql-data ./mysql-data
+            ```
             1. 获取 MySQL datadir目录中的数据
             2. 构建Dockerfile
                 ```docker
@@ -273,7 +281,7 @@
                 COPY Dockerfile /
                 CMD /bin/sh
                 ```
-            3. build 数据卷镜像 `$ docker build -f Dockerfile -t mysql-data:1.0.0 . `
+            3. build 数据卷镜像 `$ docker build -t mysql-data:1.0.0 -f Dockerfile . `
                 > push到仓库
                 ```shell
                 $ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
@@ -281,7 +289,17 @@
                 $ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.0.0
                 ```
             4. 启动数据卷容器 `$ docker run -dit --rm --name mysql-data mysql-data:1.0.0`
-            5. 挂载数据卷容器启动MySQL服务 `$ docker run -d -p 3336:3336  --name mysql-5.6.49 --volumes-from mysql-data  mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336 --rm `
+            5. 挂载数据卷容器启动MySQL服务 
+                ```shell
+                docker run -d -p 3336:3336  --name mysql-5.6.49 \
+                # -v /my/custom:/etc/mysql/conf.d \
+                # -e MYSQL_ROOT_PASSWORD=my-secret-pw \
+                --volumes-from mysql-data  mysql:5.6.49 \
+                --datadir=/mysql-data/mysql \
+                --character-set-server=utf8mb4 \
+                --collation-server=utf8mb4_unicode_ci \
+                --port=3336
+                ```
 
 ## 安装
 ?> 参考链接： </br>
@@ -358,46 +376,41 @@ docker run --rm -it --gpus=all --runtime nvidia ubuntu:20.04 /bin/bash
 #### **cuda**
 ```shell
 # 检查是否可以访问到硬件设备:(apt install pciutils)
-lspci | grep -i nvidia # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#verify-you-have-a-cuda-capable-gpu
+# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#verify-you-have-a-cuda-capable-gpu
+lspci | grep -i nvidia 
 # lsmod | grep nvidia 可以验证驱动是否安装。
 
 # https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts
 # apt-get install vim
 
-https://gitlab.com/nvidia/container-images/cuda/blob/master/dist/12.2.0/ubuntu2004/base/Dockerfile
+# pip指定多个源:~/.pip/pip.conf
+[global]
+index-url=http://mirrors.aliyun.com/pypi/simple/
+extra-index-url=https://pypi.tuna.tsinghua.edu.cn/simple/
+                http://pypi.mirrors.ustc.edu.cn/simple/
+                https://pypi.org/
+[install]
+trusted-host=mirrors.aliyun.com
+             pypi.tuna.tsinghua.edu.cn
+             pypi.mirrors.ustc.edu.cn
+             pypi.org
 
-
-
-apt-get update
-apt-get install -y --no-install-recommends cuda-cudart-12-2=12.2.53-1  cuda-compat-12-2
-rm -rf /var/lib/apt/lists/*
-
-export NVARCH=x86_64 && \
-export NVIDIA_REQUIRE_CUDA="cuda>=12.2 brand=tesla,driver>=450,driver<451 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526" && \
-export NV_CUDA_CUDART_VERSION=12.2.53-1 && \
-export NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-2 &&\
-
-export CUDA_VERSION=12.2.0 && \
-export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH} && \
-export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64 && \
-export NVIDIA_VISIBLE_DEVICES=all && \
-export NVIDIA_DRIVER_CAPABILITIES=compute,utility
-
-export NVARCH=x86_64
-export NVIDIA_REQUIRE_CUDA="cuda>=12.2 brand=tesla,driver>=450,driver<451 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526"
-export NV_CUDA_CUDART_VERSION=12.2.53-1
-export NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-2
-
-export CUDA_VERSION=12.2.0
-export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
-export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64
-export NVIDIA_VISIBLE_DEVICES=all
-export NVIDIA_DRIVER_CAPABILITIES=compute,utility
+# 运行stable-diffusion-ui
+docker run -it --rm --gpus=all \
+    -v ./miniconda3:/root/miniconda3 \
+    -v /data/newbrush/ai/stable-diffusion-webui/models:/app/models \
+    -v /data/newbrush/ai/stable-diffusion-webui/extensions:/app/extensions \
+    -v /data/newbrush/ai/stable-diffusion-webui/github:/app/github \
+    -v /data/newbrush/ai/stable-diffusion-webui/repositories:/app/repositories \
+    -v ./venvs/sd/venv/:/app/venv \
+    me/sd-ins:v1.1 /bin/bash
 ```
 - Reference
     * https://linux.how2shout.com/how-to-install-cuda-on-ubuntu-20-04-lts-linux/
     * https://askubuntu.com/questions/1398568/installing-python-who-is-deadsnakes-and-why-should-i-trust-them
     * https://itsfoss.com/add-apt-repository-command-not-found/
+    * https://gitlab.com/nvidia/container-images/cuda/blob/master/dist/12.2.0/ubuntu2004/base/Dockerfile
+    * https://stackoverflow.com/questions/58269375/how-to-install-packages-with-miniconda-in-dockerfile
 <!-- tabs:end -->
 
 ## Reference
