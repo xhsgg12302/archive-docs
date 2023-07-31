@@ -570,6 +570,31 @@
         14
         这个指令需要注意的是,直到遇到 ENDFOREACH 指令,整个语句块才会得到真正的执行。
 
+## 补充
+```shell
+# CLION 编译命令
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake \
+    --debug-server-port 55847 \
+    --debug-token-path /private/var/folders/g8/1p6zv3xs00x2b9h8fd6h8nr80000gn/T/cmake-debugtoken \
+    -S /Users/mac/Documents/clion-projects/cmake-3.27.1-tutorial-source/Step1 \
+    -B /Users/mac/Documents/clion-projects/cmake-3.27.1-tutorial-source/Step1/cmake-build-debug-cus-gdb \
+    -G "CodeBlocks - Unix Makefiles" \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_MAKE_PROGRAM=/usr/bin/make \
+    -DCMAKE_C_COMPILER=/usr/bin/gcc \
+    -DCMAKE_CXX_COMPILER=/usr/bin/g++
+
+# 通用项目
+# 1. 编写 CMakeLists.txt ,基本要素 cmake_minimum_required(VERSION 3.10), project(step1 CXX), add_executable(tutorial tutorial.cxx)
+# 2. 统计目录创建build 文件夹，用来处理构建过程中的中间文件
+# 3. cd build 中执行, 通过-D 更新缓存文件 CMakeCache.txt 中的变量值。并在上级目录按照CMakeLists.txt中定义的构建项目。
+cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++ ../
+# 4. 根据刚才的构建信息。执行下面命令执行真正的编译动作
+cmake --build .
+```
+
 ## Reference
+* https://cmake.org/cmake/help/latest/
+* https://cmake.org/cmake/help/latest/command/project.html#command:project
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%9F%BA%E7%A1%80.md
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F.md
