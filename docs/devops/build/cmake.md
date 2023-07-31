@@ -18,7 +18,8 @@
     E(源文件)-->F
     F-->G(可执行程序)
     ```
-
+    ![](../../../.images/devops/build/clion-base-step-01.png ':size=70%')
+    ![](../../../.images/devops/build/clion-base-step-02.png ':size=70%')
     * #### 基本规则
         1. ##### 变量
         使用`${}`方式取值，**变量名区分大小写**（指令名不区分大小写）</br>
@@ -30,9 +31,9 @@
          
         > **系统预定义的变量**
         >
-        > 在我们使用PROJECT指令指定工程名后，CMake会自动生成两个变量;
-        >    * ***_BINARY_DIR***: 可执行程序目录，其实就是执行cmake命令时的当前目录，比如在build/外部编译，那么它就是build的绝对路径 </br>
-        >    * ***_SOURCE_DIR***: 源文件目录，就是主CmakeLists.txt所在的绝对路径。
+        > 在我们使用PROJECT指令指定工程名后，CMake会自动生成两个变量;可以在 CMakeCache.txt 中看到定义。
+        >    * ***${pname}_BINARY_DIR***: 可执行程序目录，比如`step1_BINARY_DIR`,其实就是执行cmake命令时的当前目录，比如在build/外部编译，那么它就是build的绝对路径 </br>
+        >    * ***${pname}_SOURCE_DIR***: 源文件目录，比如`step1_SOURCE_DIR`,就是主CmakeLists.txt所在的绝对路径。
         > 
         > 我们可以使用他们。同时系统还会帮我们预定义两个与工程名无关的变量，他们的内容与上述两个变量相同，但是好处是变量名不会因为工程名改变而改变，因此推荐使用：</br>
         >    * ___PROJECT_BINARY_DIR___ : 可执行程序目录</br>
