@@ -59,7 +59,7 @@
         ```
 
         4. 工程目录结构
-        ```text
+        ```dir
         hello/	                # 根目录
         ├── CMakeLists.txt	    # 工程的cmakelists
         ├── CopyRight	        # 版权声明 
