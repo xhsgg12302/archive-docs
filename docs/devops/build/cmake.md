@@ -596,7 +596,9 @@ cmake --build .
 
 ## Reference
 * https://cmake.org/cmake/help/latest/
+* https://cmake.org/cmake/help/latest/guide/tutorial/index.html
 * https://cmake.org/cmake/help/latest/command/project.html#command:project
+* https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
 * https://www.gnu.org/software/make/manual/make.html
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%9F%BA%E7%A1%80.md
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F.md
