@@ -27,10 +27,22 @@ brew install 12302/gdb/gdb@13.1
 # 参考： https://ntsd.dev/aria2-max-connections-per-server/
 brew tap xhsgg12302/aria2 https://github.com/xhsgg12302/aria2.git
 brew extract --version 1.36.0 aria2 xhsgg12302/aria2
-tar -czvf aria2.tar.gz aria2
-readlink -f aria2.tar.gz
+# tar -czvf aria2.tar.gz aria2
+# readlink -f aria2.tar.gz
+# 计算sha256值
+shasum -a 256 aria2-1.36.0.tar.xz
 brew install xhsgg12302/aria2/aria2@1.36.0 --verbose --debug --build-from-source
+
+# 使用原生的下载,即使使用128个单机并发，最多16个连接数
+/usr/local/Cellar/aria2/1.36.0_2/bin/aria2c -s128 -k20M https://releases.ubuntu.com/22.04/ubuntu-22.04.2-desktop-amd64.iso
+# 但是使用重新编译过后的,最大连接数可以达到128，至于速度问题，可能和当前网络环境，以及服务器带宽有关系。
+# 这种针对服务器网络单个连接差的很有效。多起线程，聚少成多。
+aria2c -s128 -k20M https://releases.ubuntu.com/22.04/ubuntu-22.04.2-desktop-amd64.iso
 ```
+![](../../../../.images/devops/os/mac/brew-aria2c-01.png)
+---
+![](../../../../.images/devops/os/mac/brew-aria2c-02.png)
+
 ##### Reference
 * https://github.com/Homebrew/homebrew-core/blob/5348a1685b3b59079ba0a16a3ebd95af66115ed0/Formula/aria2.rb
 * https://ntsd.dev/aria2-max-connections-per-server/
