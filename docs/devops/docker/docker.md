@@ -24,7 +24,7 @@
         docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"
 
         # docker 不使用缓存构建镜像
-        docker build -t **:1.00 --no-cache -f Dockerfile . 
+        docker build -t **:1.0 --no-cache -f Dockerfile . 
         # docker 清理构建缓存
         docker builder prune
         ```
