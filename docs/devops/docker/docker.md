@@ -32,7 +32,17 @@
         ```shell
         {
             "experimental": true,
+            "runtimes": {
+                "nvidia": {
+                    "path": "nvidia-container-runtime",
+                    "runtimeArgs": []
+                }
+            },
+            "data-root": "/data/lib/docker",
             "registry-mirrors": [
+                "https://docker.mirrors.ustc.edu.cn",
+                "https://hub-mirror.c.163.com",
+                "https://reg-mirror.qiniu.com"
                 "https://docker.mirrors.ustc.edu.cn",
                 "https://hub-mirror.c.163.com",
                 "https://reg-mirror.qiniu.com",
