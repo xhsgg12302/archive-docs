@@ -95,8 +95,8 @@
         settings > pom.profile > pom.repository
     ```
     
-    ![](../../../.images/devops/build/maven-project-dependency.png '项目结构 :size=70%')
-    ![nihao](../../../.images/devops/build/maven-pull-process.png 'repo :size=70%')
+    ![](/.images/devops/build/maven-project-dependency.png '项目结构 :size=70%')
+    ![nihao](/.images/devops/build/maven-pull-process.png 'repo :size=70%')
 
 + ### 常用命令
 

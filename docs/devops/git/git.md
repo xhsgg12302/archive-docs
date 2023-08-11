@@ -335,7 +335,8 @@
 
 		```
 	* ### 提交技巧
-		![skill 1](../../../.images/devops/git/mixed2.png ':size=48%') ![skill 2](../../../.images/devops/git/mixed3.png ':size=48%')
+		![skill 1](/.images/devops/git/mixed2.png ':size=48%') 
+		![skill 2](/.images/devops/git/mixed3.png ':size=48%')
 		```shell
 		# 如果在main分支上新建分支newImage并做提交C2，并且在newImage分支上创建分支caption并做提交C3。
 		# 假如需要将C2修复 比如 修改提交信息。则可以如下尝试
@@ -351,7 +352,9 @@
 		git cherry-pick C3
 		```
 	* ### 高级
-		![](../../../.images/devops/git/advanced1.png ':size=33%') ![](../../../.images/devops/git/advanced2.png ':size=33%') ![](../../../.images/devops/git/advanced3.png ':size=33%')
+		![](/.images/devops/git/advanced1.png ':size=33%') 
+		![](/.images/devops/git/advanced2.png ':size=33%') 
+		![](/.images/devops/git/advanced3.png ':size=33%')
 		```shell
 		# 多分支rebase
 		git rebase main bugFix

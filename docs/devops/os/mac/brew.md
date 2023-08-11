@@ -18,7 +18,7 @@ brew extract --version 13.1 gdb 12302/gdb
 # 运行安装命令（其实这个时候已经可以通过 brew search gdb 搜索到需要安装版本的软件了）
 brew install 12302/gdb/gdb@13.1
 ```
-![](../../../../.images/devops/os/mac/brew-search-01.png)
+![](/.images/devops/os/mac/brew-search-01.png)
 
 #### **2、自定义仓库**
 ?> aria2 example
@@ -39,9 +39,9 @@ brew install xhsgg12302/aria2/aria2@1.36.0 --verbose --debug --build-from-source
 # 这种针对服务器网络单个连接差的很有效。多起线程，聚少成多。
 aria2c -s128 -k20M https://releases.ubuntu.com/22.04/ubuntu-22.04.2-desktop-amd64.iso
 ```
-![](../../../../.images/devops/os/mac/brew-aria2c-01.png)
+![](/.images/devops/os/mac/brew-aria2c-01.png)
 ---
-![](../../../../.images/devops/os/mac/brew-aria2c-02.png)
+![](/.images/devops/os/mac/brew-aria2c-02.png)
 
 ##### Reference
 * https://github.com/Homebrew/homebrew-core/blob/5348a1685b3b59079ba0a16a3ebd95af66115ed0/Formula/aria2.rb

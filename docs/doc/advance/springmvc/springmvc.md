@@ -1,6 +1,6 @@
 ## springmvc 执行流程
 
-![](../../../../.images/doc/advance/springmvc/process.png)
+![](/.images/doc/advance/springmvc/process.png)
 
 ## 过滤器
 

@@ -1,7 +1,7 @@
 ## 启动流程
 * 流程图
 
-    ![](../../../../.images/doc/advance/springboot/process.png ':size=90%')
+    ![](/.images/doc/advance/springboot/process.png ':size=90%')
 * 伪代码
     > main方法启动： `SpringApplication.run(SpringbootApplication.class, args);` <br>
     > new SpringApplication(sources).run(); <br>

@@ -390,7 +390,7 @@ docker run --rm -it --gpus=all --runtime nvidia ubuntu:20.04 /bin/bash
 
 # docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
 ```
-![](../../../.images/devops/docker/docker-with-GPU.png)
+![](/.images/devops/docker/docker-with-GPU.png)
 
 #### **cuda**
 ```shell

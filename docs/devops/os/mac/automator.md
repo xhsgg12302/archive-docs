@@ -17,7 +17,7 @@ end tell
 do shell script "open /path/to/your/script.app"
 # 7.保存这个automator.设定保存选项
 ```
-![](../../../../.images/devops/os/mac/automator-quit-viscosity-01.png)
+![](/.images/devops/os/mac/automator-quit-viscosity-01.png)
 
 
 #### **ommited**

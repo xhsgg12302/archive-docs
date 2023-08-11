@@ -143,7 +143,7 @@
 
 * 整体结构图
 
-    ![](../../../.images/thread/AQS/aqs-struct.png)
+    ![](/.images/thread/AQS/aqs-struct.png)
 
 ## ReentrantLock
 * 创建ReentrantLock示例
@@ -165,7 +165,8 @@
 
 * 非公平锁与公平锁 `获取锁图例`
 
-    ![](../../../.images/doc/base/concurrent/NonfairSync.png ':size=50%') ![](../../../.images/doc/base/concurrent/FairSync.png ':size=46%')
+    ![](/.images/doc/base/concurrent/NonfairSync.png ':size=50%') 
+    ![](/.images/doc/base/concurrent/FairSync.png ':size=46%')
 
 * 代码片段
     <details><summary>Sync#nonfairTryAcquire</summary>
@@ -299,7 +300,7 @@
 
 * 非公平锁与公平锁 `释放锁图例`
     
-    ![](../../../.images/doc/base/concurrent/unlock.png ':size=60%')
+    ![](/.images/doc/base/concurrent/unlock.png ':size=60%')
 
     <details><summary>AbstractQueuedSynchronizer#release</summary>
 

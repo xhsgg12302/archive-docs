@@ -3,7 +3,7 @@
 > 按方向分为输入流和输出流.按传输单位分为字节流和字符流。按形态分为原始流及缓冲流。<br>
 > IO流的本质是数据传输，并且流是单向的。<br>
 
-![](../../../.images/doc/base/io/iostream.png )
+![](/.images/doc/base/io/iostream.png )
 
 ## 获取文件的几种方式
 

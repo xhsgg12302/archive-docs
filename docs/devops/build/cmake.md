@@ -18,8 +18,8 @@
     E(源文件)-->F
     F-->G(可执行程序)
     ```
-    ![](../../../.images/devops/build/clion-base-step-01.png ':size=70%')
-    ![](../../../.images/devops/build/clion-base-step-02.png ':size=70%')
+    ![](/.images/devops/build/clion-base-step-01.png ':size=70%')
+    ![](/.images/devops/build/clion-base-step-02.png ':size=70%')
     * #### 基本规则
         1. ##### 变量
         使用`${}`方式取值，**变量名区分大小写**（指令名不区分大小写）</br>

@@ -1,4 +1,4 @@
-![](../../../.images/devops/k8s/framework.png ':size=90%')
+![](/.images/devops/k8s/framework.png ':size=90%')
 
 ## 基础概念
 * ### 各个组件
@@ -37,9 +37,9 @@
     * 同一个POD内多个容器，采用pause 共享网络lo
     * 各个POD overlay network
         - 同一个node，Docker0 网桥进行转发
-        ![](../../../.images/devops/k8s/docker0.png ':size=80%')
+        ![](/.images/devops/k8s/docker0.png ':size=80%')
         - 不同node，flannel 插件
-        ![](../../../.images/devops/k8s/flannel.png)
+        ![](/.images/devops/k8s/flannel.png)
     * POD与service之间的通信，IPVS，iptables，
 
 ## 构建K8S集群

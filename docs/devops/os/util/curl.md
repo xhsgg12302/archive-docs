@@ -23,7 +23,7 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
 
 ## 实例
 * ### ajax提交new from
-    ![](../../../.images/../../.images/devops/os/util/curl-first.png ':size=100%')
+    ![](/.images/devops/os/util/curl-first.png ':size=100%')
     ```shell
     curl http://localhost:8080//admin/cardRule/update.html -H "Content-Type=multipart/form-data" \
         -F "action=UploadVMKImagePath" -F "id=915427308658102272" \
@@ -33,7 +33,7 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
     ```
 
 * ### 请求打码服务器
-    ![](../../../.images/../../.images/devops/os/util/curl-second.png ':size=100%')
+    ![](/.images/devops/os/util/curl-second.png ':size=100%')
     ```shell
     # 需要 注意  --data-urlencode 配合 @ 读取文件的话key=value 中的等号也会encode。
     # 所以换一种方式通过cat 读取。另外如果需要结合在当前命令中运行shell  需要双引号先计算。
@@ -48,7 +48,7 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
     - #### 测试
         1. 首先设置burpsuite证书不受信任。
            
-           ![](../../../.images/../../.images/devops/os/util/curl-third.png ':size=70%')
+           ![](/.images/devops/os/util/curl-third.png ':size=70%')
         2. curl 验证不受信证书展示：（终止链接）
             ```shell
             curl -v -x http://127.0.0.1:7070 https://www.baidu.com 

@@ -1,3 +1,3 @@
 hello other
 
-![](../../.images/other/reference.png)
+![](/.images/other/reference.png)
