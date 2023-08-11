@@ -21,10 +21,10 @@ g++ -v
 
 
 ## Assert
-![](../../../../.images/devops/os/softwares/clion-debug-with-gdb.png)
-![](../../../../.images/devops/os/softwares/clion-gdb-config-1.png)
-![](../../../../.images/devops/os/softwares/clion-gdb-config-2.png)
-![](../../../../.images/devops/os/softwares/clion-gdb-config-3.png)
+![](../../../../../.images/devops/os/softwares/clion-debug-with-gdb.png)
+![](../../../../../.images/devops/os/softwares/clion-gdb-config-1.png)
+![](../../../../../.images/devops/os/softwares/clion-gdb-config-2.png)
+![](../../../../../.images/devops/os/softwares/clion-gdb-config-3.png)
 
 ## Reference
 * https://sourceware.org/gdb/wiki/PermissionsDarwin

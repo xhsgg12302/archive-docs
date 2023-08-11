@@ -2,8 +2,8 @@
 ?> 多vpn链接软件，和 TunnelBlick属于同一类软件
 
 * ### 下载
-![](../../../.images/devops/os/softwares/viscosity-download-01.png ':size=49%')
-![](../../../.images/devops/os/softwares/viscosity-download-02.png ':size=49%')
+![](../../../../.images/devops/os/softwares/viscosity-download-01.png ':size=49%')
+![](../../../../.images/devops/os/softwares/viscosity-download-02.png ':size=49%')
 
 * ### 激活 
 ```shell
@@ -26,7 +26,7 @@
 	deep@sea.com
 	VM1U-JKJRW4-2NSXY4-G25K7Q-AU6LCU-I56CL4
 ```
-![](../../../.images/devops/os/softwares/viscosity-activate-01.png)
+![](../../../../.images/devops/os/softwares/viscosity-activate-01.png)
 
 * ### 导入TunnelBlick配置
 ```shell
