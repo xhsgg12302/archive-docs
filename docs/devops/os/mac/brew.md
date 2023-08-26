@@ -39,6 +39,22 @@ brew install xhsgg12302/aria2/aria2@1.36.0 --verbose --debug --build-from-source
 # 这种针对服务器网络单个连接差的很有效。多起线程，聚少成多。
 aria2c -s128 -k20M https://releases.ubuntu.com/22.04/ubuntu-22.04.2-desktop-amd64.iso
 ```
+
+```shell
+# Ubuntu20.04 install aria2c from source code
+git clone https://github.com/aria2/aria2.git
+cd aria2
+vim src/OptionHandlerFactory.cc
+    OptionHandler* op(new NumberOptionHandler(PREF_MAX_CONNECTION_PER_SERVER,
+                                              TEXT_MAX_CONNECTION_PER_SERVER,
+                                              "1", 1, 128, 'x'));
+mkdir build && cd build
+autoreconf -i
+sudo apt-get install libssl-dev libssh2-1-dev
+../configure --disable-dependency-tracking  --prefix=/usr/local --with-libssh2 --without-gnutls --without-libgmp --without-libnettle --without-libgcrypt --without-appletls --with-openssl
+aria2c -h
+```
+
 ![](/.images/devops/os/mac/brew-aria2c-01.png)
 ---
 ![](/.images/devops/os/mac/brew-aria2c-02.png)
