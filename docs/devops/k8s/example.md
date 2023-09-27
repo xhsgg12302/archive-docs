@@ -1,6 +1,5 @@
 ## multiple containers in single pod
 ```yaml
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
