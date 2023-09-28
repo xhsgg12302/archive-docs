@@ -55,5 +55,6 @@ gpg --verify openvpn-2.5.5.tar.gz.asc openvpn-2.5.5.tar.gz
 ```
 
 ## 9. Reference
-[GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
-[openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
+* [GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
+* [openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
+* [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
