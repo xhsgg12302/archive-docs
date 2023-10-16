@@ -523,4 +523,11 @@ objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 	# 建议不要手动复制，使用install-cert 命令安装后会记录相关参数在域名文件下的conf文件中。
 	# 所以后续的操作，比如renew，cron等会使用到相关参数，以达到自动续期的功能。cron的话一般无需人工干预。且为 dnsapi模式。
 	acme.sh --install-cert -d wtfu.site --fullchain-file /usr/local/nginx/conf/certificate/www/full_chain.pem  --key-file /usr/local/nginx/conf/certificate/www/private.key --reloadcmd "/usr/local/nginx/sbin/nginx -s reload"
+
+	# 手动更新
+	acme.sh --renew -d example.com [--force]
+	# 升级软件
+	acme.sh --upgrade
+	# 保持自动升级
+	acme.sh --upgrade --auto-upgrade
 	```
