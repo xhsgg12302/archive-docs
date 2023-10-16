@@ -502,3 +502,25 @@ objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 		* https://techexpert.tips/nginx/nginx-shell-script-cgi/
 		* https://www.howtoforge.com/serving-cgi-scripts-with-nginx-on-centos-6.0-p2
 		* https://sleeplessbeastie.eu/2017/09/18/how-to-execute-cgi-scripts-using-fcgiwrap/
+
+
+## 工具
+1. #### 使用 acme.sh 自动化管理 ssl/tsl证书
+	```shell
+	# 安装 acme.sh (https://github.com/acmesh-official/acme.sh)
+	curl https://get.acme.sh | sh -s email=xhsgg12302@126.com
+
+	# 颁发证书，使用 dnsapi 进行验证
+	# 此处使用的是腾讯统一后的api 3.0[腾讯云 API 密钥]
+	# 如果为dnspod的话，可以修改 [--dns dns_dp]
+	# 需要注意的是如果使用的是 上面的dnsapi的话，需要DNSPod控制台(https://console.dnspod.cn/account/token/token)创建的token[DNSPod Token]而不是[腾讯云 API 密钥]。
+	# 且导入的环境变量不通，参考(https://github.com/acmesh-official/acme.sh/wiki/dnsapi#2-dnspodcn-option)
+	export Tencent_SecretId="xxxxx"
+	export Tencent_SecretKey="xxxxx"
+	acme.sh --issue --dns dns_tencent  -d wtfu.site -d www.wtfu.site
+
+	# 安装证书到指定位置 
+	# 建议不要手动复制，使用install-cert 命令安装后会记录相关参数在域名文件下的conf文件中。
+	# 所以后续的操作，比如renew，cron等会使用到相关参数，以达到自动续期的功能。cron的话一般无需人工干预。且为 dnsapi模式。
+	acme.sh --install-cert -d wtfu.site --fullchain-file /usr/local/nginx/conf/certificate/www/full_chain.pem  --key-file /usr/local/nginx/conf/certificate/www/private.key --reloadcmd "/usr/local/nginx/sbin/nginx -s reload"
+	```
