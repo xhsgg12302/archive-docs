@@ -3,6 +3,8 @@
         ```shell
         # 提交镜像
         docker commit -a "xhsgg12302@gmail.com" -m "with requirements.txt" 44f357ee68bc  eli/anaconda3:v1.0
+        # 标签镜像
+        docker tag bad7184c3c60  gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17-with-pip-deps
         # 加载镜像
         docker load -i  /path/tmp/docker-build.tar
         # 删除容器
@@ -48,6 +50,26 @@
             ]
         }
         ```
+    + ### CREDENTIAL
+        [凭证官方文档](https://docs.docker.com/engine/reference/commandline/login/#credential-helper-protocol)
+        ```shell
+        # /etc/docker/config.json
+        {
+            "auths": {
+                "harbor.meixiu.mobi": {},
+                "https://index.docker.io/v1/": {},
+                "registry.cn-hangzhou.aliyuncs.com": {}
+            },
+            "credsStore": "desktop"
+        }
+        ```
+        !> 可以使用命令`file $(which docker-credential-desktop)`查看工具位置
+        |ope    |  <div style="width: 610px">payload</div>   |   output  |
+        -|-|-
+        |list   | | {"https://gitlab.pixdaddy.com:5050":"w****","https://harbor.meixiu.mobi":"zh****",</br>"https://registry.cn-hangzhou.aliyuncs.com":"5127****@qq.com"} |
+        |get    | https://registry.cn-hangzhou.aliyuncs.com ***CTRL+D*** | {"ServerURL":"https://registry.cn-hangzhou.aliyuncs.com","Username":"5127***@qq.com","Secret":"***"}
+        |store  | {"ServerURL":"https://index.docker.io/v1","Username":"david","Secret":"passw0rd1"} ***CTRL+D***    | |
+        |erase  | https://index.docker.io/v1    | |
 
 
 - ## 使用样例
