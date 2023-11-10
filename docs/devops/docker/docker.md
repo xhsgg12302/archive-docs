@@ -6,6 +6,8 @@
         # 标签镜像
         docker tag bad7184c3c60  gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17-with-pip-deps
         # 加载镜像
+        docker build -t me/venvs:v1.0 -f DK-venv .
+        docker save me/venvs:v1.0 -o ./venvs.tar
         docker load -i  /path/tmp/docker-build.tar
         # 删除容器
         docker ps -qa | xargs -n 1 docker rm -f
