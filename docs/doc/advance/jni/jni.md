@@ -102,13 +102,32 @@ $ java -Djava.library.path=. HelloJNI
 ```
 <!-- tabs:end -->
 
-##### 5. 效果
+##### 5. 记录
 ![](/.images/doc/advance/jni/jni-show-01.png)
 
 
 #### ** C++ **
-```c++
+##### 1. 使用C++代替C语言中的第三步
+```cpp
+// Save as "HelloJNI.cpp"
+#include <jni.h>       // JNI header provided by JDK
+#include <iostream>    // C++ standard IO header
+#include "HelloJNI.h"  // Generated
+using namespace std;
+
+// Implementation of the native method sayHello()
+JNIEXPORT void JNICALL Java_HelloJNI_sayHello(JNIEnv *env, jobject thisObj) {
+	cout << "Hello World from C++!" << endl;
+   return;
+}
 ```
+##### 2. 编译动态链接库
+```shell
+$ g++ -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -dynamiclib -o libhello.dylib HelloJNI.cpp
+```
+
+##### 3. 记录
+![](/.images/doc/advance/jni/jni-with-c++_01.png)
 <!-- tabs:end -->
 
 
