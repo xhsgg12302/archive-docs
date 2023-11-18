@@ -83,8 +83,13 @@ public static void main(String[] args){
 
 <!-- tabs:start -->
 #### **Ubuntu:20.4**
+<!-- tabs:start -->
+<!-- tabs:end -->
 <!-- tabs:end -->
 
+
+![](/.images/doc/advance/jni/jni-show-01.png)
+![](/.images/doc/advance/jni/jni-show-01.png 'comment :size=70%')
 
 
 ## Reference
