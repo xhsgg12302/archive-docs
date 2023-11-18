@@ -130,7 +130,7 @@ $ g++ -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -dynamiclib -o libhel
 ![](/.images/doc/advance/jni/jni-with-c++_01.png)
 
 
-#### ** C/C++ Maxtrue **
+#### ** C/C++ Mixture **
 ##### 1. 写一段 HelloJNICpp.java 代码
 ```java
 public class HelloJNICpp {
@@ -217,7 +217,7 @@ JNIEXPORT void JNICALL Java_HelloJNICpp_sayHello (JNIEnv *env, jobject thisObj) 
 using namespace std;
  
 void sayHello () {
-    cout << "Hello World from C++, this is maxtrue!" << endl;
+    cout << "Hello World from C++, this is mixture!" << endl;
     return;
 }
 ```
@@ -231,7 +231,7 @@ $ gcc -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -lc++  -dynamiclib -o
 ```
 
 ##### 5. 记录
-![](/.images/doc/advance/jni/maxtrue-01.png)
+![](/.images/doc/advance/jni/mixture-01.png)
 
 <!-- tabs:end -->
 
