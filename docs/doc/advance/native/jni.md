@@ -103,7 +103,7 @@ $ java -Djava.library.path=. HelloJNI
 <!-- tabs:end -->
 
 ##### 5. 记录
-![](/.images/doc/advance/jni/jni-show-01.png)
+![](/.images/doc/advance/native/jni-show-01.png)
 
 
 #### ** C++ **
@@ -127,7 +127,7 @@ $ g++ -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -dynamiclib -o libhel
 ```
 
 ##### 3. 记录
-![](/.images/doc/advance/jni/jni-with-c++_01.png)
+![](/.images/doc/advance/native/jni-with-c++_01.png)
 
 
 #### ** C/C++ Mixture **
@@ -231,7 +231,7 @@ $ gcc -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/darwin" -lc++  -dynamiclib -o
 ```
 
 ##### 5. 记录
-![](/.images/doc/advance/jni/mixture-01.png)
+![](/.images/doc/advance/native/jni-mixture-01.png)
 
 <!-- tabs:end -->
 

@@ -46,7 +46,7 @@ $ java -cp .:jna-5.13.0.jar HelloWorld
 ```
 
 ##### 5. 记录
-![](/.images/doc/advance/jna/jna-origin-01.png)
+![](/.images/doc/advance/native/jna-origin-01.png)
 
 #### ** hikvision **
 <!-- tabs:end -->
