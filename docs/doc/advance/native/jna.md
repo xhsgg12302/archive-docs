@@ -105,5 +105,6 @@ int add(int a, int b){
 * https://en.wikipedia.org/wiki/Java_Native_Access
 * https://github.com/java-native-access/jna
 * https://github.com/mski/JNA-example
-* https://blog.csdn.net/zhan107876/article/details/121051129
 * https://dreammind.hatenadiary.org/entry/20091225/1261690796
+* https://blog.csdn.net/zhan107876/article/details/121051129
+* https://cloud.tencent.com/developer/article/1433681
