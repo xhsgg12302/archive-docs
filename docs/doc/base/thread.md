@@ -1,5 +1,7 @@
 ## thread
+
 * 线程的状态
+    + ![](/.images/doc/base/thread/status.jpeg)
 
     <details><summary>源码</summary>
 

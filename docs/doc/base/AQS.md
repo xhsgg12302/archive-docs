@@ -143,7 +143,7 @@
 
 * 整体结构图
 
-    ![](/.images/thread/AQS/aqs-struct.png)
+    ![](/.images/doc/base/concurrent/AQS/aqs-struct.png)
 
 ## ReentrantLock
 * 创建ReentrantLock示例
