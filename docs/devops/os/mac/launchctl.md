@@ -1,6 +1,15 @@
 ## launchctl
 
-!> 可以使用的工具有 LaunchControl
+!> 可以理解为，launchd是一套统一的开源服务管理框架，它用于启动、停止以及管理后台程序、应用程序、进程和脚本。launchd是macOS第一个启动的进程，该进程的PID为1，整个系统的其他进程都是它创建的。当launchd启动后，它会扫描/System/Library/LaunchDaemons和/Library/LaunchDaemons中的plist文件并加载他们；当输入密码登录系统后，launchd会扫描/System/Library/LaunchdAgents、/Library/LaunchAgents、~/Library/LaunchAgents这三个目录中的plist文件并加载它们。每个plist文件都是一个任务，加载不代表立即运行，只有设置了RunAtLoad为true或keepAlive为true时，才会加载并同时启动这些任务。
+
+|name | ope|
+-|-
+|帮助|`launchctl help`|
+|列出所有由launchd管理的进程 | `launchctl list` |
+|加载 | `launchctl load ~/Library/LaunchAgents/dos.wtfu.site.plist`|
+|卸载 | `launchctl unload ~/Library/LaunchAgents/dos.wtfu.site.plist`|
+|启动 | `launchctl start dos.wtfu.site`|
+|关闭 | `launchctl stop dos.wtfu.site`|
 
 ## plist
 <!-- tabs:start -->
@@ -144,3 +153,4 @@ ___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_V
 * [Mac OS 增加开机自启动脚本](https://www.xiaocaicai.com/2021/11/mac-os-%E5%A2%9E%E5%8A%A0%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/)
 * https://stackoverflow.com/questions/63169877/running-a-shell-script-automatically-with-launchd-on-mac
 * https://stackoverflow.com/questions/15536697/running-python-script-with-launchd-imports-not-found
+* https://blog.csdn.net/dddgggd/article/details/122599616
