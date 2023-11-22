@@ -1,6 +1,6 @@
 ## launchctl
 
-!> 可以理解为，launchd是一套统一的开源服务管理框架，它用于启动、停止以及管理后台程序、应用程序、进程和脚本。launchd是macOS第一个启动的进程，该进程的PID为1，整个系统的其他进程都是它创建的。当launchd启动后，它会扫描/System/Library/LaunchDaemons和/Library/LaunchDaemons中的plist文件并加载他们；当输入密码登录系统后，launchd会扫描/System/Library/LaunchdAgents、/Library/LaunchAgents、~/Library/LaunchAgents这三个目录中的plist文件并加载它们。每个plist文件都是一个任务，加载不代表立即运行，只有设置了RunAtLoad为true或keepAlive为true时，才会加载并同时启动这些任务。
+!> 简单解释，launchd是一套统一的开源服务管理框架，它用于启动、停止以及管理后台程序、应用程序、进程和脚本。launchd是macOS第一个启动的进程，该进程的PID为1，整个系统的其他进程都是它创建的。当launchd启动后，它会扫描/System/Library/LaunchDaemons和/Library/LaunchDaemons中的plist文件并加载他们；当输入密码登录系统后，launchd会扫描/System/Library/LaunchdAgents、/Library/LaunchAgents、~/Library/LaunchAgents这三个目录中的plist文件并加载它们。每个plist文件都是一个任务，加载不代表立即运行，只有设置了RunAtLoad为true或keepAlive为true时，才会加载并同时启动这些任务。
 
 |name | ope|
 -|-
