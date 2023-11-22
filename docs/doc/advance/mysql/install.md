@@ -64,9 +64,27 @@ $ FLUSH PRIVILEGES;
 ```
 
 ####  ** Docker **
-```shell
-# omitted
-```
+1. 配置环境
+    ```shell
+    # 启动数据卷
+    $ docker run -dit --rm --name mysql-data registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.0.0
+
+    # 挂载数据卷并启动 
+    #       [因为数据卷中的数据是经过密码保存的，所以此处需要有密码认证。如果不挂载数据卷的情况，可以使用`-e MYSQL_ALLOW_EMPTY_PASSWORD=yes`来空密码连接]
+    $ docker run -d -p 3336:3336 -e MYSQL_ROOT_PASSWORD='*******' --name mysql-5.6.49 \
+        --volumes-from mysql-data  mysql:5.6.49  --datadir=/mysql-data/mysql  --character-set-server=utf8mb4  --collation-server=utf8mb4_unicode_ci  --port=3336
+    ```
+
+2. 测试
+    ```shell
+    # 使用mysql容器内部客户端进行访问
+    #       [需要注意的是，让当前测试容器和宿主机共用一个网络栈。目的就是让 127.0.0.1 变成宿主机的ip，而不是docker容器内部的。]
+    $ docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336 -p
+    ```
+    ![](/.images/doc/advance/mysql/mysql-install-01.png)
+
+##### Reference
+   * https://hub.docker.com/_/mysql
 
 <!-- tabs:end -->
 
