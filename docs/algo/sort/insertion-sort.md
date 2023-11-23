@@ -1,6 +1,6 @@
 ## insertion
 
-### visu-algo
+### visualization
 ![](/.images/algo/sort/insertion-sort-01.gif)
 
 ### implement

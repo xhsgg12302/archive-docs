@@ -1,6 +1,6 @@
 ## selection
 
-### visu-algo
+### visualization
 ![](/.images/algo/sort/selection-sort-01.gif)
 
 ### implement

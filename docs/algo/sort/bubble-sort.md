@@ -1,6 +1,6 @@
 ## bubble
 
-### visu-algo
+### visualization
 ![](/.images/algo/sort/bubble-sort-01.gif)
 
 ### implement
