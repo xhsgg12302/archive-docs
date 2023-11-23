@@ -1,6 +1,6 @@
 ## selection
 
-### gif
+### visu-algo
 ![](/.images/algo/sort/selection-sort-01.gif)
 
 ### implement
@@ -22,7 +22,7 @@ public class SelectionSort{
         }
     }
 
-        public static void switchNumberByXor(int[] raw, int x, int y ){
+    public static void switchNumberByXor(int[] raw, int x, int y ){
         if(raw[x] == raw[y]) return;
         raw[x] = raw[x] ^ raw[y];
         raw[y] = raw[x] ^ raw[y];
