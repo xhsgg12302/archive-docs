@@ -1,3 +1,3 @@
-![文徵明-小楷赤壁赋](.images/_media/home.compress.resize..jpg ':size=100% * 500')
+![文徵明-小楷赤壁赋](https://vip.helloimg.com/images/2023/11/24/o0EiG9.jpg ':size=100% * 500')
 
 
