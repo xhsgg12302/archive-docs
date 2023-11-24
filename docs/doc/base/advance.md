@@ -12,61 +12,56 @@
     > 继续new Parent()，只执行父类的普通属性赋值和普通代码块，最后父类构造方法 <br>
     > 继续new Child(), 执行父类的普通属性和代码块，构造方法，然后是子类的
     
-    <details><summary>代码示例</summary>
+```java
+public class Parent {
+    static { System.out.println("父类：静态代码块"); }
+    private static String staticStringInParent = initStaticStringInParent();
+    private String stringInParent = initStringInParent();
+    public Parent() { System.out.println("父类：构造方法"); }
 
-    ```java
-    public class Parent {
-        static { System.out.println("父类：静态代码块"); }
-        private static String staticStringInParent = initStaticStringInParent();
-        private String stringInParent = initStringInParent();
-        public Parent() { System.out.println("父类：构造方法"); }
+    { System.out.println("父类：普通代码块"); }
 
-        { System.out.println("父类：普通代码块"); }
+    private static String initStaticStringInParent() { System.out.println("父类：静态方法，被静态成员变量赋值调用。"); return "initStaticStringInParent";}
+    private String initStringInParent() {System.out.println("父类：普通成员方法，被普通成员变量赋值调用。"); return "initStringInParent";}
 
-        private static String initStaticStringInParent() { System.out.println("父类：静态方法，被静态成员变量赋值调用。"); return "initStaticStringInParent";}
-        private String initStringInParent() {System.out.println("父类：普通成员方法，被普通成员变量赋值调用。"); return "initStringInParent";}
-
-        public static void main(String[] args) {
-            Parent p = new Child();
-            System.out.println("\n===============================\n\n\n");
-            p = new Child();
-        }
-
+    public static void main(String[] args) {
+        Parent p = new Child();
+        System.out.println("\n===============================\n\n\n");
+        p = new Child();
     }
+}
+// 子类
+class Child extends Parent {
+    { System.out.println("子类：普通代码块");}
+    private static String staticStringInChild = initStaticStringInChild();
+    static { System.out.println("子类：静态代码块"); }
+    private String stringInChild = initStringInChild();
+    public Child() { System.out.println("子类：构造方法"); }
 
-    class Child extends Parent {
-        { System.out.println("子类：普通代码块");}
-        private static String staticStringInChild = initStaticStringInChild();
-        static { System.out.println("子类：静态代码块"); }
-        private String stringInChild = initStringInChild();
-        public Child() { System.out.println("子类：构造方法"); }
-
-        private static String initStaticStringInChild() {System.out.println("子类：静态方法，被静态成员变量赋值调用。"); return "initStaticStringInChild";}
-        private String initStringInChild() {System.out.println("子类：普通成员方法，被普通成员变量赋值调用。"); return "initStringInChild";}
-    }
-  
-    output: 
-    父类：静态代码块
-    父类：静态方法，被静态成员变量赋值调用。
-    子类：静态方法，被静态成员变量赋值调用。
-    子类：静态代码块
-    父类：普通成员方法，被普通成员变量赋值调用。
-    父类：普通代码块
-    父类：构造方法
-    子类：普通代码块
-    子类：普通成员方法，被普通成员变量赋值调用。
-    子类：构造方法
-
-    ===============================
-
-    父类：普通成员方法，被普通成员变量赋值调用。
-    父类：普通代码块
-    父类：构造方法
-    子类：普通代码块
-    子类：普通成员方法，被普通成员变量赋值调用。
-    子类：构造方法
-    ```
-    </details>
+    private static String initStaticStringInChild() {System.out.println("子类：静态方法，被静态成员变量赋值调用。"); return "initStaticStringInChild";}
+    private String initStringInChild() {System.out.println("子类：普通成员方法，被普通成员变量赋值调用。"); return "initStringInChild";}
+}
+// output: 
+// 父类：静态代码块
+// 父类：静态方法，被静态成员变量赋值调用。
+// 子类：静态方法，被静态成员变量赋值调用。
+// 子类：静态代码块
+// 父类：普通成员方法，被普通成员变量赋值调用。
+// 父类：普通代码块
+// 父类：构造方法
+// 子类：普通代码块
+// 子类：普通成员方法，被普通成员变量赋值调用。
+// 子类：构造方法
+//
+// ===============================
+//
+// 父类：普通成员方法，被普通成员变量赋值调用。
+// 父类：普通代码块
+// 父类：构造方法
+// 子类：普通代码块
+// 子类：普通成员方法，被普通成员变量赋值调用。
+// 子类：构造方法
+```
 
 ## 动态代理
 * 简介
