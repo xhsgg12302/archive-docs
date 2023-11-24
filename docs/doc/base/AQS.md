@@ -147,7 +147,6 @@
 
 ## ReentrantLock
 * 创建ReentrantLock示例
-    <details><summary>代码示例</summary>
 
     ```java
   
@@ -161,7 +160,6 @@
         sync.lock();
     }
     ```
-    </details>
 
 * 非公平锁与公平锁 `获取锁图例`
 
@@ -169,8 +167,9 @@
     ![](/.images/doc/base/concurrent/FairSync.png ':size=46%')
 
 * 代码片段
-    <details><summary>Sync#nonfairTryAcquire</summary>
 
+    <!-- tabs:start -->
+    #### ** Sync#nonfairTryAcquire **
     ```java
     final boolean nonfairTryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
@@ -191,10 +190,8 @@
             return false;
         }
     ```
-    </details>
 
-    <details><summary>AbstractQueuedSynchronizer#addWaiter</summary>
-
+    #### ** AbstractQueuedSynchronizer#addWaiter **
     ```java
     private Node addWaiter(Node mode) {
         Node node = new Node(Thread.currentThread(), mode);
@@ -227,10 +224,8 @@
         }
     }
     ```
-    </details>
 
-    <details><summary>AbstractQueuedSynchronizer#acquireQueued</summary>
-
+    #### ** AbstractQueuedSynchronizer#acquireQueued **
     ```java
     final boolean acquireQueued(final Node node, int arg) {
         boolean failed = true;
@@ -259,10 +254,8 @@
         return Thread.interrupted();
     }
     ```
-    </details>
 
-    <details><summary>AbstractQueuedSynchronizer#selfInterrupt</summary>
-
+    #### ** AbstractQueuedSynchronizer#selfInterrupt **
     ```java
     /**
      * Convenience method to interrupt current thread.
@@ -271,10 +264,8 @@
         Thread.currentThread().interrupt();
     }
     ```
-    </details>
 
-    <details><summary>FairSync#tryAcquire</summary>
-
+    #### ** FairSync#tryAcquire **
     ```java
     protected final boolean tryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
@@ -296,14 +287,14 @@
             return false;
         }
     ```
-    </details>
+    <!-- tabs:end -->
 
 * 非公平锁与公平锁 `释放锁图例`
     
     ![](/.images/doc/base/concurrent/unlock.png ':size=60%')
 
-    <details><summary>AbstractQueuedSynchronizer#release</summary>
-
+    <!-- tabs:start -->
+    #### ** AbstractQueuedSynchronizer#release **
     ```java
     public final boolean release(int arg) {
         if (tryRelease(arg)) {
@@ -342,10 +333,7 @@
             LockSupport.unpark(s.thread);
     }
     ```
-    </details>
-
-    <details><summary>Sync#tryRelease</summary>
-
+    #### ** Sync#tryRelease **
     ```java
     protected final boolean tryRelease(int releases) {
             int c = getState() - releases;
@@ -360,4 +348,4 @@
             return free;
         }
     ```
-    </details>
+    <!-- tabs:end -->
