@@ -18,3 +18,17 @@ hello mysql
 
 ## .idb parse
 https://github.com/jeremycole/innodb_ruby/wiki
+
+## comment
+* https://stackoverflow.com/questions/9298368/in-mysql-what-does-this-mean-40100-default-character-set-latin1
+
+## select(\g|\G)
+* https://stackoverflow.com/questions/2277014/why-the-g-in-select-from-table-name-g
+
+|后缀|英文释义|描述|
+|:--:|:--:|:--:|
+| _ai | accent insensitive |不区分重音| 
+| _as | accent sensitive |区分重音| 
+| _ci | case insensitive |不区分大小写| 
+| _cs | case sensitive |区分大小写| 
+| _bin | binary |以二进制方式比较|
