@@ -25,6 +25,8 @@ https://github.com/jeremycole/innodb_ruby/wiki
 ## select(\g|\G)
 * https://stackoverflow.com/questions/2277014/why-the-g-in-select-from-table-name-g
 
+
+## character,collation
 |后缀|英文释义|描述|
 |:--:|:--:|:--:|
 | _ai | accent insensitive |不区分重音| 
