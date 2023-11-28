@@ -1,44 +1,45 @@
-!> GunPG 使用
+!> GPG
+## 安装
+```shell
+# 1. 源码安装
+# https://www.gnupg.org/download/index.en.html
+./configure
+make && make install
 
-## 1. 查看公匙和私匙
-```
-$:gpg -k/-K [name]
-```
+# 2. debian/ubuntu
+sudo apt-get install gnupg
 
-## 2. 生成公私匙
-```
-$:gpg --gen-key
-```
-
-## 3. 输出密匙
-```
-$:gpg --armor -o xx.txt --export [name|userID]
-$:gpg --armor -o xx.txt --export-secret-keys [name|userID]
+# 3. Fedora/centos
+yum install gnupg
 ```
 
-## 4. 查看公匙指纹
-```
-$:gpg --fingerprint [name|userID]
+
+## 使用
+
+### operation
+```shell
+# 1. 查看公匙和私匙
+gpg -k/-K [name]
+
+# 2. 生成公私匙
+gpg --gen-key
+
+# 3. 输出密匙
+gpg --armor -o xx.txt --export [name|userID]
+gpg --armor -o xx.txt --export-secret-keys [name|userID]
+
+# 4. 查看公匙指纹
+gpg --fingerprint [name|userID]
+
+# 5. 上传公匙
+gpg --keyserver hkp://www.example.com --send-keys [name|userID]
+gpg --keyserver hkp://www.example.com --recv-keys [name|userID]
+
+# 6. 导入公匙
+gpg --import [file]
 ```
 
-## 5. 上传公匙
-```
-$:gpg --keyserver hkp://www.example.com --send-keys [name|userID]
-$:gpg --keyserver hkp://www.example.com --recv-keys [name|userID]
-```
-
-## 6. 导入公匙
-```
-$:gpg --import [file]
-```
-
-## 7. keyserver
-```
-http://keyserver.ubuntu.com/
-https://keys.openpgp.org/
-```
-
-## 8. openvpn 样例
+### openvpn 样例
 ```
 -- 导入openvpn公匙
 wget -O security-openvpn-net.asc https://keys.openpgp.org/vks/v1/by-fingerprint/F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7
@@ -54,7 +55,11 @@ wget -c https://swupdate.openvpn.org/community/releases/openvpn-2.5.5.tar.gz
 gpg --verify openvpn-2.5.5.tar.gz.asc openvpn-2.5.5.tar.gz
 ```
 
-## 9. Reference
+## 公用服务器
+* http://keyserver.ubuntu.com/
+* https://keys.openpgp.org/
+
+## Reference
 * [GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
 * [openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
 * [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
