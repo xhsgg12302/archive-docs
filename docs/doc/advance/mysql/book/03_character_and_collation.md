@@ -82,8 +82,50 @@
 有一点需要大家十分的注意，在 MySQL 中 utf8 是 utf8mb3 的别名，所以之后在 MySQL 中提到 utf8 就意味着使用1~3个字节来表示一个字符，如果大家有使用4字节编码一个字符的情况，比如存储一些emoji表情啥的，那请使用 utf8mb4 。
 
 ### 字符集的查看
+```shell
+# MySQL 支持好多好多种字符集，查看当前 MySQL 中支持的字符集可以用下边这个语句：
+SHOW CHARACTER SET [like_or_where];
+like_or_where: {
+    LIKE 'pattern'
+  | WHERE expr
+}
+其中 CHARACTER SET 和 CHARSET 是同义词，用任意一个都可以。其中的 Default collation 列表示这种字符集中一种默认的 比较规则 。大家注意返回结果中的最后一列 Maxlen ，它代表该种字符集表示一个字符最多需要几个字节。
+```
+1. `show charset;`
+2. `show charset like '%utf%';`
+   
+   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-01.png)
+3. `show charset where charset = 'utf8mb4';`
+   
+   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-02.png)
 
 ### 比较规则查看
+```shell
+# 查看 MySQL 中支持的比较规则的命令如下:
+SHOW COLLATION [like_or_where]
+like_or_where: {
+    LIKE 'pattern'
+  | WHERE expr
+}
+其中 CHARACTER SET 和 CHARSET 是同义词，用任意一个都可以。其中的 Default collation 列表示这种字符集中一种默认的 比较规则 。大家注意返回结果中的最后一列 Maxlen ，它代表该种字符集表示一个字符最多需要几个字节。
+```
+这些比较规则的命名还挺有规律的，具体规律如下：
+* 比较规则名称以与其关联的字符集的名称开头。如上图的查询结果的比较规则名称都是以 utf8 开头的。
+* 后边紧跟着该比较规则主要作用于哪种语言，比如 utf8_polish_ci 表示以波兰语的规则比较，utf8_spanish_ci 是以西班牙语的规则比较， utf8_general_ci 是一种通用的比较规则。
+* 名称后缀意味着该比较规则是否区分语言中的重音、大小写啥的，具体可以用的值如下：
+    |后缀|英文释义|描述|
+    |:--:|:--:|:--:|
+    | _ai | accent insensitive |不区分重音| 
+    | _as | accent sensitive |区分重音| 
+    | _ci | case insensitive |不区分大小写| 
+    | _cs | case sensitive |区分大小写| 
+    | _bin | binary |以二进制方式比较|
+1. `show collation where charset = 'utf8mb4';`
+   
+   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-03.png)
+2. `show collation where charset = 'utf8mb4';`
+   
+   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-04.png)
 
 ## 字符集和比较规则的应用
 
