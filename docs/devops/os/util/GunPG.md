@@ -11,6 +11,9 @@ sudo apt-get install gnupg
 
 # 3. Fedora/centos
 yum install gnupg
+
+# 4. macosx
+brew install gnupg
 ```
 
 
