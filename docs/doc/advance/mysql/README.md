@@ -34,3 +34,6 @@ https://github.com/jeremycole/innodb_ruby/wiki
 | _ci | case insensitive |不区分大小写| 
 | _cs | case sensitive |区分大小写| 
 | _bin | binary |以二进制方式比较|
+
+## mysql查看通过`use`激活的数据库
+SELECT DATABASE();
