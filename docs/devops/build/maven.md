@@ -8,6 +8,8 @@
 	3. 既然maven有自带的依赖仲裁机制，为什么还会出现依赖冲突?
 	4. mvn 依赖可以定义的位置及加载顺序，远程仓库定义的位置及加载顺序。mirrorOf实际意义? 
 
+<div class="outer yosemite"><div class="dot red"></div><div class="dot amber"></div><div class="dot green"></div></div>
+
 + ### 介绍（一笔带过）
 
     ```
