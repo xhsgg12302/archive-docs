@@ -92,6 +92,8 @@ public static void main(String[] args){
 ![](/.images/doc/advance/jni/jni-show-01.png 'comment :size=70%')
 
 
+如果输入不了中文，参考 [mysql安装](/docs/doc/advance/mysql/install?id=源码安装)
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md
