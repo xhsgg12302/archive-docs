@@ -352,7 +352,7 @@ default-character-set=utf8
 
 ## 比较规则的应用
 结束了字符集的漫游，我们把视角再次聚焦到 比较规则 ， 比较规则 的作用通常体现比较字符串大小的表达式以及对某个字符串列进行排序中，所以有时候也称为 排序规则 。比方说表 t 的列 col 使用的字符集是 gbk ，使用的比较规则是 gbk_chinese_ci ，我们向里边插入几条记录：
-如果输入不了中文，参考 [mysql安装](/docs/doc/advance/mysql/install?id=源码安装)
+如果输入不了中文，参考 [mysql安装](/docs/doc/advance/mysql/install.md?id=源码安装)
 ```sql
 # 创建表t
 CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
