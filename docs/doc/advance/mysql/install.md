@@ -79,7 +79,8 @@ $ FLUSH PRIVILEGES;
     ```shell
     # 使用mysql容器内部客户端进行访问
     #       [需要注意的是，让当前测试容器和宿主机共用一个网络栈。目的就是让 127.0.0.1 变成宿主机的ip，而不是docker容器内部的。]
-    $ docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336 -p
+    #       [-e LANG="C.UTF-8" 指定当前操作系统可以支持的字符集，确保可以输入中文。有无双引号都可以, （en_US.UTF-8是不可以的）。还需要注意必须在mysql链接命令之前执行。不然的话，mysql是识别不到的。]
+    $ docker run -it --rm --network=host -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336 -p
     ```
     ![](/.images/doc/advance/mysql/mysql-install-01.png)
 
