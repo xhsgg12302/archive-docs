@@ -222,6 +222,15 @@ Records: 0 Duplicates: 0 Warnings: 0
 ALTER TABLE t MODIFY col VARCHAR(10);
 那列 col 的字符集和编码将使用表 t 的字符集和比较规则，也就是 utf8 和 utf8_general_ci 。
 ```
+* `SHOW FULL COLUMNS FROM t;`
+
+    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-09-01.png)
+* `SELECT column_name, character_set_name, collation_name FROM information_schema.columns WHERE table_schema = 'myemployees' AND table_name = 't';`
+
+    ***下图是后面补上去的，所以和第一种方式比较内容有差别***
+
+    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-09-02.png)
+
 !> 小贴士：在转换列的字符集时需要注意，如果转换前列中存储的数据不能用转换后的字符集进行表示会发生错误。比方说原先列使用的字符集是utf8，列中存储了一些汉字，现在把列的字符集转换为ascii的话就会出错，因为ascii字符集并不能表示汉字字符。
 
 ### 仅修改字符集或仅修改比较规则
@@ -259,8 +268,7 @@ ALTER TABLE t MODIFY col VARCHAR(10);
 2. 继续读一个字节 0x91 ，它的值也大于 0x7F ，再往后读一个字节发现木有了，所以这是半个字符。
 3. 所以 0xE68891 被 gbk 字符集解释成一个字符 '鎴' 和半个字符。
 
-假设用 iso-8859-1 ，也就是 latin1 字符集去解释这串字节，解码过程如下：
-1. 先读第一个字节 0xE6 ，它对应的 latin1 字符为 æ 。
+假设用 iso-8859-1 ，也就是 latin1 字符集去解释这串字节，解码过程如下： 1. 先读第一个字节 0xE6 ，它对应的 latin1 字符为 æ 。
 2. 再读第二个字节 0x88 ，它对应的 latin1 字符为 ˆ 。
 3. 再读第二个字节 0x91 ，它对应的 latin1 字符为 ‘ 。
 4. 所以整串字节 0xE68891 被 latin1 字符集解释后的字符串就是 'æˆ‘'
@@ -315,6 +323,8 @@ SELECT * FROM t WHERE s = '我';
 
 ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-14.png)
 
+从这个分析中我们可以得出这么几点需要注意的地方：
+
 * 服务器认为客户端发送过来的请求是用 character_set_client 编码的。假设你的客户端采用的字符集和 character_set_client 不一样的话，这就会出现意想不到的情况。比如我的
 客户端使用的是 utf8 字符集，如果把系统变量 character_set_client 的值设置为 ascii 的话，服务器可能无法理解我们发送的请求，更别谈处理这个请求了。
 * 服务器将把得到的结果集使用 character_set_results 编码后发送给客户端。假设你的客户端采用的字符集和 character_set_results 不一样的话，这就可能会出现客户端无法解码结果集的情况，结果就是在你的屏幕上出现乱码。比如我的客户端使用的是 utf8 字符集，如果把系统变量character_set_results 的值设置为 ascii 的话，可能会产生乱码。
@@ -322,10 +332,73 @@ SELECT * FROM t WHERE s = '我';
 
 知道了在 MySQL 中从发送请求到返回结果过程里发生的各种字符集转换，但是为啥要转来转去的呢？不晕么？
 
-?> 答：是的，很头晕，所以我们通常都把 character_set_client 、character_set_connection、character_set_results 这三个系统变量设置成和客户端使用的字符集一致的情况，这样减少了很多无谓的字符集转换。为了方便我们设置， MySQL 提供了一条非常简便的语句：
+?> 答：是的，很头晕，所以我们通常都把 character_set_client 、character_set_connection、character_set_results 这三个系统变量设置成和客户端使用的字符集一致的情况，这样减少了很多无谓的字符集转换。为了方便我们设置， MySQL 提供了一条非常简便的语句：`SET NAMES 字符集名;`
 
+!> 小贴士：如果你使用的是Windows系统，那应该设置成gbk。
 
+```sql
+SET NAMES 字符集名;
+# 这一条语句产生的效果和我们执行这3条的效果是一样的：
+SET character_set_client = 字符集名;
+SET character_set_connection = 字符集名;
+SET character_set_results = 字符集名;
+
+# 另外，如果你想在启动客户端的时候就把 character_set_client 、 character_set_connection 、character_set_results 这三个系统变量的值设置成一样的，
+# 那我们可以在启动客户端的时候指定一个叫 default-character-set 的启动选项，比如在配置文件里可以这么写：default character set 的启动选项，比如在配置文件里可以这么写：
+[client]
+default-character-set=utf8
+# 它起到的效果和执行一遍 SET NAMES utf8 是一样一样的，都会将那三个系统变量的值设置成 utf8 。
+```
 
 ## 比较规则的应用
+结束了字符集的漫游，我们把视角再次聚焦到 比较规则 ， 比较规则 的作用通常体现比较字符串大小的表达式以及对某个字符串列进行排序中，所以有时候也称为 排序规则 。比方说表 t 的列 col 使用的字符集是 gbk ，使用的比较规则是 gbk_chinese_ci ，我们向里边插入几条记录：
+```sql
+# 创建表t
+CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-## 总结
+mysql> INSERT INTO t(col) VALUES('a'), ('b'), ('A'), ('B');
+Query OK, 4 rows affected (0.00 sec)
+Records: 4 Duplicates: 0 Warnings: 0
+
+# 我们查询的时候按照 t 列排序一下：
+mysql> SELECT * FROM t ORDER BY col;
++------+
+| col |
++------+
+| a  |
+| A  |
+| b  |
+| B  |
+| 我  |
++------+
+5 rows in set (0.00 sec)
+
+# 可以看到在默认的比较规则 gbk_chinese_ci 中是不区分大小写的，我们现在把列 col 的比较规则修改为 gbk_bin ：
+mysql> ALTER TABLE t MODIFY col VARCHAR(10) COLLATE gbk_bin;
+Query OK, 5 rows affected (0.02 sec)
+Records: 5 Duplicates: 0 Warnings: 0
+
+# 由于 gbk_bin 是直接比较字符的编码，所以是区分大小写的，我们再看一下排序后的查询结果：
+mysql> SELECT * FROM t ORDER BY s;
++------+
+| s |
++------+
+| A |
+| B |
+| a |
+| b |
+| 我 |
++------+
+5 rows in set (0.00 sec)
+```
+
+所以如果以后大家在对字符串做比较或者对某个字符串列做排序操作时没有得到想象中的结果，需要思考一下是不是 比较规则 的问题～
+
+!> 小贴士：列`col`中各个字符在使用gbk字符集编码后对应的数字如下：</br>
+'A' -> 65 （十进制）</br>
+'B' -> 66 （十进制）</br>
+'a' -> 97 （十进制）</br>
+'b' -> 98 （十进制）</br>
+'我' -> 25105 （十进制）
+
+![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-15.png)
