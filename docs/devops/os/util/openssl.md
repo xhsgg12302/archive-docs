@@ -96,3 +96,4 @@
 * [Using a custom root CA with Burp for inspecting Android N traffic](https://blog.nviso.eu/2018/01/31/using-a-custom-root-ca-with-burp-for-inspecting-android-n-traffic/)
 * [Android 8.1 导入Burp、Fiddler证书](http://t.zoukankan.com/cijian9000-p-13431754.html)
 * [安卓手机使用adb添加系统证书方法](https://zhuanlan.zhihu.com/p/473750804)
+* [OpenSSL SAN 证书](https://blog.csdn.net/baishitongtian/article/details/119544269)
