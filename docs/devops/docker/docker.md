@@ -344,6 +344,26 @@
              
             ?> `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
 
+        #### 具体使用
+            * [mysql install docker](/docs/doc/advance/mysql/install.md?id=压缩包安装)
+        
+    4. ### 搭建chatgpt
+        !> 通过token调用openai或别的厂商的API的typescript的前端项目，并非部署模型直接生成。
+
+        ```shell
+        docker run -d --rm --name chatgpt -p 4000:3000 \
+            -e OPENAI_API_KEY=hk-xwscww100000839098****** \
+            -e BASE_URL=https://twapi.openai-hk.com \
+            -e PROXY_URL=http://192.168.1.6:7890 \
+            -e CODE=password \
+            yidadaa/chatgpt-next-web
+        ```
+        #### reference
+        * https://github.com/yidadaa/chatgpt-next-web
+        * https://openai-hk.com/m/ai
+        * https://doc.muluhub.com/docs/gpt4turbo#2hfyas
+
+
 ## 安装
 ?> 参考链接： </br>
 https://docs.docker.com/engine/install/ubuntu/ </br>
