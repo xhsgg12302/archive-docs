@@ -22,6 +22,13 @@ find /home -size 10k -[exec | ok] ls -l {} \; 
 
 ## 实例
 1. `find / -name "*.jar" -a -path "*jetbrains*" 2>/dev/null `
+2. 备份文件到另外一个地方
+    ```shell
+    # mac 语法，先筛选符合的文件
+    find ./ -type f -and -d 1 -and ! -name 'venvs' -and ! -name '.DS_Store' -exec ls -l {} \;
+    # 然后使用cp 命令移动
+    find ./ -type f -and -d 1 -and ! -name 'venvs' -and ! -name '.DS_Store' -exec cp {} ~/Desktop/configure-files/conf/dockerfile \;
+    ```
 
 
 ## Reference
