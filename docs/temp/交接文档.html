@@ -1,0 +1,321 @@
+<h2>文档</h2>
+<h3>项目</h3>
+<h4>1. spider</h4>
+<p>!&gt; <a href="https://gitlab.meishubao.com/frame/backend/spider.git">项目地址: https://gitlab.meishubao.com/frame/backend/spider.git</a></p>
+<ul>
+<li><p>获取抖音直播地址并使用wss实时获取弹幕信息，并提供tcp服务推流给建立链接的客户端。相关代码入口：<code>[dev] com.test.ikea.service.impl.DouYinLiveWssServiceImpl#startWss</code></p>
+</li>
+<li><p>爬取有赞页面数据。 代码入口: <code>[dev] com.test.youzan.Main#main</code></p>
+</li>
+<li><p>宜家站点数据爬取代码位置： <code>spider-ikea/src/main/java/com/test/ikea/compose</code></p>
+</li>
+<li><p>数据相关文件在钉盘上，可以找胡老师获取。</p>
+<p>  <img src="img/img-04.png" alt=""></p>
+</li>
+</ul>
+<h4>2. arbuy</h4>
+<ul>
+<li><p>admin</p>
+<p>  !&gt; <a href="https://gitlab.pixdaddy.com/arbuy/backend/arbuy-admin.git">项目地址：https://gitlab.pixdaddy.com/arbuy/backend/arbuy-admin.git</a></p>
+<ul>
+<li>店铺靓号管理 代码入口：<code>com.arbuy.admin.controller.core.ArStoreGoodNumberController</code></li>
+<li>店铺号回收管理 代码入口：<code>com.arbuy.admin.controller.core.ArStoreNumberRecycleController</code></li>
+</ul>
+</li>
+<li><p>app</p>
+<p>  !&gt; <a href="https://gitlab.pixdaddy.com/arbuy/backend/arbuy-app.git">项目地址：https://gitlab.pixdaddy.com/arbuy/backend/arbuy-app.git</a></p>
+</li>
+</ul>
+<h4>3. tutoring</h4>
+<p>!&gt; <a href="https://gitlab.meishubao.com/tutoring/backend">项目组地址: https://gitlab.meishubao.com/tutoring/backend</a></p>
+<ul>
+<li><p>C端进入房间接口。 代码入口： <code>com.yyb.tutoring.app.service.play.api.controller.app.v1.AppRoomController</code></p>
+</li>
+<li><p>对接声网相关接口测试代码入口： <code>com.yyb.tutoring.app.service.play.api.controller.test.v1.TestController</code></p>
+</li>
+<li><p>对接声网相关支持模块,包括linux 动态链接库文件：<code>tutoring-service-play-monitor</code></p>
+<p>  <img src="img/img-02.png" alt=""></p>
+</li>
+<li><p>信令结构标准proto文件： <code>tutoring-service-play-pojo/lib</code></p>
+<p>  <img src="img/img-03.png" alt=""></p>
+</li>
+</ul>
+<h4>4. wechat-chatgpt</h4>
+<p>!&gt; <a href="https://gitlab.pixdaddy.com/openai/backend/wechat-chatgpt.git">项目地址：https://gitlab.pixdaddy.com/openai/backend/wechat-chatgpt.git</a></p>
+<ul>
+<li>主要是集成wechaty项目的一个ts项目。</li>
+<li>目前项目中使用的 provider为<code>Wechat</code>，Service为<code>PodLocal</code>, 详情可以参考官方 <a href="https://wechaty.js.org/docs/puppet-providers/">providers</a>, <a href="https://wechaty.js.org/docs/puppet-services/">services</a></li>
+<li>前期主要是用<code>wechaty-puppet-wechat</code>, 由于是操作浏览器进行的自动化行为，所以会在使用一段时候后内存不足，导致pod发生错误，无法继续提供机器人能力。</li>
+<li>后面换成<code>wechaty-puppet-padlocal</code>,使用第三方提供的token，已pad通信协议登录并监听处理消息。token获取可以在<a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%994">参考资料</a></li>
+<li>如果存在多个机器人的话，可以用有状态的部署方式管理。</li>
+</ul>
+<h5>参考资料4</h5>
+<ul>
+<li><a href="https://github.com/fuergaosi233/wechat-chatgpt">https://github.com/fuergaosi233/wechat-chatgpt</a></li>
+<li><a href="https://github.com/wechaty/wechaty">https://github.com/wechaty/wechaty</a></li>
+<li><a href="https://wechaty.js.org/docs/puppet-services/padlocal">https://wechaty.js.org/docs/puppet-services/padlocal</a></li>
+</ul>
+<h4>5. animated-drawings</h4>
+<p>!&gt; <a href="https://gitlab.pixdaddy.com/openai/backend/animateddrawingsclient.git">项目地址： https://gitlab.pixdaddy.com/openai/backend/animateddrawingsclient.git</a></p>
+<ul>
+<li><p>Dockerfile <code>gitlab.pixdaddy.com:5050/library/python-animated/anaconda3-with-base-pip:v1.*</code></p>
+<pre><code class="language-dockerfile">FROM ubuntu:20.04
+RUN /bin/sh -c apt-get update
+RUN /bin/sh -c apt-get install -y wget
+RUN /bin/sh -c wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    &amp;&amp;  bash Miniconda3-latest-Linux-x86_64.sh -b \
+    &amp;&amp;  rm -f Miniconda3-latest-Linux-x86_64.sh \
+    &amp;&amp;  /root/miniconda3/bin/conda init bash
+ENV PATH=/root/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+COPY base/condarc.conf /root/.condarc
+COPY base/pip.conf /root/.pip/pip.conf
+COPY ./requirements.txt /build/animated-drawings/requirements.txt
+COPY ./setup.py /build/animated-drawings/setup.py
+WORKDIR /build/animated-drawings
+RUN /bin/sh -c conda install --yes python=3.8.13
+RUN /bin/sh -c pip install --no-cache-dir -r /build/animated-drawings/requirements.txt
+RUN /bin/sh -c pip install --no-cache-dir -e /build/animated-drawings
+RUN /bin/sh -c apt-get update    \
+    &amp;&amp; apt-get install -y --no-install-recommends libosmesa6-dev freeglut3-dev libglfw3-dev libgles2-mesa-dev libosmesa6     \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+RUN /bin/sh -c pip install --no-cache-dir oss2 distro
+RUN /bin/sh -c pip uninstall --yes opencv-python opencv-contrib-python     \
+    &amp;&amp; conda install --yes -c conda-forge opencv moviepy libstdcxx-ng
+RUN /bin/sh -c conda clean -afy \
+    &amp;&amp; rm -rf /root/.cache \
+    &amp;&amp; rm -rf /build/animated-drawings
+CMD [&quot;/bin/bash&quot;]
+</code></pre>
+</li>
+<li><p>镜像地址: <a href="https://gitlab.pixdaddy.com/library/python-animated/container_registry/">https://gitlab.pixdaddy.com/library/python-animated/container_registry/</a></p>
+<p>  <img src="img/img-05.png" alt=""></p>
+</li>
+</ul>
+<h5>参考资料5</h5>
+<ul>
+<li><a href="https://github.com/facebookresearch/AnimatedDrawings.git">https://github.com/facebookresearch/AnimatedDrawings.git</a></li>
+</ul>
+<h4>6. stable-diffusion-webui</h4>
+<p>!&gt; <a href="https://gitlab.pixdaddy.com/openai/backend/stable-diffusion-webui.git">项目地址： https://gitlab.pixdaddy.com/openai/backend/stable-diffusion-webui.git</a></p>
+<ul>
+<li><p>项目情况(可在个人提交记录中查看相关信息)</p>
+<ul>
+<li>在<a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">原项目</a>的基础上增加了zk客户端，用来连接到注册中心。供调度中心<code>newbrush-admin-sd-dispatcher</code>感知。</li>
+<li>增加部分oss图片上传，用来减少与客户端base64传输消耗的时间。</li>
+<li>增加clip快速切换，避免通过http调用修改。</li>
+<li>统一自定义配置，去除无用的插件。</li>
+<li>增加通过api接口请求文生图和图生图进度支持。</li>
+<li>20231109 增加<code>test-1.6.0</code>分支，主要是将一些XL相关的代码由原项目合并到当前test分支。暂未全面测试，可能存在一些bug.</li>
+</ul>
+</li>
+<li><p>镜像构建</p>
+<pre><code class="language-dockerfile">FROM ubuntu:20.04 as base
+
+LABEL maintainer &quot;NVIDIA CORPORATION &lt;cudatools@nvidia.com&gt;&quot;
+
+COPY sources.list /etc/apt/sources.list
+RUN mkdir ~/.pip  &amp;&amp; \
+echo &#39;\n\
+[global]\n\
+index-url = https://mirrors.aliyun.com/pypi/simple/\n\
+\n\
+[install]\n\
+trusted-host=mirrors.aliyun.com\n&#39;\
+&gt;&gt; ~/.pip/pip.conf &amp;&amp; \
+apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+        git libgl1 libglib2.0-0 google-perftools  &amp;&amp; rm -rf /var/lib/apt/lists/* &amp;&amp; \
+        git config --global --add safe.directory &quot;*&quot;
+# libglu1-mesa-dev
+
+ADD app/stable-diffusion-webui /app
+WORKDIR /app
+
+ENV NVARCH x86_64
+ENV NVIDIA_REQUIRE_CUDA &quot;cuda&gt;=12.2 brand=tesla,driver&gt;=450,driver&lt;451 brand=tesla,driver&gt;=470,driver&lt;471 brand=unknown,driver&gt;=470,driver&lt;471 brand=nvidia,driver&gt;=470,driver&lt;471 brand=nvidiartx,driver&gt;=470,driver&lt;471 brand=geforce,driver&gt;=470,driver&lt;471 brand=geforcertx,driver&gt;=470,driver&lt;471 brand=quadro,driver&gt;=470,driver&lt;471 brand=quadrortx,driver&gt;=470,driver&lt;471 brand=titan,driver&gt;=470,driver&lt;471 brand=titanrtx,driver&gt;=470,driver&lt;471 brand=tesla,driver&gt;=525,driver&lt;526 brand=unknown,driver&gt;=525,driver&lt;526 brand=nvidia,driver&gt;=525,driver&lt;526 brand=nvidiartx,driver&gt;=525,driver&lt;526 brand=geforce,driver&gt;=525,driver&lt;526 brand=geforcertx,driver&gt;=525,driver&lt;526 brand=quadro,driver&gt;=525,driver&lt;526 brand=quadrortx,driver&gt;=525,driver&lt;526 brand=titan,driver&gt;=525,driver&lt;526 brand=titanrtx,driver&gt;=525,driver&lt;526&quot;
+ENV NV_CUDA_CUDART_VERSION 12.2.53-1
+ENV NV_CUDA_COMPAT_PACKAGE cuda-compat-12-2
+ENV CUDA_VERSION 12.2.0
+ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:/root/miniconda3/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+# COPY NGC-DL-CONTAINER-LICENSE /
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+ENV options=&quot;&quot;
+
+# CMD bash ./webui.sh -f  --listen --port 7960 --no-half-vae --api --xformers --enable-insecure-extension-access --share
+ENTRYPOINT [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;./webui.sh -f --listen  --no-half-vae --api --xformers --enable-insecure-extension-access --share $options&quot;]
+# ENTRYPOINT [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;. /app/venv/bin/activate  &amp;&amp; pip install -r requirements.txt &amp;&amp; deactivate &amp;&amp; ./webui.sh -f --listen  --no-half-vae --api --xformers --enable-insecure-extension-access $options&quot;]
+</code></pre>
+</li>
+<li><p>sd-启动过程中报<code>Cannot locate TCMalloc</code>警告解决
+  !&gt; <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/10117">https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/10117</a></p>
+</li>
+<li><p>更多镜像构建详情参考</p>
+<ul>
+<li><p><a href="https://gitlab.pixdaddy.com/openai/backend/stable-diffusion-webui/-/snippets/2">https://gitlab.pixdaddy.com/openai/backend/stable-diffusion-webui/-/snippets/2</a></p>
+</li>
+<li><p>artificial-intelligence-(002|001) 机器上目录<code>/data/rein/docker/dkfiles</code>下的Dockerfile文件。</p>
+<p>  <img src="img/img-06.png" alt=""></p>
+</li>
+</ul>
+</li>
+<li><p>镜像启动(linux举例)：</p>
+<pre><code class="language-shell"># 每个机器上的启动参数不通，可以通过 history查看历史记录，获取正确的参数。
+docker run -dit --rm --gpus=all \
+    -v /data/newbrush/soft/miniconda:/root/miniconda3 \
+    -v /data/rein/docker/venvs/sd/venv/:/app/venv \
+    -v /data/cache/huggingface:/root/.cache/huggingface \
+    -v /data/newbrush/ai/stable-diffusion-webui/models:/app/models \
+    -v /data/newbrush/ai/stable-diffusion-webui/repositories:/app/repositories \
+    -v /data/newbrush/ai/stable-diffusion-webui/styles.csv:/app/styles.csv \
+    -v /data/newbrush/ai/stable-diffusion-webui/extensions/sd-webui-controlnet:/app/extensions/sd-webui-controlnet \
+    -v /data/newbrush/ai/stable-diffusion-webui/extensions/stable-diffusion-webui-wd14-tagger:/app/extensions/stable-diffusion-webui-wd14-tagger \
+    -v /data/newbrush/ai/stable-diffusion-webui/extensions/multidiffusion-upscaler-for-automatic1111:/app/extensions/multidiffusion-upscaler-for-automatic1111 \
+    -e options=&quot;--port 7863 --zk-addr 10.36.1.160:2181 --cluster-name default  --checkpoint book/nigi3d_v20.safetensors  --custom-domain http://image-route.newbrush.com&quot;   \
+    -p 7870:7863  --name image-route me/sd-test:v2.0
+</code></pre>
+</li>
+</ul>
+<h4>7. newbrush-admin</h4>
+<p>!&gt; <a href="https://gitlab.pixdaddy.com/newbrush-backend/newbrush-admin.git">项目地址： https://gitlab.pixdaddy.com/newbrush-backend/newbrush-admin.git</a></p>
+<ul>
+<li>增加sd调用api路由，通过client注册到注册中心的信息，监听sd客户端节点，动态分配，提供统一API供其项目（例如：newbrush-app）访问。</li>
+<li>为了避免dev环境本地启动加载zookeeper。使用spring开关排除相关Bean信息。详情见<code>com.newbrush.admin.sd.config.SdModuleSwitch</code></li>
+<li>后期新增了集群命名。用来区分不通的服务。通过<code>cluster</code> 请求头来传递。</li>
+<li>活跃度统计方法：<ol>
+<li>每个实例节点维护一个<code>com.newbrush.admin.sd.bean.Node</code>链，链长最大为30，表示最近30分钟内的访问数据。</li>
+<li>根据实际需要可以适当的缩短默认的30分钟。</li>
+<li>更新逻辑：每一分钟相当于1个Node。把当前分钟内的Node.count+1，然后与原来的链表进行合并，并且切除小尾巴（超过30分钟的数据）。</li>
+<li>查询：只需要迭代当前实例的Node链上不超过30分钟的总和即可。</li>
+</ol>
+</li>
+<li>动态分配逻辑<code>com.newbrush.admin.sd.service.impl.SdDispatcherServiceImpl#selectService</code>：<ol>
+<li>不涉及模型切换的api,例如（后期处理，tagger反推）等，在当前集群命名中找一个活跃度最低的实例节点返回即可。</li>
+<li>设计模型切换的api.<ul>
+<li>在当前集群命名中找到请求模型下的实例。在存在且任务队列小于5的集合里面。找一个接受任务数最小的实例返回。</li>
+<li>其他情况则，在当前集群命名中查找其他模型下的没有任务且活跃度最低的实例，并且等待切换模型后返回相应的实例。</li>
+<li>这种情况就是返回 null, 555 无实例可用。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h4>8. newbrush-app</h4>
+<p>!&gt; <a href="https://gitlab.pixdaddy.com/newbrush-backend/newbrush-app.git">项目地址：https://gitlab.pixdaddy.com/newbrush-backend/newbrush-app.git</a></p>
+<ul>
+<li><p>二维码生成</p>
+<ul>
+<li><p>参考<a href="https://github.com/skrymer/qrbuilder">qrbuilder</a>源代码使用google zxing 进行二维码生成。</p>
+</li>
+<li><p>生成入口<code>com.newbrush.common.utils.qrcode.QrCodeGen#gen(java.lang.String)</code></p>
+</li>
+<li><p>自定义<code>QRCodeWriterEx</code> 修改 renderResult()方法调整二维码渲染的边距。</p>
+</li>
+<li><p>相关测试代码<code>com.newbrush.common.utils.qrcode.QrCodeGen#main</code></p>
+<p>  运行main方法后在当前项目根生成qrcode.png.可以调整相关参数改变效果。</p>
+<p>   <img src="img/img-07.png" alt=""></p>
+</li>
+</ul>
+</li>
+<li><p>动态组合图片</p>
+<ul>
+<li><p>基于<a href="https://gitee.com/dromara/image-combiner">image-combiner</a>项目进行的图片合成。</p>
+</li>
+<li><p>根据模板图片自适应合成图片及文字的大小。<code>com.newbrush.common.utils.composite.ImageBuilder#buildCombinerImage</code></p>
+</li>
+<li><p>相关测试代码<code>com.newbrush.common.utils.composite.ImageBuilder#main</code></p>
+<p>  运行main方法后在当前项目根生成combiner.png.可以调整相关参数改变效果。用到的测试文件位于<code>resources</code>目录下。</p>
+<p>  <img src="img/img-08.png" alt=""></p>
+</li>
+<li><p>合成字体的时候需要注意是否基础镜像系统支持自定义字体库的加载。</p>
+</li>
+<li><p><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%998">一些参考资料</a></p>
+</li>
+</ul>
+</li>
+<li><p>镜像打包</p>
+<p>  !&gt; 主要是为了在原来的当前java环境镜像中打入python环境，用来支持通过命令的方式调用python解释器执行python文件获取结果。后来好像撑不住了， 就分离成http服务了。</p>
+<pre><code class="language-shell"># requirements.txt
+# 20230926
+certifi==2023.7.22
+charset-normalizer==3.2.0
+idna==3.4
+numpy==1.24.4
+opencv-python @ file:///app/opencv-python-4.8.0.76
+Pillow==9.3.0
+requests==2.31.0
+scipy==1.10.1
+urllib3==2.0.5
+</code></pre>
+<pre><code class="language-dockerfile"># 此处贴上Dockerfile文件，以做留存。
+FROM gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17 as deps
+
+ADD ./deps-1/ /usr/local/lib/python3.8/site-packages/
+ADD ./requirements.txt /requirements.txt
+RUN mkdir -p ~/.pip  &amp;&amp; \
+echo -e &quot;[global]\n\
+index-url = https://mirrors.aliyun.com/pypi/simple/\n\
+\n\
+[install]\n\
+trusted-host=mirrors.aliyun.com&quot;\
+&gt; ~/.pip/pip.conf &amp;&amp; \
+echo -e &quot;http://mirrors.aliyun.com/alpine/v3.14/main\n\
+http://mirrors.aliyun.com/alpine/v3.14/community&quot;\
+&gt; /etc/apk/repositories &amp;&amp; \
+echo -e &quot;import cv2\n\
+print(\&quot;OpenCV 版本:\&quot;, cv2.__version__)&quot;\
+&gt; opencv_test.py &amp;&amp; \
+    apk update &amp;&amp; \
+    apk add --no-cache libstdc++ openblas-dev &amp;&amp; \
+    ln -s /usr/include/locale.h /usr/include/xlocale.h  &amp;&amp; \
+    rm -rf /var/cache/apk/* &amp;&amp; \
+    pip install -r requirements.txt &amp;&amp; \
+    python opencv_test.py
+
+# wget -c https://mirrors.aliyun.com/pypi/packages/32/72/03747a6820bc970aeb0b89e653d1084068ac1ed606a83d8b5ac6fc237c14/opencv-python-4.8.0.76.tar.gz
+# tar -zxf opencv-python-4.8.0.76.tar.gz
+# apk add build-base
+# fatal error: linux/auxvec.h: No such file or directory
+# apk add linux-headers
+# /app/opencv-python-4.8.0.76/opencv/modules/python/src2/cv2.hpp:36:10: fatal error: numpy/ndarrayobject.h: No such file or directory
+# ln -s /usr/local/lib/python3.8/site-packages/numpy/core/include/numpy/ /usr/include/numpy  # https://github.com/opencv/opencv/issues/11709
+# pip install ./opencv-python-4.8.0.76
+
+# -- build  --
+FROM gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17
+
+COPY --from=deps /usr/local/lib/python3.8/site-packages/ /usr/local/lib/python3.8/site-packages/
+COPY --from=deps /usr/lib/ /usr/lib/
+# test
+ADD ./files /tmp/test/
+WORKDIR /tmp/test/
+RUN echo &#39;verify install ...&#39; &amp;&amp; \
+    pip list &amp;&amp; \
+    python wavfile.py &amp;&amp; \
+    python TitleForImageNew.py &amp;&amp; \
+    echo &#39;complete.&#39;
+CMD [&quot;/bin/sh&quot;]
+</code></pre>
+<p>  详情参考<a href="https://gitlab.pixdaddy.com/library/eclipse-temurin/-/snippets/4">代码片段</a></p>
+<p>  镜像包的参考：</p>
+<ul>
+<li><a href="https://github.com/docker-library/python/blob/3baa2035e25511b5dcc0e6c0062513cbe06ba803/3.8/alpine3.17/Dockerfile">https://github.com/docker-library/python/blob/3baa2035e25511b5dcc0e6c0062513cbe06ba803/3.8/alpine3.17/Dockerfile</a></li>
+<li><a href="https://github.com/adoptium/containers/blob/130db1e5356f5a86868b70809c8311b0aad0c756/17/jre/alpine/Dockerfile.releases.full">https://github.com/adoptium/containers/blob/130db1e5356f5a86868b70809c8311b0aad0c756/17/jre/alpine/Dockerfile.releases.full</a></li>
+</ul>
+</li>
+</ul>
+<h5>参考资料8</h5>
+<ul>
+<li><a href="https://gitee.com/dromara/image-combiner">https://gitee.com/dromara/image-combiner</a></li>
+<li><a href="https://blog.csdn.net/u011837804/article/details/130091685">https://blog.csdn.net/u011837804/article/details/130091685</a></li>
+<li><a href="http://itmyhome.com/java-api/java/awt/Graphics.html">http://itmyhome.com/java-api/java/awt/Graphics.html</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/2d/text/fonts.html">https://docs.oracle.com/javase/tutorial/2d/text/fonts.html</a></li>
+<li><a href="https://stackoverflow.com/questions/54720878/where-is-libfreetype-so-6-in-openjdk-i-got-an-unsatisfiedlinkerror-when-using-a">https://stackoverflow.com/questions/54720878/where-is-libfreetype-so-6-in-openjdk-i-got-an-unsatisfiedlinkerror-when-using-a</a></li>
+<li><a href="https://www.jianshu.com/p/40926c70ff84">https://www.jianshu.com/p/40926c70ff84</a></li>
+<li><a href="https://www.cnblogs.com/wubenhui/p/16476602.html">https://www.cnblogs.com/wubenhui/p/16476602.html</a></li>
+<li><a href="https://github.com/alvr/alpine-android/issues/12">https://github.com/alvr/alpine-android/issues/12</a></li>
+<li><a href="https://hub.docker.com/r/neduekwunife/openjdk8-jre-alpine-with-fontconfig">https://hub.docker.com/r/neduekwunife/openjdk8-jre-alpine-with-fontconfig</a></li>
+</ul>
+<h3>GAMEOVER</h3>
