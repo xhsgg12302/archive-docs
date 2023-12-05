@@ -40,6 +40,47 @@
         ?> 存在ACK时，seq为对方的ack.
 
 ## socket_keepalive理解
+* ### 前言
+
+    ?> 1. net.ipv4.tcp_keepalive_intvl = 75 （发送探测包的周期，前提是当前连接一直没有数据交互，才会以该频率进行发送探测包，如果中途有数据交互，则会重新计时tcp_keepalive_time，到达规定时间没有数据交互，才会重新以该频率发送探测包）
+    </br> 2. net.ipv4.tcp_keepalive_probes = 9  （探测失败的重试次数，发送探测包达次数限制对方依旧没有回应，则关闭自己这端的连接）
+    </br> 3. net.ipv4.tcp_keepalive_time = 7200 （空闲多长时间，则发送探测包）
+
+* ### 响应结果
+
+    ?> 1. 正常ack，继续保持连接；
+    </br> 2. 对方响应rst信号，双方重新连接。
+    </br> 3. 对方无响应。
+
+* ### 修改tcp，keepalive参数
+    + #### **windows**
+
+        没有这两个参数的话，就新建
+
+        ![](/.images/devops/network/tcp/tcp-keepalive-01.png '01 :size=75%')
+
+    + #### **linux**
+        ```shell
+        # echo 600 > /proc/sys/net/ipv4/tcp_keepalive_time
+        # echo 60 > /proc/sys/net/ipv4/tcp_keepalive_intvl
+        # echo 20 > /proc/sys/net/ipv4/tcp_keepalive_probes
+        ```
+        ![](/.images/devops/network/tcp/tcp-keepalive-02.png)
+
+* ###  探测情况：
+    1. #### 无任何干预
+
+        ![](/.images/devops/network/tcp/tcp-keepalive-03.png '03 :size=85%')
+
+    2. #### client 强制关闭
+
+        ![](/.images/devops/network/tcp/tcp-keepalive-04.png '04 :size=85%')
+
+    3. #### client->socket.close()
+
+        ![](/.images/devops/network/tcp/tcp-keepalive-05.png '05 :size=85%')
+
+
 
 
 ## tcp重传 滑动窗口 流量控制 拥塞控制
