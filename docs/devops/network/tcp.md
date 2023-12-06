@@ -28,7 +28,7 @@
 
 #### 相关实验
 
-![](/.images/devops/network/tcp/tcp-flag-04.png '03 :size=40%') ![](/.images/devops/network/tcp/tcp-flag-03.jpg '04 :size=50%')
+![](/.images/devops/network/tcp/tcp-flag-04.png '04 :size=70%') ![](/.images/devops/network/tcp/tcp-flag-03.png '03 :size=29%')
 
 * ***猜想***
     1. ack值：
