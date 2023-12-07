@@ -92,6 +92,17 @@
     openssl req -noout -modulus -in www.wtfu.site.csr| openssl md5
     ```
 
++ ## 记录
+    ```shell
+    # 查看证书详情
+    curl -v -k -q https://wtfu.site
+
+    # 使用openssl 查看证书
+    openssl s_client -connect wtfu.site:443 > cer.pem
+    # 删除多余的信息，然后查看证书内容
+    openssl x509 -in cer.pem -text -noout
+    ```
+
 ## Reference
 * [Using a custom root CA with Burp for inspecting Android N traffic](https://blog.nviso.eu/2018/01/31/using-a-custom-root-ca-with-burp-for-inspecting-android-n-traffic/)
 * [Android 8.1 导入Burp、Fiddler证书](http://t.zoukankan.com/cijian9000-p-13431754.html)
