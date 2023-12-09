@@ -1,12 +1,12 @@
 ## 启动流程
-* 流程图
+* ### 流程图
 
     ![](/.images/doc/advance/springboot/process.png ':size=90%')
-* 伪代码
+* ### 伪代码
     > main方法启动： `SpringApplication.run(SpringbootApplication.class, args);` <br>
     > new SpringApplication(sources).run(); <br>
 
-    <details><summary>SpringApplication#init构造器中的初始化过程</summary>
+    SpringApplication#init构造器中的初始化过程
 
     ```java
     private void initialize(Object[] sources) {
@@ -20,10 +20,8 @@
         this.mainApplicationClass = deduceMainApplicationClass();
     }
     ```
-    </details>
 
-    <details><summary>SpringApplication#run</summary>
-
+    SpringApplication#run
     ```java
     public ConfigurableApplicationContext run(String... args) {
         StopWatch stopWatch = new StopWatch();
@@ -59,7 +57,6 @@
         }
     }
     ```
-    </details>
 
 ## 自动装配
 
