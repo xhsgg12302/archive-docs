@@ -1099,4 +1099,5 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
 </profile>
 ```
 
-## OTHER
+## Reference
+* https://xxgblog.com/2015/10/23/wagon-maven-plugin/
