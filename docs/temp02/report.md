@@ -1,5 +1,50 @@
 ## 测试报告
 
+0. ### 通过api调用测试
+   
+    <!-- tabs:start -->
+    #### **揽睿（裸金属）**
+
+    ?> 1. 规格：8 卡(使用两个)
+    <br>2. 系统: CentOS Linux 7 (Core) , RAM 1.0T, VRAM 8 * 24G
+    <br>3. 驱动: `NVIDIA-SMI 535.104.05`,`Driver Version: 535.104.05`,`CUDA Version: 12.2`
+    <br>4. docker内部驱动: `NVIDIA-SMI 535.104.05`,`Driver Version: 535.104.05`, `CUDA Version: 12.2`
+    <br>5. sd版本: [官方 1.5.1](https://github.com/AUTOMATIC1111/stable-diffusion-webui/commit/68f336bd994bed5442ad95bad6b6ad5564a5409a)
+    <br>6. 访问入口（有时效性）:[已失效]
+    <br>7. 运行参数: `checkpoint: flat2DAnimerge_v30.safetensors`,`prompt: 1 girl`,`steps: 50`,`batch: 10`,`size: 2`
+    <br>8. 耗时: `26.3 sec. | 25.1 sec.`
+    <br>9. 截图如下:
+
+    ![](img/report-04.png ':size=33%') ![](img/report-05.png ':size=33%') ![](img/report-06.png ':size=33%')
+  
+    #### **揽睿（云服务）**
+
+    ?> 1. 规格：单卡
+    <br>2. 系统: Ubuntu 22.04.1 LTS (Jammy Jellyfish), RAM 413G， VRAM 24G
+    <br>3. 驱动: `NVIDIA-SMI 535.104.05  Driver Version: 535.104.05 CUDA Version: 12.2`
+    <br>4. docker内部驱动: `直接启动`
+    <br>5. sd版本: [官方 1.4.0](https://github.com/AUTOMATIC1111/stable-diffusion-webui/commit/394ffa7b0a7fff3ec484bcd084e673a8b301ccc8)
+    <br>6. 访问入口（有时效性）:[已失效]
+    <br>7. 运行参数: `checkpoint: flat2DAnimerge_v30.safetensors`,`prompt: 1 girl`,`steps: 50`,`batch: 10`,`size: 2`
+    <br>8. 耗时: `27.92s`
+    <br>9. 截图如下:
+
+    ![](img/report-07.png ':size=33%') ![](img/report-07.png ':size=33%')
+
+    #### **本地4090**
+
+    ?> 1. 规格：单卡
+    <br>2. 系统: Windows 10, RAM 64G, VRAM 24G
+    <br>3. 驱动: `NVIDIA-SMI 537.13   Driver Version: 537.13   CUDA Version: 12.2`
+    <br>4. docker内部驱动: `NVIDIA-SMI 535.103   Driver Version: 537.13   CUDA Version: 12.2`
+    <br>5. sd版本: [改进test分支](https://gitlab.metaleap.com/openai/backend/stable-diffusion-webui/-/commits/fea494ee610037e9574e8d4f7ddca1a511cc7a26)
+    <br>6. 访问入口（有时效性）:[image-5](http://image-5.newbrush.com)
+    <br>7. 运行参数: `checkpoint: flat2DAnimerge_v30.safetensors`,`prompt: 1 girl`,`steps: 50`,`batch: 10`,`size: 2`
+    <br>8. 耗时: `28.7 sec`
+    <br>9. 迭代速度: `20.20it/s`
+
+    <!-- tabs:end -->
+
 1. ### 通用计算性能测试
 
     <!-- tabs:start -->
