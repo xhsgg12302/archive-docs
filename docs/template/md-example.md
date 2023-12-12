@@ -94,6 +94,16 @@ public static void main(String[] args){
 
 如果输入不了中文，参考 [mysql安装](/docs/doc/advance/mysql/install?id=源码安装)
 
+
+emoji表示
+:100:
+<!-- 
+    :100:
+    [参考]([/docs/devops/build/cmake?id=cmake-100)
+    不需要解析emoji 
+    https://github.com/docsifyjs/docsify/issues/742
+-->
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md

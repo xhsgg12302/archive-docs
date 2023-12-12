@@ -420,6 +420,9 @@
 <!-- tabs:end -->
 
 ## 插件篇
+?> 插件的[执行/调用](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#executing-your-first-mojo)方式： mvn groupId__colon__artifactId__colon__version__colon__goal
+<br> 插件配置：https://maven.apache.org/guides/mini/guide-configuring-plugins.html
+<br> 插件executions执行配置： https://maven.apache.org/guides/mini/guide-default-execution-ids.html
 ### maven-assembly-plugin
 ```xml
 <!-- pom.xml -->
@@ -1072,7 +1075,7 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
                 <version>1.4.0</version>
                 <!-- 
                     # 查看支持的goal
-                    mvn gencode:help
+                    mvn gencode:help [-Ddetail -Dgoal=xxx]
                  -->
 
                 <configuration>
@@ -1094,7 +1097,7 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
 
                     <settings>/Users/mac/software/apache-maven-3.3.9/conf/settings.xml</settings>
                     <accessKey>***</accessKey>
-                    
+
                 </configuration>
             </plugin>
         </plugins>
