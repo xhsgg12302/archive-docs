@@ -1069,7 +1069,11 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
             <plugin>
                 <groupId>com.haohuo.framework</groupId>
                 <artifactId>gencode-maven-plugin</artifactId>
-                <version>1.0.8-SNAPSHOT</version>
+                <version>1.4.0</version>
+                <!-- 
+                    # 查看支持的goal
+                    mvn gencode:help
+                 -->
 
                 <configuration>
                     <author>gen-code</author>
@@ -1090,8 +1094,7 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
 
                     <settings>/Users/mac/software/apache-maven-3.3.9/conf/settings.xml</settings>
                     <accessKey>***</accessKey>
-
-
+                    
                 </configuration>
             </plugin>
         </plugins>
