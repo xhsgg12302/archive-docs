@@ -423,6 +423,7 @@
 ?> 插件的[执行/调用](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#executing-your-first-mojo)方式： mvn groupId__colon__artifactId__colon__version__colon__goal
 <br> 插件配置：https://maven.apache.org/guides/mini/guide-configuring-plugins.html
 <br> 插件executions执行配置： https://maven.apache.org/guides/mini/guide-default-execution-ids.html
+<br> 插件执行[单元测试样例](https://github.com/12302-haohuo/haohuo-component/blob/master/hh-cpt-maven-plugin/gencode-maven-plugin/src/test/java/com/haohuo/framework/mojo/MojoTest.java), 也可以debug了。也可以参考[官网介绍](https://maven.apache.org/plugin-developers/plugin-testing.html).
 ### maven-assembly-plugin
 ```xml
 <!-- pom.xml -->
