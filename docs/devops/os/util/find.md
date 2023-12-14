@@ -29,6 +29,14 @@ find /home -size 10k -[exec | ok] ls -l {} \; 
     # 然后使用cp 命令移动
     find ./ -type f -and -d 1 -and ! -name 'venvs' -and ! -name '.DS_Store' -exec cp {} ~/Desktop/configure-files/conf/dockerfile \;
     ```
+3. mac
+    ```shell
+    # 查找当前目录在的所有jar包，除了./jdk 中的
+    find . -type d \( -path "./jdk" -prune \) -o -type f -name "*.jar" -print
+
+    # 查找路径中存在target 并且以后缀.jar结尾的文件。
+    find . -type d -name "target" -exec find {} -name "*.jar" \; | xargs -n 1 -I {} ls -l {}
+    ```
 
 
 ## Reference
