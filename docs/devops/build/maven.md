@@ -1111,6 +1111,37 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
     </build>
 </profile>
 ```
+### github-release-maven-plugin
+```xml
+<!--
+    https://github.com/RagedUnicorn/github-release-maven-plugin 
+    https://github.com/xhsgg12302/aria2/releases
+-->
+<plugin>
+    <groupId>com.haohuo.framework</groupId>
+    <artifactId>github-release-maven-plugin</artifactId>
+    <version>1.0.8-SNAPSHOT</version>
+    <executions>
+        <execution>
+            <id>default-cli</id>
+            <configuration>
+                <owner>xhsgg12302</owner>
+                <repository>aria2</repository>
+                <server>github-release-oauth</server>
+                <tagName>${project.version}</tagName>
+                <name>example-release</name>
+                <targetCommitish>master</targetCommitish>
+                <!--<body>release description overwritten by release notes</body>-->
+                <releaseNotes>README</releaseNotes>
+                <assets>
+                    <asset>configure</asset>
+                    <asset>aria2.tar.gz</asset>
+                </assets>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
 
 ## Reference
 * https://xxgblog.com/2015/10/23/wagon-maven-plugin/
