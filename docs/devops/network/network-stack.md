@@ -1,6 +1,6 @@
 ## 网络堆栈
-![](/.images/devops/network/network-stack/network-stack-01.png)
-![](/.images/devops/network/network-stack/network-stack-02.png ':size=60%')
+![](/.images/devops/network/network-stack/network-stack-01.png ':size=40%')
+![](/.images/devops/network/network-stack/network-stack-02.png ':size=57%')
 
 ## 协议分层
 ![](/.images/devops/network/network-stack/network-stack-03.png ':size=48%')
