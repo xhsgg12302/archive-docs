@@ -45,6 +45,14 @@
 
     ?> 目前需要一些netfilter知识。以及对docker-proxy的认知。发现清空iptables后，容器映射的服务还可以访问。
 
+3. ### iptables 和 docker-proxy 相关
+    
+    ?> 删除iptables相关数据后，，还是可以直接访问，原理目前大概是 使用 docker-proxy 监听 0.0.0.0：13500 --> 172.17.0.2:25500 使用代理将流量请求到容器。
+
+    #### Reference
+    * https://blog.csdn.net/m0_45406092/article/details/105913959
+    * https://serverfault.com/questions/375981/delete-a-iptables-chain-with-its-all-rules
+
 ## Reference
 * https://medium.com/@diegogabrielschurch/how-docker-network-works-bridge-driver-e4819459cc8a # iptables
 * https://superuser.com/questions/1560357/is-docker0-virtual-bridge-or-virtual-interface
