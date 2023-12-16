@@ -167,6 +167,171 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
     - #### 总结
     !> 服务器证书中包含：明文信息（若干），一段CA签名（用来验证当前证书的有效性）。例如：PortSwigger的CA公匙信息在cacert.der这个证书中。如果可以解密CA签名，则表示就是PortSwigger这个证书机构签发的。也进一步说明明文信息中的服务器公匙没问题. 
 
+### 使用curl验证邮件服务器
+?> 使用curl测试126邮箱服务器，smtp相关返回码可以[参考](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes)
+<br> `--ssl-reqd`: 如果交互不支持SSL/TLS。则中断连接，比`--ssl`尝试ssl/tls 更加安全。如果使用带S的scheme,则这个选项不是必须的。
+<br> `--login-options ['AUTH=PLAIN'|'AUTH=LOGIN'|...]` : 设置登录选项[参考1](https://curl.se/libcurl/c/CURLOPT_LOGIN_OPTIONS.html),[参考2](https://www.samlogic.net/articles/smtp-commands-reference-auth.htm),认证方式不一致导致请求发送细节不同。也可以参考服务器返回的（250-AUTH）。
+
+<!-- tabs:start -->
+##### **[SMTP]25**
+```bash
+curl smtp://smtp.126.com -u 'xhsgg12302@126.com:xxxxxx' -v     
+*   Trying 123.126.97.180:25...
+* Connected to smtp.126.com (123.126.97.180) port 25 (#0)
+< 220 126.com Anti-spam GT for Coremail System (126com[20140526])
+> EHLO StevendeMacBook-Pro
+< 250-mail
+< 250-PIPELINING
+< 250-AUTH LOGIN PLAIN XOAUTH2
+< 250-AUTH=LOGIN PLAIN XOAUTH2
+< 250-coremail 1Uxr2xKj7kG0xkI17xGrU7I0s8FY2U3Uj8Cz28x1UUUUU7Ic2I0Y2UFXFzjVUCa0xDrUUUUj
+< 250-STARTTLS
+< 250-ID
+< 250 8BITMIME
+> AUTH PLAIN
+< 334 
+> base64..encode
+< 235 Authentication successful
+> HELP
+< 502 Error: command not implemented
+* Command failed: 502
+> QUIT
+< 221 Bye
+* Closing connection 0
+curl: (8) Command failed: 502
+```
+##### **[SMTP]465/587/994**
+```bash
+❯ curl smtps://smtp.126.com:465 -u 'xhsgg12302@126.com:xxxxxx' -v                     
+*   Trying 123.126.97.180:465...
+* Connected to smtp.126.com (123.126.97.180) port 465 (#0)
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* [CONN-0-0][CF-SSL] (304) (OUT), TLS handshake, Client hello (1):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, Server hello (2):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, Unknown (8):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, Certificate (11):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, CERT verify (15):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, Finished (20):
+* [CONN-0-0][CF-SSL] (304) (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / AEAD-AES256-GCM-SHA384
+* Server certificate:
+*  subject: C=CN; ST=zhejiang; L=hangzhou; O=NetEase (Hangzhou) Network Co., Ltd; CN=*.126.com
+*  start date: Jan 10 00:00:00 2023 GMT
+*  expire date: Feb  7 23:59:59 2024 GMT
+*  subjectAltName: host "smtp.126.com" matched cert's "*.126.com"
+*  issuer: C=US; O=DigiCert Inc; CN=GeoTrust RSA CN CA G2
+*  SSL certificate verify ok.
+< 220 126.com Anti-spam GT for Coremail System (126com[20140526])
+> EHLO StevendeMacBook-Pro
+< 250-mail
+< 250-PIPELINING
+< 250-AUTH LOGIN PLAIN XOAUTH2
+< 250-AUTH=LOGIN PLAIN XOAUTH2
+< 250-coremail 1Uxr2xKj7kG0xkI17xGrU7I0s8FY2U3Uj8Cz28x1UUUUU7Ic2I0Y2UruCFffUCa0xDrUUUUj
+< 250-STARTTLS
+< 250-ID
+< 250 8BITMIME
+> AUTH PLAIN
+< 334 
+> base64..encode
+< 235 Authentication successful
+> HELP
+< 502 Error: command not implemented
+* Command failed: 502
+> QUIT
+< 221 Bye
+* Closing connection 0
+curl: (8) Command failed: 502
+```
+##### **[IMAP]143**
+```bash
+❯ curl imap://imap.126.com: -u 'xhsgg12302@126.com:******' -v  --login-options 'AUTH=PLAIN'
+*   Trying 123.126.96.102:143...
+* Connected to imap.126.com (123.126.96.102) port 143 (#0)
+< * OK IMAP4 ready
+> A001 CAPABILITY
+< * CAPABILITY IMAP4rev1 XLIST SPECIAL-USE LITERAL+ STARTTLS APPENDLIMIT=71680000 XAPPLEPUSHSERVICE UIDPLUS X-CM-EXT-1 SASL-IR AUTH=PLAIN AUTH=LOGIN AUTH=XOAUTH2 ID STARTTLS
+< A001 OK completed
+> A002 AUTHENTICATE PLAIN base64...code
+< A002 OK LOGIN completed
+> A003 LIST "" *
+< * LIST () "/" "INBOX"
+* LIST () "/" "INBOX"
+< * LIST (\Drafts) "/" "&g0l6P3ux-"
+* LIST (\Drafts) "/" "&g0l6P3ux-"
+< * LIST (\Sent) "/" "&XfJT0ZAB-"
+* LIST (\Sent) "/" "&XfJT0ZAB-"
+< * LIST (\Trash) "/" "&XfJSIJZk-"
+* LIST (\Trash) "/" "&XfJSIJZk-"
+< * LIST (\Junk) "/" "&V4NXPpCuTvY-"
+* LIST (\Junk) "/" "&V4NXPpCuTvY-"
+< * LIST () "/" "&dcVr0pCuTvY-"
+* LIST () "/" "&dcVr0pCuTvY-"
+< * LIST () "/" "&Xn9USpCuTvY-"
+* LIST () "/" "&Xn9USpCuTvY-"
+< * LIST () "/" "&i6KWBZCuTvY-"
+* LIST () "/" "&i6KWBZCuTvY-"
+< * LIST () "/" "xhsgg12302@163.com"
+* LIST () "/" "xhsgg12302@163.com"
+< A003 OK LIST Completed
+* Connection #0 to host imap.126.com left intact
+```
+##### **[IMAP]993**
+```bash
+❯ curl imaps://imap.126.com: -u 'xhsgg12302@126.com:******' -v  --login-options 'AUTH=PLAIN'
+*   Trying 123.126.96.102:993...
+* Connected to imap.126.com (123.126.96.102) port 993 (#0)
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* [CONN-0-0][CF-SSL] (304) (OUT), TLS handshake, Client hello (1):
+* [CONN-0-0][CF-SSL] (304) (IN), TLS handshake, Server hello (2):
+* [CONN-0-0][CF-SSL] TLSv1.2 (IN), TLS handshake, Certificate (11):
+* [CONN-0-0][CF-SSL] TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* [CONN-0-0][CF-SSL] TLSv1.2 (IN), TLS handshake, Server finished (14):
+* [CONN-0-0][CF-SSL] TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* [CONN-0-0][CF-SSL] TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* [CONN-0-0][CF-SSL] TLSv1.2 (OUT), TLS handshake, Finished (20):
+* [CONN-0-0][CF-SSL] TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* [CONN-0-0][CF-SSL] TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* Server certificate:
+*  subject: C=CN; ST=zhejiang; L=hangzhou; O=NetEase (Hangzhou) Network Co., Ltd; CN=*.126.com
+*  start date: Jan 10 00:00:00 2023 GMT
+*  expire date: Feb  7 23:59:59 2024 GMT
+*  subjectAltName: host "imap.126.com" matched cert's "*.126.com"
+*  issuer: C=US; O=DigiCert Inc; CN=GeoTrust RSA CN CA G2
+*  SSL certificate verify ok.
+< * OK IMAP4 ready
+> A001 CAPABILITY
+< * CAPABILITY IMAP4rev1 XLIST SPECIAL-USE LITERAL+ STARTTLS APPENDLIMIT=71680000 XAPPLEPUSHSERVICE UIDPLUS X-CM-EXT-1 SASL-IR AUTH=PLAIN AUTH=LOGIN AUTH=XOAUTH2 ID
+< A001 OK completed
+> A002 AUTHENTICATE PLAIN base64...code
+< A002 OK LOGIN completed
+> A003 LIST "" *
+< * LIST () "/" "INBOX"
+* LIST () "/" "INBOX"
+< * LIST (\Drafts) "/" "&g0l6P3ux-"
+* LIST (\Drafts) "/" "&g0l6P3ux-"
+< * LIST (\Sent) "/" "&XfJT0ZAB-"
+* LIST (\Sent) "/" "&XfJT0ZAB-"
+< * LIST (\Trash) "/" "&XfJSIJZk-"
+* LIST (\Trash) "/" "&XfJSIJZk-"
+< * LIST (\Junk) "/" "&V4NXPpCuTvY-"
+* LIST (\Junk) "/" "&V4NXPpCuTvY-"
+< * LIST () "/" "&dcVr0pCuTvY-"
+* LIST () "/" "&dcVr0pCuTvY-"
+< * LIST () "/" "&Xn9USpCuTvY-"
+* LIST () "/" "&Xn9USpCuTvY-"
+< * LIST () "/" "&i6KWBZCuTvY-"
+* LIST () "/" "&i6KWBZCuTvY-"
+< * LIST () "/" "xhsgg12302@163.com"
+* LIST () "/" "xhsgg12302@163.com"
+< A003 OK LIST Completed
+* Connection #0 to host imap.126.com left intact
+```
+<!-- tabs:end -->
+
 ## Reference
 * [curl 的用法指南](http://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
 * https://everything.curl.dev/
