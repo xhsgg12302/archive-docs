@@ -419,6 +419,55 @@
 ```
 <!-- tabs:end -->
 
+
+## 工具链
+?> 简单理解就是，使用工具链可以配置插件调用过程中需要使用到的工具比如JDK.在maven系统中。有一些默认的工具链感知插件。比如.compile,javadoc等。这个可以[参考官方](https://maven.apache.org/guides/mini/guide-using-toolchains.html)给出的图。
+
+* #### 先决条件
+    1. 在pom中配置`maven-toolchains-plugin`插件。
+    2. 存在`toolchains.xml`配置文件用来供toolchains插件匹配。
+
+* #### 注意事项
+    1. toolchain goal默认绑定生命周期为`validate`. default阶段为首。
+    2. source和target需要JDK支持。且source小于target。可以[参考](https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html)
+
+* #### 参考配置
+```xml
+<plugins>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+            <source>1.8</source>
+            <target>11</target>
+        </configuration>
+    </plugin>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-toolchains-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>toolchain</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <toolchains>
+                <!-- 下面的配置存在于 toolchains.xml中 -->
+                <jdk>
+                    <version>21</version>
+                    <vendor>openjdk</vendor>
+                </jdk>
+            </toolchains>
+        </configuration>
+    </plugin>
+</plugins>
+```
+
+
 ## 插件篇
 ?> 插件的[执行/调用](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#executing-your-first-mojo)方式： mvn groupId__colon__artifactId__colon__version__colon__goal
 <br> 插件配置：https://maven.apache.org/guides/mini/guide-configuring-plugins.html
@@ -1145,3 +1194,4 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
 
 ## Reference
 * https://xxgblog.com/2015/10/23/wagon-maven-plugin/
+* [中文镜像](https://maven.org.cn/)
