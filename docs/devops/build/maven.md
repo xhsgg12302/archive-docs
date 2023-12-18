@@ -1122,7 +1122,7 @@ What is the new development version for "hh-cpt-maven-dependency"? (com.haohuo.f
             <plugin>
                 <groupId>com.haohuo.framework</groupId>
                 <artifactId>gencode-maven-plugin</artifactId>
-                <version>1.4.1</version>
+                <version>1.4.3</version>
                 <!-- 
                     # 查看支持的goal
                     mvn gencode:help [-Ddetail -Dgoal=xxx]
