@@ -121,25 +121,6 @@
 	?> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
-+ ## GIT仓库迁移
-	```shell
-	$ git clone --bare https://github.com/xhsgg12302/helloworld.git
-	$ cd helloworld.git
-	$ git push --mirror https://github.com/new.git
-	```
-
-+ ## GIT忽略文件提交
-	```shell
-	# 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
-	# 原因
-	# .idea已经被git跟踪，之后再加入.gitignore后是没有作用的
-	# 解决办法
-	# 清除.idea的git缓存
-	git rm -r --cached .idea
-
-	# 同理，取消其他文件追踪也一样。
-	```
-
 + ## GIT基本操作
 	* ### 文件查看
 		> `git ls-files` show information about files in the index and the working tree <br>
@@ -447,6 +428,25 @@
 		```shell
 		$ *main: git pull origin bar:foo # 将远程bar分支 更新到本地foo分支，并且与main分支进行merge。
 		```
+
++ ## GIT仓库迁移
+	```shell
+	$ git clone --bare https://github.com/xhsgg12302/helloworld.git
+	$ cd helloworld.git
+	$ git push --mirror https://github.com/new.git
+	```
+
++ ## GIT忽略文件提交
+	```shell
+	# 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
+	# 原因
+	# .idea已经被git跟踪，之后再加入.gitignore后是没有作用的
+	# 解决办法
+	# 清除.idea的git缓存
+	git rm -r --cached .idea
+
+	# 同理，取消其他文件追踪也一样。
+	```
 
 + ## Reference
 	* https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
