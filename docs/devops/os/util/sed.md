@@ -210,3 +210,4 @@ sed [option] -f 'sed script' file
 
 ### 四.参考：
 * [sed命令详解](https://www.cnblogs.com/ctaixw/p/5860221.html)
+* https://blog.51cto.com/u_3078781/3287471
