@@ -104,6 +104,12 @@ emoji表示
     https://github.com/docsifyjs/docsify/issues/742
 -->
 
+single backslash (status: opening)
+<!-- 
+反斜杠 转义 ``
+# https://github.com/docsifyjs/docsify/issues/1881
+-->
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md
