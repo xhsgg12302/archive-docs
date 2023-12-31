@@ -1,6 +1,6 @@
 ## JUL(java util logging)
 
-* ### 配置文件模板
+* ### 配置模板
 
     ?> `vim $(dirname $(which java))/../jre/lib/logging.properties`
     <br>`vim ``dirname $(which java)``/../jre/lib/logging.properties`
