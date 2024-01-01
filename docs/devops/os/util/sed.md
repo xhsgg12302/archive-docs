@@ -1,13 +1,48 @@
 ## sed (Stream Editor):
 !> 文本流编辑，是一个"非交互式的"面向字符流的编辑器。能同时处理多个文件多行内容，可以不对源文件改动，把整个文件输入到屏幕，可以把只匹配到模式的内容输出到屏幕上。还可以对源文件改动，但是不会在屏幕上返回结果。
+```shell
+[root@12302 ~]# sed --version
+sed (GNU sed) 4.2.2
+Copyright (C) 2012 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+and Paolo Bonzini.
+GNU sed home page: <http://www.gnu.org/software/sed/>.
+General help using GNU software: <http://www.gnu.org/gethelp/>.
+E-mail bug reports to: <bug-sed@gnu.org>.
+Be sure to include the word ``sed'' somewhere in the ``Subject:'' field.
+```
     
 ### 一.语法格式：
 ```shell
-sed [option] 'command' file
-sed [option] -f 'sed script' file
+# If no -e, --expression, -f, or --file option is given, then the first non-option argument is taken as the sed script to interpret.  
+# All remaining arguments are names of input files; if no input files are specified,  then  the standard input is read.
+sed [OPTION]... {script-only-if-no-other-script} [input-file]...
 ```
     
 ### 二.常用选项：
+| option | describe |
+| - | - |
+| -n, --quiet, --silent | suppress automatic printing of pattern space |
+| -e script, --expression=script | add the script to the commands to be executed |
+| -r, --regexp-extended | use extended regular expressions in the script. |
+| -f script-file, --file=script-file | add the contents of script-file to the commands to be executed |
+| --follow-symlinks | follow symlinks when processing in place|
+| -i[SUFFIX], --in-place[=SUFFIX] | edit files in place (makes backup if SUFFIX supplied) |
+| -c, --copy | use copy instead of rename when shuffling files in -i mode |
+| -s, --separate | consider files as separate rather than as a single continuous long stream.|
+| -z, --null-data | separate lines by NUL characters |
+| --version | output version information and exit |
+| ... | ... |
+
+
+### 三.地址匹配：
+| pattern | describe |
+| - | - |
+
 ```shell
 [option]
     -n : 只打印模式匹配的行
