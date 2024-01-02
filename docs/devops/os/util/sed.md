@@ -83,43 +83,73 @@ ranges: the syntax is addr1,addr2 (i.e., the addresses are separated by a comma)
     
 * ### 三.文件处理：
     + #### 1. sed `查询`：
+
+        ```sh
+        root:x:0:0:root:/root:/bin/bash
+        bin:x:1:1:bin:/bin:/sbin/nologin
+        daemon:x:2:2:daemon:/sbin:/sbin/nologin
+        adm:x:3:4:adm:/var/adm:/sbin/nologin
+        lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+        sync:x:5:0:sync:/sbin:/bin/sync
+        halt:x:7:0:halt:/sbin:/sbin/halt
+        mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+        games:x:12:100:games:/usr/games:/sbin/nologin
+        nobody:x:99:99:Nobody:/:/sbin/nologin
+        dbus:x:81:81:System message bus:/:/sbin/nologin
+        polkitd:x:999:998:User for polkitd:/:/sbin/nologin
+        abrt:x:173:173::/etc/abrt:/sbin/nologin
+        syslog:x:996:994::/home/syslog:/bin/false
+        elix:x:1000:1000::/home/elix:/bin/bash
+        mockbuild:x:1001:1001::/home/mockbuild:/sbin/nologin
+        tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin
+        ```
         - ##### 1）使用行号，可以是一个数字或者行号范围
         ```shell
-        sed '2p' file   >打印文件中第二行，第二行会打印两遍，sed默认输出模式空间内容
-        sed -n '2p' file   > 只打印匹配行
-        sed -n '1,3p' file    > 1,2,3行
-        sed -n '/second/p' file   >打印匹配second字符的行
-        sed -n '/first/,4p' file  >打印匹配first的行到第四行，first所处的行在第四行之后的话，仅打印匹配first的行
-        sed -n '2,/last/p' file   >打印第二行到第一次出现匹配last字符的行
-        sed -n '/data/,/last/p' file  >打印匹配首次匹配到data字符的行到 （相对首次）出现last字符的行
-        sed -n '1,4{=;p}' file   >打印1～4行行号及内容
-        sed -n '1,2!{=;p}' file   >取反打印行号及内容
-        sed -n '1,2!p' file   >取反打印内容
-
-        # 相对首次（注释） > '/var/,/nologin/p' 下面的内容会一直匹配到行尾，处理每行时只要匹配到第一个pattern，后面的就不管了，所以一直没有碰见 nologin,直到文件末尾。
-        cat > file <<EOF
-        libstoragemgmt:/var/run/lsm:/sbin/nologin
-        rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
-        sshd:x:74:74:Privilege-separated
-        SSH:/var/empty/sshd:/sbin/nologin
-        eli:x:1000:1000::/home/eli:/bin/bash
-        EOF
+        # 打印文件中第二行，第二行会打印两遍，sed默认输出模式空间内容
+        sed '2p' file
+        # 只打印匹配行
+        sed -n '2p' file
+        # 1,2,3行
+        sed -n '1,3p' file
+        # 打印匹配second字符的行
+        sed -n '/second/p' file
+        # 打印匹配first的行到第四行，first所处的行在第四行之后的话，仅打印匹配first的行
+        sed -n '/first/,4p' file
+        # 打印第二行到第一次出现匹配last字符的行
+        sed -n '2,/last/p' file
+        # 打印匹配首次匹配到data字符的行到 （相对首次）出现last字符的行
+        # 相对首次（注释） > '/var/,/nologin/p' 下面的内容会一直匹配到行尾，处理每行(注意是每行都包含var)时只要匹配到第一个pattern，后面的就不管了，所以一直没有碰见 nologin,直到文件末尾。
+        sed -n '/var/,/nologin/p' file
+        # 打印1～4行行号及内容
+        sed -n '1,4{=;p}' file
+        # 取反打印行号及内容
+        sed -n '1,2!{=;p}' file
+        # 取反打印内容
+        sed -n '1,2!p' file
         ```
     
         - ##### 2）使用正则或扩展正则（-r）
         ```shell
         # 正则的介绍和一些愿字符暂时不记录了
-        sed '5 q' file    >打印前5行,q(quit)
-        sed -n '/r*t/p' file  
-        sed -n '/.r.*/p' file
-        sed -n '/o\{1,\}/p' file  # 打印o字符重复一次以上的
 
-        sed -n '/^#/!p' file  # 过滤掉以#开头的行
-        sed -n '/^#/!{/^$/!p}' file    # 取出不以#开头的并且打印非空行
+        # 打印前5行,q(quit)
+        sed '5 q' file
+        sed -n '/r*t/p' file
+        sed -n '/.r.*/p' file
+        # 打印o字符重复一次以上的
+        sed -n '/o\{1,\}/p' file
+
+        # 过滤掉以#开头的行
+        sed -n '/^#/!p' file
+        # 取出不以#开头的并且打印非空行
+        sed -n '/^#/!{/^$/!p}' file
         sed -e '/^#/d' -e '/^$/d' file    # 同上
-        sed -n '1,/adm/p' file    # 打印第一行到首次出现adm的行
-        sed -n '/adm/,6p' file    # 打印/adm/到第6行
-        sed -n '/adm/,2p' file    # 相等行或错开行,只打印/adm/行
+        # 打印第一行到首次出现adm的行
+        sed -n '1,/adm/p' file
+        # 打印/adm/到第6行
+        sed -n '/adm/,6p' file
+        # [相等行或错开行],只打印/adm/行
+        sed -n '/adm/,2p' file
         ```
 
     + #### 2. sed `添加`:
