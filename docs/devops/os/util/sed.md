@@ -152,138 +152,218 @@ ranges: the syntax is addr1,addr2 (i.e., the addresses are separated by a comma)
         sed -n '/adm/,2p' file
         ```
 
-    + #### 2. sed `添加`:
-    ```shell
-    cat > myfile <<EOF
-    hello world
-    hello linux
-    how are you 
-    I am fine 
-    thanks, and you
-    EOF
+    + #### 2. sed `编辑（替换）`:
+        ```shell
+        hello world
+        hello linux
+        how are you 
+        I am fine 
+        thanks, and you
 
-    sed '/world/s/^/Li /' file    >在world字符行，行首添加Li
-    sed 's/linux/jie &/' file     >在Linux字符行，Linux前面添加jie
-    sed 's/linux/& jie/' file     >在Linux字符行，Linux后面添加jie
-    sed '/you/s/$/ Li/' file  > 在you字符行，行尾添加Li
-    sed '/you/s/\(.*\)/\1 Li/' file   > 分组引用，同上
-    sed '/are/i nihao' file   >在are字符行上一行添加一行 nihao
-    sed '/are/i\nihao' file   >同上
-    sed '/are/i/nihao' file   >在are字符行上一行添加一行 /nihao
-    sed '/are/a nihao' file   >在are字符行下一行添加一行 nihao
-    sed '/are/a\nihao' file   >同上
-    sed '/are/a\nihao\wo hen hao' file   > 如下：
-    ...
-    nihaowo hen hao
-    ...
-    sed '/are/a\nihao\n wo hen hao' file > 使用'\n'来换行，如下：
-    ...
-    nihao
-        wo hen hao
-    ...
-    sed 's/^/Start /' file    >在每行开头添加Start
-    sed 's/$/ End/' file  >在每行结尾添加End
-    sed '1,3s/^/#/' file  >1~3行行首添加#号，一般用来注释某行
-    sed 's/fine/very &' file  >将 'fine' 替换成 'very fine'
+        BOOTPROTO=dhcp
+        DEVICE=eth0
+        HWADDR=52:54:00:fa:01:30
+        NM_CONTROLLED=no
+        IPV6INIT=no
+        ONBOOT=yes
+        PERSISTENT_DHCLIENT=yes
+        TYPE=Ethernet
+        USERCTL=no
+        ```
+        
+        ```shell
+        # $符号引用
+        # 在Linux字符行，Linux前面添加jie
+        sed 's/linux/jie &/' file
+        # 在Linux字符行，Linux后面添加jie
+        sed 's/linux/& jie/' file
+        # 将 'fine' 替换成 'very fine'
+        sed 's/fine/very &' file
 
-    #地址定界符，一般由三个组成，可以是/,$,#等其他特殊字符
-    sed '/hello/s@End@tail@' file >在hello字符行，替换'End'为'tail'
-    sed -e '/tail/s@tail@end@' file   >默认修改第一次出的'tail'
-    sed -e '/tail/s@tail@end@g' file  >跟'g'表示替换所有字符
-    sed -e '/tail/s@tail@end@2g' file >n+g表示替换第n次出现的字符
-    ```
+        #地址定界符，一般由三个组成，可以是/,$,#等其他特殊字符
+        # 在hello字符行，替换'End'为'tail'
+        sed '/hello/s@End@tail@' file
+        # 默认修改第一次出的'tail'
+        sed -e '/tail/s@tail@end@' file
+        # 跟'g'表示替换所有字符
+        sed -e '/tail/s@tail@end@g' file
+        # n+g表示替换第n次出现的字符
+        sed -e '/tail/s@tail@end@2g' file
+
+        # 在world字符行，行首添加Li
+        sed '/world/s/^/Li /' file
+        # 在you字符行，行尾添加Li
+        sed '/you/s/$/ Li/' file
+        sed '/you/s/\(.*\)/\1 Li/' file   > 分组引用，同上
+
+        # 在每行开头添加Start
+        sed 's/^/Start /' file
+        # 在每行结尾添加End
+        sed 's/$/ End/' file
+        # 1~3行行首添加#号，一般用来注释某行
+        sed '1,3s/^/#/' file
+
+        # 以Ethernet替换整行内容
+        sed -i '/DEVICE/c\Ethernet' file
+        # 把static替换成dhcp
+        sed -i 's/static/dhcp' file
+        # 22.1换成10.12
+        sed -i '/IPADDR/s@22\.1@10\.12@' file
+        # 把YES换成NO
+        sed -i '/connect/s#YES#NO#' file
+        # 第二次及以后出现的bin换成tom
+        sed -i 's/bin/tom/2g' file
+        # 仅第二次出现
+        sed -i 's/bin/tom/2' file
+        # 多生产一行
+        sed -i 's/bin/tom/2p' file
+        # 匹配root字符行，bash换成nologin，0换成1
+        sed -i '/root/{s/bash/nologin/;s/0/1/g' file
+        # 把'root'换成'(root)'
+        sed -i 's/root/(&)/g' file
+        # 把#换成空,一般用于去掉注释
+        sed -i '/ONBOOT/s/#//' file
+        ```
+
+    + #### 3. sed `添加`:
+
+        ```shell
+        # 在are字符行上一行添加一行 nihao
+        sed '/are/i nihao' file
+        sed '/are/i\nihao' file   >同上
+        # 在are字符行上一行添加一行 /nihao
+        sed '/are/i/nihao' file
+        # 在are字符行下一行添加一行 nihao
+        sed '/are/a nihao' file
+        sed '/are/a\nihao' file   >同上
+        sed '/are/a\nihao\wo hen hao' file   > 如下：
+        ...
+        nihaowo hen hao
+        ...
+
+        # 使用'\n'来换行
+        sed '/are/a\nihao\n wo hen hao' file > 如下：
+        ...
+        nihao
+            wo hen hao
+        ...
+        ```
     
-    + #### 3. sed `删除`:
-    ```shell
-    sed '/^#/d' file  >删除以#开头的行
-    sed '/^#/!d' file >删除以非#开头的行
-    sed '1d' file >删除文件第一行
-    sed '$d' file >删除文件最后一行
-    sed '2,4d' file   >删除文件制定行
-    sed '/thanks/d' file  >删除thanks字符行
-    sed '/\<you\>/d' file >删除you单词行
-    sed -i -e '/sed/d' -e '/^#/d' file   >删除sed字符行和#开头的行
-    sed '/End$/d' file    >删除以End结尾的行
-    ```
+    + #### 4. sed `删除`:
 
-    + #### 4. sed `编辑（替换）`:
-    ```shell
-    sed -i '/DEVICE/c\Ethernet' file  >以Ethernet替换整行内容
-    sed -i 's/static/dhcp' file   >把static替换成dhcp
-    sed -i '/IPADDR/s@22\.1@10\.12@' file > 22.1换成10.12
-    sed -i '/connect/s#YES#NO#' file  > 把YES换成NO
-    sed -i 's/bin/tom/2g' file    >第二次及以后出现的bin换成tom
-    sed -i 's/bin/tom/2' file >仅第二次出现
-    sed -i 's/bin/tom/2p' file    >多生产一行
-    sed -i '/root/{s/bash/nologin/;s/0/1/g' file  >匹配root字符行，bash换成nologin，0换成1
-    sed -i 's/root/(&)/g' file    >把'root'换成'(root)'
-    sed -i '/ONBOOT/s/#//' file   >把#换成空,一般用于去掉注释
-    ```
+        ```shell
+        # 删除以#开头的行
+        sed '/^#/d' file
+        # 删除以非#开头的行
+        sed '/^#/!d' file
+        # 删除文件第一行
+        sed '1d' file
+        # 删除文件最后一行
+        sed '$d' file 
+        # 删除文件制定行
+        sed '2,4d' file   
+        # 删除thanks字符行
+        sed '/thanks/d' file
+        # 删除you单词行
+        sed '/\<you\>/d' file
+        # 删除sed字符行和#开头的行
+        sed -i -e '/sed/d' -e '/^#/d' file
+        # 删除以End结尾的行
+        sed '/End$/d' file
+        ```
 
     + #### 5. sed `引用变量`:
-    ```shell
-    # 第一种当sed命令里面没有默认的变量时可以把单引号改成双引号
-    # 第二种有的时候，自定义变量需要加单引号，脚本也需要加单引号
-    name=wang
-    sed -i "s/jie/$name/" file
-    sed -i "$a $name" file   ❌
-    sed -i '$a '$name'' file
-    ```
 
-    + #### 6. sed `高级使用`:
+        ```shell
+        # 第一种当sed命令里面没有默认的变量时可以把单引号改成双引号
+        # 第二种有的时候，自定义变量需要加单引号，脚本也需要加单引号
+        name=wang
+        sed -i "s/jie/$name/" file
+        sed -i "$a $name" file   ❌
+        sed -i '$a '$name'' file
+        ```
+
+    + #### 6. sed `经典例子`:
         - ##### 1),sed 操作文件的内容写到另外一个文件中
-            ```shell
-            cat > test >>EOF
-            Ethernet  
-            #BOOTPROTO="dhcp"  
-            HWADDR="00:0C:29:90:79:78"  
-            ONBOOT="yes"  
-            IPADDR=172.16.10.12  
-            NETMASK=255.255.0.0
-            EOF
-            
-            sed -i 's/IPADDR/ip/w ip.txt' test
-            > ip.txt
-            ip=172.16.10.12
-            ```
+
+        ```shell
+        #BOOTPROTO="dhcp"  
+        HWADDR="00:0C:29:90:79:78"  
+        ONBOOT="yes"  
+        IPADDR=172.16.10.12  
+        NETMASK=255.255.0.0
+        ```
+        ```shell
+        sed -i 's/IPADDR/ip/w ip.txt' test
+        > ip.txt
+        ip=172.16.10.12
+        ```
             
         - ##### 2),sed 读取一个文件到正在sed操作的文件中
-            ```shell
-            cat > myfile >>EOF
-            
-            hello world
-            I am fine 
-            how are you
-            EOF
-            
-            > ip.txt
-            
-            ip=172.16.10.12
-            
-            sed -i '/ip/r myfile' ip.txt
-            
-            > ip.txt 
-            ip=172.16.10.12
-            hello world
-            I am fine 
-            how are you
-            ```
-        
-    + #### 7. sed `经典例子`:
-        - ##### 处理以下内容，并将域名取出计数排序
-            ```shell
-            cat > file <<EOF
-            http://www.baidu.com/index.<a target="_blank" href="http://www.2cto.com/kf/qianduan/css/" class="keylink" style="border:none; padding:0px; margin:0px; color:rgb(51,51,51); text-decoration:none; font-size:14px">html</a>  
-            http://www.baidu.com/1.html  
-            http://post.baidu.com/index.html  
-            http://mp3.baidu.com/index.html  
-            http://www.baidu.com/3.html  
-            http://post.baidu.com/2.html
-            EOF
-            
-            cat file | sed -e 's/http:\/\///' -e 's/\/.*//' | sort | uniq -c | sort -rn
-            ```
+        <!-- tabs:start -->
+        #### **myfile**
+        ```shell
+        hello world
+        I am fine 
+        how are you
+        ```
+        #### **ip.txt**
+        ```shell
+        ip=172.16.10.12
+        ```
+        <!-- tabs:end -->
 
-### 四.参考：
+        ```shell
+        sed -i '/ip/r myfile' ip.txt
+        
+        > ip.txt 
+        ip=172.16.10.12
+        hello world
+        I am fine 
+        how are you
+        ```
+
+        - ##### 3),处理以下内容，并将域名取出计数排序
+        ```shell
+        http://www.baidu.com/index.<a target="_blank" href="http://www.2cto.com/kf/qianduan/css/" class="keylink" style="border:none; padding:0px; margin:0px; color:rgb(51,51,51); text-decoration:none; font-size:14px">html</a>  
+        http://www.baidu.com/1.html  
+        http://post.baidu.com/index.html  
+        http://mp3.baidu.com/index.html  
+        http://www.baidu.com/3.html  
+        http://post.baidu.com/2.html
+        ```
+        ```shell
+        cat file | sed -e 's/http:\/\///' -e 's/\/.*//' | sort | uniq -c | sort -rn
+        ```
+
+### 四.高级使用：
+1. #### 简介
+
+    !> sed 中除了有模式空间之外，还有一个叫（hold space）的保留空间，用来暂存遍历行过程中的数据。以便对sed进行更加灵活控制。[参考](https://blog.51cto.com/u_3078781/3287471).使用语法如下：
+
+    | cmd | func |
+    | - | - |
+    | d         | Delete pattern space.  Start next cycle. 删除pattern space的内容，开始下一个循环.
+    | h、 H     | Copy/append pattern space to hold space.   复制/追加pattern space的内容到hold space.
+    | g、 G     | Copy/append hold space to pattern space.   复制/追加hold space的内容到pattern space.
+    | x         | Exchange the contents of the hold and pattern spaces.    交换hold space和pattern space的内容.
+
+2. #### 操作
+
+    ```shell
+    one
+    two
+    three
+    ```
+    ```shell
+    # 翻转文本行
+    sed '1!G;h;$!d' file
+    ```
+3. #### 流程演示
+
+    ![](/.images/devops/os/util/sed-01.png)
+
+
+### 五.参考：
 * [sed命令详解](https://www.cnblogs.com/ctaixw/p/5860221.html)
 * https://blog.51cto.com/u_3078781/3287471
