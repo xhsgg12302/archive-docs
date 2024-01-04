@@ -17,7 +17,7 @@ public void getFile(){
     // 2，获取resources里面的文件
     File file1 = new File("src/main/resources/log4j.properties");
 
-    // 3，类加载器加载文件方式1,多一个resolveName
+    // 3，类加载器加载文件方式1,多一个resolveName()方法，用来追加包名。而类加载器直接在加载类的根目录加载。
     URL resource = this.getClass().getResource("../res/yqgz.cer");
     // 4，类加载器加载文件方式2
     URL resource1 = this.getClass().getClassLoader().getResource("_base/io/res/yqgz.cer");
