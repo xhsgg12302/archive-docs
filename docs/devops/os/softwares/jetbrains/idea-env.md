@@ -34,8 +34,16 @@
 
     - ### jrebel激活
         http://jrebel.qekang.com/ </br>
+        https://idea.javatiku.cn/ </br>
         https://www.jb51.net/article/201533.htm </br>
-        http://jrebel-license.jiweichengzhu.com/
+        http://jrebel-license.jiweichengzhu.com/ </br>
+        https://jrebel.com.cn/#/
+
+        + 历史记录
+        ```shell
+            http://idea.javatiku.cn/460bbf73-1d7d-4b5e-a537-43ea8b23f502
+        [*] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
+        ```
 
 ## References
 *  https://stackoverflow.com/questions/28389006/how-to-decompile-to-java-files-intellij-idea
