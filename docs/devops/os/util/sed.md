@@ -361,7 +361,7 @@ ranges: the syntax is addr1,addr2 (i.e., the addresses are separated by a comma)
     ```
 3. #### 流程演示
 
-    ![](/.images/devops/os/util/sed-01.png)
+    ![](/.images/devops/os/util/sed-01.png ':size=85%')
 
 
 ### 五.参考：
