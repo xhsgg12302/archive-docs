@@ -1,14 +1,11 @@
 ## IO 简介
-> IO指以内存为中心，外部到内存为input，内存到外部为output<br>
-> 按方向分为输入流和输出流.按传输单位分为字节流和字符流。按形态分为原始流及缓冲流。<br>
-> IO流的本质是数据传输，并且流是单向的。<br>
+!> IO指以内存为中心，外部到内存为input，内存到外部为output<br>
+按方向分为输入流和输出流.按传输单位分为字节流和字符流。按形态分为原始流及缓冲流。<br>
+IO流的本质是数据传输，并且流是单向的。<br>
 
 ![](/.images/doc/base/io/iostream.png )
 
 ## 获取文件的几种方式
-
-<details><summary>代码</summary>
-
 ```java
 @Test
 public void getFile(){
@@ -23,13 +20,12 @@ public void getFile(){
     URL resource1 = this.getClass().getClassLoader().getResource("_base/io/res/yqgz.cer");
 }
 ```
-</details>
 
 ## 字节流
 * ### InputStream
     + FileInputStream
-        <details><summary>FileInputStream读文件到字节代码</summary>
-
+        <!-- tabs:start -->
+        #### **FileInputStream读文件到字节代码**
         ```java
         @Test
         public void demoWithoutTryWithResource(){
@@ -62,10 +58,8 @@ public void getFile(){
             }
         }
         ```
-        </details>
 
-        <details><summary>使用try-with-resource方式代码</summary>
-
+        #### **使用try-with-resource方式代码**
         ```java
         @Test
         public void demoWithTryWithResource(){
@@ -82,7 +76,7 @@ public void getFile(){
             }
         } 
         ```
-        </details>
+        <!-- tabs:end -->
     + FilterInputStream
         + BufferedInputStream
         + DataInputStream
@@ -112,9 +106,7 @@ NIO相关类都被放在java.nio包及其子包下
 * ByteBuffer
 
     > Buffer类型：ByteBuffer,CharBuffer,ShortBuffer,IntBuffer,LongBuffer,FloatBuffer,DoubleBuffer.<br>
-    > 四个重要属性： 0 < mark < position < limit < capacity
-  
-    <details><summary>代码示例</summary>
+    四个重要属性： 0 < mark < position < limit < capacity
   
     ```java
     ByteBuffer byteBuffer = ByteBuffer.allocate(16);
@@ -157,7 +149,6 @@ NIO相关类都被放在java.nio包及其子包下
     /* _12302_2022/10/21_< compact,压缩缓冲空间，将剩余未读的拷贝到前开头，并且将position的位置放到剩余字节后面。limit = capacity, discard mark > */
     
     ```
-    </details>
     
 * Channel
     > IO四种控制方式：循环IO测试，程序中断，DMA方式，通道方式 <br>
@@ -166,8 +157,8 @@ NIO相关类都被放在java.nio包及其子包下
     > 使用到的技术 mmap,transferTo[sendFile] <br>
     > 分散读取与聚集写入
 
-    <details><summary>代码示例</summary>
-
+    <!-- tabs:start -->
+    #### **readByteWithSupportChannelClass**
     ```java
     @Test
     public void readByteWithSupportChannelClass(){
@@ -189,10 +180,7 @@ NIO相关类都被放在java.nio包及其子包下
         }catch (Exception e) { e.printStackTrace(); }
     }
     ```
-    </details>
-
-    <details><summary>代码示例</summary>
-
+    #### **readByteWithOpenMethodAndMappedByteBuffer**
     ```java
     @Test
     public void readByteWithOpenMethodAndMappedByteBuffer(){
@@ -209,10 +197,7 @@ NIO相关类都被放在java.nio包及其子包下
         }catch (Exception e) { e.printStackTrace();}
     }
     ```
-    </details>
-
-    <details><summary>代码示例</summary>
-
+    #### **transferTo**
     ```java
     @Test
     public void transferTo(){
@@ -225,10 +210,9 @@ NIO相关类都被放在java.nio包及其子包下
         }catch (Exception e) { e.printStackTrace(); }
     }
     ```
-    </details>
+    <!-- tabs:end -->
 
 * Selector
-
 
 
 ## 三方工具
