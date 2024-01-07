@@ -225,6 +225,12 @@ NIO相关类都被放在java.nio包及其子包下
     </dependency>
     ```
 
+## I/O控制方式
+
++ ### Reference
+    * https://xesoa.com/wp-content/uploads/2011/12/os-3.pdf (176 page)
+    * https://sunra.top/posts/3683/
+
 ## reference
 - https://github.com/docsifyjs/docsify/issues/1399
 - https://stackoverflow.com/questions/6608795/what-is-the-difference-between-class-getresource-and-classloader-getresource
