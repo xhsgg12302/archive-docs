@@ -84,6 +84,8 @@ grep -A 2 "core id" /proc/cpuinfo
             
             # grep "^\(.\{1\}\).*\1$" /etc/passwd
             # grep "^\([[:alpha:]]\).*\1$" /etc/passwd
+
+            * 分组后不引用 (?:), 参考Reference
             
         * 零宽断言：
             (?=pattern)  正向先行断言（正前瞻）
@@ -129,3 +131,4 @@ grep -A 2 "core id" /proc/cpuinfo
 ## Reference
 * [linux中grep命令的用法](https://www.cnblogs.com/flyor/p/6411140.html )
 * [grep中使用"\d"匹配数字不成功的原因解决](https://blog.csdn.net/yufenghyc/article/details/51078107)
+* [(?:)](https://blog.csdn.net/csm0912/article/details/81206848)

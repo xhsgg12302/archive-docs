@@ -42,3 +42,7 @@ SELECT DATABASE();
 mysql> \s
 
 ![](/.images/doc/advance/mysql/readme-01.png)
+
+## clear command not work
+`\! clear` `\! cls`
+* https://stackoverflow.com/questions/8807836/how-to-clear-mysql-screen-console-in-windows
