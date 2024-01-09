@@ -52,7 +52,7 @@ public class TestMain {
 <!-- tabs:end -->
 
 * ### 构建及运行
-!> 使用maven-assembly-plugin插件进行构建的。排除主类，生成`META-INF/MANIFEST.MF`且定义了`Premain-Class: agent.MyAgent`
+!> 使用maven-assembly-plugin插件进行构建的。在`assembly.xml`配置中排除主类包，并在pom.xml`assembly`插件配置中定义了生成`META-INF/MANIFEST.MF`文件且包含`Premain-Class: agent.MyAgent` 属性。
 
     ```shell
     # 进入JTW主目录
