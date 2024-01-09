@@ -47,7 +47,7 @@ public void getFile(){
             System.out.println(byteArrayOutputStream.toByteArray().length);
             } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 if(ins != null){
                     try {
                         ins.close();
@@ -55,6 +55,12 @@ public void getFile(){
                         throw new RuntimeException(e);
                     }
                 }
+                // 或者直接关闭，异常包括空指针。省略if空判断。
+                // try {
+                //     ins.close();
+                // } catch (Exception e) {
+                //     throw new RuntimeException(e);
+                // }
             }
         }
         ```
