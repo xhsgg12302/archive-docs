@@ -13,9 +13,6 @@
         public static void main(String[] args) {
             // You can use print statements as follows for debugging, they'll be visible when running tests.
             System.out.println("Logs from your program will appear here!");
-
-            // Uncomment this block to pass the first stage
-
             ServerSocket serverSocket = null;
             Socket clientSocket = null;
 
@@ -99,7 +96,6 @@
                 while((outStr = bufRead.readLine()) != null){
                     System.out.println(outStr);
                 }
-
             }catch (Exception e){e.printStackTrace();}
         }
     }
