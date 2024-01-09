@@ -36,6 +36,9 @@ find /home -size 10k -[exec | ok] ls -l {} \; 
 
     # 查找路径中存在target 并且以后缀.jar结尾的文件。
     find . -type d -name "target" -exec find {} -name "*.jar" \; | xargs -n 1 -I {} ls -l {}
+
+    # 模糊查找pdf文件，比如 忽略大小写 带mysql关键字的pdf文件
+    find / -name '*.pdf' 2>/dev/null | grep -i 'mysql'
     ```
 
 
