@@ -9,23 +9,24 @@
 ?> 我们平时是以记录为单位来向表中插入数据的，这些记录在磁盘上的存放方式也被称为 行格式 或者 记录格式 。设计 InnoDB 存储引擎的大叔们到现在为止设计了4种不同类型的 行格式 ，分别是 Compact 、 Redundant 、Dynamic 和 Compressed 行格式，随着时间的推移，他们可能会设计出更多的行格式，但是不管怎么变，在原理上大体都是相同的。
 
     1. ### 指定行格式的语法
-    我们可以在创建或修改表的语句中指定 行格式 ： `CREATE TABLE 表名 (列的信息) ROW_FORMAT=行格式名称` `ALTER TABLE 表名 ROW_FORMAT=行格式名称`
+    
+        我们可以在创建或修改表的语句中指定 行格式 ： `CREATE TABLE 表名 (列的信息) ROW_FORMAT=行格式名称` `ALTER TABLE 表名 ROW_FORMAT=行格式名称`
 
-    ```sql
-    # 比如我们在 xiaohaizi 数据库里创建一个演示用的表 `record_format_demo`，可以这样指定它的 行格式：
-    USE xiaohaizi;
+        ```sql
+        # 比如我们在 xiaohaizi 数据库里创建一个演示用的表 `record_format_demo`，可以这样指定它的 行格式：
+        USE xiaohaizi;
 
-    CREATE TABLE record_format_demo (
-        c1 VARCHAR(10),
-        c2 VARCHAR(10) NOT NULL,
-        c3 CHAR(10),
-        c4 VARCHAR(10)
-    ) CHARSET=ascii ROW_FORMAT=COMPACT;
+        CREATE TABLE record_format_demo (
+            c1 VARCHAR(10),
+            c2 VARCHAR(10) NOT NULL,
+            c3 CHAR(10),
+            c4 VARCHAR(10)
+        ) CHARSET=ascii ROW_FORMAT=COMPACT;
 
-    # 可以看到我们刚刚创建的这个表的 行格式 就是 Compact ，另外，我们还显式指定了这个表的字符集为 ascii ，
-    # 因为 ascii 字符集只包括空格、标点符号、数字、大小写字母和一些不可见字符，所以我们的汉字是不能存到这
-    # 个表里的。我们现在向这个表中插入两条记录：
-    INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES('aaaa', 'bbb', 'cc', 'd'),('eeee', 'fff', NULL, NULL);
-    ```
-    现在表中的记录就是这个样子的：
+        # 可以看到我们刚刚创建的这个表的 行格式 就是 Compact ，另外，我们还显式指定了这个表的字符集为 ascii ，
+        # 因为 ascii 字符集只包括空格、标点符号、数字、大小写字母和一些不可见字符，所以我们的汉字是不能存到这
+        # 个表里的。我们现在向这个表中插入两条记录：
+        INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES('aaaa', 'bbb', 'cc', 'd'),('eeee', 'fff', NULL, NULL);
+        ```
+        现在表中的记录就是这个样子的：
 
