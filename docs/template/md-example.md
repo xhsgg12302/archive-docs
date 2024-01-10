@@ -134,6 +134,22 @@ single backslash (status: opening)
 # https://github.com/docsifyjs/docsify/issues/1881
 -->
 
+## specification 01
+* paragraph
+
+    + inner paragraph
+
+    start of file text
+
+        1. li one
+        2. li two
+
+            text of li two
+    <!-- 如果`end of the each li`需要跳出 bullet,则需要添加一个空白行。需要注意空白行, 得预留一个跟外部顶格一样多的空格。比如`start of file text` 前面有四个空格,所以需要添加有四个空格的空白行。-->
+    
+    end of the each li
+
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md
