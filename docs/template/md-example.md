@@ -149,6 +149,17 @@ single backslash (status: opening)
     
     end of the each li
 
+## markdown引用变量
+[key]:value
+直接把key放入[],这样显示文本是key，链接为value
+[baidu] [我的主页]  ← 这里有两，只会显示第一个，估计识别成两个中括号的模式了（因为鼠标放上去显示链接是第二个变量值，两个中括号中间空格无效）
+[baidu]
+[我的主页]
+[baidu]:http://www.baidu.com
+[我的主页]:http://www.jianchengss.com
+[image-qr-code]: https://gitee.com/jianchengss/resources/raw/master/images/weixin/mp_QR-code/Jason_pinyaxuan_8.jpg
+[image-error]: https://www.baidu.com/Jason_pinyaxuan_8.jpg
+
 
 ## Reference
 * https://marked.js.org/
