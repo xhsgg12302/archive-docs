@@ -161,6 +161,12 @@ single backslash (status: opening)
 [image-error]: https://www.baidu.com/Jason_pinyaxuan_8.jpg
 
 
+## mermaid version
+* https://github.com/orgs/community/discussions/37498#discussioncomment-7152968
+```mermaid
+info
+```
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md
