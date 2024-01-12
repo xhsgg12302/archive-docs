@@ -1,7 +1,7 @@
 
 + ## 插件
 
-    | -            | -                              | -                         |
+    | column1      | column2                        | column3                   |
     | ------------ | ------------------------------ | ------------------------- |
     | Lombok       | Maven Helper                   | Mybaits Log Plugin        |
     | Translation  | Find bugs                      | RestfulToolkit            |
@@ -49,7 +49,7 @@
         https://jrebel.com.cn/#/
 
         + 历史记录
-        
+
             - [ ] http://idea.javatiku.cn/460bbf73-1d7d-4b5e-a537-43ea8b23f502
             - [x] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
 
