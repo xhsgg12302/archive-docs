@@ -1,12 +1,11 @@
 ## 简介
-> Mybatis最早Apache基金会的一个开源项目iBatis,2010年这个项目被迁移到google code,并改名为MyBatis.<br>
-> Mybatis是支持SQL查询，存储过程和高级映射的持久层框架<br>
-> Mybatis封装了JDBC几乎所有的代码和参数手工设置以及结果检索<br>
-> Mybatis可以使用XML和注解进行映射关系配置。
+?> Mybatis最早Apache基金会的一个开源项目iBatis,2010年这个项目被迁移到google code,并改名为MyBatis.
+<br>Mybatis是支持SQL查询，存储过程和高级映射的持久层框架
+<br>Mybatis封装了JDBC几乎所有的代码和参数手工设置以及结果检索
+<br>Mybatis可以使用XML和注解进行映射关系配置。
 
 ## 使用
-1. 加载jar包（mybatis，jdbc）
-    <details><summary>代码示例</summary>
+1. ### 加载jar包（mybatis，jdbc）
 
     ```xml
     <dependency>
@@ -21,10 +20,8 @@
         <version>5.1.30</version>
     </dependency>
     ```
-    </details>
 
-2. 创建主配置文件SqlMapConfig.xml
-    <details><summary>配置文件</summary>
+2. ### 创建主配置文件SqlMapConfig.xml
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" ?>
@@ -57,10 +54,8 @@
         </mappers>
     </configuration>
     ```
-    </details>
 
-3. 创建映射文件Student.xml
-    <details><summary>代码示例</summary>
+3. ### 创建映射文件Student.xml
 
     ```xml
     <?xml version="1.0" encoding="UTF-8"?>
@@ -83,10 +78,8 @@
 
     </mapper>
     ```
-    </details>
 
-4. 使用代码获取数据
-    <details><summary>代码示例</summary>
+4. ### 使用代码获取数据
 
     ```java
     @Test
@@ -105,11 +98,9 @@
         }catch (Exception e) { e.printStackTrace();}
     }
     ```
-    </details>
 
 ## 高级
-* 自定义映射
-    <details><summary>代码示例</summary>
+* ### 自定义映射
 
     ```xml
     <resultMap id="BaseResultMap" type="_framework.mybatis.bean.Student" >
@@ -117,10 +108,8 @@
         <result column="is_young" property="young" />
     </resultMap>
     ```
-    </details>
 
-* 注解配置
-    <details><summary>代码示例</summary>
+* ### 注解配置
 
     ```xml
     // 主配置文件SqlMapConfig.xml中的修改
@@ -130,12 +119,13 @@
     @Select("select * from student where name like '%${name}%'")
     List<Student> findAllStudent(String name);
     ```
-    </details>
 
-* 缓存
-    1. 一级缓存
-        > 也叫本地缓存，sqlSession级别的缓存，一直开启，与数据库同一次会话期间查询到的数据会放在本地缓存中
-        > 以后如果需要获取相同的数据，直接从缓存中拿，没必要再去数据库中查询
+* ### 缓存
+
+    1. #### 一级缓存
+
+        ?> 也叫本地缓存，sqlSession级别的缓存，一直开启，与数据库同一次会话期间查询到的数据会放在本地缓存中
+        <br>以后如果需要获取相同的数据，直接从缓存中拿，没必要再去数据库中查询
 
         `一级缓存失效的四种情况`
         - sqlSession不同
@@ -143,8 +133,9 @@
         - sqlSession相同，两次查询期间执行了增删改操作
         - sqlSession相同，手动清除一级缓存`session.clearCache()`
         
-    2. 二级缓存
-        > 也叫全局缓存，基于namespace级别的缓存，一个namespace对一个一个二级缓存
+    2. #### 二级缓存
+
+        ?> 也叫全局缓存，基于namespace级别的缓存，一个namespace对一个一个二级缓存
 
         `工作机制`
         1. 一个会话，查询一条数据，这个数据就会被放在当前会话的一级缓冲中
@@ -155,7 +146,6 @@
         `使用配置`
         1. 开启全局二级缓存配置: 主配置文件中加入 `<setting name="cacheEnabled" value="true"/>`
         2. 在mapper.xml中配置使用二级缓存：
-            <details><summary>代码示例</summary>
 
             ```xml
             <mapper namespace="_framework.mybatis.mapper.StudentMapper">
@@ -177,7 +167,6 @@
                 -->
             </mapper>
             ```
-            </details>
         3. 由于涉及到序列化，所以POJO需要实现序列化接口
 
 ## 原理
