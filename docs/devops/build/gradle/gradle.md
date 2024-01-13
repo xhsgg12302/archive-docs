@@ -672,7 +672,7 @@
         }
         ```
 
-        正式由于Project类中定义了上面方法，我们才可以以上面方式来创建task任务。
+        正是由于Project类中定义了上面方法，我们才可以以上面方式来创建task任务。
         <br>我们可以通过`gradle task`名称的命令来执行某一个task任务，比如执行上述任务：gradle aTask
 
         ![](/.images/devops/build/gradle/gradle-16.png ':size=60%')
@@ -1123,5 +1123,6 @@
         ![](/.images/devops/build/gradle/gradle-24.png ':size=70%') 
 
 ## Reference
+* https://github.com/12302-bak/gradle-test-project
 * https://www.cnblogs.com/leipDao/p/10385155.html
 * https://blog.csdn.net/qq_16386581/article/details/86982278
