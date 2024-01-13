@@ -391,7 +391,7 @@
         
 
 
-* ### 认识 gradle
+* ### Gradle概览
 
     + #### 初识
 
@@ -551,7 +551,7 @@
         ![](/.images/devops/build/gradle/gradle-09.png ':size=60%')
 
 
-* ### gradle 工作时序
+* ### Gradle工作时序
 
     ?> Gradle执行分为三个过程：
 
@@ -637,9 +637,240 @@
         !> 注意：root build.gradle中没有出现**beforeProject,afterProject**是因为需要解析配置这个文件后才会给gradle添加回调监听。如果放在`settings.gradle`就正常了。
 
 
-* ### gralde 中的task
+* ### Gradle任务
 
-* ### gradle 中任务的增量构建
+    ?> task可以说Gradle中很重要的部分，task是Gradle的执行单元，一个task就是具体执行某一任务。在idea中我们一创建工程的时候就存在很多task：
+
+    ![](/.images/devops/build/gradle/gradle-12.png ':size=30%')
+
+    上面我们说过build.gradle对应Gradle中的Project类，[Project](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html)类中定义了如下方法：
+
+    ![](/.images/devops/build/gradle/gradle-15.png ':size=80%')
+
+    + #### task自定义
+
+        ?> 我们可以定义自己的task，在app模块的build.gradle中添加如下代码：
+
+        ```gradle
+        task aTask{
+            println ">>>>>>>>>>>>>>>>task..."
+        }
+        ```
+
+        这样我们就定义了名称为aTask的任务了，在idea中同步之后我们可以看到(下左)：
+
+        ![](/.images/devops/build/gradle/gradle-13.png ':size=30%')
+        ![](/.images/devops/build/gradle/gradle-14.png ':size=30%')
+
+        由于我们没有指明分组所以这里默认属于other分组，我们可以指定自己的分组(上右)：
+        ```gradle
+        task bTask(group:'myGroup') {
+            println ">>>>>>>>>>>>>>>>task..."
+        }
+        ```
+
+        正式由于Project类中定义了上面方法，我们才可以以上面方式来创建task任务。
+        <br>我们可以通过`gradle task`名称的命令来执行某一个task任务，比如执行上述任务：gradle aTask
+
+        ![](/.images/devops/build/gradle/gradle-16.png ':size=60%')
+
+        上述打印信息的代码是在Configure阶段来执行的，所以task是可以配置的。另外可以指定开始执行和结束执行。
+
+        ```gradle
+        task aTask(group:'myGroup'){
+            println ">>>>>>>>>>>>>>>>config..."
+            //任务开始执行初期执行
+            doFirst{
+                println ">>>>>>>>>>>>>>>>aTask doFirst..."
+            }
+            //任务开始执行末期执行
+            doLast{
+                println ">>>>>>>>>>>>>>>>aTask doLast..."
+            }
+        }
+        ```
+
+        ![](/.images/devops/build/gradle/gradle-17.png ':size=60%')
+
+        !> 此外`doLast`还有另外一些写法:
+
+        ```gradle
+        // 1.
+        task B << {
+            println 'B'
+        }
+
+        // 2.
+        task B {
+            doLast{
+                println 'B'
+            }
+        }
+        ```
+
+    + #### task的依赖关系
+
+        ?> 1. task之间可以指定依赖关系，比如指定A task依赖B task那么在执行A task的时候需要先执行B task，我们修改代码为**显示指定**：
+        <br>2. 我们也可以创建task的时候就直接指定依赖，修改代码为**创建任务时指定**
+
+        <!-- tabs:start -->
+        ##### **显示指定**
+        ```gradle
+        task aTask(group:'myGroup'){
+            println ">>>>>>>>>>>>>>>>a config..."
+
+            doFirst{
+                println ">>>>>>>>>>>>>>>>aTask doFirst..."
+            }
+
+            doLast{
+                println ">>>>>>>>>>>>>>>>aTask doLast..."
+            }
+            }
+
+        task bTask(group:'myGroup'){
+            println ">>>>>>>>>>>>>>>>b config..."
+
+            doFirst{
+                println ">>>>>>>>>>>>>>>>bTask doFirst..."
+            }
+
+            doLast{
+                println ">>>>>>>>>>>>>>>>bTask doLast..."
+            }
+        }
+        //这里指定aTask 依赖于bTask
+        aTask.dependsOn bTask
+        ```
+
+        ##### **创建任务时指定**
+        ```gradle
+        //通过dependsOn指定依赖
+        task aTask(group:'myGroup', dependsOn: ["bTask"]){
+            println ">>>>>>>>>>>>>>>>a config..."
+
+            doFirst{
+                println ">>>>>>>>>>>>>>>>aTask doFirst..."
+            }
+
+            doLast{
+                println ">>>>>>>>>>>>>>>>aTask doLast..."
+            }
+        }
+
+        task bTask(group:'myGroup'){
+            println ">>>>>>>>>>>>>>>>b config..."
+
+            doFirst{
+                println ">>>>>>>>>>>>>>>>bTask doFirst..."
+            }
+
+            doLast{
+                println ">>>>>>>>>>>>>>>>bTask doLast..."
+            }
+        }
+
+        //aTask.dependsOn bTask
+        ```
+        <!-- tabs:end -->
+
+        执行aTask效果如下:
+
+        ![](/.images/devops/build/gradle/gradle-17.png ':size=60%')
+
+        我们也可以定义task类，此类需要继承DefaultTask：
+
+        ```gradle
+        class IncrementTask extends DefaultTask {
+
+            String msg = 'default'
+
+            IncrementTask() {
+                group '自定义任务' //指定任务的分组
+                description '任务描述'//指定描述
+            }
+
+            /**
+             * @TaskAction标注方法run()，这样我们在执行任务的时候会调用run()方法。
+             */
+            @TaskAction
+            void run() {
+                println "IncrementTask __$msg"
+            }
+        }
+        ```
+
+        接下来我们可以通过如下方式创建实例：
+        ```gradle
+        // 创建task的时候我们可以指定type，也就是指定其父类，如果我们不制定默认为DefaultTask的子类。
+        task increment2(type: IncrementTask) {
+            msg = 'create task'
+        }
+        ```
+
+        我们也可以通过如下方式创建：
+        ```gradle
+        tasks.create('increment1', IncrementTask){
+            //重新指定msg信息
+            msg = 'tasks.create'
+        }
+        ```
+
+        !> [tasks](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.Project.html#org.gradle.api.Project:tasks) 为Project对象的一个属性`TaskContainer tasks (read-only)`。所以可以通过[TaskContainer](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.tasks.TaskContainer.html) 类的方法`create`创建一个任务。
+
+* ### Gradle任务的增量构建
+
+    ?> 作为构建工具我们要防止做重复工作。例如AS编译出APK文件，如果我们已经编译出了APK文件，再次编译的时候如果我们没有删除APK文件并且代码资源等都没变化那么就没必要在重新走一遍流程执行各个task任务最重输出APK文件，中间的任务都可以跳过，这样可以提升效率缩短编译时间。
+    <br><br>Gradle是通过增量构建的特性来支持这个功能的。
+    <br><br>Gradle在执行任务的时候会检查任务的输入输出是否有变化，如果任务的输入输出均没有变化则认为任务是up-to-date的，会跳过任务不去执行它，任务至少有一个输出否则增量构建不起作用。<br><br>我们改造IncrementTask，使其成为可以增量构建的任务，指明其输入输出:
+
+    ```gradle
+    class IncrementTask extends DefaultTask {
+
+        @Input //指明输入
+        String msg = 'default'
+
+        @OutputFile //指明输出
+        File file
+
+        IncrementTask() {
+            group '自定义任务'
+            description '任务描述'
+        }
+
+        @TaskAction
+        void run() {
+            println "IncrementTask __$msg"
+        }
+    }
+    ```
+
+    我们在创建任务的时候指明其输入输出：
+
+    ```gradle
+    tasks.create('increment1', IncrementTask){
+        //重新指定msg信息
+        msg = 'tasks.create1'
+        file = file('path.txt')
+    }
+    ```
+
+    
+    我们在第一次执行任务的时候执行了run方法输出相应信息，接着我们再次执行：
+    <br>看到了吧，没有执行run方法，并且提示：up-to-date。
+
+    ![](/.images/devops/build/gradle/gradle-19.png ':size=60%') 
+
+    
+    我们也可以关闭任务的增量构建，使其每次执行的时候都会执行run方法：
+
+    ```gradle
+    IncrementTask() {
+        group '自定义任务'
+        description '任务描述'
+        outputs.upToDateWhen { false }//返回false关闭增量构建
+    }
+    ```
 
 * ### 自定义插件
 
