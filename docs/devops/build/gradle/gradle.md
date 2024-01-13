@@ -824,53 +824,59 @@
     <br><br>Gradle是通过增量构建的特性来支持这个功能的。
     <br><br>Gradle在执行任务的时候会检查任务的输入输出是否有变化，如果任务的输入输出均没有变化则认为任务是up-to-date的，会跳过任务不去执行它，任务至少有一个输出否则增量构建不起作用。<br><br>我们改造IncrementTask，使其成为可以增量构建的任务，指明其输入输出:
 
-    ```gradle
-    class IncrementTask extends DefaultTask {
+    + #### 定义任务类
+    
+        ```gradle
+        class IncrementTask extends DefaultTask {
 
-        @Input //指明输入
-        String msg = 'default'
+            @Input //指明输入
+            String msg = 'default'
 
-        @OutputFile //指明输出
-        File file
+            @OutputFile //指明输出
+            File file
 
+            IncrementTask() {
+                group '自定义任务'
+                description '任务描述'
+            }
+
+            @TaskAction
+            void run() {
+                println "IncrementTask __$msg"
+            }
+        }
+        ```
+
+    + #### 配置任务
+
+        我们在创建任务的时候指明其输入输出：
+
+        ```gradle
+        tasks.create('increment1', IncrementTask){
+            //重新指定msg信息
+            msg = 'tasks.create1'
+            file = file('path.txt')
+        }
+        ```
+
+        
+        我们在第一次执行任务的时候执行了run方法输出相应信息，接着我们再次执行：
+        <br>看到了吧，没有执行run方法，并且提示：up-to-date。
+
+        ![](/.images/devops/build/gradle/gradle-19.png ':size=60%') 
+
+    
+    + #### 关闭增量构建
+    
+        我们也可以关闭任务的增量构建，使其每次执行的时候都会执行run方法：
+
+        ```gradle
         IncrementTask() {
             group '自定义任务'
             description '任务描述'
+            outputs.upToDateWhen { false }//返回false关闭增量构建
         }
-
-        @TaskAction
-        void run() {
-            println "IncrementTask __$msg"
-        }
-    }
-    ```
-
-    我们在创建任务的时候指明其输入输出：
-
-    ```gradle
-    tasks.create('increment1', IncrementTask){
-        //重新指定msg信息
-        msg = 'tasks.create1'
-        file = file('path.txt')
-    }
-    ```
-
-    
-    我们在第一次执行任务的时候执行了run方法输出相应信息，接着我们再次执行：
-    <br>看到了吧，没有执行run方法，并且提示：up-to-date。
-
-    ![](/.images/devops/build/gradle/gradle-19.png ':size=60%') 
-
-    
-    我们也可以关闭任务的增量构建，使其每次执行的时候都会执行run方法：
-
-    ```gradle
-    IncrementTask() {
-        group '自定义任务'
-        description '任务描述'
-        outputs.upToDateWhen { false }//返回false关闭增量构建
-    }
-    ```
+        ```
 
 * ### 自定义插件
 
