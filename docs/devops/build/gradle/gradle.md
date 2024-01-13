@@ -553,6 +553,90 @@
 
 * ### gradle 工作时序
 
+    ?> Gradle执行分为三个过程：
+
+    1. #### Initiliazation
+
+        *初始化阶段只要为每个module创建project实例。这个阶段settings.gradle文件会被解析执行*
+    
+    2. #### Configration
+
+        *这个阶段解析每个模块的build.gradle文件，这个阶段完成后整个项目的tasks执行顺序也就确定了并且task准备就绪处于待执行状态，整个tasks任务会构成一个有向无环图。*
+    
+    3. #### 执行任务
+
+        *这阶段就是按照顺序执行具体任务了。*
+
+    + #### 测试流程
+
+        ?> 在每个阶段我们可以通过gradle对象添加回调监听。我们在settings.gradle文件与每个module的build.gradle文件添加如下信息：
+
+        <!-- tabs:start -->
+        ##### **settings.gradle**
+        ```gradle
+        println "settings start"
+        include ':app', ':lib1', ':lib4'
+        println "settings end"
+        ```
+
+        ##### **build.gradle(root)**
+        ```gradle
+        afterEvaluate{
+            project ->
+                println "root module afterEvaluate -----> $project.name"
+        }
+
+        gradle.beforeProject{
+            project ->
+                println "beforeProject $project.name"
+        }
+
+        gradle.afterProject{
+            project ->
+                println "afterProject $project.name"
+        }
+
+        gradle.taskGraph.whenReady {
+            println "taskGraph.whenReady"
+        }
+
+        gradle.buildFinished{
+            result ->
+                println "buildFinished"
+        }
+        ```
+
+        ##### **build.gradle(app)**
+        ```gradle
+        println "app start"
+
+        afterEvaluate{
+            project ->
+                println "app module afterEvaluate -----> $project.name"
+        }
+
+        println "app end"
+        ```
+
+        ##### **build.gradle(lib1)**
+        ```gradle
+        println "lib1 start"
+
+        afterEvaluate{
+            project ->
+                println "lib1 module afterEvaluate -----> $project.name"
+        }
+
+        println "lib1 end"
+        ```
+        <!-- tabs:end -->
+    
+        ![](/.images/devops/build/gradle/gradle-10.png ':size=60%')
+        ![](/.images/devops/build/gradle/gradle-11.png ':size=38%')
+
+        !> 注意：root build.gradle中没有出现**beforeProject,afterProject**是因为需要解析配置这个文件后才会给gradle添加回调监听。如果放在`settings.gradle`就正常了。
+
+
 * ### gralde 中的task
 
 * ### gradle 中任务的增量构建
