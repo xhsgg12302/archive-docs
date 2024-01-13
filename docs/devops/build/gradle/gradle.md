@@ -204,7 +204,7 @@
             //闭包定义
             // ->前是参数定义， 后面是代码
             def mClosure = {
-            String p1, int p2 ->
+                String p1, int p2 ->
                     println p1 +"..."+p2
             }
 
@@ -391,17 +391,176 @@
         
 
 
-### 认识 gradle
+* ### 认识 gradle
 
-### gradle 工作时序
+    + #### 初识
 
-### gralde 中的task
+        ?> Gradle是一个开源的构建自动化工具，既然是用于项目构建，那它肯定要制定一些规则，在Gradle中每一个待编译的工程都称为Project，每个Project都可以引入自己需要的插件，引入插件的目的其实就是引入插件中包含的Task，一个Project可以引入多个插件，每个插件同样可以包含一个或多个Task，关于插件和Task我们后面还会单独细说。
 
-### gradle 中任务的增量构建
+        ![](/.images/devops/build/gradle/gradle-01.png '工程目录结构 :size=40%')
 
-### 自定义插件
+    + #### 模块
 
-### 总结
+        ?> 工程my-gradle包含五个module：app，groovy-test, lib1，lib4, springboot。其中app是App module，而lib1，lib4均是library module。
+        <br>相信现在大部分都是这种多module项目了，对于Gradle来说这种叫做multiprojects，看这意思是多projects的项目，那么对于Gradle来说有多少个项目呢？
+        <br>我们可以通过`gradle projects`命令来查看有多少个projects：
+
+        ```shell
+        > Task :projects
+
+        ------------------------------------------------------------
+        Root project
+        ------------------------------------------------------------
+
+        Root project 'my-gradle'
+        +--- Project ':app'
+        +--- Project ':groovy-test'
+        +--- Project ':lib1'
+        +--- Project ':lib4'
+        \--- Project ':springboot'
+        ```
+
+    + #### settings.gradle
+
+        ?> 那Gradle怎么知道有多少个Project呢？在我们创建工程的时候在根目录下有个settings.gradle文件，我们看下其中内容：
+
+        ```gradle
+        rootProject.name = 'my-gradle'
+        include 'app'
+        include 'lib1'
+        include 'lib4'
+        include 'groovy-test'
+        include 'springboot'
+        ```
+
+        ?> 默认只有app模块，之后我们新建的lib1,lib4模块都会自动包含进来，Gradle就是通过查看这个配置文件来确定我们工程有多少了project的，我们修改settings.gradle文件,删除 include 'lib4',然后在执行gradle projects命令，就不会出现':lib4'了。
+
+    + #### build.gradle
+
+        ?> 好了，现在我们对settings.gradle有了初步的认识，我们在看看build.gradle文件的作用，工程根目录下有个build.gradle，每个module下也有自己的build.gradle文件：
+        记得刚接触Gradle的时候这几个build.gradle文件真是让我蒙圈，怎么这么多，都干什么的，相信很多同学刚开始都有这疑问。
+        <br><br>上面我们提到my-gradle叫做Root project，其余四个moudule均叫做Project，其实在Gradle中GradleLearn被当做三个module的父级project，在父project的build.gradle中配置的信息可以作用在子project中，比如根目录build.gradle内容片段如下：
+
+        ```gradle
+        buildscript {
+            repositories {
+                google()
+                jcenter()
+            }
+            dependencies {
+                classpath 'com.android.tools.build:gradle:3.3.1'
+            }
+        }
+
+        // 这里的意思就是配置此项目及其每个子项目的仓储库为google()与 jcenter()，这样我们就不用在每个子project的build.gradle中再单独配置了.
+        // 否则我们需要为每个子project单独配置一下需要引入的插件的仓储库。
+        allprojects {
+            repositories {
+                google()
+                jcenter()
+            }
+        }
+
+        task clean(type: Delete) {
+            delete rootProject.buildDir
+        }
+        ```
+
+        根project的build.gradle文件并不是必须的，我们甚至可以删除掉，其存在的意义主要就是将子project公共的配置提取到父build.gradle来统一管理，有点像“基类”的意思。
+    
+    + #### .gradle文件本质
+
+        ?> 大家有没有想过这样一个问题为什么settings.gradle可以include子模块，又为什么build.gradle可以写成如上那样的配置呢。其实我们在settings.gradle与build.gradle中看似配置的信息其实都是调用对应对象的方法或者脚本块设置对应信息。
+        <br><br>对应对象是什么？其实settings.gradle文件最终会被翻译为Settings对象，而build.gradle文件最终会被翻译为Project对象，build.gradle文件对应的就是每个project的配置。
+        <br><br>Settings与Project在Gradle中都有对应的类，也就是说只有Gradle这个框架定义的我们才能用，至于Settings与Project都定义了什么我们只能查看其官方文档啊。
+
+        - ##### Settings对象
+
+            ?> 比如[Settings](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html)类中定义了include方法：
+
+            ![](/.images/devops/build/gradle/gradle-02.png ':size=80%')
+
+            ?> `include`方法[API](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.Iterable))说明
+
+            ![](/.images/devops/build/gradle/gradle-03.png ':size=80%')
+
+            ?> 看到了吧，我们每一个配置都是调用对应对象的方法。我还发现Settings类中定义了如下方法：`findProject(projectDir)`、`findProject(path)`方法。
+            <br><br>那我们在**setting.gradle**文件里面追加上如下代码试一下：
+
+            ```gradle
+            ...
+            def pro = findProject(':app')
+            println '----------------------------'
+            println pro.getPath()
+            println '----------------------------'
+            ```
+
+            运行`gradle classes`结果如下:(输出了app这个project的信息。)
+
+            ![](/.images/devops/build/gradle/gradle-04.png ':size=60%')
+
+        - ##### Project对象
+
+        ?> 每个build.gradle文件都会被翻译为对应的Project对象，build.gradle文件最重要的作用就是：
+
+            1. 引入插件并配置相应信息
+            2. 添加依赖信息
+        
+        引入插件重要的就是引入插件中包含的tasks，至于插件与tasks后面会详细讲到。
+        <br>那怎么引入插件呢？
+        
+        [Project](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html)定义了[apply](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project:apply(java.util.Map))函数供我们调用：
+
+        ![](/.images/devops/build/gradle/gradle-05.png ':size=90%')
+
+        平时我们看到的如下：`apply plugin: 'com.android.library'`,最终都是调用那个的上面apply方法。
+        
+        在Project类中有个很重要的方法，如下：
+
+        ![](/.images/devops/build/gradle/gradle-06.png ':size=80%')
+
+        这个方法在配置完当前project后立刻调用，并且传给我们project参数，我们调用试试，app module的build.gradle添加如下代码：
+
+        ```gradle
+        afterEvaluate {
+            project ->
+                println "app module -----> $project.name"
+        }
+        ```
+
+        同样，运行`gradle classes`结果如下:
+
+        ![](/.images/devops/build/gradle/gradle-07.png ':size=60%')
+
+        - ##### Gradle对象
+
+        ?> 在我们执行gradle相关命令的时候，Gradle框架会为我们创建一个gradle对象，并且整个工程只有这一个gradle对象，这个对象不像上面两个一样有对应文件，这个对象一般不需要我们配置什么，主要用于给我们提供一些工程信息，具体有哪些信息呢？查看文档中Gradle类包含以下信息：
+        
+        ![](/.images/devops/build/gradle/gradle-08.png ':size=80%')
+
+        我们可以打印一些信息看看，在根build.gradle中添加如下代码：
+
+        ```gradle
+        println "homeDir = $gradle.gradleHomeDir"
+        println "UserHomeDir = $gradle.gradleUserHomeDir"
+        println "gradleVersion = $gradle.gradleVersion"
+        ```
+
+        运行`gradle classes`结果如下:
+
+        ![](/.images/devops/build/gradle/gradle-09.png ':size=60%')
+
+
+* ### gradle 工作时序
+
+* ### gralde 中的task
+
+* ### gradle 中任务的增量构建
+
+* ### 自定义插件
+
+* ### 总结
 
 ## Reference
+* https://www.cnblogs.com/leipDao/p/10385155.html
 * https://blog.csdn.net/qq_16386581/article/details/86982278

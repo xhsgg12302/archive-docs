@@ -7,6 +7,10 @@
 4. **扩展性**：Gradle具有良好的可扩展性，你可以通过自定义`task types`或甚至自定义`build model`来拓展Gradle。例如Android的构建工具就引入了许多新的构建概念例如`flavours和build types`.
 5. **IDE支持**，几个主流的IDE都支持导入Gradle构建并且通过图形化界面的方式与Gradle进行交互。
 
+## 查看gradle具体执行参数
+
+?> 将GradleHome 下bin 中的gradle最后一行修改为`echo "$JAVACMD" "$@"`,将完整打印执行命令。
+
 ## Reference
 * https://blog.csdn.net/qq_16386581/article/details/86982278
 * https://cloud.tencent.com/developer/article/1818133
