@@ -311,8 +311,11 @@
             des << '''i love groovy'''
             ```
     
-    5. #### XML解析
+    5. #### XML解析 & JSON处理
 
+        <!-- tabs:start -->
+
+        ##### **XML解析**
         <!-- tabs:start -->
         ##### **需要解析的xml文档**
 
@@ -347,9 +350,8 @@
         println p0.age
         ```
         <!-- tabs:end -->
-        
-    6. #### JSON处理
 
+        ##### **JSON处理**
         <!-- tabs:start -->
         ##### **解析代码**
         ```groovy
@@ -383,6 +385,7 @@
         hello world
         456
         ```
+        <!-- tabs:end -->
         <!-- tabs:end -->
 
     ##### Reference
@@ -879,6 +882,245 @@
         ```
 
 * ### 自定义插件
+
+    + #### 描述
+
+        ?> 引入插件最大的作用就是引入其中包含的一个个任务，一个任务往往完成一项工作，比如java代码编译为class字节码的任务，处理ndk的任务等等。接下来我们先看看怎么自定义插件，说那么多显得很苍白。Gradle提供了三种方式：① build.gradle脚本中直接编写，② buildSrc中编写，③ 独立Module中编写。
+        <br><br>其中前两种方式只能用在自己项目，而第三种方式比较灵活，可以发布到jcenter仓库供别人引入使用，这里我采用独立module的方式编写。
+
+    + #### 模块(module)结构
+    ![](/.images/devops/build/gradle/gradle-20.png ':size=50%') 
+
+    + #### 文件列表
+
+        <!-- tabs:start -->
+        ##### **build.gradle**
+        ```gradle
+        plugins {
+            id 'java'
+        }
+
+        group = 'site.wtfu.framework'
+        version = '1.0-SNAPSHOT'
+
+        apply plugin: 'java-library'
+        apply plugin: 'groovy'
+
+        dependencies {
+            // 在其build.gradle中引入Groovy插件，并将Gradle API添加为编译时依赖项
+            compile gradleApi()
+            compile localGroovy()
+            implementation fileTree(dir: 'libs', include: ['*.jar'])
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+
+        //用于发布到本地仓库
+        apply plugin: 'maven-publish'
+        //发布配置
+        publishing {
+            publications {
+                plugin(MavenPublication) {
+                    from components.java
+                    artifactId 'test-plugin'
+                }
+            }
+        }
+        ```
+
+        ##### **Plug.groovy**
+        ```groovy
+        package site.wtfu.framework
+
+        import org.gradle.api.Plugin
+        import org.gradle.api.Project
+        
+        class Plug implements Plugin<Project> {
+
+            @Override
+            void apply(Project project) {
+                println "我是自定义插件"
+            }
+        }
+        ```
+
+        ##### **site.wtfu.plugin.properties**
+        ```properties
+        implementation-class=site.wtfu.framework.Plug
+        ```
+        <!-- tabs:end -->
+    
+    + #### 发布插件到本地仓库
+
+        ?> 接下来我们就可以将我们的插件发布到仓库了，这里为了简便我发布到本地仓库，引入maven-publish插件用来发布到本地仓库
+        <br><br>同步工程后，会发现`publishPluginPublicationToMavenLocal`任务。运行任务发布到本地maven仓库。
+
+        ![](/.images/devops/build/gradle/gradle-21.png ':size=90%') 
+        
+    + #### 引入测试
+
+        ?> 这样我们就可以在别的module引入自己写的插件了，比如我在app模块下引入：
+        ```gradle
+        buildscript{
+            repositories{
+                mavenLocal()
+            }
+            dependencies{
+                classpath 'site.wtfu.framework:test-plugin:1.0-SNAPSHOT'
+            }
+        }
+
+        // 注意引入的顺序，不能在plugins {}之前
+        apply plugin:"site.wtfu.plugin"
+        ```
+
+        运行`gradle classes`后可以查看到插件生效了
+
+        ![](/.images/devops/build/gradle/gradle-22.png ':size=70%') 
+
+    + #### 添加任务
+
+        ?> 上面只是输出简单的信息，还没有为我们的插件添加任何任务，下面为插件添加任务，新建FirstTask.groovy类，编写如下代码：
+        ```groovy
+        package site.wtfu.framework
+
+        import org.gradle.api.DefaultTask
+        import org.gradle.api.tasks.TaskAction
+
+        class FirstTask extends DefaultTask{
+
+            String msg = 'default'
+
+            FirstTask() {
+                group '自定义任务'
+                description '任务描述'
+            }
+
+            @TaskAction
+            void run() {
+                println "FirstTask2__$msg"
+            }
+        }
+        ```
+
+        新建了任务类，然后我们就可以在`Plug.groovy`中创建这个任务了：
+        ```groovy
+        class Plug implements Plugin<Project> {
+
+            @Override
+            void apply(Project project) {
+                println "我是自定义插件"
+
+                project.afterEvaluate {
+                    
+                    // 创建任务
+                    FirstTask task = project.tasks.create('firstTask',FirstTask)
+
+                    // 通过查看当前app 任务列表`gradle :app:tasks`
+                    // 添加任务依赖关系,因为当前项目没有`checkDebugManifest`,所以使用 classes替代
+                    project.tasks.getByName('classes').dependsOn task
+                }
+            }
+        }
+        ```
+
+        通过`gradle classes`执行后如下图所示：
+
+        ![](/.images/devops/build/gradle/gradle-23.png ':size=70%') 
+    
+    + #### 传递参数
+
+        ?> 引入安卓插件我们可以配置一些信息。如下：
+
+        ```gradle
+        android {
+            compileSdkVersion 28
+            defaultConfig {
+                applicationId "com.wanglei55.gradlelearn"
+                minSdkVersion 15
+                targetSdkVersion 28
+                versionCode 1
+                versionName "1.0"
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
+            buildTypes {
+                release {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+            }
+        }
+        ```
+
+        我们也可以模仿，定义两个类
+
+        ```groovy
+        class AExtensions{
+            def compileSdkVersion
+        }
+
+        class BExtensions {
+            def  applicationId
+        }
+        ```
+
+        然后我们就可以为插件创建扩展了：
+
+        ```groovy
+        package site.wtfu.framework
+
+        import org.gradle.api.Plugin
+        import org.gradle.api.Project
+
+        class Plug implements Plugin<Project> {
+
+            @Override
+            void apply(Project project) {
+                println "我是自定义插件"
+
+                // 创建扩展
+                project.extensions.create('aExtensions',AExtensions)
+                // 为aExtensions创建扩展
+                project.aExtensions.extensions.create('bExtensions',BExtensions)
+
+                project.afterEvaluate {
+
+                    // 获取我们配置的compileSdkVersion与applicationId并打印
+                    println project.aExtensions.compileSdkVersion
+                    println project.aExtensions.bExtensions.applicationId
+
+                    //创建任务
+                    FirstTask task = project.tasks.create('firstTask',FirstTask) {
+                        // 为任务中msg赋值
+                        msg = project.aExtensions.bExtensions.applicationId
+                    }
+
+                    //添加任务依赖关系
+                    //project.tasks.getByName('checkDebugManifest').dependsOn task
+                    project.tasks.getByName('classes').dependsOn task
+                }
+            }
+        }
+        ```
+
+        引入插件配置示例：
+
+        ```gradle
+        apply plugin : "site.wtfu.plugin"
+
+        aExtensions{
+            compileSdkVersion 29
+            bExtensions {
+                applicationId "site.wtfu.gradle"
+            }
+        }
+        ```
+
+        运行`gradle classes`得到结果如下图：
+
+        ![](/.images/devops/build/gradle/gradle-24.png ':size=70%') 
 
 ## Reference
 * https://www.cnblogs.com/leipDao/p/10385155.html
