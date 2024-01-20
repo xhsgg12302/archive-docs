@@ -531,3 +531,7 @@ objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 	# 保持自动升级
 	acme.sh --upgrade --auto-upgrade
 	```
+
+	+ Reference
+	
+		* https://blog.freessl.cn/acme-quick-start/

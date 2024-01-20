@@ -74,3 +74,4 @@
 * https://blog.csdn.net/JimFire/article/details/120174611
 * 
 * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.html
+* https://stackoverflow.com/questions/138511/what-are-java-command-line-options-to-set-to-allow-jvm-to-be-remotely-debugged
