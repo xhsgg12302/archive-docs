@@ -1,5 +1,5 @@
 ## hello
-[recongize](docs/devops/build/gradle/gradle.md)
+[recongize](gradle.md)
 
 ## Reference
 * 
