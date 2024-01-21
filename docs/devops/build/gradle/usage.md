@@ -1,5 +1,5 @@
 ## hello
-[recongize](gradle.md)
+[recongize](../maven.md)
 
 ## Reference
 * 
