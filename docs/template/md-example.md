@@ -161,6 +161,14 @@ single backslash (status: opening)
 [image-error]: https://www.baidu.com/Jason_pinyaxuan_8.jpg
 
 
+## 在当前页面引入其他页面的链接
+```shell
+# 比如在 usage.md中引入maven.md
+[recongize](../maven.md)
+[abc](./gradle.md)
+```
+
+
 ## mermaid version
 * https://github.com/orgs/community/discussions/37498#discussioncomment-7152968
 ```mermaid
