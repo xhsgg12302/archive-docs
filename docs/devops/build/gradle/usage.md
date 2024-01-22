@@ -1,6 +1,3 @@
-## hello
-[maven](../maven.md)
-[recongize](./gradle.md)
 
 * ## 目录结构
     
@@ -52,7 +49,9 @@
             ```groovy
             // build.gradle
             repositories {
-                mavenCentral()
+                jcenter {
+                    name = "jcenter"
+                }
             }
 
             tasks.register('showRepos') {
@@ -66,17 +65,28 @@
             // init.gradle
             allprojects {
                 repositories {
-                    mavenLocal()
+                    mavenLocal { name 'maven-local' }
+                    maven {
+                        name 'aliyun'
+                        url "http://maven.aliyun.com/nexus/content/groups/public"
+                    }
+                    maven {
+                        name 'wtfu'
+                        url 'http://mvn.wtfu.site/nexus/content/groups/public'
+                    }
+                    maven { 
+                        name 'sonatype'
+                        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                    }
+                    //jcenter()
+                    //google { name 'google' }
+                    mavenCentral { name 'maven-central' }
                 }
             }
             ```
+            运行结果:
 
-            ```shell
-            # 输出
-            > gradle --init-script init.gradle -q showRepos
-            All repos:
-            [MavenLocal, MavenRepo]
-            ```
+            ![](/.images/devops/build/gradle/usage/gradle-usage-04.png ':size=99%')
 
     + ### init 脚本的外部依赖项
 
@@ -105,11 +115,9 @@
     tasks.register('doNothing')
     ```
 
-    ```shell
-    // output
-    gradle --init-script init.gradle -q doNothing
-    2 / 5
-    ```
+    运行结果:
+    
+    ![](/.images/devops/build/gradle/usage/gradle-usage-05.png ':size=99%')
 
     + ### 初始化脚本插件
 

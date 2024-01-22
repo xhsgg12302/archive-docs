@@ -14,6 +14,8 @@
 ## IDEA 配置截图
 ![](/.images/devops/build/gradle/usage/gradle-usage-01.png ':size=80%')
 
+## gradle单独设置caches目录
+
 ## Reference
 * https://blog.csdn.net/qq_16386581/article/details/86982278
 * https://cloud.tencent.com/developer/article/1818133
