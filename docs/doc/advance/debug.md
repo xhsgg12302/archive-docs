@@ -120,6 +120,8 @@
 ## Reference
 * https://blog.csdn.net/ywlmsm1224811/article/details/98611454
 * https://blog.csdn.net/JimFire/article/details/120174611
+* https://github.com/eugenp/tutorials/blob/master/java-jdi/src/main/java/com/baeldung/jdi/JDIExampleDebugger.java
+* https://itsallbinary.com/java-debug-interface-api-jdi-hello-world-example-programmatic-debugging-for-beginners/
 * 
 * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.html
 * https://stackoverflow.com/questions/138511/what-are-java-command-line-options-to-set-to-allow-jvm-to-be-remotely-debugged
