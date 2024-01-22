@@ -11,6 +11,9 @@
 
 ?> 将GradleHome 下bin 中的gradle最后一行修改为`echo "$JAVACMD" "$@"`,将完整打印执行命令。
 
+## IDEA 配置截图
+![](/.images/devops/build/gradle/usage/gradle-usage-01.png ':size=80%')
+
 ## Reference
 * https://blog.csdn.net/qq_16386581/article/details/86982278
 * https://cloud.tencent.com/developer/article/1818133

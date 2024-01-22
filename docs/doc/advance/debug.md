@@ -64,9 +64,33 @@
                 -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:57982,suspend=y,server=n 
                 -javaagent:/Users/stevenobelia/Library/Caches/JetBrains/IntelliJIdea2023.2/captureAgent/debugger-agent.jar 
                 -Dfile.encoding=UTF-8 
-                -classpath /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/lib/tools.jar:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar 
+                -classpath /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/charsets.jar
+                    :/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/lib/tools.jar
+                    :/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar 
                 _draft.test.debug.HelloWorld
             Connected to the target VM, address: '127.0.0.1:57982', transport: 'socket'
+            ```
+
+        - **IDEA maven debug**
+
+            ```shell
+            /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin/java 
+                -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:49219,suspend=y,server=n 
+                -Dmaven.multiModuleProjectDirectory=/Users/stevenobelia/Documents/project_idea_test/idea-test-project 
+                -Djansi.passthrough=true 
+                -Dmaven.home=/Users/stevenobelia/software/apache-maven-3.6.0 
+                -Dclassworlds.conf=/Users/stevenobelia/software/apache-maven-3.6.0/bin/m2.conf 
+                -Dmaven.ext.class.path=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven-event-listener.jar 
+
+                -javaagent:/Users/stevenobelia/Library/Caches/JetBrains/IntelliJIdea2023.2/captureAgent/debugger-agent.jar 
+                -Dfile.encoding=UTF-8 
+                -classpath /Users/stevenobelia/software/apache-maven-3.6.0/boot/plexus-classworlds-2.5.2.jar
+                    :/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar 
+
+                org.codehaus.classworlds.Launcher 
+                -Didea.version=2023.2.3 
+                -s /Users/stevenobelia/software/apache-maven-3.6.0/conf/settings.xml 
+                clean:clean
             ```
 
 * ## 问题
