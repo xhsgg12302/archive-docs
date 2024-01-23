@@ -220,3 +220,4 @@
 
 ## Reference
 * https://stackoverflow.com/questions/23184845/dont-understand-character-digit-in-java
+* https://stackoverflow.com/questions/27014955/socket-connect-vs-bind
