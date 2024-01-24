@@ -155,3 +155,5 @@
 * https://stackoverflow.com/questions/138511/what-are-java-command-line-options-to-set-to-allow-jvm-to-be-remotely-debugged
 * 
 * https://intellij-support.jetbrains.com/hc/en-us/community/posts/360009891220-How-to-run-JDI-application-in-IntelliJ
+* 
+* [[docs]JDK debug](./jdk/build.md)
