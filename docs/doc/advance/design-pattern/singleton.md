@@ -5,27 +5,23 @@
 ## UML
 
 ## 代码实现
-<!-- tabs:start -->
-### **懒汉式[线程不安全]**
 ```java
-public class Singleton {  
-    private Singleton (){}
-    private static Singleton instance;
-    public static Singleton getInstance() {  
-        if (instance == null) {  
-            instance = new Singleton();  
-        }  
-        return instance;  
-    }
+public class Entrance {
+   public static void main(String[] args) {
+      //获取唯一可用的对象
+      SingleObject object = SingleObject.getInstance();
+      //显示消息
+      object.showMessage();
+   }
 }
 ```
-
-### **懒汉式[线程安全]**
+<!-- tabs:start -->
+### **懒汉式**
 ```java
 public class Singleton {  
     private Singleton (){}
     private static Singleton instance;  
-    public static synchronized Singleton getInstance() {  
+    public static /*synchronized*/ Singleton getInstance() {  
         if (instance == null) {  
             instance = new Singleton();  
         }  
@@ -81,16 +77,6 @@ public enum Singleton {
 }
 ```
 <!-- tabs:end -->
-```java
-public class Entrance {
-   public static void main(String[] args) {
-      //获取唯一可用的对象
-      SingleObject object = SingleObject.getInstance();
-      //显示消息
-      object.showMessage();
-   }
-}
-```
 
 ## Reference
 * https://www.runoob.com/design-pattern/singleton-pattern.html
