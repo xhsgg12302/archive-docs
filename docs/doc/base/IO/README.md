@@ -1,3 +1,6 @@
+* ## Structure
+
+    ![](/.images/doc/base/io/iostream.png )
 
 * ## FileDescriptor
 
