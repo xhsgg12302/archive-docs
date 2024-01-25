@@ -1,4 +1,6 @@
 
+## 查看JDK详细信息包括版本，厂商
+?> `java -XshowSettings:properties -version`
 
 ## 查看native 对应的C/C++代码
 ```c
@@ -43,3 +45,4 @@ Java_com_foobar_main_test__Ljava_lang_String_I(..., jstring text, jint integer);
 
 ## Reference
 * https://stackoverflow.com/questions/65513492/how-to-find-the-native-c-function-who-called-a-java-method-in-a-android-app-an
+* https://hackernoon.com/oracle-ibm-or-open-jdk-how-to-know-java-vendor-details
