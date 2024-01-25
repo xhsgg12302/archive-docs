@@ -111,58 +111,59 @@
 
     + ### 插件介绍(插件，resources)
         
-        ```
-        1, 打jar包-> exe文件，
-            -- maven-shade-plugin 配合 launch4j-maven-plugin
-            -- spring-boot-maven-plugin 配合 launch4j-maven-plugin
+        ```xml
+        <!-- 
+            1, 打jar包-> exe文件，
+                - maven-shade-plugin 配合 launch4j-maven-plugin
+                - spring-boot-maven-plugin 配合 launch4j-maven-plugin 
+        -->
             
-        2，远程部署tomcat插件
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <url>http://test.wtfu.site/manager/text</url>
-                        <server>tomcat7</server>
-                        <path>/test##2.1</path>
-                        <charset>utf8</charset>
-                        <update>true</update>
-                    </configuration>
-                </plugin>
-            </plugins>
-            
-        3，代码生成插件
+        <!-- 2，远程部署tomcat插件 -->
+        <plugins>
             <plugin>
-                    <!-- _12302_2021/9/7_< https://gitee.com/xhsgg12302/haohuo-component.git > -->
-                    <groupId>com.haohuo.framework</groupId>
-                    <artifactId>gencode-maven-plugin</artifactId>
-                    <version>1.0.3-SNAPSHOT</version>
-                    <executions>
-                        <!-- _12302_2021/9/7_< 不跟任何生命周期绑定，
-                        命令行 mvn com.haohuo.framework:gencode-maven-plugin:product
-                        或者maven任务栏插件，goal,执行 > -->
-                    </executions>
-                    <configuration>
-                    .....
-                    </configuration>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://test.wtfu.site/manager/text</url>
+                    <server>tomcat7</server>
+                    <path>/test##2.1</path>
+                    <charset>utf8</charset>
+                    <update>true</update>
+                </configuration>
             </plugin>
+        </plugins>
+            
+        <!-- 3，代码生成插件 -->
+        <plugin>
+                <!-- _12302_2021/9/7_< https://gitee.com/xhsgg12302/haohuo-component.git > -->
+                <groupId>com.haohuo.framework</groupId>
+                <artifactId>gencode-maven-plugin</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
+                <executions>
+                    <!-- _12302_2021/9/7_< 不跟任何生命周期绑定，
+                    命令行 mvn com.haohuo.framework:gencode-maven-plugin:product
+                    或者maven任务栏插件，goal,执行 > -->
+                </executions>
+                <configuration>
+                .....
+                </configuration>
+        </plugin>
         ```
 
     + ### maven私服及免费的maven仓库
 
-        ```
-        自己搭建
-        开源镜像（163, huawei, alibaba, tencent)
-            163: http://mirrors.163.com/.help/maven.html
-            huawei: https://mirrors.huaweicloud.com/home
-            alibaba: https://developer.aliyun.com/mvn/guide
-            tencent: https://mirrors.cloud.tencent.com/help/maven.html
-        github提供的package
-        云效maven 私服 
-        旧版：https://repomanage.rdc.aliyun.com/
-        新版：https://packages.aliyun.com/maven （有覆盖 release版本的设置）
-        ```
+        | name     | url                                                            |
+        | -------- | -------------------------------------------------------------- |
+        | 自己搭建 | http://mvn.wtfu.site/nexus                                     |
+        | 163      | http://mirrors.163.com/.help/maven.html                        |
+        | huawei   | https://mirrors.huaweicloud.com/home                           |
+        | alibaba  | https://developer.aliyun.com/mvn/guide                         |
+        | tencent  | https://mirrors.cloud.tencent.com/help/maven.html              |
+        | github   |                                                                |
+        | 云效旧版 | https://repomanage.rdc.aliyun.com/                             |
+        | 云效新版 | https://packages.aliyun.com/maven （有覆盖 release版本的设置） |
+    
     + ### 项目中的log4j[CVE-2021-44228] 漏洞修复思路及复现
 
         ```
@@ -187,7 +188,7 @@
         
     + ### deploy
 
-        ```
+        ```shell
         mvn clean deploy -Dmaven.test.skip=true -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
         ```
 
