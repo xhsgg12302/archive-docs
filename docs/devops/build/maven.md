@@ -1130,6 +1130,8 @@
 
     + ### gencode-maven-plugin
 
+        !> [源代码](https://github.com/12302-haohuo/haohuo-component/tree/master/hh-cpt-maven-plugin/gencode-maven-plugin)
+
         ```xml
         <profile>
             <id>code-generator</id>
