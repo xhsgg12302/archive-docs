@@ -46,6 +46,5 @@
     22. [模板方法](./22-template.md)
     23. 访问者
 
-
 ## Reference
 * https://www.liaoxuefeng.com/wiki/1252599548343744/1264742167474528
