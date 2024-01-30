@@ -350,7 +350,7 @@
             ?> `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
 
         #### 具体使用
-            * [mysql install docker](/docs/doc/advance/mysql/install.md?id=压缩包安装)
+            * [mysql install docker](/docs/doc/framework/mysql/install.md?id=压缩包安装)
         
     5. ### 搭建chatgpt
         !> 通过token调用openai或别的厂商的API的typescript的前端项目，并非部署模型直接生成。
