@@ -160,3 +160,6 @@
 ## Reference
 * https://stackoverflow.com/questions/10006293/why-some-java-methods-in-core-libraries-end-with-numbers
 * https://wangdoc.com/clang/file
+* https://web.archive.org/web/20140528182031/https://blogs.oracle.com/slc/entry/javanio_vs_javaio
+* https://medium.com/@nilasini/java-nio-non-blocking-io-vs-io-1731caa910a2
+* https://stackoverflow.com/tags/nio/info
