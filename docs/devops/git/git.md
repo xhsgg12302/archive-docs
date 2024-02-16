@@ -158,10 +158,15 @@
 			``` 
 
 	* ### HEAD分离 
+		?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit。
+		<br><br>如果在分离状态下提交commit，则需要在提交之后(`f178964`)新建分支与其关联`git branch <新分支名> f178964`,否则会丢失提交。
+		<br>或者直接新建分支`git branch detached_3`,但是此时仍是分离状态，可以通过`git checkout detached_3`将HEAD指向新建分支。退出分离状态。
+		<br>或者在新版中：如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令中添加参数 -c(创建并切换一个新分支) 来实现（现在或稍后）。例如：`git switch -c <新分支名>`
+
 		```shell
 		# HEAD 指向当前工作的commit 节点。不一定指向分支（比如分离状态下）
 
-		*main $ git chekcout main # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
+		*main $ git chekcout Cx # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
 
 		# 相对引用
 		# 使用 ^ 向上移动 1 个提交记录
