@@ -122,6 +122,10 @@
 
 
 + ## GIT基本操作
+	* ### learngitbranching常用命令
+
+		?> [help,levels,level move1, objective,undo,reset,show solution, show goal,hide goal]
+	
 	* ### 文件查看
 		> `git ls-files` show information about files in the index and the working tree <br>
 		`git ls-tree ` list the contents of a tree object
@@ -264,7 +268,10 @@
 		# HEAD位置
 		
 			git cherry-pick      # 命令后，HEAD 在当前新节点上。
-			git rebase           # 命令后，HEAD 在当前新节点上。
+			                        # 因为需要往*所指的节点或者分支上pick,所以HEAD在当前分支或最新节点上面。例如下面`git cherry-pick C2 C4`
+			git rebase           # 命令后，HEAD 在当前新节点上。 
+			                        # bugFix(*),main, git rebase bugFix main ==> main(*)
+			                        # bugFix(*),Cx, git rebase bugFix Cx ==> Cx(*), 例如下面`git rebase main C3`
 			git merge            # 命令后，HEAD 在当前新节点上。
 		```
 
@@ -296,14 +303,14 @@
 			*bugFix $ git rebase main  # 会将bugFix上与main分之差异节点复制到main分之上。
 			# 指定节点rebase. 将指定节点或分支 与 main的差异复制到main 上。
 			*bugFix $ git rebase main bugFix
-			*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准
+			*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准[已修复，由于tab缩进导致，改成空格即可]
 
-				main													     main      HEAD
-				C5										                   C5---C2'---C3'
-				/						     git rebase main C3					/
-			C0---C1---C2---C3---C4        ----------------------->             C0---C1---C2---C3---C4 
-								\															 \
-								bugFix														 bugFix
+			       main                                                          main       (*)
+			       C5                                                            C5---C2'---C3'
+			      /                          git rebase main C3                 /
+			C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4 
+			                     \                                                             \
+			                      bugFix(*)                                                     bugFix
 			⭕️ main*
 			|
 			⭕️ bugFix
@@ -329,19 +336,21 @@
 			# .       specified). Use -c <commit> to reword the commit message.
 			#
 			# These lines can be re-ordered; they are executed from top to bottom.
-
 		```
-	* ### 提交技巧
+	
+	* ### 提交技巧[#1|#2]
 		![skill 1](/.images/devops/git/mixed2.png ':size=48%') 
 		![skill 2](/.images/devops/git/mixed3.png ':size=48%')
 		```shell
 		# 如果在main分支上新建分支newImage并做提交C2，并且在newImage分支上创建分支caption并做提交C3。
 		# 假如需要将C2修复 比如 修改提交信息。则可以如下尝试
+		# #1
 		git rebase -i  # 将提交重新排序，把需要修改的记录挪到最前
 		git commit --amend # 进行修改
 		git rebase -i  # 调回原来的顺序
 		# 最后将main 移动到修改的最前端。
 
+		# #2
 		# 通过cherry-pick
 		git checkout main
 		git cherry-pick C2
@@ -349,9 +358,9 @@
 		git cherry-pick C3
 		```
 	* ### 高级
-		![](/.images/devops/git/advanced1.png ':size=33%') 
+		![](/.images/devops/git/advanced1.png ':size=36%') 
 		![](/.images/devops/git/advanced2.png ':size=33%') 
-		![](/.images/devops/git/advanced3.png ':size=33%')
+		![](/.images/devops/git/advanced3.png ':size=27%')
 		```shell
 		# 多分支rebase
 		git rebase main bugFix
