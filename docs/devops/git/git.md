@@ -166,38 +166,46 @@
 		```shell
 		# HEAD 指向当前工作的commit 节点。不一定指向分支（比如分离状态下）
 
-		*main $ git chekcout Cx # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
+			*main $ git chekcout Cx # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
 
 		# 相对引用
-		# 使用 ^ 向上移动 1 个提交记录
-		# 使用 ~<num> 向上移动多个提交记录，如 ~3
-		git checkout main^  # 标识移动至 main 指向提交记录的上一个提交
+
+			# 使用 ^ 向上移动 1 个提交记录
+			# 使用 ~<num> 向上移动多个提交记录，如 ~3
+			git checkout main^  # 标识移动至 main 指向提交记录的上一个提交
 
 		# 强制修改分支位置
-		git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
-		git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
 
-		# reset
-		git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
+			git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
+			git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
 
-		# revert
-		git revert HEAD
+		# 回退
+
+			# reset
+			git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
+
+			# revert
+			# 例如 C1 -- C2 -- C3  git revert C3 ==> C3' ,其实 C3' = C2
+			git revert HEAD
 
 		# 强制回退远程分支(在别人未拉取最新远程之前可以。之后的话，如果对方处理不好，则又会将上一个版本的东西带入当前分支)
-		git reset --hard rebs^
-		git push -f origin rebs:rebs 
+
+			git reset --hard rebs^
+			git push -f origin rebs:rebs 
 
 		# 在任意位置创建分支
-		git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
-		git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
+
+			git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
+			git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
 
 		# comment
 		git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
 
 		# HEAD位置
-		git cherry-pick 	# 命令后，HEAD 在当前新节点上。
-		git rebase        	# 命令后，HEAD 在当前新节点上。
-		git merge		  	# 命令后，HEAD 在当前新节点上。
+		
+			git cherry-pick 	# 命令后，HEAD 在当前新节点上。
+			git rebase        	# 命令后，HEAD 在当前新节点上。
+			git merge		  	# 命令后，HEAD 在当前新节点上。
 		```
 
 	* ### 分支  &nbsp;[doc](https://git-scm.com/docs/git-branch)
