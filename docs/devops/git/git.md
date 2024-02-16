@@ -157,57 +157,6 @@
 			git show 61ea06c341fcfe80ddd10cbabdf8e9283851753b:cherry-pick.txt
 			``` 
 
-	* ### HEAD分离 
-		?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit。
-		<br><br>如果在分离状态下提交commit，则需要在提交之后(`f178964`)新建分支与其关联`git branch <新分支名> f178964`,否则会丢失提交。
-		<br>或者直接新建分支`git branch detached_3`,但是此时仍是分离状态，可以通过`git checkout detached_3`将HEAD指向新建分支。退出分离状态。
-		<br>或者在新版中：如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令中添加参数 -c(创建并切换一个新分支) 来实现（现在或稍后）。例如：`git switch -c <新分支名>`
-
-		```shell
-		# HEAD 指向当前工作的commit 节点。不一定指向分支（比如分离状态下）
-
-			*main $ git chekcout Cx # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
-
-		# 相对引用
-
-			# 使用 ^ 向上移动 1 个提交记录
-			# 使用 ~<num> 向上移动多个提交记录，如 ~3
-			git checkout main^  # 标识移动至 main 指向提交记录的上一个提交
-
-		# 强制修改分支位置
-
-			git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
-			git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
-
-		# 回退
-
-			# reset
-			git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
-
-			# revert
-			# 例如 C1 -- C2 -- C3  git revert C3 ==> C3' ,其实 C3' = C2
-			git revert HEAD
-
-		# 强制回退远程分支(在别人未拉取最新远程之前可以。之后的话，如果对方处理不好，则又会将上一个版本的东西带入当前分支)
-
-			git reset --hard rebs^
-			git push -f origin rebs:rebs 
-
-		# 在任意位置创建分支
-
-			git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
-			git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
-
-		# comment
-		git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
-
-		# HEAD位置
-		
-			git cherry-pick 	# 命令后，HEAD 在当前新节点上。
-			git rebase        	# 命令后，HEAD 在当前新节点上。
-			git merge		  	# 命令后，HEAD 在当前新节点上。
-		```
-
 	* ### 分支  &nbsp;[doc](https://git-scm.com/docs/git-branch)
 		```shell
 		# 创建分支
@@ -265,7 +214,58 @@
 		# git describe
 		git describe <ref> # <ref> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会使用你目前所在的位置（HEAD）
 		output: <tag>_<numCommits>_g<hash>  # tag表示的是离ref最近的标签,numCommits表示相差有多少个提交记录,hash表示提交记录hash值。 如果ref上有标签，则只输出标签名。
+		```
 
+	* ### HEAD分离 
+		?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit。
+		<br><br>如果在分离状态下提交commit，则需要在提交之后(`f178964`)新建分支与其关联`git branch <新分支名> f178964`,否则会丢失提交。
+		<br>或者直接新建分支`git branch detached_3`,但是此时仍是分离状态，可以通过`git checkout detached_3`将HEAD指向新建分支。退出分离状态。
+		<br>或者在新版中：如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令中添加参数 -c(创建并切换一个新分支) 来实现（现在或稍后）。例如：`git switch -c <新分支名>`
+
+		```shell
+		# HEAD 指向当前工作的commit 节点。不一定指向分支（比如分离状态下）
+
+			*main $ git chekcout Cx # 将HEAD从main上分离   由原来的 HEAD->main->Cx  变为 HEAD->Cx
+
+		# 相对引用
+
+			# 使用 ^ 向上移动 1 个提交记录
+			# 使用 ~<num> 向上移动多个提交记录，如 ~3
+			git checkout main^  # 标识移动至 main 指向提交记录的上一个提交
+
+		# 强制修改分支位置
+
+			git branch -f main HEAD~3  # 将 main 分支强制指向 HEAD 的第 3 级父提交
+			git branch -f bugFix C6  # 如果 HEAD 在 bugFix,则 HEAD也会跟随移动
+
+		# 回退
+
+			# reset
+			git reset HEAD^ # 将当前分支和HEAD 都回退至上一个节点。
+
+			# revert
+			# 例如 C1 -- C2 -- C3  git revert C3 ==> C3' ,其实 C3' = C2
+			git revert HEAD
+
+		# 强制回退远程分支(在别人未拉取最新远程之前可以。之后的话，如果对方处理不好，则又会将上一个版本的东西带入当前分支)
+
+			git reset --hard rebs^
+			git push -f origin rebs:rebs 
+
+		# 在任意位置创建分支
+
+			git checkout f41a7ad45714adac3ba898e94b1728de212d3cf9 #将HEAD分离到 f41a节点
+			git checkout -b newBranchOfHead # 在这个节点上创建并切换分支
+
+		# comment
+
+			git -c core.quotepath=false -c log.showSignature=false push --progress --porcelain origin refs/heads/rebs:rebs    [local:remote]
+
+		# HEAD位置
+		
+			git cherry-pick      # 命令后，HEAD 在当前新节点上。
+			git rebase           # 命令后，HEAD 在当前新节点上。
+			git merge            # 命令后，HEAD 在当前新节点上。
 		```
 
 	* ### 修复本地提交
@@ -278,54 +278,57 @@
 		# 
 		$ git restore <file>... to discard changes in working directory
 
-		# cherry-pick
-		# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
-		*main $ git cherry-pick C2 C4
-			main 															  main
-			C5													   C5---C2'---C4'
-			/														/
-		C0---C1---C2---C3---C4			$(git cherry-pick C2 C4)	C0---C1---C2---C3---C4	
-							\														 \
-							side													  side
+		# 移动提交记录
 
-		# git rebase [commit | branch]
-		# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
-		*bugFix $ git rebase main  # 会将bugFix上与main分之差异节点复制到main分之上。
-		# 指定节点rebase. 将指定节点或分支 与 main的差异复制到main 上。
-		*bugFix $ git rebase main bugFix
-		*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准
+			# cherry-pick [level move1]
+			# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
+			*main $ git cherry-pick C2 C4
 
-			main													     main      HEAD
-			C5										                   C5---C2'---C3'
-			/						git rebase main C3					/
-		C0---C1---C2---C3---C4        ----------------------->             C0---C1---C2---C3---C4 
-							\															 \
-							bugFix														 bugFix
-		⭕️ main*
-		|
-		⭕️ bugFix
-		* main $ git rebase bugFix # 会将main分之直接移动到bugFix,由于继承关系。fast-forward
+			       main(*)                                                                  main(*)
+			       C5                                                            C5---C2'---C4'
+			      /                                                             /
+			C0---C1---C2---C3---C4        $(git cherry-pick C2 C4)        C0---C1---C2---C3---C4	
+			                     \                                                             \
+			                      side                                                          side
 
-		# 交互式rebase -i
-		# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)
-		#
-		# Commands:
-		# p, pick <commit> = use commit
-		# r, reword <commit> = use commit, but edit the commit message
-		# e, edit <commit> = use commit, but stop for amending
-		# s, squash <commit> = use commit, but meld into previous commit
-		# f, fixup <commit> = like "squash", but discard this commit's log message
-		# x, exec <command> = run command (the rest of the line) using shell
-		# b, break = stop here (continue rebase later with 'git rebase --continue')
-		# d, drop <commit> = remove commit
-		# l, label <label> = label current HEAD with a name
-		# t, reset <label> = reset HEAD to a label
-		# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
-		# .       create a merge commit using the original merge commit's
-		# .       message (or the oneline, if no original merge commit was
-		# .       specified). Use -c <commit> to reword the commit message.
-		#
-		# These lines can be re-ordered; they are executed from top to bottom.
+			# git rebase [commit | branch]
+			# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
+			*bugFix $ git rebase main  # 会将bugFix上与main分之差异节点复制到main分之上。
+			# 指定节点rebase. 将指定节点或分支 与 main的差异复制到main 上。
+			*bugFix $ git rebase main bugFix
+			*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准
+
+				main													     main      HEAD
+				C5										                   C5---C2'---C3'
+				/						     git rebase main C3					/
+			C0---C1---C2---C3---C4        ----------------------->             C0---C1---C2---C3---C4 
+								\															 \
+								bugFix														 bugFix
+			⭕️ main*
+			|
+			⭕️ bugFix
+			* main $ git rebase bugFix # 会将main分之直接移动到bugFix,由于继承关系。fast-forward
+
+			# 交互式rebase -i
+			# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)
+			#
+			# Commands:
+			# p, pick <commit> = use commit
+			# r, reword <commit> = use commit, but edit the commit message
+			# e, edit <commit> = use commit, but stop for amending
+			# s, squash <commit> = use commit, but meld into previous commit
+			# f, fixup <commit> = like "squash", but discard this commit's log message
+			# x, exec <command> = run command (the rest of the line) using shell
+			# b, break = stop here (continue rebase later with 'git rebase --continue')
+			# d, drop <commit> = remove commit
+			# l, label <label> = label current HEAD with a name
+			# t, reset <label> = reset HEAD to a label
+			# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+			# .       create a merge commit using the original merge commit's
+			# .       message (or the oneline, if no original merge commit was
+			# .       specified). Use -c <commit> to reword the commit message.
+			#
+			# These lines can be re-ordered; they are executed from top to bottom.
 
 		```
 	* ### 提交技巧
