@@ -298,7 +298,7 @@
 				      /                                                             /
 				C0---C1---C2---C3---C4        $(git cherry-pick C2 C4)        C0---C1---C2---C3---C4	
 				                     \                                                             \
-                                      side                                                          side
+				                      side                                                          side
 
 				# git rebase [commit | branch]
 				# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
