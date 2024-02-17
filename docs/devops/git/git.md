@@ -293,12 +293,12 @@
 				# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
 				*main $ git cherry-pick C2 C4
 
-					  main(*)                                                                  main(*)
-					  C5                                                            C5---C2'---C4'
-					  /                                                             /
+				      main(*)                                                                  main(*)
+				      C5                                                            C5---C2'---C4'
+				      /                                                             /
 				C0---C1---C2---C3---C4        $(git cherry-pick C2 C4)        C0---C1---C2---C3---C4	
-									 \                                                             \
-									  side                                                          side
+				                     \                                                             \
+                                      side                                                          side
 
 				# git rebase [commit | branch]
 				# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
@@ -307,12 +307,13 @@
 				*bugFix $ git rebase main bugFix
 				*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准[已修复，由于tab缩进导致，改成空格即可]
 
-					  main                                                          main       (*)
-					  C5                                                            C5---C2'---C3'
-					  /                          git rebase main C3                 /
+			          main                                                          main       (*)
+				      C5                                                            C5---C2'---C3'
+				      /                          git rebase main C3                 /
 				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4 
-									 \                                                             \
-									  bugFix(*)                                                     bugFix
+			                         \                                                             \
+				                      bugFix(*)                                                     bugFix
+				
 				⭕️ main*
 				|
 				⭕️ bugFix
