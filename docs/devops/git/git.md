@@ -311,9 +311,9 @@
 				      C5                                                            C5---C2'---C3'
 				      /                          git rebase main C3                 /
 				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4 
-			                         \                                                             \
+				                     \                                                             \
 				                      bugFix(*)                                                     bugFix
-				
+
 				⭕️ main*
 				|
 				⭕️ bugFix
