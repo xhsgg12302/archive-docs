@@ -307,7 +307,7 @@
 				*bugFix $ git rebase main bugFix
 				*bugFix $ git rebase main C3 # 下面的视图在编辑的时候出现错位，以网站展示为准[已修复，由于tab缩进导致，改成空格即可]
 
-			          main                                                          main       (*)
+				      main                                                          main       (*)
 				      C5                                                            C5---C2'---C3'
 				      /                          git rebase main C3                 /
 				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4 
