@@ -223,7 +223,7 @@
 			```
 
 		* #### HEAD分离 
-			?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit。
+			?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit(或者远程分支)。
 			<br><br>如果在分离状态下提交commit，则需要在提交之后(`f178964`)新建分支与其关联`git branch <新分支名> f178964`,否则会丢失提交。
 			<br>或者直接新建分支`git branch detached_3`,但是此时仍是分离状态，可以通过`git checkout detached_3`将HEAD指向新建分支。退出分离状态。
 			<br>或者在新版中：如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令中添加参数 -c(创建并切换一个新分支) 来实现（现在或稍后）。例如：`git switch -c <新分支名>`
@@ -271,9 +271,11 @@
 			
 				git cherry-pick      # 命令后，HEAD 在当前新节点上。
 										# 因为需要往*所指的节点或者分支上pick,所以HEAD在当前分支或最新节点上面。例如下面`git cherry-pick C2 C4`
+										# git cherry-pick ...,  head还指向当前分支或节点。
 				git rebase           # 命令后，HEAD 在当前新节点上。 
 										# bugFix(*),main, git rebase bugFix main ==> main(*)
 										# bugFix(*),Cx, git rebase bugFix Cx ==> Cx(*), 例如下面`git rebase main C3`
+										# git rebase base [other] , head 在 other上。
 				git merge            # 命令后，HEAD 在当前新节点上。
 			```
 
@@ -393,6 +395,9 @@
 		git fetch; git merge origin/main; git push
 		git pull; git push
 		```
+		![](/.images/devops/git/remote-rebase-01.gif )
+		![](/.images/devops/git/remote-merge-01.gif )
+
 		* #### 受保护的main分支
 		```shell
 		# 由于 main分支的保护特性，一般不会直接让开发人员推送到 main分支，需要用其他分支提交push到远程，再创建pull request请求合并。
