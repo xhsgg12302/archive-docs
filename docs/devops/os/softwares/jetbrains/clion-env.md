@@ -1,6 +1,7 @@
 ## Clion 安装 GDB 工具
+[brew安装 gdb@13.1](../../mac/brew.md)
 ```shell
-# 结合brew安装 gdb@13.1, clion 不支持13.2
+# 结合`brew安装 gdb@13.1`, clion 不支持13.2
 # PermissionsDarwin相关操作导入证书，一般不用重启。
 # 添加gbd启动初始化脚本
 echo 'set startup-with-shell off' >> ~/.gdbinit
@@ -21,10 +22,10 @@ g++ -v
 
 
 ## Assert
-![](/.images/devops/os/softwares/clion-debug-with-gdb.png)
-![](/.images/devops/os/softwares/clion-gdb-config-1.png)
-![](/.images/devops/os/softwares/clion-gdb-config-2.png)
-![](/.images/devops/os/softwares/clion-gdb-config-3.png)
+![](/.images/devops/os/softwares/clion-debug-with-gdb.png ':size=98%')
+![](/.images/devops/os/softwares/clion-gdb-config-1.png ':size=49%')
+![](/.images/devops/os/softwares/clion-gdb-config-2.png ':size=49%')
+![](/.images/devops/os/softwares/clion-gdb-config-3.png ':size=98%')
 
 ## Reference
 * https://sourceware.org/gdb/wiki/PermissionsDarwin
