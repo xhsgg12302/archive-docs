@@ -19,13 +19,13 @@ gcc -v
 g++ -v 
 # Apple clang version 14.0.3 (clang-1403.0.22.14.1)
 ```
+![](/.images/devops/os/softwares/clion-gdb-config-3.png ':size=98%')
+![](/.images/devops/os/softwares/clion-gdb-config-1.png ':size=49%')
+![](/.images/devops/os/softwares/clion-gdb-config-2.png ':size=49%')
 
 
 ## Assert
 ![](/.images/devops/os/softwares/clion-debug-with-gdb.png ':size=98%')
-![](/.images/devops/os/softwares/clion-gdb-config-1.png ':size=49%')
-![](/.images/devops/os/softwares/clion-gdb-config-2.png ':size=49%')
-![](/.images/devops/os/softwares/clion-gdb-config-3.png ':size=98%')
 
 ## Reference
 * https://sourceware.org/gdb/wiki/PermissionsDarwin
