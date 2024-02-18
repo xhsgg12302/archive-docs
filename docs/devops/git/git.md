@@ -395,8 +395,8 @@
 		git fetch; git merge origin/main; git push
 		git pull; git push
 		```
-		![](/.images/devops/git/remote-rebase-01.gif )
-		![](/.images/devops/git/remote-merge-01.gif )
+		![](/.images/devops/git/remote-rebase-01.gif)
+		![](/.images/devops/git/remote-merge-01.gif)
 
 		* #### 受保护的main分支
 		```shell
@@ -427,28 +427,43 @@
 		```shell
 		# 方式1：自己在创建分支时指定
 		git checkout -b totallyNotMain o/main
-		# 方式2：对于已经创建的分支指定
+		# 方式2：对于已经创建的分支指定(如果在当前foo分支，则可以省略：`git branch -u o/main`)
 		git branch -u o/main foo
 		```
+		![](/.images/devops/git/remote-track-01.gif)
+		![](/.images/devops/git/remote-track-02.gif)
+
 		* #### push 参数
 		```shell
-		# git push 默认推送当前分支，如果不单独指定的话
+		# git push 
+		# 默认推送HEAD指向的分支。如果HEAD分离，则无法推送。
+		# git push origin main, HEAD无关，推向main分支关联的upstream.
 		# 如果默认远程和本地分支名不一致，则使用 [:] ,git push origin <source>:<destination> ,参数实际上是 refspec, 比如：git push origin foo^:bar
 		# 如果推送的远程分支不存在，则会在远程创建一个。 git push origin main:notexist
 		# 如果省略source, 则表示删除远程分支
 		```
+		![](/.images/devops/git/remote-push-01.gif)
+
 		* #### fetch 参数
 		```shell
 		# 与push 类似，只是方向相反 git fetch origin <remote>:<source>
-		# 一般不会直接更新本地分支，比如 git fetch origin foo~1:bar
+		# 一般用法`git fetch origin foo`,直接更新o/foo远程分支。本地分支不会变动。
+		# 一般不会直接更新本地分支，比如 git fetch origin foo~1:bar。如果在后面通过':'追加本地分支了，则会更新本地分支。
 		# 不存在本地，新建更新。
 		# 没有参数，直接 git fetch，会更新远程所有分支
 		```
+		![](/.images/devops/git/remote-fetch-01.gif)
+		![](/.images/devops/git/remote-fetch-02.gif)
+		![](/.images/devops/git/remote-fetch-03.gif)
+
 		* #### 没有source
 		```shell
 		git push origin :main # 删除远程分支
 		git fetch origin :bar # 创建本地分支
 		```
+		![](/.images/devops/git/remote-nosource-01.gif)
+		![](/.images/devops/git/remote-nosource-02.gif)
+
 		* #### pull 参数
 		```shell
 		# 下面两者等价（需要注意合并的对象，因为fetch默认不会更新本地分支，所以，第一个是 merge o/foo, 而第二个指明了 更新本地分支，所以会 merge bugFix）
@@ -457,11 +472,12 @@
 
 		git pull origin bar~1:bugFix
 		git fetch origin bar~1:bugFix; git merge bugFix
+
+		$ *bar: git pull origin main       # 将远程main分支 更新到本地main分支，并且与bar分支进行merge。
+		$ *bar: git pull origin main:foo   # 将远程main分支 更新到本地foo分支，并且与bar分支进行merge。
 		```
-		* #### 下载并合并
-		```shell
-		$ *main: git pull origin bar:foo # 将远程bar分支 更新到本地foo分支，并且与main分支进行merge。
-		```
+		![](/.images/devops/git/remote-pull-01.gif)
+		![](/.images/devops/git/remote-pull-02.gif)
 
 + ## GIT仓库迁移
 	```shell
