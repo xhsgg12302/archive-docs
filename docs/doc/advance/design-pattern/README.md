@@ -15,7 +15,7 @@
     !> 创建型模式关注点是如何创建对象，其核心思想是要把对象的创建和使用相分离，这样使得两者能相对独立地变换。
 
     1. [单例：Singleton](./01-singleton.md)
-    2. [工厂方法：Factory Method](./02-factory.md)
+    2. [工厂方法：Factory](./02-factory.md)
     3. [抽象工厂：Abstract Factory](./03-abstract-factory.md)
     4. 原型：Prototype
     5. 建造者：Builder
@@ -23,7 +23,7 @@
 * ### 结构性模式
     !> 结构型模式主要涉及如何组合各种对象以便获得更好、更灵活的结构。虽然面向对象的继承机制提供了最基本的子类扩展父类的功能，但结构型模式不仅仅简单地使用继承，而更多地通过组合与运行期的动态组合来实现更灵活的功能。
 
-    6. [适配器](./06-adapter.md)
+    6. [适配器：Adapter](./06-adapter.md)
     7. 桥接
     8. 组合
     9. 装饰器
@@ -34,7 +34,7 @@
 * ### 行为型模式
     !> 行为型模式主要涉及算法和对象间的职责分配。通过使用对象组合，行为型模式可以描述一组对象应该如何协作来完成一个整体任务。
 
-    13. [责任链](./13-chain-of-responsibility.md)
+    13. [责任链：Chain of responsibility](./13-chain-of-responsibility.md)
     14. 命令
     15. 解释器
     16. 迭代器
@@ -42,9 +42,10 @@
     18. 备忘录
     19. 观察者
     20. 状态
-    21. [策略](./21-strategy.md)
-    22. [模板方法](./22-template.md)
+    21. [策略：strategy](./21-strategy.md)
+    22. [模板方法：Template](./22-template.md)
     23. 访问者
 
 ## Reference
+* https://www.runoob.com/design-pattern/design-pattern-tutorial.html
 * https://www.liaoxuefeng.com/wiki/1252599548343744/1264742167474528
