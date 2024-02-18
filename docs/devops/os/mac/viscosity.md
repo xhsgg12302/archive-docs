@@ -2,8 +2,8 @@
 ?> 多vpn链接软件，和 TunnelBlick属于同一类软件
 
 * ### 下载
-![](/.images/devops/os/softwares/viscosity-download-01.png ':size=49%')
-![](/.images/devops/os/softwares/viscosity-download-02.png ':size=49%')
+![](/.images/devops/os/softwares/viscosity-download-01.png ':size=42%')
+![](/.images/devops/os/softwares/viscosity-download-02.png ':size=56%')
 
 * ### 激活 
 ```shell
