@@ -130,3 +130,4 @@
 ## Reference
 * [你真的懂wait、notify和notifyAll吗](https://www.jianshu.com/p/25e243850bd2?appinstall=0)
 * [读懂isInterrupted、interrupted和interrupt](https://zhuanlan.zhihu.com/p/265169898)
+* https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states
