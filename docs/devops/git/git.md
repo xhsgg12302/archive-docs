@@ -480,11 +480,9 @@
 		![](/.images/devops/git/remote-pull-02.gif)
 
 + ## GIT仓库迁移
-	```shell
-	$ git clone --bare https://github.com/xhsgg12302/helloworld.git
-	$ cd helloworld.git
-	$ git push --mirror https://github.com/new.git
-	```
+	?> 1、git clone --bare https://github.com/xhsgg12302/helloworld.git
+	<br>2、cd helloworld.git
+	<br>3、git push --mirror https://github.com/new.git
 
 + ## GIT忽略文件提交
 	```shell
