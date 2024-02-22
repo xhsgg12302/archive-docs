@@ -6,3 +6,4 @@
 
 ## Reference
 * https://www.bilibili.com/video/BV1E4411H73v?p=30
+* https://www.cs.usfca.edu/~galles/visualization/StackArray.html
