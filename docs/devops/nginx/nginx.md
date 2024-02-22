@@ -1,7 +1,7 @@
 * ## 简介
 
 	1. #### 介绍
-	
+
 		?> Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
 
 	2. #### 功能
@@ -28,7 +28,7 @@ make
 objs/nginx -V
 objs/nginx -h
 objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
-#make install
+# make install
 ```
 
 ## 配置文件
