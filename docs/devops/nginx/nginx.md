@@ -1,22 +1,35 @@
-## 简介
-1. #### 介绍
-	> Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
-2. #### 功能
-	* 反向代理
-	* 负载均衡
-	* 静态服务器
-	* 邮箱服务器
-3. #### 负载均衡方式
-	|name | explain | feature|
-	|-    | - | - |  
-	| 轮询  	| 默认方式 		| |
-	| weight 	| 权重方式		| 根据权重分发请求,权重大的分配到请求的概率大 |
-	| ip_hash	| ip 分配 		| 根据客户端请求的IP地址计算hash值， 根据hash值来分发请求, 同一个IP发起的请求, 会发转发到同一个服务器上 |
-	| url_hash	| url 分配 		| 根据客户端请求url的hash值，来分发请求, 同一个url请求, 会发转发到同一个服务器上 |
-	| fair		| 智能响应		| 优先把请求分发给处理请求时间短的服务器 |
-	| least_conn| 最少连接		| 哪个服务器当前处理的连接少, 请求优先转发到这台服务器 |
+* ## 简介
+
+	1. #### 介绍
+	
+		?> Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
+
+	2. #### 功能
+		* 反向代理
+		* 负载均衡
+		* 静态服务器
+		* 邮箱服务器
+
+	3. #### 负载均衡方式
+		|name | explain | feature|
+		|-    | - | - |  
+		| 轮询  	| 默认方式 		| |
+		| weight 	| 权重方式		| 根据权重分发请求,权重大的分配到请求的概率大 |
+		| ip_hash	| ip 分配 		| 根据客户端请求的IP地址计算hash值， 根据hash值来分发请求, 同一个IP发起的请求, 会发转发到同一个服务器上 |
+		| url_hash	| url 分配 		| 根据客户端请求url的hash值，来分发请求, 同一个url请求, 会发转发到同一个服务器上 |
+		| fair		| 智能响应		| 优先把请求分发给处理请求时间短的服务器 |
+		| least_conn| 最少连接		| 哪个服务器当前处理的连接少, 请求优先转发到这台服务器 |
 
 ## 编译
+```bash
+cd nginx-1.16.1/
+./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --without-http_fastcgi_module
+make
+objs/nginx -V
+objs/nginx -h
+objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
+#make install
+```
 
 ## 配置文件
 ```nginx
@@ -410,16 +423,6 @@ http {
 		# }
 	}
 }
-```
-
-## his_cmd
-```bash
-cd nginx-1.16.1/
-./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --without-http_fastcgi_module
-make
-objs/nginx -V
-objs/nginx -h
-objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 ```
 
 ## 应用
