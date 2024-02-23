@@ -180,6 +180,34 @@ $$ E=mc^2 $$
 info
 ```
 
+## 数学符号和example panels组合
+?> 将下面代码放到render.md文件中就可以看到效果
+* ## Sample
+
+    ?> hello $\lim\nolimits_x$ and $E=m^2$
+
+    $$E=m^2$$
+
+<!-- panels:start -->
+<!-- div:title-panel -->
+## Demo
+<!-- div:left-panel -->
+
+If you are on widescreen, checkout the *right* panel, *right* there →
+
+<!-- div:right-panel -->
+
+This is an example panel.
+
+You can see it's usage in practice in the docs listed below:
+
+-   [Fairlay API](https://fairlay.com/api)
+-   [FLAP services](https://docs.flap.cloud/#/create_new_service?id=special-files)
+
+<small>please contact me if you use docsify-example-panels. i would like to display it here too.</small>
+<!-- panels:end -->
+
+
 ## Reference
 * https://marked.js.org/
 * https://github.com/pandao/editor.md
