@@ -8,7 +8,7 @@
         ?> 为什么需要AVL：二叉搜索树一定程度上可以提高搜索效率，但是当原序列有序时，例如序列 A = {1，2，3，4，5，6}，构造二叉搜索树如下图。依据此序列构造的二叉搜索树为右斜树，同时二叉树退化成单链表，搜索效率降低为 O(n)。
 
         ![](/.images/algo/tree/tree-AVL-01.png ':size=30%')
-        ![](/.images/algo/tree/tree-AVL-02.png ':size=30%')
+        ![](/.images/algo/tree/tree-AVL-02.png ':size=33%')
 
         ?> 在此二叉搜索树中查找元素 6 需要查找 6 次。
         <br>二叉搜索树的查找效率取决于树的高度，因此保持树的高度最小，即可保证树的查找效率。同样的序列 A，将其改为图右的方式存储，查找元素 6 时只需比较 3 次，查找效率提升一倍。
@@ -28,7 +28,7 @@
 
         ![](/.images/algo/tree/tree-AVL-no-01.png ':size=30%')
         ![](/.images/algo/tree/tree-AVL-no-02.png ':size=30%')
-        ![](/.images/algo/tree/tree-AVL-no-03.png ':size=30%')
+        ![](/.images/algo/tree/tree-AVL-no-03.png ':size=28%')
         
     + ### 性质
 
@@ -50,3 +50,4 @@
 ## Reference
 * https://zhuanlan.zhihu.com/p/56066942
 * https://www.bilibili.com/video/BV1xE411h7dd
+* https://drive.google.com/file/d/1t2cbmfuVA5yYWMes4ROXqu50MyDy9O-4/view
