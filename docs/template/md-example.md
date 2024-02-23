@@ -169,6 +169,10 @@ single backslash (status: opening)
 [mysql install docker](/docs/doc/framework/mysql/install.md?id=压缩包安装)
 ```
 
+## 数学符号
+$ E=mc^2 $
+$$ E=mc^2 $$
+[示例](/docs/algo/tree/03-01-AVL-tree.md)
 
 ## mermaid version
 * https://github.com/orgs/community/discussions/37498#discussioncomment-7152968
