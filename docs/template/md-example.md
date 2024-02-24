@@ -189,10 +189,10 @@ info
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### Hello World
-        <!-- div:left-panel -->
+        <!-- div:left-panel-45 -->
         ?> If you are on widescreen, checkout the *right* panel, *right* there →
 
-        <!-- div:right-panel -->
+        <!-- div:right-panel-50 -->
         ?> This is an example panel.
         <br>You can see it's usage in practice in the docs listed below:
 
