@@ -36,12 +36,37 @@
             !> 若设二叉树的深度为h，除第 h 层外，其它各层 (1～(h-1)层) 的结点数都达到最大个数，第h层所有的结点都连续集中在最左边，这就是完全二叉树。
             <br><br>完全二叉树是效率很高的数据结构，堆是一种完全二叉树或者近似完全二叉树，所以效率极高，像十分常用的排序算法、Dijkstra算法、Prim算法等都要用堆才能优化，二叉排序树的效率也要借助平衡性来提高，而平衡性基于完全二叉树。
             
-        
     + ### 示例
 
         ![](/.images/algo/tree/tree-binary-01.png ':size=20%')
         ![](/.images/algo/tree/tree-binary-02.png ':size=32%')
         ![](/.images/algo/tree/tree-binary-03.png ':size=33%')
+
+    + ### 线索化二叉树
+        
+        ?> [wiki](https://zh.wikipedia.org/wiki/线索二叉树): 在计算机科学中，线索二叉树（或称引线二叉树）是添加了直接指向节点的前驱和后继的指针的二叉树。
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 图解与代码
+        <!-- div:left-panel -->
+        ![](/.images/algo/tree/tree-threaded-binary-01.png ':size=60%')
+        <!-- div:right-panel -->
+        ```java
+        public void threadedTree(Node node){
+            if(node == null){ return;}
+            // 中序遍历
+            threadTree(node.getLeft());
+            
+            if(node.getLeft() == null){
+
+            }
+
+            threadTree(node.getRight());
+        }
+        ```
+        <!-- panels:end -->
+
 
 * ## Implement
 
