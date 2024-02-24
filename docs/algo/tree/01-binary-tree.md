@@ -49,9 +49,9 @@
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### 图解与代码
-        <!-- div:left-panel -->
-        ![](/.images/algo/tree/tree-threaded-binary-01.png ':size=60%')
-        <!-- div:right-panel -->
+        <!-- div:left-panel-43 -->
+        ![](/.images/algo/tree/tree-threaded-binary-01.png)
+        <!-- div:right-panel-50 -->
         ```java
         public void threadedTree(Node node){
             if(node == null){ return;}
@@ -59,14 +59,22 @@
             threadTree(node.getLeft());
             
             if(node.getLeft() == null){
-
+                node.setLeft(pre);
+                node.setLeftType(1);
             }
+
+            if(pre != null && pre.getRight() == null){
+                pre.setRight(node);
+                pre.setRightType(1);
+            }
+
+            // 保存当前节点，为下一次遍历做准备。
+            pre = node;
 
             threadTree(node.getRight());
         }
         ```
         <!-- panels:end -->
-
 
 * ## Implement
 
