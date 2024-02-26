@@ -63,14 +63,37 @@
         }
         ```
 
+    + ### 扰动函数[hash()]
+
+        ?> 理论上散列值是一个int型，如果直接拿散列值作为下标访问HashMap主数组的话，考虑到2进制32位带符号的int表值范围从`-2147483648`到`2147483648`。前后加起来大概`40亿`的映射空间。只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。
+
+        !> 使用扰动函数的目的是让`hashcode`的高16位也参与散列运算。
+
+        ```java
+        static final int hash(Object key) {
+            int h;
+            return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+        }
+        ```
+    
+    + ### 计算下标
+
+        ?> 通过`(n - 1) & hash` 代码计算table下标[`n 为table的长度`]。将通过扰动后的hash值与`table长度 - 1`的值进行`&`运算取得下标index。
+        <br><br>为什么会`& (n - 1)`?
+        <br>因为 n 为 ${\color{red}2^{n}}$ ,假如 n = 16 = $(2^{4})$ 。则 n - 1 = $[0000 1111]$
+        <br>则将任何值与 $[0000 1111]$ 进行 & 运算都会得到 $[0000 0000] \sim [0000 1111]$ ，即 0 ~ 15，也就是table的下标值。这也是为什么table长度取 ${\color{red}2^{n}}$ 的原因。
+
 * ## Problem
 
     1. [解决哈希冲突的方法](https://cloud.tencent.com/developer/article/1672781)
     2. 扰动函数
     3. 空间大小，及扩容容量
     4. jdk1.7头插死链形成
+    5. null值问题
+    6. [字符串hashcode选31](https://stackoverflow.com/questions/299304/why-does-javas-hashcode-in-string-use-31-as-a-multiplier)
 
 * ## Reference
 
     + https://www.bilibili.com/video/BV1b84y1G7o5
     + https://www.cnblogs.com/youzhibing/p/13915116.html
+    + https://www.zhihu.com/question/20733617
