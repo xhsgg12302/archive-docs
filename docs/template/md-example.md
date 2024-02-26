@@ -170,8 +170,9 @@ single backslash (status: opening)
 ```
 
 ## 数学符号
-$ E=mc^2 $
-$$ E=mc^2 $$
+[github支持，没有空格](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
+$E=mc^2$
+$$E=mc^2$$
 [示例](/docs/algo/tree/03-01-AVL-tree.md)
 
 ## mermaid version
