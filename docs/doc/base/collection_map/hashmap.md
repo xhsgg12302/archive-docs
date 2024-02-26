@@ -4,7 +4,7 @@
 
     + ### 扩容方法
 
-        ?> 实际是求取一个整形数值的最接近 $2^n$ 的值。
+        ?> 实际是求取一个整形数值的最接近 ${\color{red}2^{n}}$ 的值。
 
         ```java
         static final int MAXIMUM_CAPACITY = 1 << 30;
