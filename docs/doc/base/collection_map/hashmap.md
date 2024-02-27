@@ -119,6 +119,17 @@
         <br>因为 n 为 ${\color{red}2^{n}}$ ,假如 n = 16 = $(2^{4})$ 。则 n - 1 = $[0000 1111]$
         <br>则将任何值与 $[0000 1111]$ 进行 & 运算都会得到 $[0000 0000] \sim [0000 1111]$ ，即 0 ~ 15，也就是table的下标值。___这也是为什么table长度取 ${\color{red}2^{n}}$ 的原因。___
 
+    + ### 扩容方法
+
+        ![](/.images/doc/base/collection/hashmap/hashmap-resize-01.png ':size=90%')
+
+        !> 1). 根据上图的规律可知。若数组长度大小固定，则可以推导出某个`index`的后半部分`hash`值。
+        <br>例如：若`table.length=16`。则在`index=15`的位置上。因为`index = hash & (length -1 )`,也即`0b00001111 = hash & 1111`。则hash值的后四位一定为1。
+        <br>若将`a,b,c,d,e`这些原在15位置上的hash值由原来的 $16=2^4$ 重新分配到新数组 $32=2^5$ 的时候，决定新下标的与值为`11111`。也就是原来15上面的0bxxx01111,还在15上(因为`0bxxx01111 & 11111 = 15`),而0bxxx11111,就分配在31了(因为`0bxxx11111 & 11111 = 31`)。
+        <br><br>2). 还有一个需要注意的点是`resize()方法中的`这[两行代码](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/java.base/share/classes/java/util/HashMap.java#L717-L718)。翻译过来就是，如果当前下标中只有一个节点(单节点，不是链表，也不是红黑树)。为什么可以直接在新数组中使用`newTab[e.hash & (newCap - 1)] = e;`覆盖，难道不怕转移过程中存在hash冲突，有数据已经转移到新数组当前节点，而造成数据丢失吗？
+        <br>原因其实还可以用上方的图来解释：
+        <br>如果index=15的位置上只有一个节点a,则hash值肯定为`0bxxxx1111`。假设有其他节点会重新分配过来的话。则其他节点的hash后四位一定为`1111`。此时会存在矛盾，因为如果其他节点的hash后四位为`1111`的话，则原来一定存在15的位置上，不可能只有a元素一个。所以不用担心直接覆盖的情况，因为就只有一个。
+
 * ## Problem
 
     1. [解决哈希冲突的方法](https://cloud.tencent.com/developer/article/1672781)
@@ -133,3 +144,4 @@
     + https://www.bilibili.com/video/BV1b84y1G7o5
     + https://www.cnblogs.com/youzhibing/p/13915116.html
     + https://www.zhihu.com/question/20733617
+    + https://drive.google.com/file/d/1Ts19mUZI7hKU4Z8GruMWy8le5DDZEgQ4/view
