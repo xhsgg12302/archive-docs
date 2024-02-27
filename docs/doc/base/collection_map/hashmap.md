@@ -121,14 +121,103 @@
 
     + ### 扩容方法
 
-        ![](/.images/doc/base/collection/hashmap/hashmap-resize-01.png ':size=90%')
+        - #### resize()
 
-        !> 1). 根据上图的规律可知。若数组长度大小固定，则可以推导出某个`index`的后半部分`hash`值。
-        <br>例如：若`table.length=16`。则在`index=15`的位置上。因为`index = hash & (length -1 )`,也即`0b00001111 = hash & 1111`。则hash值的后四位一定为1。
-        <br>若将`a,b,c,d,e`这些原在15位置上的hash值由原来的 $16=2^4$ 重新分配到新数组 $32=2^5$ 的时候，决定新下标的与值为`11111`。也就是原来15上面的0bxxx01111,还在15上(因为`0bxxx01111 & 11111 = 15`),而0bxxx11111,就分配在31了(因为`0bxxx11111 & 11111 = 31`)。
-        <br><br>2). 还有一个需要注意的点是`resize()方法中的`这[两行代码](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/java.base/share/classes/java/util/HashMap.java#L717-L718)。翻译过来就是，如果当前下标中只有一个节点(单节点，不是链表，也不是红黑树)。为什么可以直接在新数组中使用`newTab[e.hash & (newCap - 1)] = e;`覆盖，难道不怕转移过程中存在hash冲突，有数据已经转移到新数组当前节点，而造成数据丢失吗？
-        <br>原因其实还可以用上方的图来解释：
-        <br>如果index=15的位置上只有一个节点a,则hash值肯定为`0bxxxx1111`。假设有其他节点会重新分配过来的话。则其他节点的hash后四位一定为`1111`。此时会存在矛盾，因为如果其他节点的hash后四位为`1111`的话，则原来一定存在15的位置上，不可能只有a元素一个。所以不用担心直接覆盖的情况，因为就只有一个。
+            ```java
+            /**
+             * Initializes or doubles table size.  If null, allocates in
+             * accord with initial capacity target held in field threshold.
+             * Otherwise, because we are using power-of-two expansion, the
+             * elements from each bin must either stay at same index, or move
+             * with a power of two offset in the new table.
+             *
+             * @return the table
+             */
+            final Node<K,V>[] resize() {
+                Node<K,V>[] oldTab = table;
+                int oldCap = (oldTab == null) ? 0 : oldTab.length;
+                int oldThr = threshold;
+                int newCap, newThr = 0;
+                if (oldCap > 0) {
+                    if (oldCap >= MAXIMUM_CAPACITY) {
+                        threshold = Integer.MAX_VALUE;
+                        return oldTab;
+                    }
+                    else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+                            oldCap >= DEFAULT_INITIAL_CAPACITY)
+                        newThr = oldThr << 1; // double threshold
+                }
+                else if (oldThr > 0) // initial capacity was placed in threshold
+                    newCap = oldThr;
+                else {               // zero initial threshold signifies using defaults
+                    newCap = DEFAULT_INITIAL_CAPACITY;
+                    newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+                }
+                if (newThr == 0) {
+                    float ft = (float)newCap * loadFactor;
+                    newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+                            (int)ft : Integer.MAX_VALUE);
+                }
+                threshold = newThr;
+                @SuppressWarnings({"rawtypes","unchecked"})
+                    Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+                table = newTab;
+                if (oldTab != null) {
+                    for (int j = 0; j < oldCap; ++j) {
+                        Node<K,V> e;
+                        if ((e = oldTab[j]) != null) {
+                            oldTab[j] = null;
+                            if (e.next == null)
+                                newTab[e.hash & (newCap - 1)] = e;
+                            else if (e instanceof TreeNode)
+                                ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+                            else { // preserve order
+                                Node<K,V> loHead = null, loTail = null;
+                                Node<K,V> hiHead = null, hiTail = null;
+                                Node<K,V> next;
+                                do {
+                                    next = e.next;
+                                    if ((e.hash & oldCap) == 0) {
+                                        if (loTail == null)
+                                            loHead = e;
+                                        else
+                                            loTail.next = e;
+                                        loTail = e;
+                                    }
+                                    else {
+                                        if (hiTail == null)
+                                            hiHead = e;
+                                        else
+                                            hiTail.next = e;
+                                        hiTail = e;
+                                    }
+                                } while ((e = next) != null);
+                                if (loTail != null) {
+                                    loTail.next = null;
+                                    newTab[j] = loHead;
+                                }
+                                if (hiTail != null) {
+                                    hiTail.next = null;
+                                    newTab[j + oldCap] = hiHead;
+                                }
+                            }
+                        }
+                    }
+                }
+                return newTab;
+            }
+            ```
+
+        - #### 需要注意的点
+
+            ![](/.images/doc/base/collection/hashmap/hashmap-resize-01.png ':size=90%')
+
+            !> 1). 根据上图的规律可知。若数组长度大小固定，则可以推导出某个`index`的后半部分`hash`值。
+            <br>例如：若`table.length=16`。则在`index=15`的位置上。因为`index = hash & (length -1 )`,也即`0b00001111 = hash & 1111`。则hash值的后四位一定为1。
+            <br>若将`a,b,c,d,e`这些原在15位置上的hash值由原来的 $16=2^4$ 重新分配到新数组 $32=2^5$ 的时候，决定新下标的与值为`11111`。也就是原来15上面的0bxxx01111,还在15上(因为`0bxxx01111 & 11111 = 15`),而0bxxx11111,就分配在31了(因为`0bxxx11111 & 11111 = 31`)。
+            <br><br>2). 还有一个需要注意的点是`resize()方法中的`这[两行代码](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/java.base/share/classes/java/util/HashMap.java#L717-L718)。翻译过来就是，如果当前下标中只有一个节点(单节点，不是链表，也不是红黑树)。为什么可以直接在新数组中使用`newTab[e.hash & (newCap - 1)] = e;`覆盖，难道不怕转移过程中存在hash冲突，有数据已经转移到新数组当前节点，而造成数据丢失吗？
+            <br>原因其实还可以用上方的图来解释：
+            <br>如果index=15的位置上只有一个节点a,则hash值肯定为`0bxxxx1111`。假设有其他节点会重新分配过来的话。则其他节点的hash后四位一定为`1111`。此时会存在矛盾，因为如果其他节点的hash后四位为`1111`的话，则原来一定存在15的位置上，不可能只有a元素一个。所以不用担心直接覆盖的情况，因为就只有一个。
 
 * ## Problem
 
