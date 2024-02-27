@@ -2,7 +2,43 @@
 
     ?> hello hashmap
 
-    + ### 扩容方法
+    + ### 构造器
+    
+        ```java
+        public HashMap(int initialCapacity, float loadFactor) {
+            if (initialCapacity < 0)
+                throw new IllegalArgumentException("Illegal initial capacity: " +
+                                                initialCapacity);
+            if (initialCapacity > MAXIMUM_CAPACITY)
+                initialCapacity = MAXIMUM_CAPACITY;
+            if (loadFactor <= 0 || Float.isNaN(loadFactor))
+                throw new IllegalArgumentException("Illegal load factor: " +
+                                                loadFactor);
+            this.loadFactor = loadFactor;
+            this.threshold = tableSizeFor(initialCapacity);
+        }
+
+        /**
+         * Constructs an empty <tt>HashMap</tt> with the specified initial
+         * capacity and the default load factor (0.75).
+         *
+         * @param  initialCapacity the initial capacity.
+         * @throws IllegalArgumentException if the initial capacity is negative.
+         */
+        public HashMap(int initialCapacity) {
+            this(initialCapacity, DEFAULT_LOAD_FACTOR);
+        }
+
+        /**
+         * Constructs an empty <tt>HashMap</tt> with the default initial capacity
+         * (16) and the default load factor (0.75).
+         */
+        public HashMap() {
+            this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
+        }
+        ```
+
+    + ### 初始容量
 
         ?> 实际是求取一个整形数值的最接近 ${\color{red}2^{n}}$ 的值。
         <br><br>可以通过以下方法获取：
