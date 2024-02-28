@@ -330,6 +330,53 @@
 
                 ![](/.images/doc/base/collection/hashmap/hashmap-transfer-02.png ':size=70%')
 
+* ## Extends
+
+    + ### 解决哈希冲突的方法
+
+        ?> 举例数列：`[25, 18, 23, 3, 56, 87, 19, 37, 59]`。
+
+        - #### 开放定址法
+
+            !> 为产生冲突的地址 $H(key)$，按照某种规则产生另外一个地址的方法。
+
+            1. 线性探测法
+
+                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                <br> $d = 1,2,3,4,5...n $
+
+                ![](/.images/doc/base/collection/hashmap/hash-conflict-01.png ':size=70%')
+             
+            2. 平方探测法
+
+                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                <br> $d = 1^2, -1^2, 2^2, -2^2, ... $
+
+                ![](/.images/doc/base/collection/hashmap/hash-conflict-02.png ':size=70%')
+             
+            3. 随机探测法
+
+                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                <br> $d = 3, 1, 9, 2, ... $ //一组伪随机数列
+
+                ![](/.images/doc/base/collection/hashmap/hash-conflict-03.png ':size=70%')
+            
+        - #### 链地址法(拉链法)
+
+            !> 即hashmap中使用的方法，不再介绍。
+            
+        - #### 再哈希法
+
+            !> 这种方法是同时构造多个不同的哈希函数：$H_d(key) = H_{d+1}(key), d = 1, 2, 3, ..., n $
+            <br>当哈希地址 $H(key)$ 发生冲突时，再计算$H2(key)$……，直到冲突不再产生。这种方法不易产生聚集，但增加了计算时间。
+            
+        - #### 建立公共溢出区
+
+            !> 散列表包含`基本表`和`溢出表`两个部分，将发生冲突的记录**顺序**存储到`溢出表`中。
+            <br>查找方法：通过 $H(key)$ 函数计算散列地址，先在`基本表`中记录进行比较，若相等，则查找成功；否则，到`溢出表`中顺序查找。
+
+            ![](/.images/doc/base/collection/hashmap/hash-conflict-05.png ':size=70%')
+
 * ## Problem
 
     1. [解决哈希冲突的方法](https://cloud.tencent.com/developer/article/1672781)
@@ -345,3 +392,5 @@
     + https://www.cnblogs.com/youzhibing/p/13915116.html
     + https://www.zhihu.com/question/20733617
     + https://drive.google.com/file/d/1Ts19mUZI7hKU4Z8GruMWy8le5DDZEgQ4/view
+    + 
+    + https://www.bilibili.com/video/BV1v94y1S727
