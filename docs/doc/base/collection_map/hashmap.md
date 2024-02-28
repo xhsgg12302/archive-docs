@@ -72,10 +72,10 @@
         static final int MAXIMUM_CAPACITY = 1 << 30;
 
         /**
-        * jdk 1.7 hashmap 根据参数计算tablesize
-        * @param number
-        * @return
-        */
+         * jdk 1.7 hashmap 根据参数计算tablesize
+         * @param number
+         * @return
+         */
         private static int roundUpToPowerOf2(int number) {
             // assert number >= 0 : "number must be non-negative";
             return number >= MAXIMUM_CAPACITY
@@ -84,10 +84,10 @@
         }
 
         /**
-        * jdk 1.8 hashmap 根据参数计算tablesize
-        * @param cap
-        * @return
-        */
+         * jdk 1.8 hashmap 根据参数计算tablesize
+         * @param cap
+         * @return
+         */
         static final int tableSizeFor(int cap) {
             int n = cap - 1;
             n |= n >>> 1;
@@ -258,30 +258,77 @@
     
     + ### 死链的形成(JDK1.7)
 
-        ```java
-        public V put(K key, V value) {
-            if (table == EMPTY_TABLE) {
-                inflateTable(threshold);
+        - #### put()
+
+            !> 1). 头插
+            <br>2). 替换
+
+            ```java
+            public V put(K key, V value) {
+                if (table == EMPTY_TABLE) {
+                    inflateTable(threshold);
+                }
+                if (key == null)
+                    return putForNullKey(value);
+                int hash = hash(key);
+                int i = indexFor(hash, table.length);
+                for (Entry<K,V> e = table[i]; e != null; e = e.next) {
+                    Object k;
+                    if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
+                        V oldValue = e.value;
+                        e.value = value;
+                        e.recordAccess(this);
+                        return oldValue;
+                    }
+                }
+
+                modCount++;
+                addEntry(hash, key, value, i);
+                return null;
             }
-            if (key == null)
-                return putForNullKey(value);
-            int hash = hash(key);
-            int i = indexFor(hash, table.length);
-            for (Entry<K,V> e = table[i]; e != null; e = e.next) {
-                Object k;
-                if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
-                    V oldValue = e.value;
-                    e.value = value;
-                    e.recordAccess(this);
-                    return oldValue;
+            ```
+        
+        - #### transfer()
+
+            ```java
+            /**
+             * Transfers all entries from current table to newTable.
+             */
+            void transfer(Entry[] newTable, boolean rehash) {
+                int newCapacity = newTable.length;
+                for (Entry<K,V> e : table) {
+                    while(null != e) {
+                        Entry<K,V> next = e.next;
+                        if (rehash) {
+                            e.hash = null == e.key ? 0 : hash(e.key);
+                        }
+                        int i = indexFor(e.hash, newCapacity);
+                        e.next = newTable[i];
+                        newTable[i] = e;
+                        e = next;
+                    }
                 }
             }
+            ```
 
-            modCount++;
-            addEntry(hash, key, value, i);
-            return null;
-        }
-        ```
+            1. [转换过程图](https://www.autodraw.com/share/IGYQ4DFC0JL8)
+
+                ?> 转换过程就是，在`index位置引用`和`它所指向的节点【NULL或者其他node】`之间不断插入原来需要移动的节点。
+                <br>$31 \to null$
+                <br>$31 \to a \to null$
+                <br>$31 \to b \to a \to null$
+                <br>$31 \to c \to b \to a -> null$
+
+                ![](/.images/doc/base/collection/hashmap/hashmap-transfer-01.png ':size=70%')
+
+            2. 死链形成过程如下图
+
+                !> 假设`线程1`和`线程2`同时到达左边的状态。此时`线程2`挂起。完全由`线程1`进行transfer，完成后如右边所示。
+                <br>因为节点不管怎么移动。或者说节点之间怎么指向，都不会影响`线程2`中 $e \to a ，e.next \to b$。
+                <br>结合 e, e.next 的语义可以发现。此时右边所示左右两个红框所表达的是一个意思。
+                <br>而`线程2`开始执行的时候发现，$e \to a, e.next \to b$ , 且由于`线程1`操作完成后 $b \to a$ 的关系， 就造成死循环了。
+
+                ![](/.images/doc/base/collection/hashmap/hashmap-transfer-02.png ':size=70%')
 
 * ## Problem
 
