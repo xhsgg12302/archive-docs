@@ -72,7 +72,7 @@
         static final int MAXIMUM_CAPACITY = 1 << 30;
 
         /**
-        * jdk 1.7 hashmap 扩容算法
+        * jdk 1.7 hashmap 根据参数计算tablesize
         * @param number
         * @return
         */
@@ -84,7 +84,7 @@
         }
 
         /**
-        * jdk 1.8 hashmap 扩容算法
+        * jdk 1.8 hashmap 根据参数计算tablesize
         * @param cap
         * @return
         */
