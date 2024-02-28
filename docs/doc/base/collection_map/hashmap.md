@@ -103,7 +103,7 @@
 
         ?> 理论上散列值是一个int型，如果直接拿散列值作为下标访问HashMap主数组的话，考虑到2进制32位带符号的int表值范围从`-2147483648`到`2147483648`。前后加起来大概`40亿`的映射空间。只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。
 
-        !> 使用扰动函数的目的是让`hashcode`的高16位也参与散列运算。
+        !> 使用扰动函数的目的是让`hashcode`的高16位也参与散列运算。混合原始哈希码的高位和低位，以此来使低位的随机性更好。
 
         ```java
         static final int hash(Object key) {
@@ -217,7 +217,71 @@
             <br>若将`a,b,c,d,e`这些原在15位置上的hash值由原来的 $16=2^4$ 重新分配到新数组 $32=2^5$ 的时候，决定新下标的与值为`11111`。也就是原来15上面的0bxxx01111,还在15上(因为`0bxxx01111 & 11111 = 15`),而0bxxx11111,就分配在31了(因为`0bxxx11111 & 11111 = 31`)。
             <br><br>2). 还有一个需要注意的点是`resize()方法中的`这[两行代码](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/java.base/share/classes/java/util/HashMap.java#L717-L718)。翻译过来就是，如果当前下标中只有一个节点(单节点，不是链表，也不是红黑树)。为什么可以直接在新数组中使用`newTab[e.hash & (newCap - 1)] = e;`覆盖，难道不怕转移过程中存在hash冲突，有数据已经转移到新数组当前节点，而造成数据丢失吗？
             <br>原因其实还可以用上方的图来解释：
-            <br>如果index=15的位置上只有一个节点a,则hash值肯定为`0bxxxx1111`。假设有其他节点会重新分配过来的话。则其他节点的hash后四位一定为`1111`。此时会存在矛盾，因为如果其他节点的hash后四位为`1111`的话，则原来一定存在15的位置上，不可能只有a元素一个。所以不用担心直接覆盖的情况，因为就只有一个。
+            <br>如果index=15的位置上只有一个节点a,则hash值肯定为`0bxxxx1111`。假设有其他节点会重新分配到新数组的话。则其他节点的hash后四位一定为`1111`。此时会存在矛盾，因为如果其他节点的hash后四位为`1111`的话，则原来一定存在15的位置上，不可能只有a元素一个。所以不用担心直接覆盖的情况，因为就只有一个。
+
+    + ### NULL值问题
+
+        ```java
+        // jdk 1.7 处理
+        /**
+         * 和hash值无关，put刚进来就会判断key==null。等于Null的话，直接往index=0的位置替换或头插。
+         * addEntry() ==> createEntry(hash, key, value, bucketIndex);
+         * createEntry():
+         *      // 保存原来的链e
+         *      Entry<K,V> e = table[bucketIndex];
+         *      // 用刚才的值新建节点，并将next指向刚才保存的e。然后替换原来的链条，实现头插。
+         *      table[bucketIndex] = new Entry<>(hash, key, value, e);
+         */
+        private V putForNullKey(V value) {
+            for (Entry<K,V> e = table[0]; e != null; e = e.next) {
+                if (e.key == null) {
+                    V oldValue = e.value;
+                    e.value = value;
+                    e.recordAccess(this);
+                    return oldValue;
+                }
+            }
+            modCount++;
+            addEntry(0, null, value, 0);
+            return null;
+        }
+
+        // jdk 1.8 处理
+        /**
+         * 和hash值有关，Null值参与hash计算。得到的结果为0。
+         * 经过下面的代码判断后发现存在null键值，后续会进行替换。
+         */
+        if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+                e = p;
+        ```
+    
+    + ### 死链的形成(JDK1.7)
+
+        ```java
+        public V put(K key, V value) {
+            if (table == EMPTY_TABLE) {
+                inflateTable(threshold);
+            }
+            if (key == null)
+                return putForNullKey(value);
+            int hash = hash(key);
+            int i = indexFor(hash, table.length);
+            for (Entry<K,V> e = table[i]; e != null; e = e.next) {
+                Object k;
+                if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
+                    V oldValue = e.value;
+                    e.value = value;
+                    e.recordAccess(this);
+                    return oldValue;
+                }
+            }
+
+            modCount++;
+            addEntry(hash, key, value, i);
+            return null;
+        }
+        ```
 
 * ## Problem
 
