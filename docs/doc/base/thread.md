@@ -125,9 +125,33 @@
         <!-- div:title-panel -->
         #### 1. sleep
         <!-- div:left-panel-40 -->
-        !> hello
+        !> 使当前执行的线程在指定的毫秒数内休眠(暂时停止执行)，这取决于系统计时器和调度器的精度和准确性。线程不会失去任何监视器的所有权(意味着不会释放锁)。
         <!-- div:right-panel-60 -->
         ```java
+        // Causes the currently executing thread to sleep (temporarily cease execution) 
+        // for the specified number of milliseconds, 
+        // subject to the precision and accuracy of system timers and schedulers. 
+        // The thread does not lose ownership of any monitors. 
+        public static void sleep(long millis, int nanos)
+        throws InterruptedException {
+            if (millis < 0) {
+                throw new IllegalArgumentException("timeout value is negative");
+            }
+
+            if (nanos < 0 || nanos > 999999) {
+                throw new IllegalArgumentException(
+                                    "nanosecond timeout value out of range");
+            }
+
+            if (nanos >= 500000 || (nanos != 0 && millis == 0)) {
+                millis++;
+            }
+
+            sleep(millis);
+        }
+
+        // native
+        public static native void sleep(long millis) throws InterruptedException;
         ```
         <!-- panels:end -->
 
@@ -202,13 +226,56 @@
         <!-- div:title-panel -->
         #### 4. interrupted/interrupt/isInterrupted
         <!-- div:left-panel-40 -->
-        !> hello
+        !> 1). interrupt()用于设置中断标志。如果在碰见以下情况:清除标志位，并且抛出一个`InterruptedException`异常
+        <br> 此线程正在调用一个对象的`wait()`,`join()`,或者`sleep()`方法。等等...
+        <br><br>2). 静态方法，获取当前线程的中断标志，并给native方法传参数`true`清除标志位。
+        <br>换句话说，如果连续调用两次这个方法。则第二次会返回`false`。
+        <br><br>3). 返回中断标志。
+        <br><br>4). 中断探测与是否清空标志的native方法。
         <!-- div:right-panel-60 -->
         ```java
+        // If this thread is blocked in an invocation of the wait(), join(),sleep() methods of the Object class, 
+        // then its interrupt status will be cleared and it will receive an InterruptedException.
+        // and else conditions ...
+        // If none of the previous conditions hold then this thread's interrupt status will be set.
+        public void interrupt() {
+            if (this != Thread.currentThread())
+                checkAccess();
+
+            synchronized (blockerLock) {
+                Interruptible b = blocker;
+                if (b != null) {
+                    interrupt0();           // Just to set the interrupt flag
+                    b.interrupt(this);
+                    return;
+                }
+            }
+            interrupt0();
+        }
+
+        // Tests whether the current thread has been interrupted. 
+        // The interrupted status of the thread is cleared by this method. 
+        // In other words, if this method were to be called twice in succession, 
+        // the second call would return false
+        public static boolean interrupted() {
+            return currentThread().isInterrupted(true);
+        }
+
+        // Tests whether this thread has been interrupted. 
+        // The interrupted status of the thread is unaffected by this method.
+        public boolean isInterrupted() {
+            return isInterrupted(false);
+        }
+
+        // Tests if some Thread has been interrupted. 
+        // The interrupted state is reset or not based on 
+        // the value of ClearInterrupted that is passed.
+        private native boolean isInterrupted(boolean ClearInterrupted);
         ```
         <!-- panels:end -->
 
-        ?> `isInterrupted()`返回标志。`interrupted()` 表示返回标志，如果为true,清除。`interrupt()`设置中断标志。
+        ?> `isInterrupted()`返回标志。`interrupt()`设置中断标志。
+        <br>`interrupted()` 表示返回标志，如果为true,清除。
 
         <details><summary>代码示例</summary>
 
@@ -264,5 +331,7 @@
 ## Reference
 * [你真的懂wait、notify和notifyAll吗](https://www.jianshu.com/p/25e243850bd2?appinstall=0)
 * [读懂isInterrupted、interrupted和interrupt](https://zhuanlan.zhihu.com/p/265169898)
+* https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html
+* https://stackoverflow.com/questions/5218969/why-is-thread-stop-so-dangerous
 * https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states
 * https://drive.google.com/file/d/1r_DtdgyC9bHP-Y-poLb5fbQIttrWTkAa/view?usp=sharing
