@@ -80,10 +80,8 @@
         <!-- div:title-panel -->
         #### 1. 重写run方法
         <!-- div:left-panel-40 -->
-    
         !> 重写`Runnable`的run方法相当于自定义target，start启动后调用start0()native方法给线程分配运行资源，近而重新调度到`Thread`的run方法。并传递给`Runnbale target`中的run方法。
         <br><br>因为这个是直接通过Thread类启动的。所以run方法没有被重载。所以会调度到target --> run()方法中。
-
         <!-- div:right-panel-60 -->
         ```java
         class PrimeRun implements Runnable {
@@ -103,7 +101,6 @@
         <!-- div:title-panel -->
         #### 2. 继承Thread
         <!-- div:left-panel-40 -->
-    
         !> 而继承的线程和刚才的实现接口不太一样的地方是：不需要target，也无需调用target的 run()方法。并且整个运行过程中target为NULL.
         <br>因为整个Thread对象run方法被子类`PrimeThread`给重写了。
 
@@ -121,13 +118,6 @@
         <!-- panels:end -->
     
     + ### 线程相关的方法
-
-        !> `notify,wait`造成的死锁
-        <br> 解释：假设有四个线程，C1,C2,P1,P2 正在锁池
-        <br> 现在C1，拿到锁，没数据，进入等待池,C2 同理进入等待池
-        <br> P1 拿到锁，生产，notify C1进入锁重新争取。P1退出。此时P2也在。若P2拿到锁，进入等待池。此时P2,C2都在等待池。
-        <br> C1 拿到锁，消费，notify P2 --> 正常情况
-        <br> C1 拿到锁，消费，notify C2 --> C2,P2会一直在等待池中。造成死锁
 
         ?> （sleep,join,wait,interrupted,interrupt,isInterrupted）
 
@@ -148,7 +138,7 @@
         ?> 1). join() <=等价与=> join(0)
         <br><br>2). 等待该线程死亡的时间最多为`millis`毫秒。`0`意味着永久等待。
         <br><br>3). 通过循环调用`this.wait`来实现join逻辑，需要在当前线程存活的情况下。
-        <br><br>4). 当一个线程终止时，`this.notifyAll`方法会被调用。所以`thread1`无限wait到`thread2`对象上时。`thread1`被唤醒的情况就是`thread2`死亡，JVM会调用`thread2`线程对象的notifyAll方法，释放wait在上面的其他资源(例如:`thread1`)。
+        <br><br>4). 当一个线程终止时，`this.notifyAll`方法会被调用。所以`thread1`无限wait到`thread2`对象上时。`thread1`被唤醒的情况之一就是`thread2`死亡，JVM会调用`thread2`线程对象的notifyAll方法，释放wait在上面的其他资源(例如:`thread1`)。
         <!-- div:right-panel-60 -->
         ```java
         /*
@@ -188,13 +178,24 @@
         <!-- div:title-panel -->
         #### 3. wait/notify/notifyAll
         <!-- div:left-panel-40 -->
-        !> hello
+        ?> JVM会为一个使用内部锁（synchronized）的对象维护两个集合，Entry Set和Wait Set，也有人翻译为锁池和等待池，意思基本一致。[参考](https://www.jianshu.com/p/25e243850bd2)
         <!-- div:right-panel-60 -->
         ```java
         public final native void wait(long timeout) throws InterruptedException;
         public final native void notify();
         public final native void notifyAll();
         ```
+        <!-- panels:end -->
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        !> `wait,notify`容易造成的死锁
+        <br> 解释：假设有四个线程，C1,C2,P1,P2 正在锁池
+        <br><br> 现在C1，拿到锁，没数据，进入等待池,C2 同理进入等待池
+        <br><br> P1 拿到锁，生产，notify C1进入锁重新争取。P1退出。此时P2也在。若P2拿到锁，进入等待池。此时P2,C2都在等待池。
+        <br><br> C1 拿到锁，消费，notify P2 --> 正常情况
+        <br><br> C1 拿到锁，消费，notify C2 --> C2,P2会一直在等待池中。造成死锁
+        <!-- div:right-panel-60 -->
+        ![](/.images/doc/base/thread/thread-notify-wait-01.png ':size=100%')
         <!-- panels:end -->
 
         <!-- panels:start -->
