@@ -1,7 +1,9 @@
 ## thread
 
 * 线程的状态
-    + ![](/.images/doc/base/thread/status.jpeg)
+
+    ![](/.images/doc/base/thread/thread-status-01.png ':size=50%')
+    ![](/.images/doc/base/thread/status.jpeg ':size=40%')
 
     <details><summary>源码</summary>
 
@@ -127,7 +129,11 @@
 * 线程池的几个核心参数
 * 线程池的运行流程
 
+## TODO
+* ThreadLocal
+
 ## Reference
 * [你真的懂wait、notify和notifyAll吗](https://www.jianshu.com/p/25e243850bd2?appinstall=0)
 * [读懂isInterrupted、interrupted和interrupt](https://zhuanlan.zhihu.com/p/265169898)
 * https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states
+* https://drive.google.com/file/d/1r_DtdgyC9bHP-Y-poLb5fbQIttrWTkAa/view?usp=sharing
