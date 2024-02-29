@@ -76,42 +76,40 @@
 
     + ### 创建方式
 
-        ?> 基本两种方式： `继承Thread`或者`重写run方法`。或者实现runnable接口，定义target的run方法。<br>
-        <br>其余的都是扩展，比如new Thread(futureTask),其实 FutureTask 一起实现了 Runnable, Future接口。运行结束后通过futureTask对象的get（）阻塞获取值。另外FutureTask构造器需要Callable
-
         <!-- panels:start -->
         <!-- div:title-panel -->
-        #### 重写run方法
+        #### 1. 重写run方法
         <!-- div:left-panel-40 -->
     
-        ?> hello
+        !> 重写`Runnable`的run方法相当于自定义target，start启动后调用start0()native方法给线程分配运行资源，近而重新调度到`Thread`的run方法。并传递给`Runnbale target`中的run方法。
+        <br><br>因为这个是直接通过Thread类启动的。所以run方法没有被重载。所以会调度到target --> run()方法中。
 
         <!-- div:right-panel-60 -->
         ```java
-        // method 1.0
-        new Thread(new Runnable() {
+        class PrimeRun implements Runnable {
             @Override
             public void run() {
                 System.out.println(Thread.currentThread().getName() + ": hello world");
             }
-        }).start();
-
-        // method 1.1
-        new Thread(() -> { System.out.println(Thread.currentThread().getName() + ": hello world"); }).start();
+        }
+        // 启动线程
+        new Thread(new PrimeRun()).start();
         ```
         <!-- panels:end -->
 
+        ?> 其余的都是扩展，比如new Thread(futureTask),其实 FutureTask 一起实现了 Runnable, Future接口。运行结束后通过futureTask对象的get（）阻塞获取值。另外FutureTask构造器需要Callable
+
         <!-- panels:start -->
         <!-- div:title-panel -->
-        #### 继承Thread
+        #### 2. 继承Thread
         <!-- div:left-panel-40 -->
     
-        ?> hello hello hello hello hello hello hello heelo
+        !> 而继承的线程和刚才的实现接口不太一样的地方是：不需要target，也无需调用target的 run()方法。并且整个运行过程中target为NULL.
+        <br>因为整个Thread对象run方法被子类`PrimeThread`给重写了。
 
         <!-- div:right-panel-60 -->
         ```java
-        // 定义MyThread线程
-        class MyThread extends Thread {
+        class PrimeThread extends Thread {
             @Override
             public void run() {
                 System.out.println(Thread.currentThread().getName() + ": hello world");
@@ -122,7 +120,7 @@
         ```
         <!-- panels:end -->
     
-    + ### 关于线程的几个方法
+    + ### 线程相关的方法
 
         !> `notify,wait`造成的死锁
         <br> 解释：假设有四个线程，C1,C2,P1,P2 正在锁池
@@ -131,15 +129,85 @@
         <br> C1 拿到锁，消费，notify P2 --> 正常情况
         <br> C1 拿到锁，消费，notify C2 --> C2,P2会一直在等待池中。造成死锁
 
-        1. sleep
-        2. join
-        3. wait
-        4. interrupted
-        5. interrupt
-        6. isInterrupted
+        ?> （sleep,join,wait,interrupted,interrupt,isInterrupted）
 
-    ?> （sleep,join,wait,interrupted,interrupt,isInterrupted）
-        <br> `join` 方法实现原理：调用 thd.join()方法的线程会wait在 thd线程对象的身上，时间为0的话会直到对象死亡，JVM释放对象身上的等待线程。<br> `isInterrupted()`返回标志。`interrupted()` 表示返回标志，如果为true,清除。`interrupt()`设置中断标志。
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 1. sleep
+        <!-- div:left-panel-40 -->
+        !> hello
+        <!-- div:right-panel-60 -->
+        ```java
+        ```
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 2. join
+        <!-- div:left-panel-40 -->
+        ?> 1). join() <=等价与=> join(0)
+        <br><br>2). 等待该线程死亡的时间最多为`millis`毫秒。`0`意味着永久等待。
+        <br><br>3). 通过循环调用`this.wait`来实现join逻辑，需要在当前线程存活的情况下。
+        <br><br>4). 当一个线程终止时，`this.notifyAll`方法会被调用。所以`thread1`无限wait到`thread2`对象上时。`thread1`被唤醒的情况就是`thread2`死亡，JVM会调用`thread2`线程对象的notifyAll方法，释放wait在上面的其他资源(例如:`thread1`)。
+        <!-- div:right-panel-60 -->
+        ```java
+        /*
+         * Waits at most millis milliseconds for this thread to die. A timeout of 0 means to wait forever.
+         * This implementation uses a loop of this.wait calls conditioned on this.isAlive. 
+         * As a thread terminates the this.notifyAll method is invoked. 
+         * It is recommended that applications not use wait, notify, or notifyAll on Thread instances.
+         */
+        public final synchronized void join(long millis) 
+        throws InterruptedException {
+            long base = System.currentTimeMillis();
+            long now = 0;
+
+            if (millis < 0) {
+                throw new IllegalArgumentException("timeout value is negative");
+            }
+
+            if (millis == 0) {
+                while (isAlive()) {
+                    wait(0);
+                }
+            } else {
+                while (isAlive()) {
+                    long delay = millis - now;
+                    if (delay <= 0) {
+                        break;
+                    }
+                    wait(delay);
+                    now = System.currentTimeMillis() - base;
+                }
+            }
+        }
+        ```
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 3. wait/notify/notifyAll
+        <!-- div:left-panel-40 -->
+        !> hello
+        <!-- div:right-panel-60 -->
+        ```java
+        public final native void wait(long timeout) throws InterruptedException;
+        public final native void notify();
+        public final native void notifyAll();
+        ```
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 4. interrupted/interrupt/isInterrupted
+        <!-- div:left-panel-40 -->
+        !> hello
+        <!-- div:right-panel-60 -->
+        ```java
+        ```
+        <!-- panels:end -->
+
+        ?> `isInterrupted()`返回标志。`interrupted()` 表示返回标志，如果为true,清除。`interrupt()`设置中断标志。
 
         <details><summary>代码示例</summary>
 
