@@ -316,7 +316,59 @@
     
     + ### ThreadLocal
 
-        ?> hello
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ```java
+        @Test
+        public void test01(){
+            ThreadLocal<String> local = new ThreadLocal<>();
+            local.set("hello world");
+        }
+        ```
+        ```java
+        static class ThreadLocalMap {
+            static class Entry extends WeakReference<ThreadLocal<?>> {
+                /** The value associated with this ThreadLocal. */
+                Object value;
+
+                Entry(ThreadLocal<?> k, Object v) {
+                    super(k);
+                    value = v;
+                }
+            }
+        }
+        ```
+        <!-- div:right-panel-50 -->
+        ```java
+        //
+        //
+        public void set(T value) {
+            Thread t = Thread.currentThread();
+            ThreadLocalMap map = getMap(t);
+            if (map != null)
+                map.set(this, value);
+            else
+                createMap(t, value);
+        }
+
+        ThreadLocalMap getMap(Thread t) {
+            return t.threadLocals;
+        }
+
+        void createMap(Thread t, T firstValue) {
+            t.threadLocals = new ThreadLocalMap(this, firstValue);
+        }
+        
+        // ThreadLocal values pertaining to this thread. This map is maintained by the ThreadLocal class.
+        ThreadLocal.ThreadLocalMap threadLocals = null;
+        ```
+        <!-- panels:end -->
+        !> 1). 主要是通过ThreadLocal对象给Thread中的属性`ThreadLocalMap`赋值。
+        <br>但是因为这个属性`ThreadLocalMap`是默认类型，也只允许同包下的类可以访问。所以外部[我们编写的代码]不可以直接访问这个属性。
+        <br><br>2). ThreadLocal造成内存泄露:
+        <br>继承`WeakReference`的目的是为了调用`super(k)`，将这个Entry中的ThreadLocal类型的key进行虚化。
+        <br>因为Entry节点在赋值的时候是强引用，Entry中的value也是强引用，而里面的属性key是虚引用。这样就会形成`Entry entry = new Entry(null, value)`的效果。因为ThreadLocal对象已经回收。所以这个entry正常不会使用了。也就造成内存泄露了。
+        <br>当key为null，在下一次ThreadLocalMap调用set(),get()，remove()方法的时候会被清除value值。
 
     + ### 生产者消费者模型
 
@@ -326,7 +378,6 @@
 * 线程池的运行流程
 
 ## TODO
-* ThreadLocal
 
 ## Reference
 * [你真的懂wait、notify和notifyAll吗](https://www.jianshu.com/p/25e243850bd2?appinstall=0)
