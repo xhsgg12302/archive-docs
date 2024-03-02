@@ -319,11 +319,73 @@
 
         <!-- panels:start -->
         <!-- div:left-panel -->
-        ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的字节码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
+        ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
         <!-- div:right-panel -->
         !> 1. 它确保指令重排时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面，即在执行到内存屏障这句指令时，在它前面的错作已经全部完成。
         <br>2. 它会强制将对缓存的修改立即写入主存。
         <br>3. 如果是写操作，它会导致其他cpu中对应的缓存行无效。
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 可见性
+        <!-- div:left-panel-40 -->
+        ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
+        <!-- div:right-panel-60 -->
+        ```java
+        class TestVisual {
+            public static class InnerClass {
+                public /*volatile*/ int num = 0;
+                public void numTo60() { num = 60; }
+            }
+
+            public static void main(String[] args) {
+                InnerClass object = new InnerClass();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(3 * 1000L);
+                        object.numTo60();
+                        System.out.println(Thread.currentThread().getName() + ": updated");
+                    } catch (InterruptedException e) { throw new RuntimeException(e);}
+                }).start();
+
+                while(object.num == 0){ /* infinite loop */}
+                System.out.println(Thread.currentThread().getName() + ": skip");
+            }
+        }
+        ```
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 非原子性
+        <!-- div:left-panel-40 -->
+        ?> 非原子性
+        <!-- div:right-panel-60 -->
+        ```java
+        class TestNotAtomicity {
+            public static class InnerClass {
+                public volatile int num = 0;
+                public void numPlusPlus() { num++; }
+            }
+
+            public static void main(String[] args) throws InterruptedException {
+                InnerClass object = new InnerClass();
+                CountDownLatch cdl = new CountDownLatch(10);
+                for (int i = 0; i < 10; i++) {
+                    new Thread(() -> {
+                        for (int j = 0; j < 1000; j++) {
+                            object.numPlusPlus();
+                        }
+                        System.out.println(Thread.currentThread().getName() + "has done");
+                        cdl.countDown();
+                    }).start();
+                }
+                cdl.await();
+                System.out.println("current num value: " + object.num);
+            }
+        }
+        ```
         <!-- panels:end -->
  
     + ### ThreadLocal
@@ -397,4 +459,5 @@
 * https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html
 * https://stackoverflow.com/questions/5218969/why-is-thread-stop-so-dangerous
 * https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states
+* https://www.zhihu.com/question/329746124
 * https://drive.google.com/file/d/1r_DtdgyC9bHP-Y-poLb5fbQIttrWTkAa/view?usp=sharing
