@@ -91,7 +91,7 @@
 
     + ### 简介
 
-        ?> 动态代理就是，在程序运行期，创建目标对象的代理对象，并对目标对象中的方法进行功能性增强的一种技术。
+        !> 动态代理就是，在程序运行期，创建目标对象的代理对象，并对目标对象中的方法进行功能性增强的一种技术。
         <br>在生成代理对象的过程中，目标对象不变，代理对象中的方法是目标对象方法的增强方法。
         <br>可以理解为运行期间，对象中方法的动态拦截，在拦截方法的前后执行功能操作。
 
@@ -223,7 +223,7 @@
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. class net.sf.cglib.proxy.Enhancer\$EnhancerKey\$\$KeyFactoryByCGLIB\$\$7fb24d72 
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. class net.sf.cglib.core.MethodWrapper\$MethodWrapperKey\$\$KeyFactoryByCGLIB\$\$d45e49f7 
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. class _base.proxy.cglib_dynamic.StudentNoIntfs\$\$EnhancerByCGLIB\$\$81f8e23d
-            <br>repo: [cglib-dynamic](https://github.com/xhsgg12302/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/cglib_dynamic)
+            <br>repo: [cglib-dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/cglib_dynamic)
             
             <details><summary>代码示例</summary>
 
