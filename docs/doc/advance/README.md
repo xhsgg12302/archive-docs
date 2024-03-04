@@ -715,19 +715,86 @@
 
 
 
-## 反射
+* ## 反射
 
-## 序列化
+* ## 序列化
 
-## SPI
+* ## SPI
 
-## 范型&通配符
+    + ### 定义
 
-## 注解
+        ?> [wiki](https://en.wikipedia.org/wiki/Service_provider_interface): ___Service provider interface (SPI)___ 是一种API，打算让第三方厂商实现和扩展。它可以用来扩展和替换组件。
+        <br>换句话说：是一种服务发现机制。它通过在 ClassPath 路径下的 META-INF/services 文件夹查找文件，自动加载文件里所定义的类。
 
-## 语法糖
+    + ### 样例
+        
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        ?> <br>[测试代码](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/spi)
+        <br><br>1). 定义接口`ISpiTest`.
+        <br><br>2). 接口`ISpiTest`实现类`SpiTestImpl`.
+        <br><br>3). 按照规范在`META-INF/services/`目录下放置接口名`_jvm.classLoader.spi.service.ISpiTest`,内容为`_jvm.classLoader.spi.service.impl.SpiTestImpl`实现类的文件。
+        <br><br>4). 使用`ServiceLoader`加载接口进行测试
+        <!-- div:right-panel-60 -->
+        <!-- tabs:start -->
+        ##### **Entrance.java**
+        ```java
+        public class Entrance {
+            public static void main(String[] args) {
+                ServiceLoader<ISpiTest> serviceLoader = ServiceLoader.load(ISpiTest.class);
+                Iterator<ISpiTest> iterator = serviceLoader.iterator();
+                while(iterator.hasNext()){
+                    ISpiTest next = iterator.next();
+                    next.saySpi();
+                }
+            }
+        }
+        ```
 
-## 新特性
+        ##### **ISpiTest.java**
+        ```java
+        public interface ISpiTest {
+            public void saySpi();
+        }
+        ```
 
-## Reference
-* https://drive.google.com/file/d/13OR290XMvjjkMZ9pzOumxas6eEvU7NNa/view?usp=sharing
+        ##### **SpiTestImpl.java**
+        ```java
+        public class SpiTestImpl implements ISpiTest {
+            @Override
+            public void saySpi() {
+                System.out.println("call saySpi");
+            }
+        }
+        ```
+        ##### **_jvm.classLoader.spi.service.ISpiTest**
+        ```shell
+        _jvm.classLoader.spi.service.impl.SpiTestImpl
+        ```
+        <!-- tabs:end -->
+        <!-- panels:end -->
+
+    + ### 结构
+
+        ?> 目前有两种实现技术，一种是JDK自带的`java.util.ServiceLoader`，另外一种是sun公司提供的`sun.misc.Service`。
+        <br>下面主要已JDK的进行分析。
+
+    + ### 使用场景
+
+        - #### JDBC
+
+    + ### Reference
+
+        - https://docs.oracle.com/javadb/10.8.3.0/ref/rrefjdbc4_0summary.html
+
+* ## 范型&通配符
+
+* ## 注解
+
+* ## 语法糖
+
+* ## 新特性
+
+* ## Reference
+
+  + https://drive.google.com/file/d/13OR290XMvjjkMZ9pzOumxas6eEvU7NNa/view?usp=sharing
