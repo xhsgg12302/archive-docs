@@ -159,6 +159,12 @@
         ?> 参考[定义<sup>5). </sup>](#定义)。如果一个类加载器收到了类加载器的请求，它首先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类时，子加载类才会尝试自己去加载)。
 
         !> 自定义加载器的话，需要继承 ClassLoader 。如果我们不想打破双亲委派模型，就重写 ClassLoader 类中的 findClass() 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 loadClass() 方法。
+
+        !> 由于双亲委派模型以及类加载器的一些特性(使用当前类加载器去加载引用类)，会出现一些情况。
+        <br><br>比如：
+        <br> 使用当前类加载器`CustomClassLoader1`去加载子类`CustomClassLoader2`管理路径下的class。会找不到类，以至于加载不了。[代码实现]()
+        <br><br>解决办法：
+        <br>Java设计团队只好引入了一个不太优雅的设计 ___线程上下文件类加载器(Thread Context ClassLoader)___ 。这个类加载器可以通过java.lang.Thread类的setContextClassLoader()方法进行设置，如果创建线程时还未设置，它将会从父线程中继承一个。如：[SPI](#spi)
         <!-- div:right-panel-60 -->
         ```java
         protected Class<?> loadClass(String name, boolean resolve)
