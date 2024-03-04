@@ -10,7 +10,7 @@
         <br><br>2). 每个类对象都包含一个定义它的类加载器`ClassLoader`的引用。
         <br><br>3). 数组类的类对象不是通过类加载器创建的。但会根据java运行时的需要自动创建（也就是JVM自己创建）。对于数组的`Class.getClassLoader()`返回的类加载器和它加载它元素类型的加载器一样。如果元素是`primitive type`原始类型(有别于复合类型)，则数组类没有类加载器。
         <br><br>4). 应用程序实现 ClassLoader 的子类，以扩展 Java 虚拟机动态加载类的方式。
-        <br><br>5). `ClassLoader`使用委托模式查找类或资源，每一个`ClassLoader`都关联一个父加载器。当请求查找一个类或资源的时候。在它自己加载之前会先委托父加载器去加载。JVM内建的加载器叫作`bootstrap class loader`, 它自己没有父加载器，但可以作为换一个父加载器实例。
+        <br><br>5). `ClassLoader`使用委托模式查找类或资源(文本，图像，配置文件，视频等)通过`getResource`，每一个`ClassLoader`都关联一个父加载器。当请求查找一个类或资源的时候。在它自己加载之前会先委托父加载器去加载。JVM内建的加载器叫作`bootstrap class loader`, 它自己没有父加载器，但可以作为换一个父加载器实例。
         <br><br>6). 通常，JVM虚拟机加载类从本地文件系统已平台相关的方式。例如：在UNIX系统中。JVM加载类通过定义的`CLASSPATH`环境变量。
         <br><br>7). 然而，一些类获取不是来源于文件，而是来自诸如网络的情况，或者被一个应用程序构造生成。`defineClass`转换一个字节数组到类的实例。可以使用`Class.newInstance`创建新定义的类的实例。
         <br><br>8). 类加载器创建的对象的方法和构造函数可以引用其他类。为了确定引用的类，Java 虚拟机调用最初创建该类的类加载器的 loadClass 方法。[参考](https://stackoverflow.com/questions/61711187/what-does-the-methods-and-constructors-of-objects-created-by-a-class-loader-may) , [代码实现](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/load_reference)
@@ -111,10 +111,95 @@
         + 初始化initialization、类加载的最后阶段，如该类具有超类，则对其进行初始化，执行静态初始化器和静态初始化成员变量（如前面只初始化了 默认值的static变量将会在这个阶段赋值，成员变量也将被初始化）
 
     + ### 加载规则
+
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        ?> JVM 启动的时候，并不会一次性加载所有的类，而是根据需要去动态加载。也就是说，大部分类在具体用到的时候才会去加载，这样对内存更加友好。
+        <br><br>对于已经加载的类会被放在 ClassLoader 中。在类加载的时候，系统会首先判断当前类是否被加载过。已经被加载的类会直接返回，否则才会尝试加载。也就是说，对于一个类加载器来说，相同二进制名称的类只会被加载一次。
+
+        !> 通过注释可以看出：
+        <br>JVM 会自己调用`addClass`方法用来记录当前类加载器已经加载的类。
+        <!-- div:right-panel-60 -->
+        ```java
+        public abstract class ClassLoader {
+
+            // The parent class loader for delegation
+            // Note: VM hardcoded the offset of this field, thus all new fields
+            // must be added *after* it.
+            private final ClassLoader parent;
+
+            // The classes loaded by this class loader. The only purpose of this table
+            // is to keep the classes from being GC'ed until the loader is GC'ed.
+            private final Vector<Class<?>> classes = new Vector<>();
+
+            // Invoked by the VM to record every loaded class with this loader.
+            void addClass(Class<?> c) {
+                classes.addElement(c);
+            }
+        }
+        ```
+        <!-- panels:end -->
     
     + ### 分类
 
+        ?> JVM 中内置了三个重要的 ClassLoader：
+        <br><br>1). ___BootstrapClassLoader(启动类加载器)___ ：最顶层的加载类，由 C++实现，没有对应的Java类。所以在Java中是取不到的。如果一个类的classloader是null。已经足可以证明他就是由BootStrapClassLoader 加载的,通常表示为 null，并且没有父级，主要用来加载JDK内部的核心类库`%JAVA_HOME%/lib目录下的rt.jar、resources.jar、charsets.jar等 jar 包和类`以及被`-Xbootclasspath`参数指定的路径下的所有类。
+        <br><br>2). ___ExtClassLoader(扩展类加载器)___ ：主要负责加载`%JRE_HOME%/lib/ext`目录下的 jar 包和类以及被`java.ext.dirs`系统变量所指定的路径下的所有类。
+        <br><br>3). ___AppClassLoader(应用程序类加载器)___ ：面向我们用户的加载器，负责加载当前应用`classpath`下的所有 jar 包和类。
+
+        !> 属性parent是通过`ClassLoader(Void unused, ClassLoader parent)`方法传进去的。`AppClassLoader`和`ExtClassLoader`并非继承关系。
+
+        ![](/.images/doc/advance/advance/class-loader-03.png ':size=66%')
+        ![](/.images/doc/advance/advance/class-loader-02.png ':size=33%')
+
     + ### 双亲委派模型
+
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        ?> 参考[定义<sup>5). </sup>](#定义)。如果一个类加载器收到了类加载器的请求，它首先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类时，子加载类才会尝试自己去加载)。
+
+        !> 自定义加载器的话，需要继承 ClassLoader 。如果我们不想打破双亲委派模型，就重写 ClassLoader 类中的 findClass() 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 loadClass() 方法。
+        <!-- div:right-panel-60 -->
+        ```java
+        protected Class<?> loadClass(String name, boolean resolve)
+            throws ClassNotFoundException
+        {
+            synchronized (getClassLoadingLock(name)) {
+                // First, check if the class has already been loaded
+                Class<?> c = findLoadedClass(name);
+                if (c == null) {
+                    long t0 = System.nanoTime();
+                    try {
+                        if (parent != null) {
+                            c = parent.loadClass(name, false);
+                        } else {
+                            c = findBootstrapClassOrNull(name);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        // ClassNotFoundException thrown if class not found
+                        // from the non-null parent class loader
+                    }
+
+                    if (c == null) {
+                        // If still not found, then invoke findClass in order
+                        // to find the class.
+                        long t1 = System.nanoTime();
+                        c = findClass(name);
+
+                        // this is the defining class loader; record the stats
+                        sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);
+                        sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);
+                        sun.misc.PerfCounter.getFindClasses().increment();
+                    }
+                }
+                if (resolve) {
+                    resolveClass(c);
+                }
+                return c;
+            }
+        }
+        ```
+        <!-- panels:end -->
 
     + ### 初始化顺序
         !> 父，子，静态代码块  -- 和静态变量  等级初始化
