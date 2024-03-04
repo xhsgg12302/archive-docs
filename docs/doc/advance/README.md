@@ -1,8 +1,104 @@
 * ## 类加载器
 
-    ?> 类加载器从 JDK 1.0 就出现了，最初只是为了满足 Java Applet（已经被淘汰） 的需要。后来，慢慢成为 Java 程序中的一个重要组成部分，赋予了 Java 类可以被动态加载到 JVM 中并执行的能力。
+    !> 类加载器从 JDK 1.0 就出现了，最初只是为了满足 Java Applet（已经被淘汰） 的需要。后来，慢慢成为 Java 程序中的一个重要组成部分，赋予了 Java 类可以被动态加载到 JVM 中并执行的能力。
 
     + ### 定义
+
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        ?> 1). 类加载器是一个负责加载类的对象。`ClassLoader`是一个抽象类。给定一个类的二进制名称，类加载器尝试定位或者生成构成类定义的数据。一个典型的策略是：转换一个名字到一个文件然后读取名字对应的类文件从文件系统。
+        <br><br>2). 每个类对象都包含一个定义它的类加载器`ClassLoader`的引用。
+        <br><br>3). 数组类的类对象不是通过类加载器创建的。但会根据java运行时的需要自动创建（也就是JVM自己创建）。对于数组的`Class.getClassLoader()`返回的类加载器和它加载它元素类型的加载器一样。如果元素是`primitive type`原始类型(有别于复合类型)，则数组类没有类加载器。
+        <br><br>4). 应用程序实现 ClassLoader 的子类，以扩展 Java 虚拟机动态加载类的方式。
+        <br><br>5). `ClassLoader`使用委托模式查找类或资源，每一个`ClassLoader`都关联一个父加载器。当请求查找一个类或资源的时候。在它自己加载之前会先委托父加载器去加载。JVM内建的加载器叫作`bootstrap class loader`, 它自己没有父加载器，但可以作为换一个父加载器实例。
+        <br><br>6). 通常，JVM虚拟机加载类从本地文件系统已平台相关的方式。例如：在UNIX系统中。JVM加载类通过定义的`CLASSPATH`环境变量。
+        <br><br>7). 然而，一些类获取不是来源于文件，而是来自诸如网络的情况，或者被一个应用程序构造生成。`defineClass`转换一个字节数组到类的实例。可以使用`Class.newInstance`创建新定义的类的实例。
+        <br><br>8). 类加载器创建的对象的方法和构造函数可以引用其他类。为了确定引用的类，Java 虚拟机调用最初创建该类的类加载器的 loadClass 方法。[参考](https://stackoverflow.com/questions/61711187/what-does-the-methods-and-constructors-of-objects-created-by-a-class-loader-may) , [代码实现](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/load_reference)
+        <!-- div:right-panel-59 -->
+        ```java
+        /**
+         * A class loader is an object that is responsible for loading classes. The
+         * class ClassLoader is an abstract class.  Given the binary name of a class, a class loader should attempt to
+         * locate or generate data that constitutes a definition for the class.  A
+         * typical strategy is to transform the name into a file name and then read a
+         * "class file" of that name from a file system.
+         *
+         * Every Class object contains a  reference to the ClassLoader that defined it.
+         *
+         * <p> <tt>Class</tt> objects for array classes are not created by class
+         * loaders, but are created automatically as required by the Java runtime.
+         * The class loader for an array class, as returned by {@link
+         * Class#getClassLoader()} is the same as the class loader for its element
+         * type; if the element type is a primitive type, then the array class has no
+         * class loader.
+         *
+         * <p> Applications implement subclasses of <tt>ClassLoader</tt> in order to
+         * extend the manner in which the Java virtual machine dynamically loads
+         * classes.
+         *
+         * <p> Class loaders may typically be used by security managers to indicate
+         * security domains.
+         *
+         * <p> The <tt>ClassLoader</tt> class uses a delegation model to search for
+         * classes and resources.  Each instance of <tt>ClassLoader</tt> has an
+         * associated parent class loader.  When requested to find a class or
+         * resource, a <tt>ClassLoader</tt> instance will delegate the search for the
+         * class or resource to its parent class loader before attempting to find the
+         * class or resource itself.  The virtual machine's built-in class loader,
+         * called the "bootstrap class loader", does not itself have a parent but may
+         * serve as the parent of a <tt>ClassLoader</tt> instance.
+         *
+         * <p> Normally, the Java virtual machine loads classes from the local file
+         * system in a platform-dependent manner.  For example, on UNIX systems, the
+         * virtual machine loads classes from the directory defined by the
+         * <tt>CLASSPATH</tt> environment variable.
+         *
+         * <p> However, some classes may not originate from a file; they may originate
+         * from other sources, such as the network, or they could be constructed by an
+         * application.  The method defineClass converts an array of bytes into an instance of class Class. Instances of this newly defined class can be created using Class.newInstance.
+         *
+         * <p> The methods and constructors of objects created by a class loader may
+         * reference other classes.  To determine the class(es) referred to, the Java
+         * virtual machine invokes the {@link #loadClass <tt>loadClass</tt>} method of
+         * the class loader that originally created the class.
+         *
+         */
+        public abstract class ClassLoader { }
+        ```
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        #### 网络类加载器demo
+        <!-- div:left-panel-100 -->
+        ```java
+        /*
+         * <p> The network class loader subclass must define the methods {@link
+         * #findClass <tt>findClass</tt>} and <tt>loadClassData</tt> to load a class
+         * from the network.  Once it has downloaded the bytes that make up the class,
+         * it should use the method {@link #defineClass <tt>defineClass</tt>} to
+         * create a class instance.  A sample implementation is:
+         *
+         */
+        class NetworkClassLoader extends ClassLoader {
+            String host;
+            int port;
+    
+            public Class findClass(String name) {
+                byte[] b = loadClassData(name);
+                return defineClass(name, b, 0, b.length);
+            }
+    
+            private byte[] loadClassData(String name) {
+                // load the class data from the connection
+            }
+        }
+
+        // 
+        ClassLoader loader = new NetworkClassLoader(host, port);
+        Object main = loader.loadClass("Main", true).newInstance();
+        ```
+        <!-- panels:end -->
 
     + ### 加载流程
 
