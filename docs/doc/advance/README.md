@@ -776,12 +776,259 @@
 
     + ### 结构
 
-        ?> 目前有两种实现技术，一种是JDK自带的`java.util.ServiceLoader`，另外一种是sun公司提供的`sun.misc.Service`。
+        ?> 目前有两种实现技术，一种是JDK自带的[`java.util.ServiceLoader`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/ServiceLoader.java)，另外一种是sun公司提供的[`sun.misc.Service`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/misc/Service.java)。
         <br>下面主要已JDK的进行分析。
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        ##### ServiceLoader
+        <!-- div:left-panel-50 -->
+        ?> 初始化`ServiceLoader`
+
+        ```java
+        // 调用
+        ServiceLoader<ISpiTest> serviceLoader = ServiceLoader.load(ISpiTest.class);
+        Iterator<ISpiTest> iterator = serviceLoader.iterator();
+        while(iterator.hasNext()){
+            ISpiTest next = iterator.next();
+            next.saySpi();
+        }
+
+        // 
+        public static <S> ServiceLoader<S> load(Class<S> service) {
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            return ServiceLoader.load(service, cl);
+        }
+
+        //
+        public static <S> ServiceLoader<S> load(Class<S> service,
+                                            ClassLoader loader){
+            return new ServiceLoader<>(service, loader);
+        }
+
+        // 
+        public void reload() {
+            providers.clear();
+            lookupIterator = new LazyIterator(service, loader);
+        }
+
+        private ServiceLoader(Class<S> svc, ClassLoader cl) {
+            service = Objects.requireNonNull(svc, "Service interface cannot be null");
+            loader = (cl == null) ? ClassLoader.getSystemClassLoader() : cl;
+            acc = (System.getSecurityManager() != null) ? AccessController.getContext() : null;
+            reload();
+        }
+        ```
+        <!-- div:right-panel-50 -->
+        ?> 懒加载迭代
+
+        ```java
+        // 调用 iterator()方法返回一个迭代器，迭代器内部有一个类型为 LazyIterator lookupIterator懒加载迭代器。
+        // 查找和加载在这个懒加载器中。
+        public Iterator<S> iterator() {
+            return new Iterator<S>() {
+
+                Iterator<Map.Entry<String,S>> knownProviders
+                    = providers.entrySet().iterator();
+
+                public boolean hasNext() {
+                    if (knownProviders.hasNext())
+                        return true;
+                    return lookupIterator.hasNext();
+                }
+
+                public S next() {
+                    if (knownProviders.hasNext())
+                        return knownProviders.next().getValue();
+                    return lookupIterator.next();
+                }
+
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+
+            };
+        }
+
+        // 然后就是使用懒加载迭代器通过`ClassLoader`getResource加载资源文件，
+        configs = loader.getResources(fullName);
+        // 以及 Class.forName(cn, false, loader); 加载资源文件类。最后强转换一下
+        c = Class.forName(cn, false, loader);
+        S p = service.cast(c.newInstance());
+        ```
+        <!-- panels:end -->
 
     + ### 使用场景
 
         - #### JDBC
+
+            ?> JDBC 4.0 开始增加了[`Autoloading of JDBC drivers`](https://docs.oracle.com/javadb/10.8.3.0/ref/rrefjdbc4_0summary.html)自动加载驱动的特性。主要使用的是 ***SPI*** 以及破坏双亲委派机制的 ***Thread Context ClassLoader*** 技术。
+            <br><br>Autoloading of JDBC drivers. In earlier versions of JDBC, applications had to manually register drivers before requesting Connections. With JDBC 4.0, applications no longer need to issue a Class.forName() on the driver name; instead, the DriverManager will find an appropriate JDBC driver when the application requests a Connection.
+
+            <!-- panels:start -->
+            <!-- div:title-panel -->
+            ##### 数据库驱动注册方式(老版本)
+            <!-- div:left-panel-50 -->
+            ?> **Mysql**
+            ```java
+            /**
+             * 方式①
+             * 直接手动注册。
+             */
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            //Getting the connection
+            String mysqlUrl = "jdbc:mysql://localhost/mydatabase";
+            Connection con = DriverManager.getConnection(mysqlUrl, "root", "password");
+
+            /**
+             * 方式②
+             * 间接手动注册。
+             *（间接是因为Class.forName()加载类的时候会进行初始话，调用静态方法，近而调用注册方法注册）
+             */
+            Class.forName("com.mysql.jdbc.Driver");
+            //Getting the connection
+            String mysqlUrl = "jdbc:mysql://localhost/mydatabase";
+            Connection con = DriverManager.getConnection(mysqlUrl, "root", "password");
+
+            // Class.forName()调用静态方法进行注册。
+            public class Driver extends NonRegisteringDriver implements java.sql.Driver {
+                public Driver() throws SQLException {
+                }
+
+                static {
+                    try {
+                        
+                        DriverManager.registerDriver(new Driver());
+                    } catch (SQLException var1) {
+                        throw 
+                            new RuntimeException("Can't register driver!");
+                    }
+                }
+            }
+            ```
+            
+            <!-- div:right-panel-50 -->
+            ?> **SQLServer**
+            ```java
+            /**
+             * 方式①
+             * 直接手动注册。
+             */
+            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+            //Getting the connection
+            String mysqlUrl = "jdbc:sqlserver://localhost:1433;DatabaseName=wtf";
+            Connection con = DriverManager.getConnection(mysqlUrl, "root", "password");
+            
+            /**
+             * 方式②
+             * 间接手动注册。
+             *（间接是因为Class.forName()加载类的时候会进行初始话，调用静态方法，近而调用注册方法注册）
+             */
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            //Getting the connection
+            String mysqlUrl = "jdbc:sqlserver://localhost:1433;DatabaseName=wtf";
+            Connection con = DriverManager.getConnection(mysqlUrl, "sa", "password");
+
+            // Class.forName()调用静态方法进行注册。 
+            public final class SQLServerDriver implements Driver {
+                 static {
+                    DRIVER_PROPERTIES = new SQLServerDriverPropertyInfo[]{new SQLServerDriverPropertyInfo("applicationName", "Microsoft SQL Server JDBC Driver", false, (String[])null), new SQLServerDriverPropertyInfo("databaseName", "", false, (String[])null), new SQLServerDriverPropertyInfo("disableStatementPooling", "true", false, new String[]{"true"}), new SQLServerDriverPropertyInfo("encrypt", "false", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("failoverPartner", "", false, (String[])null), new SQLServerDriverPropertyInfo("hostNameInCertificate", "", false, (String[])null), new SQLServerDriverPropertyInfo("instanceName", "", false, (String[])null), new SQLServerDriverPropertyInfo("integratedSecurity", "false", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("lastUpdateCount", "true", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("lockTimeout", "-1", false, (String[])null), new SQLServerDriverPropertyInfo("loginTimeout", "15", false, (String[])null), new SQLServerDriverPropertyInfo("packetSize", String.valueOf(8000), false, (String[])null), new SQLServerDriverPropertyInfo("password", "", true, (String[])null), new SQLServerDriverPropertyInfo("portNumber", "1433", false, (String[])null), new SQLServerDriverPropertyInfo("responseBuffering", "adaptive", false, new String[]{"adaptive", "full"}), new SQLServerDriverPropertyInfo("selectMethod", "direct", false, new String[]{"direct", "cursor"}), new SQLServerDriverPropertyInfo("sendStringParametersAsUnicode", "true", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("serverName", "", false, (String[])null), new SQLServerDriverPropertyInfo("trustServerCertificate", "false", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("trustStore", "", false, (String[])null), new SQLServerDriverPropertyInfo("trustStorePassword", "", false, (String[])null), new SQLServerDriverPropertyInfo("sendTimeAsDatetime", "true", false, TRUE_FALSE), new SQLServerDriverPropertyInfo("user", "", true, (String[])null), new SQLServerDriverPropertyInfo("workstationID", "", false, (String[])null), new SQLServerDriverPropertyInfo("xopenStates", "false", false, TRUE_FALSE)};
+                    driverPropertiesSynonyms = new String[][]{{"database", "databaseName"}, {"userName", "user"}, {"server", "serverName"}, {"port", "portNumber"}};
+                    baseID = 0;
+                    loggerExternal = Logger.getLogger("com.microsoft.sqlserver.jdbc.Driver");
+                    drLogger = Logger.getLogger("com.microsoft.sqlserver.jdbc.internals.SQLServerDriver");
+                    try {
+                        DriverManager.registerDriver(new SQLServerDriver());
+                    } catch (SQLException var1) {
+                        var1.printStackTrace();
+                    }
+                }
+            }
+            ```
+            <!-- panels:end -->
+
+            !> 新老版本之间的区别就是，不用手动注册驱动了。新版本可以直接通过`DriverManager.getConnection()`获取连接，只要classpath存在合适的驱动包。
+            <br>比如`mysql-connector-java-5.1.34.jar`或者`sqljdbc4.jar`。之所以可以这样，是因为：
+            <br><br>1). 调用`DriverManager.getConnection()`代码会进行`DriverManager`类加载。而`DriverManager`属于java.sql.包。根据类加载器的特性，这个类会被`BootstrapClassLoader`进行加载并且会初始化静态方法。近而调用`loadInitialDrivers()`方法。
+            <br><br>2). 方法里面分为两部分，一个是获取系统属性`jdbc.drivers`的字符串进行:分割，使用`Class.forName(aDriver, true,ClassLoader.getSystemClassLoader());`进行加载并 ___初始化___ ，注意使用的是`ClassLoader.getSystemClassLoader()`系统类加载器，因为`BootstrapClassLoader`本身加载不了。
+            <br><br>3). 另外一个是使用SPI进行加载的。使用spi加载的时候由前面介绍的 [ServiceLoader初始化第11行](#serviceloader) 知道。它会使用当前线程的类加载器。一般默认为`AppClassLoader`也既系统类加载器。然后查找classpath下面jar包中的`META-INF/services/`目录下的`java.sql.Driver`的实现。然后使用线程类加载器加载里面定义的类[并没有初始化]`c = Class.forName(cn, false, loader);`，获取到类后通过反射`S p = service.cast(c.newInstance());`实例化对象并进行 ___初始化___ 。
+            <br><br>4). 不管上述哪一部分，都是 ___初始化___ 调用静态方法将自己注册到驱动管理器里面。近而省略手动加载的步骤，实现自动加载。
+
+            ```java
+            public class DriverManager {
+                /**
+                 * Load the initial JDBC drivers by checking the System property
+                 * jdbc.properties and then use the {@code ServiceLoader} mechanism
+                 */
+                static {
+                    loadInitialDrivers();
+                    println("JDBC DriverManager initialized");
+                }
+
+                private static void loadInitialDrivers() {
+                    String drivers;
+                    try {
+                        drivers = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                            public String run() {
+                                return System.getProperty("jdbc.drivers");
+                            }
+                        });
+                    } catch (Exception ex) {
+                        drivers = null;
+                    }
+                    // If the driver is packaged as a Service Provider, load it.
+                    // Get all the drivers through the classloader
+                    // exposed as a java.sql.Driver.class service.
+                    // ServiceLoader.load() replaces the sun.misc.Providers()
+
+                    AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                        public Void run() {
+
+                            ServiceLoader<Driver> loadedDrivers = ServiceLoader.load(Driver.class);
+                            Iterator<Driver> driversIterator = loadedDrivers.iterator();
+
+                            /* Load these drivers, so that they can be instantiated.
+                            * It may be the case that the driver class may not be there
+                            * i.e. there may be a packaged driver with the service class
+                            * as implementation of java.sql.Driver but the actual class
+                            * may be missing. In that case a java.util.ServiceConfigurationError
+                            * will be thrown at runtime by the VM trying to locate
+                            * and load the service.
+                            *
+                            * Adding a try catch block to catch those runtime errors
+                            * if driver not available in classpath but it's
+                            * packaged as service and that service is there in classpath.
+                            */
+                            try{
+                                while(driversIterator.hasNext()) {
+                                    driversIterator.next();
+                                }
+                            } catch(Throwable t) {
+                            // Do nothing
+                            }
+                            return null;
+                        }
+                    });
+
+                    println("DriverManager.initialize: jdbc.drivers = " + drivers);
+
+                    if (drivers == null || drivers.equals("")) {
+                        return;
+                    }
+                    String[] driversList = drivers.split(":");
+                    println("number of Drivers:" + driversList.length);
+                    for (String aDriver : driversList) {
+                        try {
+                            println("DriverManager.Initialize: loading " + aDriver);
+                            Class.forName(aDriver, true,
+                                    ClassLoader.getSystemClassLoader());
+                        } catch (Exception ex) {
+                            println("DriverManager.Initialize: load failed: " + ex);
+                        }
+                    }
+                }
+            }
+            ```
 
     + ### Reference
 
