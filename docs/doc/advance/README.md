@@ -952,7 +952,7 @@
             <br><br>1). 调用`DriverManager.getConnection()`代码会进行`DriverManager`类加载。而`DriverManager`属于java.sql.包。根据类加载器的特性，这个类会被`BootstrapClassLoader`进行加载并且会初始化静态方法。近而调用`loadInitialDrivers()`方法。
             <br><br>2). 方法里面分为两部分，一个是获取系统属性`jdbc.drivers`的字符串进行:分割，使用`Class.forName(aDriver, true,ClassLoader.getSystemClassLoader());`进行加载并 ___初始化___ ，注意使用的是`ClassLoader.getSystemClassLoader()`系统类加载器，因为`BootstrapClassLoader`本身加载不了。
             <br><br>3). 另外一个是使用SPI进行加载的。使用spi加载的时候由前面介绍的 [ServiceLoader初始化第11行](#serviceloader) 知道。它会使用当前线程的类加载器。一般默认为`AppClassLoader`也既系统类加载器。然后查找classpath下面jar包中的`META-INF/services/`目录下的`java.sql.Driver`的实现。然后使用线程类加载器加载里面定义的类[并没有初始化]`c = Class.forName(cn, false, loader);`，获取到类后通过反射`S p = service.cast(c.newInstance());`实例化对象并进行 ___初始化___ 。
-            <br><br>4). 不管上述哪一部分，都是 ___初始化___ 调用静态方法将自己注册到驱动管理器里面。近而省略手动加载的步骤，实现自动加载。
+            <br><br>4). 不管上述哪一部分，都是 ___初始化___ 调用三方厂商实现的驱动里面的静态方法将自己注册到驱动管理器里面。近而省略手动加载的步骤，实现自动加载。
 
             ```java
             public class DriverManager {
