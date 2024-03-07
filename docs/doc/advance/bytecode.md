@@ -1,5 +1,7 @@
 * ## Intro(ByteCode)
 
+    <!-- panels:start -->
+    <!-- div:left-panel-55 -->
     !> 参考
     <br>[JDK8 JVM虚拟机实现规范 Chapter 4. The class File Format](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1)，包括[常量池](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4)数据结构
     <br>[JDK8 JVM虚拟机实现规范 Chapter 6. The Java Virtual Machine Instruction Set](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html)
@@ -7,11 +9,10 @@
     <br>进制转换`echo 'ibase=16;12'| bc`
     <br>十六进制转utf-8`echo -n "6E756D" | xxd -r -p | iconv -f utf-8`
 
-    <!-- panels:start -->
-    <!-- div:left-panel-55 -->
     ?> 下面为java源代码和class字节码。
     <br><br>用vim打开class文件`vim -b Hello.class`。[不加`-b`会在末尾追加`0x0A`多一个字节]
     <br>并且使用xxd工具查看`:%!xxd -u`;
+    <br><br>右边为使用`javap -v Hello.class`工具输出的字节码信息。
     ```java
     public class Hello { 
         private int num;
