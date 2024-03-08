@@ -263,15 +263,17 @@
             }
             ```
             ?> 对于下列LocalVariableTable属性的解释：
-            <br><br> `Start`:code块可见性起始偏移量，
-            <br>`Length`:code块可见性长度，
+            <br>`Start`:code块有值时候的始偏移量，
+            <br>`Length`:code块有值时候的长度，
             <br>`Slot`:存放变量的槽位。
+            <br><br>官方说有值: ***Each entry in the local_variable_type_table array indicates a range of code array offsets within which a local variable has a value. It also indicates the index into the local variable array of the current frame at which that local variable can be found***. 有些地方说"[可见](https://stackoverflow.com/questions/30104521/what-do-start-and-length-attribute-in-localvariabletable-mean)",一个意思。
             <br><br>比如：
-            <br>1). `this,a,b`变量在code块中一直(0->16)可见的。因为调用栈传入slot中的。
-            <br>2). 而`c`变量直到在 ***2: istore_3*** 存入第三个slot中时才可见，也就是在(3->16)位置可见。
-            <br>3). 同理`d`变量在 ***5: istore 4*** 存入第四个slot中时才可见，也就是在(7->16)位置可见。
+            <br>1). `this,a,b`变量在code块中一直(0->16)有值。因为调用栈传入slot中的。
+            <br>2). 而`c`变量直到在 ***2: istore_3*** 存入第三个slot中时才有值，也就是在(3->16)位置有值。
+            <br>3). 同理`d`变量在 ***5: istore 4*** 存入第四个slot中时才有值，也就是在(7->16)位置有值。
             <!-- div:right-panel-50 -->
             ```java
+            // 字节码节选
             public int study(int, int);
                 descriptor: (II)I
                 flags: ACC_PUBLIC
