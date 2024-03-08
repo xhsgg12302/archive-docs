@@ -249,6 +249,59 @@
         <!-- div:right-panel -->
         ![](/.images/doc/advance/runtime/runtime-stack-struction-01.png ':size=98%')
         <!-- panels:end -->
+
+        - #### LocalVariableTable
+
+            !> [局部变量表](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.14)：在编译期间可以加`-g`参数用来生成调试信息。Code块可选的属性。可以用来debug,调试器可以使用它来确定方法执行期间给定局部变量的值。
+            <!-- panels:start -->
+            <!-- div:left-panel-50 -->
+            ```java
+            public int study(int a, int b){
+                int c = 10;
+                int d = 20;
+                return a+b*c-d;
+            }
+            ```
+            ?> 对于下列LocalVariableTable属性的解释：
+            <br><br> `Start`:code块可见性起始偏移量，
+            <br>`Length`:code块可见性长度，
+            <br>`Slot`:存放变量的槽位。
+            <br><br>比如：
+            <br>1). `this,a,b`变量在code块中一直(0->16)可见的。因为调用栈传入slot中的。
+            <br>2). 而`c`变量直到在 ***2: istore_3*** 存入第三个slot中时才可见，也就是在(3->16)位置可见。
+            <br>3). 同理`d`变量在 ***5: istore 4*** 存入第四个slot中时才可见，也就是在(7->16)位置可见。
+            <!-- div:right-panel-50 -->
+            ```java
+            public int study(int, int);
+                descriptor: (II)I
+                flags: ACC_PUBLIC
+                Code:
+                stack=3, locals=5, args_size=3
+                    0: bipush        10
+                    2: istore_3
+                    3: bipush        20
+                    5: istore        4
+                    7: iload_1
+                    8: iload_2
+                    9: iload_3
+                    10: imul
+                    11: iadd
+                    12: iload         4
+                    14: isub
+                    15: ireturn
+                LineNumberTable:
+                    line 26: 0
+                    line 27: 3
+                    line 28: 7
+                LocalVariableTable:
+                    Start  Length  Slot  Name   Signature
+                        0      16     0  this   L_jvm/classPrase/Student;
+                        0      16     1     a   I
+                        0      16     2     b   I
+                        3      13     3     c   I
+                        7       9     4     d   I
+            ```
+            <!-- panels:end -->
         
     + ### 运行过程
 

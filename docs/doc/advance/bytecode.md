@@ -9,7 +9,7 @@
     <br>进制转换`echo 'ibase=16;12'| bc`
     <br>十六进制转utf-8`echo -n "6E756D" | xxd -r -p | iconv -f utf-8`
 
-    ?> 下面为java源代码和class字节码。
+    ?> 下面为java源代码和class字节码。编译使用`-g`参数，会包含 [***LocalVariableTable***](./runtime.md#LocalVariableTable) 。
     <br><br>用vim打开class文件`vim -b Hello.class`。[不加`-b`会在末尾追加`0x0A`多一个字节]
     <br>并且使用xxd工具查看`:%!xxd -u`;
     <br><br>右边为使用`javap -v Hello.class`工具输出的字节码信息。
