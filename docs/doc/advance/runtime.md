@@ -4,6 +4,120 @@
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
+    !> 右上java源代码，右下常量池，左下为Code方法块。
+    ```java
+    {
+        public _jvm.classPrase.Student(int, java.lang.String, java.lang.String);
+            descriptor: (ILjava/lang/String;Ljava/lang/String;)V
+            flags: ACC_PUBLIC
+            Code:
+            stack=3, locals=4, args_size=4
+                0: aload_0
+                1: iload_1
+                2: aload_2
+                3: invokespecial #1                  // Method _jvm/classPrase/Person."<init>":(ILjava/lang/String;)V
+                6: aload_0
+                7: aload_3
+                8: putfield      #2                  // Field sid:Ljava/lang/String;
+                11: return
+            LineNumberTable:
+                line 19: 0
+                line 20: 6
+                line 21: 11
+
+        public void run();
+            descriptor: ()V
+            flags: ACC_PUBLIC
+            Code:
+            stack=2, locals=1, args_size=1
+                0: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;
+                3: ldc           #4                  // String run()...
+                5: invokevirtual #5                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+                8: return
+            LineNumberTable:
+                line 23: 0
+                line 24: 8
+
+        public int study(int, int);
+            descriptor: (II)I
+            flags: ACC_PUBLIC
+            Code:
+            stack=3, locals=5, args_size=3
+                0: bipush        10
+                2: istore_3
+                3: bipush        20
+                5: istore        4
+                7: iload_1
+                8: iload_2
+                9: iload_3
+                10: imul
+                11: iadd
+                12: iload         4
+                14: isub
+                15: ireturn
+            LineNumberTable:
+                line 26: 0
+                line 27: 3
+                line 28: 7
+
+        public static int getCnt();
+            descriptor: ()I
+            flags: ACC_PUBLIC, ACC_STATIC
+            Code:
+            stack=1, locals=0, args_size=0
+                0: getstatic     #6                  // Field cnt:I
+                3: ireturn
+            LineNumberTable:
+                line 31: 0
+
+        public static void main(java.lang.String[]);
+            descriptor: ([Ljava/lang/String;)V
+            flags: ACC_PUBLIC, ACC_STATIC
+            Code:
+            stack=5, locals=2, args_size=1
+                0: new           #7                  // class _jvm/classPrase/Student
+                3: dup
+                4: bipush        23
+                6: ldc           #8                  // String dqrcsc
+                8: ldc           #9                  // String 20150723
+                10: invokespecial #10                 // Method "<init>":(ILjava/lang/String;Ljava/lang/String;)V
+                13: astore_1
+                14: aload_1
+                15: iconst_5
+                16: bipush        6
+                18: invokevirtual #11                 // Method study:(II)I
+                21: pop
+                22: invokestatic  #12                 // Method getCnt:()I
+                25: pop
+                26: aload_1
+                27: invokevirtual #13                 // Method run:()V
+                30: return
+            LineNumberTable:
+                line 34: 0
+                line 35: 14
+                line 36: 22
+                line 37: 26
+                line 38: 30
+
+        static {};
+            descriptor: ()V
+            flags: ACC_STATIC
+            Code:
+            stack=2, locals=0, args_size=0
+                0: iconst_5
+                1: putstatic     #6                  // Field cnt:I
+                4: getstatic     #6                  // Field cnt:I
+                7: iconst_1
+                8: iadd
+                9: putstatic     #6                  // Field cnt:I
+                12: return
+            LineNumberTable:
+                line 13: 0
+                line 15: 4
+                line 16: 12
+    }
+    ```
+    <!-- div:right-panel-50 -->
     ```java
     package _jvm.classPrase;
 
@@ -117,121 +231,6 @@
         #56 = Utf8               java/io/PrintStream
         #57 = Utf8               println
         #58 = Utf8               (Ljava/lang/String;)V
-    ```
-    <!-- div:right-panel-50 -->
-
-    !> 左上java源代码，左下常量池，右下为Code方法块。
-    ```java
-    {
-        public _jvm.classPrase.Student(int, java.lang.String, java.lang.String);
-            descriptor: (ILjava/lang/String;Ljava/lang/String;)V
-            flags: ACC_PUBLIC
-            Code:
-            stack=3, locals=4, args_size=4
-                0: aload_0
-                1: iload_1
-                2: aload_2
-                3: invokespecial #1                  // Method _jvm/classPrase/Person."<init>":(ILjava/lang/String;)V
-                6: aload_0
-                7: aload_3
-                8: putfield      #2                  // Field sid:Ljava/lang/String;
-                11: return
-            LineNumberTable:
-                line 19: 0
-                line 20: 6
-                line 21: 11
-
-        public void run();
-            descriptor: ()V
-            flags: ACC_PUBLIC
-            Code:
-            stack=2, locals=1, args_size=1
-                0: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;
-                3: ldc           #4                  // String run()...
-                5: invokevirtual #5                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-                8: return
-            LineNumberTable:
-                line 23: 0
-                line 24: 8
-
-        public int study(int, int);
-            descriptor: (II)I
-            flags: ACC_PUBLIC
-            Code:
-            stack=3, locals=5, args_size=3
-                0: bipush        10
-                2: istore_3
-                3: bipush        20
-                5: istore        4
-                7: iload_1
-                8: iload_2
-                9: iload_3
-                10: imul
-                11: iadd
-                12: iload         4
-                14: isub
-                15: ireturn
-            LineNumberTable:
-                line 26: 0
-                line 27: 3
-                line 28: 7
-
-        public static int getCnt();
-            descriptor: ()I
-            flags: ACC_PUBLIC, ACC_STATIC
-            Code:
-            stack=1, locals=0, args_size=0
-                0: getstatic     #6                  // Field cnt:I
-                3: ireturn
-            LineNumberTable:
-                line 31: 0
-
-        public static void main(java.lang.String[]);
-            descriptor: ([Ljava/lang/String;)V
-            flags: ACC_PUBLIC, ACC_STATIC
-            Code:
-            stack=5, locals=2, args_size=1
-                0: new           #7                  // class _jvm/classPrase/Student
-                3: dup
-                4: bipush        23
-                6: ldc           #8                  // String dqrcsc
-                8: ldc           #9                  // String 20150723
-                10: invokespecial #10                 // Method "<init>":(ILjava/lang/String;Ljava/lang/String;)V
-                13: astore_1
-                14: aload_1
-                15: iconst_5
-                16: bipush        6
-                18: invokevirtual #11                 // Method study:(II)I
-                21: pop
-                22: invokestatic  #12                 // Method getCnt:()I
-                25: pop
-                26: aload_1
-                27: invokevirtual #13                 // Method run:()V
-                30: return
-            LineNumberTable:
-                line 34: 0
-                line 35: 14
-                line 36: 22
-                line 37: 26
-                line 38: 30
-
-        static {};
-            descriptor: ()V
-            flags: ACC_STATIC
-            Code:
-            stack=2, locals=0, args_size=0
-                0: iconst_5
-                1: putstatic     #6                  // Field cnt:I
-                4: getstatic     #6                  // Field cnt:I
-                7: iconst_1
-                8: iadd
-                9: putstatic     #6                  // Field cnt:I
-                12: return
-            LineNumberTable:
-                line 13: 0
-                line 15: 4
-                line 16: 12
-    }
     ```
     <!-- panels:end -->
 
