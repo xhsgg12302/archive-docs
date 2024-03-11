@@ -2,10 +2,20 @@
 
 - ### 方法区
 
-    ?> JDK1.7及之前的实现叫做永久代，包括类信息，常量，静态变量以及常量池。1.7将字符串常量池放在堆里了。主要在堆里开辟内存，隶属于堆，连续的物理内存。但是相互隔离。
-    <br><br>JDK1.8改名为元空间，`元空间不再虚拟机设置的内存中，而是使用本地内存`
-    <br><br>*[常量池](https://blog.csdn.net/qq_43210583/article/details/116558468) 是方法区比较重要的一部分，分为四种：类文件常量池（静态常量池，[字节码文件解析](../bytecode.md) ），字符串常量池，运行时常量池，封装类常量池。类文件常量池中的数据在类加载的时候会放入到运行时常量池中，并将符号引用在解析阶段转换成运行时常量池中的直接引用。*
-    <br><br>字符串常量池部分可以[参考](../base/string.md#内存布局)
+    ?> [JVMS](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4): The Java Virtual Machine has a method area that is shared among all Java Virtual Machine threads. The method area is analogous to the storage area for compiled code of a conventional language or analogous to the "text" segment in an operating system process. It stores per-class structures such as the run-time constant pool, field and method data, and the code for methods and constructors, including the special methods (§2.9) used in class and instance initialization and interface initialization.
+    <br>The method area is created on virtual machine start-up. Although the method area is logically part of the heap, simple implementations may choose not to either garbage collect or compact it. This specification does not mandate the location of the method area or the policies used to manage compiled code. The method area may be of a fixed size or may be expanded as required by the computation and may be contracted if a larger method area becomes unnecessary. The memory for the method area does not need to be contiguous.
+    <br><br>A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file (§4.4). It contains several kinds of constants, ranging from numeric literals known at compile-time to method and field references that must be resolved at run-time. The run-time constant pool serves a function similar to that of a symbol table for a conventional programming language, although it contains a wider range of data than a typical symbol table.
+    <br>Each run-time constant pool is allocated from the Java Virtual Machine's method area (§2.5.4). The run-time constant pool for a class or interface is constructed when the class or interface is created (§5.3) by the Java Virtual Machine.
+
+    ?> 翻译：Java虚拟机有一个在所有Java虚拟机线程之间共享的方法区域。方法区域类似于传统语言编译代码的存储区域或类似于操作系统进程中的“文本”段。它存储 ___每个类的结构，如运行时常量池、字段和方法数据，以及方法和构造函数的代码，包括类和实例初始化以及接口初始化中使用的特殊方法(2.9)___ 。
+    <br> ___方法区域在虚拟机启动时创建. 虽然方法区域在逻辑上是堆的一部分___ ，但简单的实现可能选择不进行垃圾收集或压缩它。该规范不强制要求方法区域的位置或用于管理编译代码的策略。方法区域可以是固定大小的，也可以根据计算的需要扩展，如果不需要更大的方法区域，也可以收缩。方法区域的 ___内存不必是连续的___ 。
+    <br><br>运行时常量池是每个类或者接口运行时类文件中`constant_pool`表的表达形式。它包含几种常量，从编译时已知的数值字面量到必须在运行时解析的方法和字段引用。运行时常数池的功能类似于传统编程语言的符号表，尽管它比典型的符号表包含更广泛的数据。
+    <br>每个运行时常数池都是从Java虚拟机的方法区分配的(2.5.4)。类或接口的运行时常数池是在Java虚拟机创建类或接口时构造的(5.3)。
+
+    !> JDK1.7及之前的实现叫做永久代，包括类信息，常量，静态变量以及常量池。1.7将字符串常量池放在堆里了。主要在堆里开辟内存，隶属于堆，但是相互隔离。
+    <br>JDK1.8改名为元空间，`元空间不再虚拟机设置的内存(堆)中，而是使用本地内存`。
+    <br><br>*[常量池](https://blog.csdn.net/qq_43210583/article/details/116558468) 是方法区比较重要的一部分，分为以下几种：类文件常量池（静态常量池，[字节码文件解析](../bytecode.md) ），[字符串常量池](../base/string.md#内存布局)，运行时常量池，~封装类常量池~。类文件常量池中的数据在类加载的时候会放入到运行时常量池中，并将符号引用在解析阶段转换成运行时常量池中的直接引用。* ，并不是所有的符号引用都会解析成实体引用。[比如]()
+    <br><br>运行时常量池是属于JVM加载类时为每个类或者接口在方法区创建的。不属于堆，但里面引用的字符串字面量部分会在堆中或者字符串池中进行创建。[这张图](https://www.cnblogs.com/chiangchou/p/jvm-1.html#_label0_1)感觉有误解: (字符串常量池在堆没问题，而且字符串引用也没问题。但是根据JVMS，运行时常量池是在方法区创建的。根据这张图展示的来说，字符串常量池就属于方法区了❌)。
 
     | type     | explain                                                      |
     | -------- | ------------------------------------------------------------ |
