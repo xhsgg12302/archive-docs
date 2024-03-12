@@ -2,7 +2,8 @@
 
 * ### reference
 
-    ?> special：macosx安装特殊版本[1.6.0_65](https://updates.cdn-apple.com/2019/cert/041-88384-20191011-3d8da658-dca4-4a5b-b67c-26e686876403/JavaForOSX.dmg)，oracle没有提供。
+    ?> ~special：macosx[Sonoma]安装特殊版本[1.6.0_65](https://updates.cdn-apple.com/2019/cert/041-88384-20191011-3d8da658-dca4-4a5b-b67c-26e686876403/JavaForOSX.dmg)，oracle没有提供~ 。
+    <br>上面的没有源码，[参考](https://stackoverflow.com/questions/4011002/java-eclipse-on-macosx-where-is-the-src-zip) 改用[`Java for OS X 2013-005 Developer Package`](https://developer.apple.com/download/all/?q=java)，对应的JAVA版本为 **1.6.0_65-b14-462.jdk** 。
 
     + https://mirrors.huaweicloud.com/java/jdk/
     + https://mirrors.huaweicloud.com/openjdk/
