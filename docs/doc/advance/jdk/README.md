@@ -1,5 +1,6 @@
 ## 下载JDK
-* ### Reference
+
+* ### reference
 
     ?> special：macosx安装特殊版本[1.6.0_65](https://updates.cdn-apple.com/2019/cert/041-88384-20191011-3d8da658-dca4-4a5b-b67c-26e686876403/JavaForOSX.dmg)，oracle没有提供。
 
