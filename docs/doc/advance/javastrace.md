@@ -1,4 +1,4 @@
-* ## Intro(Runtime)
+* ## Intro(JavaStrace)
 
     ?> 一个java程序的运行全过程解析。
 
@@ -246,7 +246,7 @@
         <br>___注意：局部变量表及操作数栈的最大深度在编译期间就已经确定了，存储在该方法字节码的Code属性中。___
 
         <!-- div:right-panel -->
-        ![](/.images/doc/advance/runtime/runtime-stack-struction-01.png ':size=98%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-struction-01.png ':size=98%')
         <!-- panels:end -->
 
         - #### LocalVariableTable
@@ -322,7 +322,7 @@
             s.run();
         }
         ```
-        ![](/.images/doc/advance/runtime/runtime-stack-main-01.png ':size=77%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-01.png ':size=77%')
         <!-- div:right-panel -->
         ```java
         public static void main(java.lang.String[]);
@@ -362,8 +362,8 @@
         <br>`ldc #8`：将#8这个常量池中的常量即”dqrcsc”取出，并入栈。
         <br>`ldc #9`：将#9这个常量池中的常量即”20150723”取出，并入栈。
 
-        ![](/.images/doc/advance/runtime/runtime-stack-main-02.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-03.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-02.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-03.png ':size=49%')
 
         <!-- panels:start -->
         <!-- div:title-panel -->
@@ -380,7 +380,7 @@
             this.sid = sid;
         }
         ```
-        ![](/.images/doc/advance/runtime/runtime-stack-main-04.png ':size=99%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-04.png ':size=99%')
         <!-- div:right-panel-39 -->
         ```java
         public Person(int age, String name){
@@ -418,8 +418,8 @@
         <br><br>`putfield #2`：将当前栈顶的值”20150723”赋值给0x2222所引用对象的sid字段，然后栈中的两个值出栈。
         <br>`return`：返回调用方，即main()方法，当前方法栈帧出栈。
 
-        ![](/.images/doc/advance/runtime/runtime-stack-main-05.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-06.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-05.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-06.png ':size=49%')
 
         ?> 重新回到main()方法中，继续执行下面的字节码指令：
         <br>`astore_1`：将当前栈顶引用类型的值赋值给slot1处的局部变量，然后出栈。
@@ -427,8 +427,8 @@
         <br>`iconst_5`：将常数5入栈，int型常数只有0-5有对应的iconst_x指令。
         <br>`bipush 6`：将常数6入栈。
 
-        ![](/.images/doc/advance/runtime/runtime-stack-main-02.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-07.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-02.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-07.png ':size=49%')
 
         <!-- panels:start -->
         <!-- div:title-panel -->
@@ -443,7 +443,7 @@
             return a+b*c-d;
         }
         ```
-        ![](/.images/doc/advance/runtime/runtime-stack-main-08.png ':size=99%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-08.png ':size=99%')
         <!-- div:right-panel-55 -->
         ```java
         public int study(int, int);
@@ -482,10 +482,10 @@
         <br><br>`isub`：将栈顶两个值出栈，相减结果入栈：
         <br>`ireturn`：将当前栈顶的值返回到调用方。
 
-        ![](/.images/doc/advance/runtime/runtime-stack-main-09.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-10.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-11.png ':size=49%')
-        ![](/.images/doc/advance/runtime/runtime-stack-main-12.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-09.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-10.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-11.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-12.png ':size=49%')
 
         <!-- panels:start -->
         <!-- div:title-panel -->
@@ -498,7 +498,7 @@
         <br>`invokevirtual #13`：调用0x2222对象的run()方法，重写自父类的方法，需要动态分派，所以使用invokevirtual指令
         <br>`return`：main()返回，程序运行结束。
 
-        ![](/.images/doc/advance/runtime/runtime-stack-main-13.png ':size=49%')
+        ![](/.images/doc/advance/javastrace/runtime-stack-main-13.png ':size=49%')
         <!-- panels:end -->
 
 
