@@ -28,6 +28,47 @@
         <br><br>运行时常量池是属于JVM加载类时为每个类或者接口在方法区创建的。不属于堆，但里面引用的字符串字面量部分会在堆中或者字符串池中进行创建。[图](https://www.cnblogs.com/chiangchou/p/jvm-1.html#_label0_1)感觉有误解: (字符串常量池在堆没问题，而且字符串引用也没问题。但是根据JVMS，运行时常量池是在方法区创建的。根据这张图展示的来说，字符串常量池就属于方法区了❌)。
         <br><br>运行时常量池中的所有引用最初都是符号性的.还有一些非符号引用的。string，integer，long
 
+        - #### 获取运行时常量池中的数据
+
+            ?> 主要通过反射获取Class类中的Method`getConstantPool`,然后结合实际类获取常量池[`sun.reflect.ConstantPool`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/reflect/ConstantPool.java)。[参考](https://stackoverflow.com/questions/33981540/getting-a-class-constant-pool-programmatically)
+
+            <!-- panels:start -->
+            <!-- div:left-panel-50 -->
+            ```java
+            public class Bar {
+                private static final Method getConstantPool;
+
+                static {
+                    try {
+                        getConstantPool = Class.class.getDeclaredMethod("getConstantPool");
+                        getConstantPool.setAccessible(true);
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                static void butts() {
+                    try {
+                        ConstantPool constantPool = (ConstantPool) getConstantPool.invoke(ConstantTest.class);
+                        // ...
+                        System.out.println();
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                public static void main(String[] args) {
+                    butts();
+                }
+            }
+            ```
+            <!-- div:right-panel-50 -->
+            !> 需要注意的是不知道为什么通过`constantPool.getStringAt(2)`获取字符串常量的时候会导致JVM crash，有时候是好使的。暂时不知道原因。
+            <br><br>错误信息如下：
+            <br>`Problematic frame:# V  [libjvm.dylib+0x1e732e]  Array<unsigned short>::index_of(unsigned short const&) const+0x4`
+
+            ![](/.images/doc/advance/jvm/jvm-runtime-constant-pool-01.png ':size=100%')
+            <!-- panels:end -->
+
         - #### Constant_pool_Table解析时机
 
             ?> JVM加载类的时候并不是一上来就会将原来字节码文件中的常量池全部解析。比如下面这段代码，查看字面量确实存在`"example@126.com"`。但是使用`jvisualvm`dumpheap后没有找到对应的字符串。
