@@ -2,16 +2,19 @@
 
     + ### 内存布局
 
-        ![](/.images/doc/base/string/string-memory-01.png ':size=99%')
+        ![](/.images/doc/base/string/string-memory-01.png ':size=37%')
+        ![](/.images/doc/base/string/string-memory-02.png ':size=62%')
 
     + ### intern()
 
-        ?> 这个方法表示获取一个字符串对象的值在常量池中的引用。如果常量池中存在，则直接返回引用。如果不存在，JDK1.6的话，会copy String.value 到字符串常量池中，而包含及以上版本的话，会直接将String.value的引用放入到字符串常量池中。另外字符串常量池的实现是[C++ 中的hashtable](https://www.cnblogs.com/mic112/p/15520770.html#字符串常量池)。
+        ?> `String.intern()`方法表示获取一个字符串对象的值在常量池中的引用。如果常量池中存在，则直接返回引用。如果不存在，常量池创建并返回引用。
+        <br><br>不同jdk版本创建并返回引用是有区别的：
+        <br>JDK1.6，不存在则在**永久代字符串常量池**创建`等值字符串`，
+        <br>JDK1.6之后，在**堆区字符串常量池**创建的是`堆中String obj的引用`。[参考1](https://stackoverflow.com/questions/27812666/why-string-intern-behave-differently-in-oracle-jdk-1-7)，[参考2](https://blog.csdn.net/tyyking/article/details/82496901)
+        <br><br>另外字符串常量池的实现是[C++ 中的hashtable](https://www.cnblogs.com/mic112/p/15520770.html#字符串常量池)。
 
         !> `String s = new String("ABC")` 这行单纯代码层面来说，只创建一个对象。如果包含类加载的过程，有可能会创建两个，一个在常量池中，一个在堆里面。堆里面的引用常量池中的value。[参考](https://stackoverflow.com/questions/19672427/string-s-new-stringxyz-how-many-objects-has-been-made-after-this-line-of)
-        <br><br>`String.intern()` 方法首先会在常量池中查找等值字符串，找到了，返回引用。没找到，常量池创建并返回引用。
-        <br>JDK1.6。不存在创建的是等值字符串，之后，创建的是堆中value的引用。[参考](https://blog.csdn.net/tyyking/article/details/82496901)
-
+        
         ```java
         /**
          * Returns a canonical representation for the string object.
@@ -45,18 +48,18 @@
         <!-- tabs:start -->
         ##### **hello**
         ```java
-        // 代码片段1
-        String str2 = new String("str")+new String("01"); // 创建string对象 0x02912。
-        str2.intern(); // jdk1.7及以下。 str2.intern()如果常量池中没有的话，会创建 str2 0x02912。 . 所以 str2.intern() == str2
-        String str1 = "str01"; // 现在常量池中有了，直接返回引用 0x02912。
-        System.out.println(str2==str1); // 所以相等
+        // source: https://blog.csdn.net/tyyking/article/details/82496901
+        String str2 = new String("str") + new String("01");
+        str2.intern(); 
+        String str1 = "str01";
+        System.out.println(str2 == str1);
 
-        // 代码片段2
-        String str2 = new String("str")+new String("01"); // 创建string对象 0x02912。
-        String str1 = "str01"; // 常量池中没有，创建"str01"字符串并返回引用 0xbc0cf
-        str2.intern(); // 常量池中有字符串 ”str01" 所以返回引用 0xbc0cf .所以 str2.intern()== str01 == 0xbc0cf 
-        System.out.println(str2==str1); // 不相等。因为str2 == 0x2912 ,str1 = oxbc0cf
+        // 上述代码在JDK1.6及以后版本表现不同。假设str2的地址为`String@725`
+        // 1.6 调用`str2.intern()`会在永久代字符串常量池中复制等值字符串String@825，然后返回引用String@825。给str1赋值的时候发现字符串常量池有'str01'，则将引用String@825给str1。
+        // >1.6 调用`str2.intern()`会在堆区字符串常量池中放置对象str2的引用String@725，然后返回引用String@725。给str1赋值的时候发现字符串常量池有'str01'，则将引用String@725给str1。
         ```
+        ![](/.images/doc/base/string/string-intern-01.png ':size=99%')
+        ![](/.images/doc/base/string/string-intern-02.png ':size=99%')
         ##### **world**
         ```java
         public class Hello{}
