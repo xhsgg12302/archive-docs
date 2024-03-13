@@ -238,3 +238,11 @@
 
     + [\[Java基础\]-- Java GC 垃圾回收器的分类和优缺点](https://blog.csdn.net/high2011/article/details/80177473)
     + [方法区](https://baijiahao.baidu.com/s?id=1731211048001613394&wfr=spider&for=pc)
+
+    + ### OQL分析工具
+        - https://htmlpreview.github.io/?https://raw.githubusercontent.com/visualvm/visualvm.java.net.backup/master/www/oqlhelp.html
+        - https://cr.openjdk.org/~sundar/8022483/webrev.01/raw_files/new/src/share/classes/com/sun/tools/hat/resources/oqlhelp.html
+    
+    + ### 堆分析工具
+        - https://www.usenix.org/legacy/events/jvm01/full_papers/russell/russell_html/index.html
+        - https://javabetter.cn/jvm/hsdb.html
