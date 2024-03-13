@@ -47,7 +47,7 @@
         <!-- div:title-panel -->
         #### 测试
         <!-- tabs:start -->
-        ##### **hello**
+        ##### **case1**
         ```java
         // source: https://blog.csdn.net/tyyking/article/details/82496901
         String str2 = new String("str") + new String("01");
@@ -61,10 +61,15 @@
         ```
         ![](/.images/doc/base/string/string-intern-01.png ':size=99%')
         ![](/.images/doc/base/string/string-intern-02.png ':size=99%')
-        ##### **world**
+        ##### **case2**
         ```java
-        public class Hello{}
+        String s1 = "a";
+        String s2 = "b";
+        String s3 = "ab";
+        String s4 = s1 + s2;
+        boolean flag = s3 == s4;
         ```
+        ![](/.images/doc/base/string/string-intern-03.png ':size=99%')
         <!-- tabs:end -->
         <!-- panels:end -->
 
