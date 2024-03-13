@@ -14,6 +14,7 @@
         <br><br>另外字符串常量池的实现是[C++ 中的hashtable](https://www.cnblogs.com/mic112/p/15520770.html#字符串常量池)。
 
         !> `String s = new String("ABC")` 这行单纯代码层面来说，只创建一个对象。如果包含类加载的过程，有可能会创建两个，一个在常量池中，一个在堆里面。堆里面的引用常量池中的value。[参考](https://stackoverflow.com/questions/19672427/string-s-new-stringxyz-how-many-objects-has-been-made-after-this-line-of)
+        <br><br>不要使用JUnit之类的工具测试intern方法，有可能会有误差，[详细解释](https://blog.csdn.net/tyyking/article/details/82496901#comments_31667673)
         
         ```java
         /**
@@ -55,7 +56,7 @@
         System.out.println(str2 == str1);
 
         // 上述代码在JDK1.6及以后版本表现不同。假设str2的地址为`String@725`
-        // 1.6 调用`str2.intern()`会在永久代字符串常量池中复制等值字符串String@825，然后返回引用String@825。给str1赋值的时候发现字符串常量池有'str01'，则将引用String@825给str1。
+        // 1.6  调用`str2.intern()`会在永久代字符串常量池中复制等值字符串String@825，然后返回引用String@825。给str1赋值的时候发现字符串常量池有'str01'，则将引用String@825给str1。
         // >1.6 调用`str2.intern()`会在堆区字符串常量池中放置对象str2的引用String@725，然后返回引用String@725。给str1赋值的时候发现字符串常量池有'str01'，则将引用String@725给str1。
         ```
         ![](/.images/doc/base/string/string-intern-01.png ':size=99%')
