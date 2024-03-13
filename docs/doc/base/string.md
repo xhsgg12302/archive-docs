@@ -14,7 +14,7 @@
         <br><br>另外字符串常量池的实现是[C++ 中的hashtable](https://www.cnblogs.com/mic112/p/15520770.html#字符串常量池)。
 
         !> `String s = new String("ABC")` 这行单纯代码层面来说，只创建一个对象。如果包含类加载的过程，有可能会创建两个，一个在常量池中，一个在堆里面。堆里面的引用常量池中的value。[参考](https://stackoverflow.com/questions/19672427/string-s-new-stringxyz-how-many-objects-has-been-made-after-this-line-of)
-        <br><br>不要使用JUnit之类的工具测试intern方法，有可能会有误差，[详细解释](https://blog.csdn.net/tyyking/article/details/82496901#comments_31667673)
+        <br><br>不要使用JUnit之类的工具测试intern方法，有可能会有误差，[详细解释查看case3](#case3)
         
         ```java
         /**
@@ -70,15 +70,28 @@
         boolean flag = s3 == s4;
         ```
         ![](/.images/doc/base/string/string-intern-03.png ':size=99%')
+        ##### **case3**
+        ?> 下面的代码在main方法以及JUnit中运行的效果不同。
+        <br><br>[解释](https://blog.csdn.net/tyyking/article/details/82496901#comments_31667673)：
+        <br>此处的不正常现象在于JUnit会加载一些其他类，这些类里面定义了一些需要加载到字符串常量池(SCP)的字面量。而且JVM的SCP仅有一个，所以出现这种现象。
+        <br>现象分析：
+        <br>如果在当前方法执行之前JUnit相关类已经加载`"11"`到字SCP。`String s3 = new String("1") + new String("1");` 在堆中创建了一个新的对象（包括字符串对象中的value引用也是最新的）。但是String s4引用的是SCP中存在的，这两个对象互不相关。*【不像main方法执行"s3.intern()"的时候,SCP 里面没对应的值，所以将s3的引用放在SCP里面,定义s4的时候自然将SCP中的那一个s3引用给s4，也就是s4 == s3】* 。当然，除了"11"字符串外，还有如下可以验证的值`"10","775","813","923","CN","星期日","大正","昭和","巴基斯坦卢比","java.home"`，只需要将上述字符串拆解即可验真。
+
+        ```java
+        String s3 = new String("1") + new String("1");
+        s3.intern();
+        String s4 = "11";
+        System.out.println(s3 == s4);
+        ```
+        ![](/.images/doc/base/string/string-intern-04.png ':size=49%')
+        ![](/.images/doc/base/string/string-intern-05.png ':size=49%')
         <!-- tabs:end -->
         <!-- panels:end -->
 
 * ## Reference
-    + https://drive.google.com/file/d/1YLB0u2DXSNAccpvdH_EZSwTTnYchHOKs/view?usp=sharing
+    + https://stackoverflow.com/questions/27812666/why-string-intern-behave-differently-in-oracle-jdk-1-7
+    + https://stackoverflow.com/questions/19672427/string-s-new-stringxyz-how-many-objects-has-been-made-after-this-line-of
+    + https://blog.csdn.net/tyyking/article/details/82496901
     + https://www.cnblogs.com/mic112/p/15520770.html#字符串常量池
-    + https://cloud.tencent.com/developer/article/2110482 常量池在运行区域的位置
-    + https://www.cnblogs.com/ghj1976/p/5408295.html
-
-        ?> select s from java.lang.String s where s.toString().contains("xhsgg1230")
-
-    + https://example.com
+    + 
+    + https://drive.google.com/file/d/1YLB0u2DXSNAccpvdH_EZSwTTnYchHOKs/view?usp=sharing

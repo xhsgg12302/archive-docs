@@ -9,10 +9,13 @@
 
         !> JDK1.7及之前的实现叫做永久代，包括类信息，常量，静态变量以及常量池。1.7将字符串常量池放在堆里了。主要在堆里开辟内存，隶属于堆，但是相互隔离。
         <br>JDK1.8改名为元空间，`元空间不再虚拟机设置的内存(堆)中，而是使用本地内存`。
+        <br><br>[HSDB jvm静态对象实例在放法区还是堆中？](https://www.zhihu.com/question/65328195)
 
         | type     | explain                                                      | type     | explain                                                      |
         | -------- | ------------------------------------------------------------ | -------- | -----------------------------------------------------------  |
         | 字面量    | 文本字符串（代码中双括号包裹的字符串）<br />声明为final的常量<br />基本数据类型的表示及属性方法明 | 符号引用  |  类符号引用：类的完全限定名<br />字段的名称和描述符<br />方法的名称和描述符 |
+
+        ![](/.images/doc/advance/jvm/jvm-method-area-01.png ':size=99%')
 
     + ### 运行时常量池
 
@@ -21,13 +24,74 @@
         <br><br>翻译：运行时常量池是每个类或者接口运行时类文件中`constant_pool`表的表达形式。它包含几种常量，从编译时已知的数值字面量到必须在运行时解析的方法和字段引用。运行时常数池的功能类似于传统编程语言的符号表，尽管它比典型的符号表包含更广泛的数据。
         <br><br>每个运行时常数池都是从Java虚拟机的方法区分配的(2.5.4)。类或接口的运行时常数池是在Java虚拟机创建类或接口时构造的(5.3)。
         
-        !> *[常量池](https://blog.csdn.net/qq_43210583/article/details/116558468) 是方法区比较重要的一部分，分为以下几种：类文件常量池（静态常量池，[字节码文件解析](../bytecode.md) ），[字符串常量池](../base/string.md#内存布局)，运行时常量池，~封装类常量池~。类文件常量池中的数据在类加载的时候会放入到运行时常量池中，并将符号引用在解析阶段转换成运行时常量池中的直接引用。* 并不是所有的符号引用都会解析成实体引用。[比如]()
+        !> *常量池 是方法区比较重要的一部分，分为以下几种：类文件常量池（静态常量池，[字节码文件解析](../bytecode.md) ），[字符串常量池](../base/string.md#内存布局)，运行时常量池，~封装类常量池~。类文件常量池中的数据在类加载的时候会放入到运行时常量池中，并将符号引用在解析阶段转换成运行时常量池中的直接引用。* 并不是所有的符号引用都会解析成实体引用。比如[Constant_pool_Table解析时机](#constant_pool_table解析时机)。
         <br><br>运行时常量池是属于JVM加载类时为每个类或者接口在方法区创建的。不属于堆，但里面引用的字符串字面量部分会在堆中或者字符串池中进行创建。[图](https://www.cnblogs.com/chiangchou/p/jvm-1.html#_label0_1)感觉有误解: (字符串常量池在堆没问题，而且字符串引用也没问题。但是根据JVMS，运行时常量池是在方法区创建的。根据这张图展示的来说，字符串常量池就属于方法区了❌)。
         <br><br>运行时常量池中的所有引用最初都是符号性的.还有一些非符号引用的。string，integer，long
 
-        - #### Reference
+        - #### Constant_pool_Table解析时机
 
+            ?> JVM加载类的时候并不是一上来就会将原来字节码文件中的常量池全部解析。比如下面这段代码，查看字面量确实存在`"example@126.com"`。但是使用`jvisualvm`dumpheap后没有找到对应的字符串。
+
+            !> 字符串字面量，和其他基本类型的字面量或常量不同，并不会在类加载中的解析（resolve） 阶段填充并驻留在字符串常量池中，而是以特殊的形式存储在 运行时常量池（Run-Time Constant Pool） 中。而是只有当此字符串字面量被调用时（如对其执行ldc字节码指令，将其添加到栈顶），HotSpot VM才会对其进行resolve，为其在字符串常量池中创建对应的String实例。
+            <br>具体来说，应该是在执行ldc指令时（该指令表示int、float或String型常量从常量池推送至栈顶）在JDK1.8的HotSpot VM中，这种未真正解析（resolve）的String字面量，被称为pseudo-string，以JVM_CONSTANT_String的形式存放在运行时常量池中，此时并未为其创建String实例。
+            <br>在编译期，字符串字面量以"CONSTANT_String_info"+"CONSTANT_Utf8_info"的形式存放在class文件的 常量池（Constant Pool） 中；在类加载之后，字符串字面量以"JVM_CONSTANT_UnresolvedString(JDK1.7)"或者"JVM_CONSTANT_String(JDK1.8)"的形式存放在 运行时常量池（Run-time Constant Pool） 中；在首次使用某个字符串字面量时，字符串字面量以真正的String对象的方式存放在 字符串常量池（String Pool） 中。[参考来源](https://www.cnblogs.com/mic112/p/15520770.html#字面量是什么时候进入到字符串常量池的)
+
+            <!-- panels:start -->
+            <!-- div:left-panel-45 -->
+            ```java
+            package _jvm.constant_pool;
+
+            import _utils.thread.ThreadUtil;
+
+            public class ConstantTest {
+                private static String invokeStaticMethod = clinit();
+
+                private static String str1 = "example@outlook.com";
+
+                private static Integer int1 = 12306;
+
+                public static String clinit(){
+                    String str2 = "example@gmail.com";
+                    Integer int1 = 12302;
+                    Integer int3 = new Integer(12303);
+                    int int2 = 123021;
+                    return "example@wtfu.site";
+                }
+
+                public int foo() {
+                    String str4 = "example@126.com";
+                    return 255;
+                }
+
+                /**
+                 * 不是所有的字面量都会在刚加载完类后就会在运行时常量池解析。
+                 * 比如str4就没有对应的数据在堆里面。
+                 * 
+                 * @param args
+                 */
+                public static void main(String[] args) {
+                    Integer int3 = new Integer(12304);
+                    String str5 = "example@qq.com";
+
+                    ThreadUtil.keepRunning();
+                }
+            }
+            ```
+            <!-- div:right-panel-55 -->
+            !> 一般来说，如果使用`String str4 = "example@126.com";`之类的代码，肯定会将字面量"example@126.com"使用指令`ldc`从SCP加载，没有的话创建对象，然后给str4引用。但是目前通过工具分析出来的结果是代码马上执行完了，然后堆里面还没有创建相应的实例。所以并不是所有的constant_pool Table中的常量项都会即时解析。比如这种没有调用的情况。
+            <br><br>另外分析整形数据。如果执行`select i from java.lang.Integer i where i.value > 12302`，只会出现`12306`类属性和`12304`当前帧栈两个对象。其他的数值可以理解为一个数字，退出帧栈就没了，有一个比较特殊`int int2 = 123021;`。根据[int 入栈指令](https://juejin.cn/post/6844903655171178509)以及[ldc](https://stackoverflow.com/questions/28264012/im-curious-about-what-ldc-short-for-in-jvm) [\[JVMS-6.5\]](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.ldc) 执行描述部分*The run-time constant pool entry at index either must be a run-time constant of type int or float, or a reference to a string literal, or a symbolic reference to a class, method type, or method handle (§5.1).* ，这个会执行`ldc #6` 将这个int型从常量池中拿出来。与运行时常量池有关，需要注意。
+
+            ![](/.images/doc/advance/jvm/jvm-SCP-01.png ':size=100%')
+            <!-- panels:end -->
+
+        - #### Reference
+            * https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.5
+            * https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.ldc
+            * https://blog.csdn.net/qq_43210583/article/details/116558468
+            * https://juejin.cn/post/6844903655171178509
+            * https://stackoverflow.com/questions/28264012/im-curious-about-what-ldc-short-for-in-jvm
             * https://www.cnblogs.com/mic112/p/15520770.html#字面量是什么时候进入到字符串常量池的
+            * https://cloud.tencent.com/developer/article/2110482
     
     + ### 堆
 
@@ -236,12 +300,15 @@
 
 * ## Reference
 
-    + [\[Java基础\]-- Java GC 垃圾回收器的分类和优缺点](https://blog.csdn.net/high2011/article/details/80177473)
-    + [方法区](https://baijiahao.baidu.com/s?id=1731211048001613394&wfr=spider&for=pc)
+    + ### UNDO
+        - [\[Java基础\]-- Java GC 垃圾回收器的分类和优缺点](https://blog.csdn.net/high2011/article/details/80177473)
+        - [方法区](https://baijiahao.baidu.com/s?id=1731211048001613394&wfr=spider&for=pc)
+        - https://zhuanlan.zhihu.com/p/166190558
 
     + ### OQL分析工具
         - https://htmlpreview.github.io/?https://raw.githubusercontent.com/visualvm/visualvm.java.net.backup/master/www/oqlhelp.html
         - https://cr.openjdk.org/~sundar/8022483/webrev.01/raw_files/new/src/share/classes/com/sun/tools/hat/resources/oqlhelp.html
+        - https://www.cnblogs.com/ghj1976/p/5408295.html
     
     + ### 堆分析工具
         - https://www.usenix.org/legacy/events/jvm01/full_papers/russell/russell_html/index.html
