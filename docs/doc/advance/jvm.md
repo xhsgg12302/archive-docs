@@ -10,6 +10,7 @@
         !> JDK1.7及之前的实现叫做永久代，包括类信息，常量，静态变量以及常量池。1.7将字符串常量池放在堆里了。主要在堆里开辟内存，隶属于堆，但是相互隔离。
         <br>JDK1.8改名为元空间，`元空间不再虚拟机设置的内存(堆)中，而是使用本地内存`。
         <br><br>[HSDB jvm静态对象实例在放法区还是堆中？](https://www.zhihu.com/question/65328195)
+        <br>[HSDB: JVM中的Java对象?](https://juejin.cn/post/6959419302067830791)
 
         | type     | explain                                                      | type     | explain                                                      |
         | -------- | ------------------------------------------------------------ | -------- | -----------------------------------------------------------  |
@@ -119,7 +120,7 @@
             }
             ```
             <!-- div:right-panel-55 -->
-            !> 一般来说，如果使用`String str4 = "example@126.com";`之类的代码，肯定会将字面量"example@126.com"使用指令`ldc`从SCP加载，没有的话创建对象，然后给str4引用。但是目前通过工具分析出来的结果是代码马上执行完了，然后堆里面还没有创建相应的实例。所以并不是所有的constant_pool Table中的常量项都会即时解析。比如这种没有调用的情况。
+            !> 一般来说，如果使用`String str4 = "example@126.com";`之类的代码，肯定会将字面量`"example@126.com"`使用指令`ldc`从SCP加载，没有的话创建对象，然后给str4引用。但是目前通过工具分析出来的结果是代码马上执行完了，然后堆里面还没有创建相应的实例。所以并不是所有的constant_pool Table中的常量项都会即时解析。比如这种没有调用的情况。
             <br><br>另外分析整形数据。如果执行`select i from java.lang.Integer i where i.value > 12302`，只会出现`12306`类属性和`12304`当前帧栈两个对象。其他的数值可以理解为一个数字，退出帧栈就没了，有一个比较特殊`int int2 = 123021;`。根据[int 入栈指令](https://juejin.cn/post/6844903655171178509)以及[ldc](https://stackoverflow.com/questions/28264012/im-curious-about-what-ldc-short-for-in-jvm) [\[JVMS-6.5\]](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.ldc) 执行描述部分*The run-time constant pool entry at index either must be a run-time constant of type int or float, or a reference to a string literal, or a symbolic reference to a class, method type, or method handle (§5.1).* ，这个会执行`ldc #6` 将这个int型从常量池中拿出来。与运行时常量池有关，需要注意。
 
             ![](/.images/doc/advance/jvm/jvm-SCP-01.png ':size=100%')
