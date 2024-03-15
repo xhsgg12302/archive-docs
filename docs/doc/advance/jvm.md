@@ -346,6 +346,7 @@
         - [\[Java基础\]-- Java GC 垃圾回收器的分类和优缺点](https://blog.csdn.net/high2011/article/details/80177473)
         - [方法区](https://baijiahao.baidu.com/s?id=1731211048001613394&wfr=spider&for=pc)
         - https://zhuanlan.zhihu.com/p/166190558
+        - [JVM性能调优（1） —— JVM内存模型和类加载运行机制 ](https://www.cnblogs.com/chiangchou/p/jvm-1.html#_label0_1)
 
     + ### OQL分析工具
         - https://htmlpreview.github.io/?https://raw.githubusercontent.com/visualvm/visualvm.java.net.backup/master/www/oqlhelp.html
