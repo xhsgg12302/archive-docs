@@ -548,3 +548,12 @@
 6. ## 熔断，限流
 
 
+
+## Reference
+* https://zhuanlan.zhihu.com/p/358995096
+* https://www.cnblogs.com/hero123/p/8889790.html
+* https://blog.csdn.net/myydnz/article/details/131473266
+* https://zhuanlan.zhihu.com/p/588366958
+* https://baijiahao.baidu.com/s?id=1701167160625876534&wfr=spider&for=pc
+* https://www.jianshu.com/p/dd215ead6e2e
+* https://blog.csdn.net/Javaesandyou/article/details/131896223
