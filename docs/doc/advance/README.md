@@ -289,7 +289,7 @@
             <br>代理配置： -Dsun.misc.ProxyGenerator.saveGeneratedFiles=true  源码：`ProxyGenerator`。可以生成代理类字节文件，方便反编译查看生成内容。
             <br>repo: [jdk_dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/jdk_dynamic)
 
-            <details><summary>代码示例</summary>
+            <details open><summary>代码示例</summary>
 
             ```java
             @Test
@@ -412,7 +412,7 @@
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. class _base.proxy.cglib_dynamic.StudentNoIntfs\$\$EnhancerByCGLIB\$\$81f8e23d
             <br>repo: [cglib-dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/cglib_dynamic)
             
-            <details><summary>代码示例</summary>
+            <details open><summary>代码示例</summary>
 
             ```java
             @Test
