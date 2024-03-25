@@ -1134,6 +1134,12 @@
 
         !> [源代码](https://github.com/12302-haohuo/haohuo-component/tree/master/hh-cpt-maven-plugin/gencode-maven-plugin)
 
+        ?> **version:1.4.3**
+        <br> `<pluginGroups><pluginGroup>com.haohuo.framework</pluginGroup></pluginGroups>`
+        <br><br> `mvn gencode:decode  -DaccessKey=*** -Dsettings="$HOME/software/apache-maven-3.3.9/conf/settings.xml"`
+        <br> `mvn gencode:decode-single  -DaccessKey=*** -DencryptString='******'`
+        <br> `mvn gencode:decode-single  -DaccessKey=*** -Dmaster='***' -DencryptString='******'`
+
         ```xml
         <profile>
             <id>code-generator</id>
