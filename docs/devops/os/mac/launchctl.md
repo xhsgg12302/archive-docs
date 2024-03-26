@@ -154,6 +154,7 @@ ___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_V
 ```
 
 ## Reference
+* [mac上如何开机与关机时自动运行shell脚本](https://namiling.github.io/2020-11-24-mac上如何开机与关机时自动运行shell脚本/)
 * [Mac OS 增加开机自启动脚本](https://www.xiaocaicai.com/2021/11/mac-os-%E5%A2%9E%E5%8A%A0%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/)
 * https://stackoverflow.com/questions/63169877/running-a-shell-script-automatically-with-launchd-on-mac
 * https://stackoverflow.com/questions/15536697/running-python-script-with-launchd-imports-not-found
