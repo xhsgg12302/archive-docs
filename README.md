@@ -1,4 +1,4 @@
-![文徵明-小楷赤壁赋](https://img.wtfu.site/.images/_media/home.compress.resize..jpg ':size=100% * 500')
+![文徵明-小楷赤壁赋](https://static.12302.site/.images/_media/home.compress.resize..jpg ':size=100% * 500')
 
 <!-- http://s4m156k8j.hb-bkt.clouddn.com/home.compress.resize..jpg -->
 <!-- https://img.wtfu.site/home.compress.resize..jpg -->
