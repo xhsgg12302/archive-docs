@@ -113,7 +113,7 @@
             }
         }
         // 启动线程
-        new MyThread().start();
+        new PrimeThread().start();
         ```
         <!-- panels:end -->
     
@@ -451,6 +451,7 @@
 * 线程池的几个核心参数
 * 线程池的运行流程
 * https://juejin.cn/post/7137186083074703391
+* https://zhuanlan.zhihu.com/p/112527671
 
 ## TODO
 
