@@ -9,6 +9,16 @@
     | Codota       | Material Theme UI              | SequenceDiagram           |
     | StickyScroll |                                |                           |
 
++ ## 配置
+
+    - ### 生成serialVersionUID
+
+        ?> [参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/14718197525906-intellij-serialversionuid-generate):
+        <br> File -> Settings -> Editor -> Inspections -> JVM Languages : Find `serialization class without 'serialVersionUID'` and check it.
+        <br> Back to the editor, clicks on the class name, ALT + ENTER (Windows), it will prompts the Add serialVersionUID field option.A new serialVersionUID is auto-generated.
+
+        ![](/.images/devops/os/softwares/idea-config-serial-01.png ':size=70%')
+
 + ## 其他
 
     - ### 使用idea 插件反编译整个jar到文件夹
@@ -53,5 +63,7 @@
             - [ ] http://idea.javatiku.cn/460bbf73-1d7d-4b5e-a537-43ea8b23f502
             - [x] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
 
-## References
-*  https://stackoverflow.com/questions/28389006/how-to-decompile-to-java-files-intellij-idea
+* ## References
+
+    + https://stackoverflow.com/questions/28389006/how-to-decompile-to-java-files-intellij-idea
+    + https://intellij-support.jetbrains.com/hc/en-us/community/posts/14718197525906-intellij-serialversionuid-generate
