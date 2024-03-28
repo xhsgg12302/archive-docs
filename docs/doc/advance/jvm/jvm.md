@@ -293,7 +293,7 @@
 
         * 逃逸分析：reference: [1](https://blog.csdn.net/qq_32649581/article/details/123206658) [2](https://blog.csdn.net/o9109003234/article/details/101365108) [3](https://blog.csdn.net/qq_43227967/article/details/106103658) [4](https://zhuanlan.zhihu.com/p/401057707) [5](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html) [6](https://juejin.cn/post/7034669867286396958)
 
-        > 逃逸：指的是变量引用是否被其他方法或者线程访问。
+        > 逃逸：指的是变量引用是否被其他方法或者线程访问。 -XX:+DoEscapeAnalysis。[记忆中的B站视频](https://www.bilibili.com/video/BV1Qv411v7Qe/?spm_id_from=333.337.search-card.all.click&vd_source=550a4dc4b2a914c0681a14307bbe8cbe)
 
         * 栈上分配
         * 标量替换/分离对象
