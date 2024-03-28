@@ -52,9 +52,9 @@
     18. 备忘录
     19. 观察者
     20. 状态
-    21. [策略：strategy](./21-strategy.md)
+    21. [策略：Strategy](./21-strategy.md)
     22. [模板方法：Template](./22-template.md)
-    23. 访问者
+    23. [访问者：Visitor](./23-visitor.md)
 
 ## Reference
 * https://www.runoob.com/design-pattern/design-pattern-tutorial.html
