@@ -298,7 +298,8 @@
         
         - #### methods[methods_count] (*)
 
-            ?> `00 01` access_flags = ACC_PUBLIC。
+            ?> ***init方法***
+            <br>`00 01` access_flags = ACC_PUBLIC。
             <br>`00 07` name_index 指向常量池中的第七个常量，为'\<init\>'。
             <br>`00 08` descriptor_index 指向常量池中的第八个常量，为'()V'。 上述三个合起来就是 ***public void \<init\>()***
             <br>`00 01` attributes_count attributes数量为1.
@@ -319,7 +320,8 @@
             <br>`0001` line_number_table_length = 1。
             <br>`0000` start_pc = 0。
             <br>`0001` line_number = 1。
-            <br><br>`0001` access_flags = ACC_PUBLIC。
+            <br><br><br> ***foo方法***
+            <br>`0001` access_flags = ACC_PUBLIC。
             <br>`000B` name_index 指向常量池中的第11个常量，为'foo'。
             <br>`000C` descriptor_index 指向常量池中的第12个常量，为'()I'。 上述三个合起来就是 ***public int foo()***
             <br>`0001` attributes_count attributes数量为1.
@@ -417,6 +419,10 @@
                 u2 sourcefile_index;
             }
             ```
+        
+        - #### 整体结构图
+
+            ![](/.images/doc/advance/bytecode/bytecode-struct-01.png ':size=80%')
 
 
 * ## Reference
