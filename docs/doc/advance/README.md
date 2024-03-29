@@ -286,9 +286,11 @@
         
         - #### JDK
             ?> 基于接口的动态代理，代理类必须实现某个接口。
-            <br>代理配置： -Dsun.misc.ProxyGenerator.saveGeneratedFiles=true  源码：`ProxyGenerator`。可以生成代理类字节文件，方便反编译查看生成内容。
+            <br>代理配置： -Dsun.misc.ProxyGenerator.saveGeneratedFiles=true  源码：[`ProxyGenerator`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/misc/ProxyGenerator.java#L341C13-L341C31)。可以生成代理类字节文件，方便反编译查看生成内容。
             <br>repo: [jdk_dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/jdk_dynamic)
 
+            ![](/.images/doc/advance/advance/class-dynamic-proxy-jdk.png ':size=80%')
+            
             <details open><summary>代码示例</summary>
 
             ```java
@@ -324,11 +326,11 @@
             import java.lang.reflect.UndeclaredThrowableException;
 
             public final class $Proxy4 extends Proxy implements Person {
-            private static Method m1;
-            private static Method m4;
-            private static Method m2;
-            private static Method m3;
-            private static Method m0;
+                private static Method m1;
+                private static Method m4;
+                private static Method m2;
+                private static Method m3;
+                private static Method m0;
 
                 public $Proxy4(InvocationHandler var1) throws  {
                     super(var1);
@@ -405,13 +407,13 @@
         - #### CGLIB
 
             ?> 基于ASM字节码操作框架。由于继承关系，不能代理final类。
-            <br>代理类生成配置： -Dcglib.debugLocation=/path/to/somewhere   源码：`DebuggingClassWriter` 
+            <br>代理类生成配置： -Dcglib.debugLocation=/path/to/somewhere   源码：[`DebuggingClassWriter`](https://github.com/cglib/cglib/blob/RELEASE_3_3_0/cglib/src/main/java/net/sf/cglib/core/DebuggingClassWriter.java#L79) 
             <br>cglib生成代理类的过程当中会生成一些辅助类，所以打断点获取Class字节数组的时候需要注意，一般来说最后一次生成的才是正真的Proxy。
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. class net.sf.cglib.proxy.Enhancer\$EnhancerKey\$\$KeyFactoryByCGLIB\$\$7fb24d72 
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. class net.sf.cglib.core.MethodWrapper\$MethodWrapperKey\$\$KeyFactoryByCGLIB\$\$d45e49f7 
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. class _base.proxy.cglib_dynamic.StudentNoIntfs\$\$EnhancerByCGLIB\$\$81f8e23d
             <br>repo: [cglib-dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/cglib_dynamic)
-            
+
             <details open><summary>代码示例</summary>
 
             ```java
