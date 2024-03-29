@@ -129,6 +129,7 @@
         行内的公式${\color{red}E=mc^2}$行内的公式，行内的${\color{green}log_2N}$公式，行内的${\color{purple}(\sqrt{3x-1}+(1+x)^2)}$公式，行内的${\color{blue}\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))}$公式
         
         多行公式
+        
         $$
         \displaystyle
         \left( \sum\_{k=1}^n a\_k b\_k \right)^2
