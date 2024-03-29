@@ -19,7 +19,7 @@
 
         -----
 
-        ![favicon.ico](https://static.wtfu.site/.images/_media/favicon.ico "h")
+        ![favicon.ico](/.images/_media/favicon.ico "h")
 
         **粗体1** __加粗2__
 
