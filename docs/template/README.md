@@ -215,11 +215,11 @@
         > An alert of type 'attention' using global style 'callout'.
 
         <!-- div:right-panel-50 -->
-        > [!WARNING|style:flat]
-        > An alert of type 'warning' using locality style 'flat'.
-
         > [!TIP|style:flat]
         > An alert of type 'tip' using locality style 'flat'.
+
+        > [!WARNING|style:flat]
+        > An alert of type 'warning' using locality style 'flat'.
 
         > [!ATTENTION|style:flat]
         > An alert of type 'attention' using locality style 'flat'.
