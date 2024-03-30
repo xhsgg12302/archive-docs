@@ -58,6 +58,11 @@ wget -c https://swupdate.openvpn.org/community/releases/openvpn-2.5.5.tar.gz
 gpg --verify openvpn-2.5.5.tar.gz.asc openvpn-2.5.5.tar.gz
 ```
 
+### github 验证
+```shell
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/checking-for-existing-gpg-keys
+```
+
 ## 公用服务器
 * http://keyserver.ubuntu.com/
 * https://keys.openpgp.org/
