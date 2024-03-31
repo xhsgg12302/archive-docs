@@ -1,6 +1,6 @@
 * ## Intro(GunPG)
 
-    ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70%')
+    ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70% :align=center')
 
     > [!NOTE]
     Key 管理是 GPG 的核心功能，GPG Key 不能简单的理解为非对称加密的 Private Key / Public Key / Key Pair。GPG Key 由如下信息组成：
