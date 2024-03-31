@@ -43,31 +43,101 @@
         brew install gnupg
         ```
 
-    + ### 使用
+    + ### 基本操作
 
-        - #### operation
+        - #### 1. 查看公匙和私匙
+        > [!TIP]
+        `gpg -k/-K [--keyid-format {none|short|0xshort|long|0xlong}] [KEYID]`
+
+        ![](/.images/devops/os/util/gpg-usage-1-01.png ':size=49%')
+        ![](/.images/devops/os/util/gpg-usage-1-02.png ':size=49%')
+
+        - #### 2. 生成与删除公私匙
+        > [!TIP]
+        `gpg [--generate-key | --full-generate-key]`
+        <br><br>`gpg --delete-secret-keys <KEYID>` `gpg --delete-key <KEYID>`。
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ![](/.images/devops/os/util/gpg-usage-2-01.png ':size=99%')
+        <hr>
+
+        > [!ATTENTION|style:flat] 删除的时候得先删除私匙
         
-            ```shell
-            # 1. 查看公匙和私匙
-            gpg -k/-K [name]
+        ![](/.images/devops/os/util/gpg-usage-2-03.png ':size=99%')
+        <!-- div:right-panel-50 -->
+        ![](/.images/devops/os/util/gpg-usage-2-02.png ':size=99%')
+        <!-- panels:end -->
 
-            # 2. 生成公私匙
-            gpg --gen-key
+        - #### 3. 输出密匙
+        > [!TIP]
+        `gpg --armor [-o xx.txt] --export [KEYID]`
+        <br>`gpg --armor [-o xx.txt] --export-secret-keys [KEYID]`
 
-            # 3. 输出密匙
-            gpg --armor -o xx.txt --export [name|userID]
-            gpg --armor -o xx.txt --export-secret-keys [name|userID]
+        ![](/.images/devops/os/util/gpg-usage-3-01.png ':size=47%')
+        ![](/.images/devops/os/util/gpg-usage-3-02.png ':size=49%')
 
-            # 4. 查看公匙指纹
-            gpg --fingerprint [name|userID]
+        - #### 4. 查看公匙指纹
+        > [!TIP]
+        `gpg --fingerprint [KEYID]`
 
-            # 5. 上传公匙
-            gpg --keyserver hkp://www.example.com --send-keys [name|userID]
-            gpg --keyserver hkp://www.example.com --recv-keys [name|userID]
+        ![](/.images/devops/os/util/gpg-usage-4-01.png ':size=80%')
 
-            # 6. 导入公匙
-            gpg --import [file]
-            ```
+        - #### 5. 上传公匙
+        > [!TIP]
+        `gpg --keyserver hkp://keyserver.ubuntu.com --send-keys [KEYID]`
+        <br>`gpg --keyserver hkps://keys.openpgp.org --recv-keys [KEYID]`
+        <br><br>`--keyserver name` This option is deprecated - please use the --keyserver in ‘dirmngr.conf’ instead.
+
+        ![](/.images/devops/os/util/gpg-usage-5-01.png ':size=80%')
+
+        - #### 6. 导入公匙
+        `gpg --import [file]`
+
+        ![](/.images/devops/os/util/gpg-usage-6-01.png ':size=99%')
+
+    + ### 加密签名
+
+        > [!WARNING|style:flat|label:demo txt ]
+        hello world;
+        <br>最近怎么样，我正在学习gpg。
+
+        - #### 加密
+        > [!NOTE]
+        `gpg --recipient 425B8CB8073AAC1EB005E4E648E1F1185160B400 --output demo.en.txt --encrypt demo.txt`
+
+        ![](/.images/devops/os/util/gpg-en-01.png ':size=99%')
+
+        - #### 解密
+        > [!NOTE]
+        `gpg --recipient 425B8CB8073AAC1EB005E4E648E1F1185160B400 --output demo.en.txt --encrypt demo.txt`
+
+        ![](/.images/devops/os/util/gpg-de-01.png ':size=70%')
+
+        - #### 签名
+        > [!NOTE]
+        `gpg --sign demo.txt`
+        <br>生成 **demo.txt.gpg** 文件，这个文件默认采用二进制储存，如果想生成ASCII码的签名文件，可以使用`--clearsign`参数，生成 **demo.txt.asc** 文件
+        <br>如果想生成单独的签名文件，与文件内容分开存放，可以使用`--detach-sign`参数。生成一个单独的签名文件 **demo.txt.sig** 。该文件是二进制形式的，
+        <br>如果想采用ASCII码形式，要加上armor参数。`gpg --armor --detach-sign demo.txt`
+
+        ![](/.images/devops/os/util/gpg-sign-01.png ':size=90%')
+
+        - #### 签名➕加密
+        > [!NOTE]
+        `gpg --local-user [发信者KEYID] --recipient [接收者KEYID] --armor --sign --encrypt demo.txt`
+        <br>local-user参数指定用发信者的私钥签名，recipient参数指定用接收者的公钥加密，armor参数表示采用ASCII码形式显示，
+        <br>sign参数表示需要签名，encrypt参数表示指定源文件。
+
+        ![](/.images/devops/os/util/gpg-en-sign-01.png ':size=90%')
+
+        - #### 验证签名
+        > [!NOTE]
+        `gpg --local-user [发信者KEYID] --recipient [接收者KEYID] --armor --sign --encrypt demo.txt`
+        <br>local-user参数指定用发信者的私钥签名，recipient参数指定用接收者的公钥加密，armor参数表示采用ASCII码形式显示，
+        <br>sign参数表示需要签名，encrypt参数表示指定源文件。
+
+    + ### 其他样例
 
         - #### openvpn 样例
 
@@ -104,5 +174,6 @@
     + [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
     + https://www.rectcircle.cn/posts/understand-and-use-gpg/
     + https://www.zhihu.com/question/60520344/answer/531709554
+    + https://github.com/rvm/rvm/issues/4215
     + 
     + [gpg: signing failed: Inappropriate ioctl for device](https://github.com/keybase/keybase-issues/issues/2798)
