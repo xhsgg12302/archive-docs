@@ -225,6 +225,10 @@
         > An alert of type 'attention' using locality style 'flat'.
         <!-- panels:end -->
 
+        ?> 扩展样式1
+
+        !> 扩展样式2
+
     + ### 12-折叠展开
 
         <details>
