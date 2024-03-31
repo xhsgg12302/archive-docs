@@ -102,3 +102,5 @@
     + [openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
     + [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
     + https://www.rectcircle.cn/posts/understand-and-use-gpg/
+    + 
+    + [gpg: signing failed: Inappropriate ioctl for device](https://github.com/keybase/keybase-issues/issues/2798)
