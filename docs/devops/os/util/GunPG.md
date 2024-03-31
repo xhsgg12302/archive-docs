@@ -96,11 +96,13 @@
 
         * http://keyserver.ubuntu.com/
         * https://keys.openpgp.org/
+        * http://pgp.mit.edu/
 
 * ## Reference
     + [GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
     + [openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
     + [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
     + https://www.rectcircle.cn/posts/understand-and-use-gpg/
+    + https://www.zhihu.com/question/60520344/answer/531709554
     + 
     + [gpg: signing failed: Inappropriate ioctl for device](https://github.com/keybase/keybase-issues/issues/2798)
