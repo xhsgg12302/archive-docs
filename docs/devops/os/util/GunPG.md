@@ -1,5 +1,7 @@
 * ## Intro(GunPG)
 
+    ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70%')
+
     > [!NOTE]
     Key 管理是 GPG 的核心功能，GPG Key 不能简单的理解为非对称加密的 Private Key / Public Key / Key Pair。GPG Key 由如下信息组成：
     <br><br>Key ID: 该 GPG Key 的唯一标识，值为主公钥的指纹，支持多种格式(Fingerprint, Long key ID, Short key ID)，更多参见：What is a OpenPGP/GnuPG key ID?。
