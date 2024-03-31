@@ -110,7 +110,7 @@
 
         - #### 解密
         > [!NOTE]
-        `gpg --recipient 425B8CB8073AAC1EB005E4E648E1F1185160B400 --output demo.en.txt --encrypt demo.txt`
+        `gpg --armor --decrypt demo.en.txt`
 
         ![](/.images/devops/os/util/gpg-de-01.png ':size=70%')
 
@@ -123,6 +123,15 @@
 
         ![](/.images/devops/os/util/gpg-sign-01.png ':size=90%')
 
+        - #### 验签
+        > [!NOTE]
+        `gpg --verify demo.txt.asc`
+        <br>出现: **WARNING: not a detached signature; file 'demo.txt' was NOT verified!** 
+        <br>是因为附近有'demo.txt'文件造成的。可以理解为这不是一个单独的签名文件。如果同级目录存在'demo.txt'，不对其进行hash验签。
+        <br>可以重命名'demo.txt'或者使用`--detach-sign`来消除警告。[参考](https://sites.google.com/view/chewkeanho/guides/gnupg/verify#h.p_M_4fYCj3j-bZ)
+
+        ![](/.images/devops/os/util/gpg-verify-01.png ':size=90%')
+
         - #### 签名➕加密
         > [!NOTE]
         `gpg --local-user [发信者KEYID] --recipient [接收者KEYID] --armor --sign --encrypt demo.txt`
@@ -131,11 +140,15 @@
 
         ![](/.images/devops/os/util/gpg-en-sign-01.png ':size=90%')
 
-        - #### 验证签名
+        - #### 解密➕验签
         > [!NOTE]
-        `gpg --local-user [发信者KEYID] --recipient [接收者KEYID] --armor --sign --encrypt demo.txt`
-        <br>local-user参数指定用发信者的私钥签名，recipient参数指定用接收者的公钥加密，armor参数表示采用ASCII码形式显示，
-        <br>sign参数表示需要签名，encrypt参数表示指定源文件。
+        `gpg --decrypt demo.txt.asc`
+        <br>将上述步骤生成的`demo.txt.asc`进行解密验签名。
+
+        > [!ATTENTION|style:flat]
+        需要注意的是：不能单独验证，可能是因为先加密的原因，需要解密后才可以看见签名，发现签名后顺带验证签名了。
+
+        ![](/.images/devops/os/util/gpg-de-verify-01.png ':size=90%')
 
     + ### 其他样例
 
@@ -170,6 +183,8 @@
 
 * ## Reference
     + [GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
+    + https://www.hacksanity.com/kb/gnupg-part-4-encrypt-sign-files/
+    + https://loganmarchione.com/2015/12/a-brief-introduction-to-gpg/
     + [openvpn | GnuPG Public Key](https://openvpn.net/community-resources/sig/ 'hello')
     + [python3.10.6 gpg](https://www.python.org/downloads/release/python-3106/)
     + https://www.rectcircle.cn/posts/understand-and-use-gpg/
