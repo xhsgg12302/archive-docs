@@ -31,6 +31,8 @@
 
     + ### 安装
 
+        <!-- panels:start -->
+        <!-- div:left-panel-60 -->
         <!-- tabs:start -->
         ##### **SourceCode**
         ?> # 1. 源码安装
@@ -44,6 +46,7 @@
         ##### **macosx**
         `brew install gnupg`
         <!-- tabs:end -->
+        <!-- panels:end -->
 
     + ### 基本操作
 
