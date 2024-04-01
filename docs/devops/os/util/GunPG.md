@@ -2,16 +2,17 @@
 
     ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70% :align=center')
 
-    > [!NOTE]
+    > [!TIP|style:flat]
     Key 管理是 GPG 的核心功能，GPG Key 不能简单的理解为非对称加密的 Private Key / Public Key / Key Pair。GPG Key 由如下信息组成：
     <br><br>Key ID: 该 GPG Key 的唯一标识，值为主公钥的指纹，支持多种格式(Fingerprint, Long key ID, Short key ID)，更多参见：What is a OpenPGP/GnuPG key ID?。
     <br>UID: 1 个或多个，每个 UID 由 name、email、comment 组成，email 和 comment 可以为空。
     <br>Expire: 过期时间，可以为永久。
     <br>多个具有不同用途的非对称加密算法中的 Key 的集合。
 
-    > [!WARNING|style:flat|label:key 分类参见下表]
-    <br>主秘钥和主公钥（Primary Key）、子秘钥和子公钥（Sub Key）都是成对出现的，其用途也是一致的。
+    > [!WARNING|label:key 分类参见下表]
+    主秘钥和主公钥（Primary Key）、子秘钥和子公钥（Sub Key）都是成对出现的，其用途也是一致的。
     <br>每一对都包含一个 key id 属性（为 public key 的指纹），其中主密钥/主公钥的 key id 就是当前 GPG Key 的 Key ID。
+
     | 类型   | 全名          | 缩写 | 用途 (Usage) | 说明                                                              |
     | ------ | ------------- | ---- | ------------ | ----------------------------------------------------------------- |
     | 主公钥 | Public Key    | pub  | SC           | 每个 GPG Key 有且只有一个 主公钥，可以选择一种或多种 Usage        |
@@ -19,7 +20,8 @@
     | 主私钥 | Secret Key    | sec  | SC           | 每个 GPG Key 有且只有一个 主私钥，可以选择一种或多种 Usage        |
     | 子私钥 | Secret Subkey | ssb  | S/A/E        | 每个 GOG Key 可以有多个子私钥，每个子私钥可以选择一种或多种 Usage |
 
-    > [!WARNING|style:flat|label:用途参见下表]
+    > [!WARNING|label:用途参见下表]
+
     | 缩写 | 全名           | 用途                                                 |
     | ---- | -------------- | ---------------------------------------------------- |
     | C    | Certificating  | 管理证书，如添加/删除/吊销子密钥/UID，修改过期时间。 |
@@ -29,21 +31,19 @@
 
     + ### 安装
 
-        ```shell
-        # 1. 源码安装
-        # https://www.gnupg.org/download/index.en.html
-        ./configure
-        make && make install
-
-        # 2. debian/ubuntu
-        sudo apt-get install gnupg
-
-        # 3. Fedora/centos
-        yum install gnupg
-
-        # 4. macosx
-        brew install gnupg
-        ```
+        <!-- tabs:start -->
+        ##### **SourceCode**
+        ?> # 1. 源码安装
+        <br># https://www.gnupg.org/download/index.en.html
+        <br>`./configure`
+        <br>`make && make install`
+        ##### **debian/ubuntu**
+        `sudo apt-get install gnupg`
+        ##### **Fedora/centos**
+        `yum install gnupg`
+        ##### **macosx**
+        `brew install gnupg`
+        <!-- tabs:end -->
 
     + ### 基本操作
 
