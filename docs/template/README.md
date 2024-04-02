@@ -69,7 +69,7 @@
     + ### 03-图片缩放居中
 
         ![Minion](https://octodex.github.com/images/minion.png ":size=250 :align=center")
-        ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg ":size=250 The Stormtroopocat")
+        ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg ":size=400x400 The Stormtroopocat")
         ![Alt text][dojocat]
 
     + ### 04 标签页tabs
