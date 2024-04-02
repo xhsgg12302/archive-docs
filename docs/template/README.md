@@ -66,7 +66,7 @@
         <br>[12302]
         <br>[我的主页]
 
-    + ### 03-图片缩放
+    + ### 03-图片缩放居中
 
         ![Minion](https://octodex.github.com/images/minion.png ":size=250 :align=center")
         ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg ":size=250 The Stormtroopocat")
