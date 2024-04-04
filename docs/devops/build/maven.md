@@ -1098,6 +1098,80 @@
         ```
         </details>
 
+    + ### maven-gpg-plugin
+
+        ?> 可以参考[官方](https://maven.apache.org/plugins/maven-gpg-plugin/usage.html)指定配置，建议使用env`pseudo security`伪安全配置方式。
+
+        > [!WARNING|style:flat]
+        以下配置方式由于放置敏感（即使加密过）数据在settings.xml中，被官方认为是伪安全的。所以在版本`3.1.0`之后，这个插件对settings.xml中配置的`passphrase`支持出现bug了。大概原因是因为`3.1.0`之后的版本移除了`'/META-INF/plexus/components.xml'`，导致查找主密码的文件查找使用了**DefaultSecDispatcher**中默认的`~/.settings-security.xml`,而不是`~/.m2/settings-security.xml`,导致解密失败，近而影响到签名。根据提交到apache的issues,这个问题会在`3.2.3`中进行修复。具体详情可以参考[MGPG-121](https://issues.apache.org/jira/browse/MGPG-121)。
+
+        <!-- tabs:start -->
+        ##### **settings.xml**
+        ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+        <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <!--
+                https://maven.apache.org/settings.html#quick-overview
+                文档中介绍说可以使用所有的system-properties(since Maven 3.0)或者 环境变量（${env.HOME}）
+                特别说明： 在此文件通过<properties></properties>定义的变量不能用于插值[interpolation]。
+
+                可以使用help插件来验证 mvn help:evaluate  -> ${settings.localRepository}
+            -->
+            <localRepository>${user.home}/Documents/maven_repo</localRepository>
+
+            <pluginGroups>
+                <pluginGroup>com.haohuo.framework</pluginGroup>
+            </pluginGroups>
+
+            <proxies />
+
+            <!-- servers
+            | This is a list of authentication profiles, keyed by the server-id used within the system.
+            | Authentication profiles can be used whenever maven must make a connection to a remote server.
+            |-->
+            <!--
+                password encryption: https://maven.apache.org/guides/mini/guide-encryption.html
+            -->
+            <servers>
+                <server>
+                    <id>gpg.passphrase</id>
+                    <!--<keyID>48E1F1185160B400</keyID>-->
+                    <passphrase>{AcPACqkxKm8H9FSK3OnqmM9+a1VQ7po8KQuQ+38pzjY=}</passphrase>
+                </server>
+            </servers>
+
+            <mirrors />
+
+            <profiles>
+                <profile>
+                    <id>father</id>
+                    <activation><activeByDefault>true</activeByDefault></activation>
+                    <properties>
+                        <gpg.keyname>48E1F1185160B400</gpg.keyname>
+                    </properties>
+                </profile>
+            </profiles>
+        </settings>
+        ```
+        ##### **pom.xml**
+        ```xml
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.3-SNAPSHOT</version>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        ```
+        <!-- tabs:end -->
+
     + ### spring-boot-maven-plugin
 
         ```xml
