@@ -1104,7 +1104,7 @@
 
         > [!ATTENTION]
         以下配置方式由于放置敏感（即使加密过）数据在settings.xml中，被官方认为是`pseudo security`伪安全的。所以在版本`3.1.0`之后，这个插件对settings.xml中配置的`passphrase`支持出现bug了。大概原因是因为`3.1.0`之后的版本移除了`'/META-INF/plexus/components.xml'`，导致查找主密码的文件查找使用了**DefaultSecDispatcher**中默认的`~/.settings-security.xml`,而不是`~/.m2/settings-security.xml`,导致解密失败，近而影响到签名。
-        <br><br>根据提交到apache的issues,这个问题会在`3.2.3`中进行修复，目前已经合并PR，但未发版本，据说很快会有 :smirk: 。具体详情可以参考 [MGPG-121](https://issues.apache.org/jira/browse/MGPG-121)。
+        <br><br>根据提交到apache的issues,这个问题会在`3.2.3`中进行修复，目前已经合并 [PR](https://github.com/apache/maven-gpg-plugin/pull/90)，但未发版本，据说很快会有 :smirk: 。具体详情可以参考 [MGPG-121](https://issues.apache.org/jira/browse/MGPG-121)。
 
         <!-- tabs:start -->
         ##### **settings.xml**
