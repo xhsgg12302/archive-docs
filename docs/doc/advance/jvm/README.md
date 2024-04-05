@@ -137,71 +137,36 @@
     
     + ### 堆
 
-    + ### 虚拟机栈
+        - #### 垃圾回收算法
 
-        !> 运行过程可以参考[一个类运行的全过程](../javastrace.md)
-        - #### 局部变量表
-        
-            ?> 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
-            <br>存储单位是Slot【32bi t】,一个slot就是JVM规范对局部变量区里存储一个局部变量的存储单元的叫法。每个slot可以存储一个宽度在32位或以下的原始类型值，或者一个引用，或一个returnAddress；相邻的两个slot可存储一个double或long型的值。[参考](https://hllvm-group.iteye.com/group/topic/25858),另外参考中也有例子体现slot复用性。
-            <br>根据索引的方式定位局部变量表，下标从0开始。非静态方法的0位是this,静态方法的从参数开始排列
-            <br><br>slot复用：[影响GC](https://blog.csdn.net/weixin_38106322/article/details/108785468)。当同一个帧栈中局部方法中变量没有被复用，会导致无法垃圾回收。
-        
-        - #### 操作数栈
-        
-            ?> 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
-            <br><br>[栈顶缓存技术](https://blog.csdn.net/qq_40298351/article/details/120730602)。操作数在内存中，频繁操作影响性能。可以将栈顶全部元素缓存在物理CPU寄存器中
-        
-        - #### 动态链接
-        
-        - #### 方法返回地址
+            1. ##### Mark-Sweep（标记-清除）
 
-            > [!COMMENT]
-            [参考](https://www.yuque.com/yangxiaofei-vquku/wmp1zm/mggrlr#yQ65Z)
-      
-    + ### 本地方法栈
+                > [!COMMENT] 
+                回收过程主要分为两个阶段，第一阶段为追踪（Tracing）阶段，即从GCROOT开始便利对象图，并标记（Mark）所遇到的每个对象，第二阶段为清除（Sweep）阶段，即回收器检查堆中的每一个对象，并将未标记的对象进行回收，整个过程不会发生对象移动。整个算法再不同的实现中会使用三色抽象（Tricolour Abstraction），位图标记（BitMap）等技术来提高算法的效率，存活对象较多时较高效。
 
-        > 类比虚拟机栈，不过这个是针对本地语言（c/c++），方法一般由native修饰。
+            2. ##### Mark-Compact（标记-整理）
 
-    + ### 程序计数器
+                > [!COMMENT] 
+                这个算法主要的目的就是解决在非移动式回收器中都会存在的碎片化问题，也分为两个阶段，第一阶段与Mark-Sweep类似，第二阶段则会对存活对象按照整理顺序（Compaction Order）进行整理。主要实现有双指针（Two-Finger）回收算法，滑动回收（Lisp2）算法和引线整理（Threaded Compaction）算法等。
 
-        > 一块比较小的内存空间，可以看做事当前线程所需执行字节码的行号指示器，通常由执行引擎开执行程序计数器所指向的行号内容。更确切的说。一个线程的执行，是通过字节码解释器改变当前线程 的计数器的值，来获取下一条需要执行的字节码指令，从而确保线程的正确执行。
+            3. ##### Copying（复制）
 
-* ## 垃圾回收
+                > [!COMMENT] 
+                将空间分为两个大小相同的From和To两个半区，同一时间只会使用其中一个。每次进行回收时将一个半区的存活对象通过复制的方式转移到另一个半区。有递归（Robert R.Fenichel 和 Jerome C.Yochelson提出）和迭代（Chenev提出）以及解决了前两者递归栈，缓存行等问题的近似优先搜索算法。复制算法可以通过碰撞指针的方式进行快速地分配内存，但是也存在着空间利用率不高的缺点，另外就是存活对象比较大时复制的成本较高。
 
-    + ### 算法
+            4. ##### Generational（分代）
 
-        - #### Mark-Sweep（标记-清除）
+        - #### 垃圾回收器
 
-            > 回收过程主要分为两个阶段，第一阶段为追踪（Tracing）阶段，即从GCROOT开始便利对象图，并标记（Mark）所遇到的每个对象，第二阶段为清除（Sweep）阶段，即回收器检查堆中的每一个对象，并将未标记的对象进行回收，整个过程不会发生对象移动。整个算法再不同的实现中会使用三色抽象（Tricolour Abstraction），位图标记（BitMap）等技术来提高算法的效率，存活对象较多时较高效。
+            > [!TIP|style:flat]
+            串行收集器： DefNew：是使用-XX:+UseSerialGC（新生代，老年代都使用串行回收收集器）。 
+            <br>并行收集器： ParNew：是使用-XX:+UseParNewGC（新生代使用并行收集器，老年代使用串行回收收集器）或者-XX:+UseConcMarkSweepGC(新生代使用并行收集器，老年代使用CMS)。 
+            <br><br>PSYoungGen：是使用-XX:+UseParallelOldGC（新生代，老年代都使用并行回收收集器）或者-XX:+UseParallelGC（新生代使用并行回收收集器，老年代使用串行收集器） 
+            <br><br>garbage-first heap：是使用-XX:+UseG1GC（G1收集器)
+            <br><br>[Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
+            <br><br>[垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
 
-        - #### Mark-Compact（标记-整理）
-
-            > 这个算法主要的目的就是解决在非移动式回收器中都会存在的碎片化问题，也分为两个阶段，第一阶段与Mark-Sweep类似，第二阶段则会对存活对象按照整理顺序（Compaction Order）进行整理。主要实现有双指针（Two-Finger）回收算法，滑动回收（Lisp2）算法和引线整理（Threaded Compaction）算法等。
-
-        - #### Copying（复制）
-
-            > 将空间分为两个大小相同的From和To两个半区，同一时间只会使用其中一个。每次进行回收时将一个半区的存活对象通过复制的方式转移到另一个半区。有递归（Robert R.Fenichel 和 Jerome C.Yochelson提出）和迭代（Chenev提出）以及解决了前两者递归栈，缓存行等问题的近似优先搜索算法。复制算法可以通过碰撞指针的方式进行快速地分配内存，但是也存在着空间利用率不高的缺点，另外就是存活对象比较大时复制的成本较高。
-
-        - #### Generational（分代）
-
-    + ### 垃圾回收器
-
-        > 串行收集器： DefNew：是使用-XX:+UseSerialGC（新生代，老年代都使用串行回收收集器）。 
-        >
-        > 并行收集器： ParNew：是使用-XX:+UseParNewGC（新生代使用并行收集器，老年代使用串行回收收集器）或者-XX:+UseConcMarkSweepGC(新生代使用并行收集器，老年代使用CMS)。 
-        >
-        > PSYoungGen：是使用-XX:+UseParallelOldGC（新生代，老年代都使用并行回收收集器）或者-XX:+UseParallelGC（新生代使用并行回收收集器，老年代使用串行收集器） 
-        >
-        > garbage-first heap：是使用-XX:+UseG1GC（G1收集器)
-        >
-        > [Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
-
-        [垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
-
-        - #### 垃圾回收器图解
-
-            ![](/.images/doc/advance/jvm/gcor.jpeg)
+            ![](/.images/doc/advance/jvm/jvm-gc-01.png ':size=80%x560 :align=center')
 
             + ##### Serial
 
@@ -254,6 +219,35 @@
             | CMS               | 并发      | 老    | 并行最短时间收集器                                           |
             | G1                | 并发/并行 | 新/老 | 面向局部收集和基于Region内存布局的新型低延时收集器           |
 
+    + ### 虚拟机栈
+
+        !> 运行过程可以参考[一个类运行的全过程](../javastrace.md)
+        - #### 局部变量表
+        
+            ?> 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
+            <br>存储单位是Slot【32bi t】,一个slot就是JVM规范对局部变量区里存储一个局部变量的存储单元的叫法。每个slot可以存储一个宽度在32位或以下的原始类型值，或者一个引用，或一个returnAddress；相邻的两个slot可存储一个double或long型的值。[参考](https://hllvm-group.iteye.com/group/topic/25858),另外参考中也有例子体现slot复用性。
+            <br>根据索引的方式定位局部变量表，下标从0开始。非静态方法的0位是this,静态方法的从参数开始排列
+            <br><br>slot复用：[影响GC](https://blog.csdn.net/weixin_38106322/article/details/108785468)。当同一个帧栈中局部方法中变量没有被复用，会导致无法垃圾回收。
+        
+        - #### 操作数栈
+        
+            ?> 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
+            <br><br>[栈顶缓存技术](https://blog.csdn.net/qq_40298351/article/details/120730602)。操作数在内存中，频繁操作影响性能。可以将栈顶全部元素缓存在物理CPU寄存器中
+        
+        - #### 动态链接
+        
+        - #### 方法返回地址
+
+            > [!COMMENT]
+            [参考](https://www.yuque.com/yangxiaofei-vquku/wmp1zm/mggrlr#yQ65Z)
+      
+    + ### 本地方法栈
+
+        > 类比虚拟机栈，不过这个是针对本地语言（c/c++），方法一般由native修饰。
+
+    + ### 程序计数器
+
+        > 一块比较小的内存空间，可以看做事当前线程所需执行字节码的行号指示器，通常由执行引擎开执行程序计数器所指向的行号内容。更确切的说。一个线程的执行，是通过字节码解释器改变当前线程 的计数器的值，来获取下一条需要执行的字节码指令，从而确保线程的正确执行。
 
 * ## 扩展
 
@@ -293,7 +287,16 @@
 
         ?> 同一个版本的垃圾回收器[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)。 在不同的平台上使用的垃圾回收器不一样
 
-        ![](/.images/doc/advance/jvm/diff-jdk-version-gc-condition.jpg)
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ?> mac
+
+        ![](/.images/doc/advance/jvm/jvm-platform-diff-01.png)
+        <!-- div:right-panel-50 -->
+        ?> centos
+        
+        ![](/.images/doc/advance/jvm/jvm-platform-diff-02.png)
+        <!-- panels:end -->
 
         * `-XX:+UseParallelGC / -XX:-UseParallelOldGC` 选项[link](https://docs.oracle.com/javase/10/gctuning/available-collectors.htm#JSGCT-GUID-F215A508-9E58-40B4-90A5-74E29BF3BD3C)
 
@@ -373,19 +376,23 @@
 
     + CPU 100% 问题排查
 
-        > 1 在Linux上面使用 `top` 命令进程查询 CPU100% 进程ID[pid]
+        <!-- panels:start -->
+        <!-- div:left-panel-33 -->
+        > [!COMMENT]
+        1 在Linux上面使用 `top` 命令进程查询 CPU100% 进程ID[pid]，此处为`23198`
+
         ![linux-top](/.images/doc/advance/jvm/linux-top.png)
-        >
-        > 
-        >
-        >
-        > 2  使用`top -Hp 23198` 查看具体线程所占用CPU,然后将线程通过`printf "%x\n" 23208` 记录线程ID 
+        <!-- div:left-panel-33 -->
+        > [!COMMENT]
+        2 使用`top -Hp 23198` 查看具体线程所占用CPU,然后将线程通过`printf "%x\n" 23208` 记录线程ID 
+
         ![](/.images/doc/advance/jvm/linux-thread-0x.jpg)
-        >
-        >
-        > 
-        > 3 使用`jstack 23198` 打印进程下线程状态。根据上一步获取的十六进制的线程ID 查找是那个线程栈导致。
+        <!-- div:right-panel-33 -->
+        > [!COMMENT]
+        3 使用`jstack 23198` 打印进程下线程状态。根据上一步获取的十六进制的线程ID 查找是那个线程栈导致。
+
         ![](/.images/doc/advance/jvm/find-nid-check.jpg)
+        <!-- panels:end -->
 
     + 内存超标
 
