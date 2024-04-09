@@ -1,5 +1,10 @@
 ## brew
 
+### 切换版本
+> [!NOTE]
+`brew unlink node@18`
+<br>`brew link --overwrite --force node@14`
+
 ### 安装软件
 
 <!-- tabs:start -->
