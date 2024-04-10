@@ -15,7 +15,7 @@
 
         <!-- tabs:start -->
         #### **docs.wtfu.site**
-        path: `~/Library/LaunchAgents/dos.wtfu.site.plist`
+        path: `~/Library/LaunchAgents/docs.wtfu.site.plist`
         ```xml
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -58,7 +58,7 @@
                 <array>
                     <string>sh</string>
                     <string>-c</string>
-                    <string>/Users/mac/Desktop/frp_0.34.1_darwin_amd64/frpc -c /Users/mac/Desktop/frp_0.34.1_darwin_amd64/frpc.ini </string>
+                    <string>~/Desktop/frp_0.34.1_darwin_amd64/frpc -c ~/Desktop/frp_0.34.1_darwin_amd64/frpc.ini </string>
                 </array>
                 <key>RunAtLoad</key>
                 <true/>
@@ -72,7 +72,7 @@
                 <key>StandardErrorPath</key>
                 <string>/tmp/frpc.wtfu.site.err</string>
             </dict>
-        </plist
+        </plist>
         ```
 
         #### **ssh.plist**
