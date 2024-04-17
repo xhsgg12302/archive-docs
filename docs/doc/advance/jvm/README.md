@@ -159,11 +159,8 @@
         - #### 垃圾回收器
 
             > [!TIP|style:flat]
-            串行收集器： DefNew：是使用-XX:+UseSerialGC（新生代，老年代都使用串行回收收集器）。 
-            <br>并行收集器： ParNew：是使用-XX:+UseParNewGC（新生代使用并行收集器，老年代使用串行回收收集器）或者-XX:+UseConcMarkSweepGC(新生代使用并行收集器，老年代使用CMS)。 
-            <br><br>PSYoungGen：是使用-XX:+UseParallelOldGC（新生代，老年代都使用并行回收收集器）或者-XX:+UseParallelGC（新生代使用并行回收收集器，老年代使用串行收集器） 
-            <br><br>garbage-first heap：是使用-XX:+UseG1GC（G1收集器)
-            <br><br>[Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
+            [Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
+            <br>是这样的。 串行收集器： DefNew：是使用-XX:+UseSerialGC（新生代，老年代都使用串行回收收集器）。 并行收集器： ParNew：是使用-XX:+UseParNewGC（新生代使用并行收集器，老年代使用串行回收收集器）或者-XX:+UseConcMarkSweepGC(新生代使用并行收集器，老年代使用CMS)。 PSYoungGen：是使用-XX:+UseParallelOldGC（新生代，老年代都使用并行回收收集器）或者-XX:+UseParallelGC（新生代使用并行回收收集器，老年代使用串行收集器） garbage-first heap：是使用-XX:+UseG1GC（G1收集器).
             <br><br>[垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
 
             ![](/.images/doc/advance/jvm/jvm-gc-01.png ':size=80%x560 :align=center')
@@ -270,7 +267,7 @@
     + ### 新生代到老年代的标准
 
         1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。
-        2. 动态对象年龄判断：survivor区域中年龄从低到高对象大小总和大于-XX:TargetSurvivorRatio[:50%]，则将当前年龄及大雨当前年龄的对象晋升。[误区](https://wenku.baidu.com/view/e90d99cc142ded630b1c59eef8c75fbfc77d94a0.html )
+        2. 动态对象年龄判断：survivor区域中年龄从低到高对象大小总和大于-XX:TargetSurvivorRatio[:50%]，则将当前年龄及大雨当前年龄的对象晋升。[误区](https://my.oschina.net/xpbob/blog/2221709 )
         3. 大对象直接进入老年代：-XX:PretenureSizeThreshold。超过这个值的对象直接放在老年代。
         4. 空间分配担保机制：[src](https://blog.csdn.net/qq_40662405/article/details/114783644)
         ![](/.images/doc/advance/jvm/handler-promotion-failure.png)
