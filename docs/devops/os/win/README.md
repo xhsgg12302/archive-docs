@@ -2,17 +2,30 @@
 
     + ### window激活
 
-        > [!NOTE|label:window10专业版]
-        <br>1). 首先，查看一下Win10正式专业版系统的激活状态：点击桌面左下角的“Windows”按钮，从打开的扩展面板中依次点击“设置”-“更新和安全”，并切换到“激活”选项卡，在此就可以查看到当前系统的激活状态。
+        > [!NOTE|label:window各种版本激活]
+        <br>1). 首先，查看系统的激活状态：点击桌面左下角的“Windows”按钮，从扩展面板中依次点击“设置”-“更新和安全”，并切换到“激活”选项卡，在此就可以查看到当前系统的激活状态。
         <br>2). 以管理员身份”运行cmd。输出以下命令：`slmgr.vbs /upk`复制以上命令，按回车进行确定。此时弹出窗口显未“已成功卸载了产品密钥”。
-        <br>3). 接着输入以下命令：`slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX` 弹出窗口提示：“成功的安装了产品密钥”。
+        <br>3). 接着输入以下命令：`slmgr /ipk <KMS key>` 弹出窗口提示：“成功的安装了产品密钥”。`KMS key`参见下标,例如对于**Windows 10 Pro专业版**，使用`slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX`。
         <br>4). 继续输入以下命令：`slmgr /skms zh.us.to` 弹出窗口提示：“密钥管理服务计算机名成功的设置为zh.us.to”。
         <br>5). 接下来输入以下命令：`slmgr /ato` 此时将弹出窗口提示：“成功的激活了产品”。
-        <br>6). 最后就可以再次查看当前Win10正式专业版系统的激活状态啦。表明已成功激活Win10正式专业版系统。
+        <br>6). 最后就可以看到当前系统的激活状态了。
+
+        | OS | KMS key |
+        | -  | -       |
+        |  Windows 10 Pro专业版  | `W269N-WFGWX-YVC9B-4J6C9-T83GX` |
+        |  Windows 11 Pro专业版  | `W269N-WFGWX-YVC9B-4J6C9-T83GX` |
+        |  Windows 7  Enterprise企业版  | `33PXH-7Y6KF-2VJC9-XBBR8-HVTHH` [参考](https://gist.github.com/jerodg/502bd80a715347662e79af526c98f187#windows-7) |
 
         <!-- panels:start -->
         <!-- div:left-panel-54 -->
         ![](/.images/devops/os/windows/windows-active-01.png ':size=100%')
+        <hr>
+
+        ![](/.images/devops/os/windows/windows-active-03.png ':size=100%')
+        <hr>
+
+        ![](/.images/devops/os/windows/windows-active-04.png ':size=100%')
+
         <!-- div:right-panel-46 -->
         ![](/.images/devops/os/windows/windows-active-02.png ':size=100%')
         <!-- panels:end -->
