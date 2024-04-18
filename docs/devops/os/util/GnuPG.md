@@ -197,6 +197,7 @@
         <br> 重启agent `gpg-connect-agent reloadagent /bye`
 
 * ## Reference
+
     + https://wiki.archlinuxcn.org/wiki/GnuPG
     + https://unix.stackexchange.com/questions/512173/gpg-gpg-preset-passphrase-installation
     + https://unix.stackexchange.com/questions/614737/how-to-cache-gpg-key-passphrase-with-gpg-agent-and-keychain-on-debian-10
