@@ -1,4 +1,4 @@
-* ## Intro(GunPG)
+* ## Intro(GnuPG)
 
     ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70% :align=center')
 
@@ -185,8 +185,23 @@
         * http://keyserver.ubuntu.com/
         * https://keys.openpgp.org/
         * http://pgp.mit.edu/
+        * [更多参考wikipedia](https://en.wikipedia.org/wiki/Key_server_(cryptographic)#Keyserver_examples)
+
+    + ### GnuPG套件
+
+        > [!NOTE]
+        <br> gpg有很多的辅助程序，比如`gpg-agent`,`dirmngr`。
+        <br> 查看keygrip `gpg --with-keygrip -K 425B8CB8073AAC1EB005E4E648E1F1185160B400`
+        <br> 预置密码 `"$(gpgconf --list-dirs libexecdir)"/gpg-preset-passphrase --preset <keygrip>`，需要在gpg-agent中开启`allow-preset-passphrase`选项。
+        <br> 查看agent `gpg-connect-agent 'keyinfo --list' /bye`
+        <br> 重启agent `gpg-connect-agent reloadagent /bye`
 
 * ## Reference
+    + https://wiki.archlinuxcn.org/wiki/GnuPG
+    + https://unix.stackexchange.com/questions/512173/gpg-gpg-preset-passphrase-installation
+    + https://unix.stackexchange.com/questions/614737/how-to-cache-gpg-key-passphrase-with-gpg-agent-and-keychain-on-debian-10
+    + https://superuser.com/questions/1539189/gpg-preset-passphrase-caching-passphrase-failed-not-supported
+    + 
     + [GPG入门教程 | ruanyifeng ](http://www.ruanyifeng.com/blog/2013/07/gpg.html)
     + https://www.hacksanity.com/kb/gnupg-part-4-encrypt-sign-files/
     + https://loganmarchione.com/2015/12/a-brief-introduction-to-gpg/
