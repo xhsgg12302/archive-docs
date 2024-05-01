@@ -140,6 +140,166 @@
             }
             ```
             <!-- panels:end -->
+        
+    + ### Reactor Pattern
+
+        > [!TIP|style:flat|label:|iconVisibility:hidden]
+        <br>1. Reactor responds to IO events by dispatching the appropriate handler`(Similar to AWT thread)`
+        <br>2. Handlers perform non-blocking actions`(Similar to AWT ActionListeners)`
+        <br>3. Manage by binding handlers to events`(Similar to AWT addActionListener)`
+        <br><br>See Schmidt et al, Pattern-Oriented Software Architecture, Volume 2 (POSA2). Also Richard Stevens's networking books, Matt Welsh's SEDA framework, etc.
+        
+        - #### Basic Reactor Design
+
+            ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-04-basic-reactor-design.png ':size=57%')
+
+            <!-- panels:start -->
+            <!-- div:left-panel-40 -->
+            ?> `Reactor` and `Acceptor`
+            ```java
+            public class Reactor {
+
+                final Selector selector;
+                final ServerSocketChannel serverSocket;
+
+                // Reactor 1: Setup
+                Reactor(int port) throws IOException {
+
+                    /*
+                        Alternatively, use explicit SPI provider:
+                        SelectorProvider p = SelectorProvider.provider();
+                        selector = p.openSelector();
+                        serverSocket = p.openServerSocketChannel();
+                    */
+                    selector = Selector.open();
+                    serverSocket = ServerSocketChannel.open();
+
+                    serverSocket.socket().bind(new InetSocketAddress(port));
+                    serverSocket.configureBlocking(false);
+
+                    SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+                    sk.attach(new Acceptor());
+                }
+
+                // Reactor 2: Dispatch Loop
+                public void run() { // normally in a new Thread
+                    try {
+                        while (!Thread.interrupted()) {
+                            selector.select();
+                            Set selected = selector.selectedKeys();
+                            Iterator it = selected.iterator();
+                            while (it.hasNext())
+                                dispatch((SelectionKey)(it.next()));
+                            selected.clear();
+                        }
+                    } catch (IOException ex) { /* ... */ }
+                }
+                void dispatch(SelectionKey k) {
+                    Runnable r = (Runnable)(k.attachment());
+                    if (r != null)
+                        r.run();
+                }
+
+                // Reactor 3: Acceptor
+                class Acceptor implements Runnable { // inner
+                    public void run() {
+                        try {
+                            SocketChannel c = serverSocket.accept();
+                            if (c != null)
+                                new Handler(selector, c);
+                        }
+                        catch(IOException ex) { /* ... */ }
+                    }
+                }
+            }
+            ```
+            <!-- div:right-panel-60 -->
+            ?> Normal `Handler` and GoF `Handler`
+            ```java
+            final class Handler implements Runnable {
+
+                // Reactor 4: Handler setup
+                final SocketChannel socket;
+                final SelectionKey sk;
+                ByteBuffer input = ByteBuffer.allocate(1024);
+                ByteBuffer output = ByteBuffer.allocate(1024);
+                static final int READING = 0, SENDING = 1;
+                int state = READING;
+
+                Handler(Selector sel, SocketChannel c)
+                        throws IOException {
+                    socket = c;
+                    c.configureBlocking(false);
+                    // Optionally try first read now
+                    sk = socket.register(sel, 0);
+                    sk.attach(this);
+                    sk.interestOps(SelectionKey.OP_READ);
+                    sel.wakeup();
+                }
+
+                boolean inputIsComplete() { /* ... */ return true; }
+                boolean outputIsComplete() { /* ... */ return true; }
+                void process() { /* ... */}
+
+                //run()
+            }
+            ```
+            <!-- panels:start -->
+            <!-- div:left-panel-30 -->
+            ```java
+            // Reactor 5: Request Handling
+            @Override
+            public void run() {
+                try {
+                    if (state == READING) read();
+                    else if (state == SENDING) send();
+                } catch (IOException ex) { /* ... */ }
+            }
+
+            void read() throws IOException {
+                socket.read(input);
+                if (inputIsComplete()) {
+                    process();
+                    state = SENDING;
+                    // Normally also do first write now
+                    sk.interestOps(SelectionKey.OP_WRITE);
+                }
+            }
+            void send() throws IOException {
+                input.flip();
+                socket.write(input);
+                if (outputIsComplete()) sk.cancel();
+            }
+            ```
+            <!-- div:right-panel-30 -->
+            ```java
+            // Per-State Handlers (A simple use of GoF State-Object pattern)
+            // Rebind appropriate handler as attachment
+
+            // Reactor 5: Request Handling
+            @Override
+            public void run() throws IOException { 
+                // initial state is reader
+                socket.read(input);
+                if (inputIsComplete()) {
+                    process();
+                    sk.attach(new Sender());
+                    sk.interestOps(SelectionKey.OP_WRITE);
+                    sk.selector().wakeup();
+                }
+            }
+
+            class Sender implements Runnable {
+                @SneakyThrows
+                public void run(){ // ...
+                    socket.write(output);
+                    if (outputIsComplete()) sk.cancel();
+                }
+            }
+            ```
+            <!-- panels:end -->
+            <!-- panels:end -->
+
 
 ## Reference
 * https://gee.cs.oswego.edu/dl/cpjslides/nio.pdf
