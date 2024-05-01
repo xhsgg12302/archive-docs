@@ -1,6 +1,6 @@
 * ## Buffer
 
-    ![](/.images/doc/base/io/nio/buffer-01.png ':size=80% :align=center')
+    ![](/.images/doc/base/io/nio/buffer-01.png ':size=100%')
 
     <!-- panels:start -->
     <!-- div:left-panel-20 -->
@@ -15,8 +15,10 @@
     <!-- div:left-panel-20 -->
     ```java
     public final Buffer mark() {
+
         mark = position;
         return this;
+
     }
     ```
     <!-- div:left-panel-20 -->
@@ -40,6 +42,7 @@
     <!-- div:left-panel-20 -->
     ```java
     public final Buffer rewind() {
+        
         position = 0;
         mark = -1;
         return this;
