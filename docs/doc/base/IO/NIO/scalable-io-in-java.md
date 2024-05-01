@@ -116,7 +116,7 @@
             public class SimpleAWTExample {
                 public SimpleAWTExample() {
                     // 创建窗口
-                    Frame frame = new Frame("简单AWT示例");
+                    Frame frame = new Frame("AWT示例");
                     frame.setSize(300, 150);
                     frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent e) { System.exit(0);}});
                     // 创建文本框
