@@ -359,6 +359,9 @@
                 4. __Futures__
                     * When each task produces a result
                     * Coordination layered on top of join or wait/notify
+
+             
+                ---
                 <!-- panels:end -->
 
                 <!-- panels:start -->
@@ -374,7 +377,9 @@
                     * "Warm" versus on-demand threads
                     * Keep-alive interval until idle threads die (to be later replaced by new ones if necessary)
                     * Saturation policy (block, drop, producer-runs, etc)
-                
+
+             
+                ---
                 <!-- panels:end -->
 
             * __Multiple Reactor Threads__ (Reactor threads can saturate doing IO Distribute load to other reactors, Load-balance to match CPU and IO rates)

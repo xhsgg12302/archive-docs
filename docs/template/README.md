@@ -1,8 +1,10 @@
-[toc]
+<!-- [toc] -->
 <!-- varibale -->
 [12302]:http://mvn.wtfu.site
 [我的主页]:https://wtfu.site
 [dojocat]: https://octodex.github.com/images/dojocat.jpg ":size=400 The Dojocat"
+
+<h1 style="text-align:center; font-size: 50px">以下语法仅针对项目环境生效</h1>
 
 * ## Example
 
@@ -120,8 +122,55 @@
 
                     text of li two
 
-            end of the each li
+            > [!NOTE] end of the each li [逃离一个]
 
+        > [!TIP] end of the each li [逃离两个]
+
+        * phase
+
+            第二个段落内容
+
+    
+        > [!WARNING|label:逃离三个] 逃离段落，最后一个段落添加空行，以及新开四个空格开头的空行，然后按照格式写正文即可。
+
+        ---
+
+        ?> 两个紧挨着的 `panel`，如果第一个有层级关系，比如在第二个开始之前添加前一行添加一个空格。并且添加换一个类似分割线(---)的东西。
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        ##### Coordinating Tasks
+        <!-- div:left-panel-100 -->
+        1. __Handoffs__ (Each task enables, triggers, or calls next one Usually fastest but can be brittle)
+        2. __Callbacks to per-handler dispatcher__
+            * Sets state, attachment, etc
+            * A variant of GoF Mediator pattern
+        3. __Queues__ (For example, passing buffers across stages)
+        4. __Futures__
+            * When each task produces a result
+            * Coordination layered on top of join or wait/notify
+
+     
+        ---
+        <!-- panels:end -->
+
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        ##### Using PooledExecutor
+        <!-- div:left-panel-100 -->
+        1. __A tunable worker thread pool__
+        2. __Main method execute(Runnable r)__
+        3. __Controls for:__
+            * The kind of task queue (any Channel)
+            * Maximum number of threads
+            * Minimum number of threads
+            * "Warm" versus on-demand threads
+            * Keep-alive interval until idle threads die (to be later replaced by new ones if necessary)
+            * Saturation policy (block, drop, producer-runs, etc)
+
+     
+        ---
+        <!-- panels:end -->
+        
     + ### 08-数学符号
 
         [github支持，没有空格](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
