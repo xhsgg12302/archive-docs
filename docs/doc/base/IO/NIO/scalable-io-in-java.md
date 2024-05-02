@@ -348,9 +348,8 @@
                 ```
 
                 <!-- panels:start -->
-                <!-- div:title-panel -->
-                ##### Coordinating Tasks
-                <!-- div:left-panel-100 -->
+                <!-- div:left-panel-50 -->
+                ?> Coordinating Tasks
                 1. __Handoffs__ (Each task enables, triggers, or calls next one Usually fastest but can be brittle)
                 2. __Callbacks to per-handler dispatcher__
                     * Sets state, attachment, etc
@@ -362,12 +361,8 @@
 
              
                 ---
-                <!-- panels:end -->
-
-                <!-- panels:start -->
-                <!-- div:title-panel -->
-                ##### Using PooledExecutor
-                <!-- div:left-panel-100 -->
+                <!-- div:right-panel-50 -->
+                ?> Using PooledExecutor
                 1. __A tunable worker thread pool__
                 2. __Main method execute(Runnable r)__
                 3. __Controls for:__
@@ -384,7 +379,45 @@
 
             * __Multiple Reactor Threads__ (Reactor threads can saturate doing IO Distribute load to other reactors, Load-balance to match CPU and IO rates)
 
-                ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-06-using-multiple-reactors.png ':size=57%')
+                <!-- panels:start -->
+                <!-- div:left-panel-50 -->
+                ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-06-using-multiple-reactors.png ':size=100%')
+                <!-- div:right-panel-50 -->
+                ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-07-multiple-reactor-threads.png ':size=100%')
+                <!-- panels:end -->
+
+                <!-- panels:start -->
+                <!-- div:title-panel -->
+                ##### 
+                <!-- div:left-panel-50 -->
+                ?> Using other java.nio features
+                1. __Multiple Selectors per Reactor__ (To bind different handlers to different IO events, May need careful synchronization to coordinate)
+                2. __File transfer__ (Automated file-to-net or net-to-file copying)
+                3. __Memory-mapped files__ (Access files via buffers)
+                4. __Direct buffers__
+                    * Can sometimes achieve zero-copy transfer
+                    * But have setup and finalization overhead
+                    * Best for applications with long-lived connections
+
+             
+                ---
+                <!-- div:right-panel-50 -->
+                ?> Connection-Based Extensions
+                1. __Instead of a single service request__
+                    * Client connects
+                    * Client sends a series of messages/requests
+                    * Client disconnects
+                2. __Examples__
+                    * Databases and Transaction monitors
+                    * Multi-participant games, chat, etc
+                3. __Can extend basic network service patterns__
+                    * Handle many relatively long-lived clients
+                    * Track client and session state (including drops)
+                    * Distribute services across multiple hosts
+
+             
+                ---
+                <!-- panels:end -->
 
 
 ## Reference
