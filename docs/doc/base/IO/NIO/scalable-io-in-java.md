@@ -300,6 +300,87 @@
             <!-- panels:end -->
             <!-- panels:end -->
 
+            ---
+
+            > [!ATTENTION|style:flat|label:为什么需要调用wakeup（）方法？] [ref](https://yiyan.baidu.com/share/PjR5tzcKWN '针对改变interestOps(感兴趣的操作集合)做详细说明，为什么改变后需要wakeup')
+            <br>当你改变了一个通道的`interestOps`后，这个改变不会立即触发select()方法返回。这是因为select()方法是在等待至少有一个已注册的通道的状态变为就绪（即满足之前设置的 interestOps）时才会返回。
+            <br>然而，如果你已经改变了某个通道的`interestOps`，并且你希望这个改变能够立即影响到select()方法的执行（例如:你希望 select()方法立即返回以检查新的 interestOps），那么你就需要调用`wakeup()`方法。
+            <br>因此，改变 interestOps 后需要调用 wakeup() 的主要原因是，你希望这个改变能够立即影响到 select() 方法的执行，以便能够及时响应新的感兴趣的操作。如果不调用 wakeup()，那么 select() 方法可能会继续阻塞，直到某个已注册的通道的状态变为就绪，而这可能并不符合你的期望。
+
+        - #### Multithreaded Designs
+
+            * __Strategically add threads for scalability__ (Mainly applicable to multiprocessors)
+            * __Worker Threads__ 
+                1. Reactors should quickly trigger handlers. (Handler processing slows down Reactor)
+                2. Offload non-IO processing to other threads.
+            
+
+                ?> `Offload non-IO processing to speed up Reactor thread` (Similar to POSA2 Proactor designs)
+                <br> `Simpler than reworking compute-bound processing into event-driven form` (Should still be pure nonblocking computation,
+                Enough processing to outweigh overhead)
+                <br>`But harder to overlap processing with IO` (Best when can first read all input into a buffer)
+                <br>`Use thread pool so can tune and control` (Normally need many fewer threads than clients)
+
+                ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-05-worker-thread-pools.png ':size=57%')
+
+                ```java
+                class Handler implements Runnable {
+                    // uses util.concurrent thread pool
+                    static PooledExecutor pool = new PooledExecutor(...);
+                    static final int PROCESSING = 3;
+                    // ...
+                    synchronized void read() { // ...
+                        socket.read(input);
+                        if (inputIsComplete()) {
+                            state = PROCESSING;
+                            pool.execute(new Processer());
+                        }
+                    }
+                    synchronized void processAndHandOff() {
+                        process();
+                        state = SENDING; // or rebind attachment
+                        sk.interest(SelectionKey.OP_WRITE);
+                    }
+                    class Processer implements Runnable {
+                        public void run() { processAndHandOff(); }
+                    }
+                }
+                ```
+
+                <!-- panels:start -->
+                <!-- div:title-panel -->
+                ##### Coordinating Tasks
+                <!-- div:left-panel-100 -->
+                1. __Handoffs__ (Each task enables, triggers, or calls next one Usually fastest but can be brittle)
+                2. __Callbacks to per-handler dispatcher__
+                    * Sets state, attachment, etc
+                    * A variant of GoF Mediator pattern
+                3. __Queues__ (For example, passing buffers across stages)
+                4. __Futures__
+                    * When each task produces a result
+                    * Coordination layered on top of join or wait/notify
+                <!-- panels:end -->
+
+                <!-- panels:start -->
+                <!-- div:title-panel -->
+                ##### Using PooledExecutor
+                <!-- div:left-panel-100 -->
+                1. __A tunable worker thread pool__
+                2. __Main method execute(Runnable r)__
+                3. __Controls for:__
+                    * The kind of task queue (any Channel)
+                    * Maximum number of threads
+                    * Minimum number of threads
+                    * "Warm" versus on-demand threads
+                    * Keep-alive interval until idle threads die (to be later replaced by new ones if necessary)
+                    * Saturation policy (block, drop, producer-runs, etc)
+                
+                <!-- panels:end -->
+
+            * __Multiple Reactor Threads__ (Reactor threads can saturate doing IO Distribute load to other reactors, Load-balance to match CPU and IO rates)
+
+                ![](/.images/doc/base/io/nio/scalable-io-in-java/siij-06-using-multiple-reactors.png ':size=57%')
+
 
 ## Reference
 * https://gee.cs.oswego.edu/dl/cpjslides/nio.pdf
