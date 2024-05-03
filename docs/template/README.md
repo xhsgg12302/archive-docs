@@ -280,6 +280,10 @@
 
     + ### 12-折叠展开
 
+        <details open>
+            <summary>default open</summary>
+            hello
+        </details>
         <details>
             <summary>This is a super cool title</summary><!-- Good place for a CTA (Call to Action) -->
             <!-- leave an empty line *️⃣  -->
