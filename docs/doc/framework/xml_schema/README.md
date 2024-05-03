@@ -90,7 +90,7 @@
                     <age>18</age>
                 </person>
 
-                <person name="pOne">
+                <person name="pTwo">
                     <name>张三</name>
                     <age>18</age>
                 </person>
@@ -399,8 +399,16 @@
                 ```
 
                 </details>
+
+            2. http://mybatis.org/dtd/mybatis-3-config.dtd
+
+                [dcos| 创建主配置文件SqlMapConfig.xml](../mybatis/mybatis.md#创建主配置文件sqlmapconfigxml )
             
     + ### Schema约束
+
+        - #### 编写规则
+        - #### 引入方式
+        - #### 参考引用
 
 ## Reference
 * https://www.bilibili.com/video/BV19P411S7mf/?vd_source=550a4dc4b2a914c0681a14307bbe8cbe
