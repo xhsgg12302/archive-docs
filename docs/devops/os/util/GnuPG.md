@@ -196,6 +196,8 @@
         <br> 查看agent `gpg-connect-agent 'keyinfo --list' /bye`
         <br> 重启agent `gpg-connect-agent reloadagent /bye`
 
+        ![](/.images/devops/os/util/gpg-suite-01.png ':size=60%')
+
 * ## Reference
 
     + https://wiki.archlinuxcn.org/wiki/GnuPG
