@@ -2,7 +2,7 @@
 
     ### WebStorm文件内容不能预览(打不开文件)
     
-    ?> 可能原因是新版本使用了老版本的插件，不兼容造成的原因。解决办法：`删除对应版本WebStorm中的plugins目录`。[参考](https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs)
+    ?> 可能原因是新版本使用了老版本的插件，不兼容造成的原因。解决办法：`删除对应版本WebStorm中的plugins目录`。[参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/360010609860-Intellij-cannot-view-any-file-content) 删除了额外的插件 [目录](https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs)
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
