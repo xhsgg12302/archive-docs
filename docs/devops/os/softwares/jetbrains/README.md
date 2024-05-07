@@ -13,7 +13,7 @@
 
     ### Idea调试异常信息显示(Unknown Source)
 
-    ?> 可能原因是当前使用的jar包在编译的时候没有加入调试信息，比如(LineNumberTable, LocalVariableTable, etc. )
+    ?> 可能原因是当前使用的jar包在编译的时候没有加入调试信息，比如(`LineNumberTable`, [`LocalVariableTable`](/docs/doc/advance/javastrace.md#localvariabletable), etc. )
     <br> [参考：Why do I see unknown source in stack traces when I have sources downloaded?](https://stackoverflow.com/questions/66565398/why-do-i-see-unknown-source-in-stack-traces-when-i-have-sources-downloaded/66565466)
 
     <!-- panels:start -->
