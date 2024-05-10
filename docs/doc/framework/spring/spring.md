@@ -115,8 +115,7 @@
     ```
     </details>
 
-    ![](/.images/doc/advance/spring/xmlac-load-bd.png ':size=65%') 
-    ![](/.images/doc/advance/spring/xmlac-load-bd.png ':size=30%')
+    ![](/.images/doc/framework/spring/xmlac-load-bd.png ':size=65%') 
 
 ## spring bean生命周期 [repo](https://github.com/xhsgg12302/idea-test-project/tree/master/_0_base-learning/src/main/java/_framework/spring/bean_lifecycle)
 
