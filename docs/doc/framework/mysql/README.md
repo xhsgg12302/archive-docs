@@ -41,7 +41,7 @@ SELECT DATABASE();
 ## 用于显示当前会话的状态信息，包括当前使用的数据库、服务器版本、连接信息等
 mysql> \s
 
-![](/.images/doc/advance/mysql/readme-01.png)
+![](/.images/doc/framework/mysql/readme-01.png)
 
 ## clear command not work
 `\! clear` `\! cls`

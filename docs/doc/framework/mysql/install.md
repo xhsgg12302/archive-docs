@@ -84,7 +84,7 @@ $ FLUSH PRIVILEGES;
     #           [ 还需要注意必须在mysql连接命令之前执行。不然的话，mysql是识别不到的。]
     $ docker run -it --rm --network=host -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336 -p
     ```
-    ![](/.images/doc/advance/mysql/mysql-install-01.png)
+    ![](/.images/doc/framework/mysql/mysql-install-01.png)
 
 ##### Reference
    * https://hub.docker.com/_/mysql
