@@ -94,10 +94,10 @@ like_or_where: {
 1. `show charset;`
 2. `show charset like '%utf%';`
    
-   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-01.png)
+   ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-01.png)
 3. `show charset where charset = 'utf8mb4';`
    
-   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-02.png)
+   ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-02.png)
 
 ### 比较规则查看
 ```sql
@@ -122,10 +122,10 @@ like_or_where: {
     | _bin | binary |以二进制方式比较|
 1. `show collation where charset = 'utf8mb4';`
    
-   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-03.png)
+   ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-03.png)
 2. `show collation where charset = 'utf8mb4';`
    
-   ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-04.png)
+   ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-04.png)
 
 ## 字符集和比较规则的应用
 
@@ -136,11 +136,11 @@ like_or_where: {
 MySQL 提供了两个系统变量来表示服务器级别的字符集和比较规则：
 - `show variables like 'character_set_server';`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-05.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-05.png)
 
 - `show variables like 'collation_server';`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-06.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-06.png)
 
 可以看到在我的计算机中服务器级别默认的字符集是 utf8mb4 ，默认的比较规则是 utf8mb4_unicode_ci 。我们可以在启动服务器程序时通过启动选项或者在服务器程序运行过程中使用 SET 语句修改这两个变量的值。比如我们可以在配置文件中如下写：当服务器启动的时候读取这个配置文件后这两个系统变量的值便修改了。
 ```sql
@@ -170,13 +170,13 @@ Query OK, 1 row affected (0.01 sec)
 * `select database();`
 * `show variables like 'character_set_database';`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-07.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-07.png)
 * `show variables like 'collation_database';`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-08.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-08.png)
 * `show create database myemployees\G`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-08-1.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-08-1.png)
 
 !> character_set_database 和 collation_database 这两个系统变量是只读的，我们不能通过修改这两个变量的值而改变当前数据库的字符集和比较规则。
 
@@ -200,10 +200,10 @@ Query OK, 0 rows affected (0.03 sec)
 ```
 * `show create table jobs\G`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-10.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-10.png)
 * `select table_schema, table_collation from information_schema.tables where table_name = 'jobs'\G`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-09.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-09.png)
 
 #### 4. ___列级别___
 需要注意的是，对于存储字符串的列，*同一个表中的不同的列也可以有不同的字符集和比较规则*。我们在创建和修改列定义的时候可以指定该列的字符集和比较规则，语法如下：
@@ -224,12 +224,12 @@ ALTER TABLE t MODIFY col VARCHAR(10);
 ```
 * `SHOW FULL COLUMNS FROM t;`
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-09-01.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-09-01.png)
 * `SELECT column_name, character_set_name, collation_name FROM information_schema.columns WHERE table_schema = 'myemployees' AND table_name = 't';`
 
     ***下图是后面补上去的，所以和第一种方式比较内容有差别***
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-09-02.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-09-02.png)
 
 !> 小贴士：在转换列的字符集时需要注意，如果转换前列中存储的数据不能用转换后的字符集进行表示会发生错误。比方说原先列使用的字符集是utf8，列中存储了一些汉字，现在把列的字符集转换为ascii的话就会出错，因为ascii字符集并不能表示汉字字符。
 
@@ -241,13 +241,13 @@ ALTER TABLE t MODIFY col VARCHAR(10);
 *不论哪个级别的字符集和比较规则，这两条规则都适用*，我们以服务器级别的字符集和比较规则为例来看一下详细过程：
 * 只修改字符集，则比较规则将变为修改后的字符集默认的比较规则。
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-11.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-11.png)
 
     我们只修改了 character_set_server 的值为 utf8mb4 ， collation_server 的值自动变为了utf8mb4_general_ci 。
 
 * 只修改比较规则，则字符集将变为修改后的比较规则对应的字符集。
 
-    ![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-12.png)
+    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-12.png)
     
     我们只修改了 collation_server 的值为 gb2312_chinese_ci ， character_set_server 的值自动变为了 gb2312 。
 
@@ -290,7 +290,7 @@ show variables like 'character_set_client';
 show variables like 'character_set_connection';
 show variables like 'character_set_results';
 ```
-![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-13.png)
+![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-13.png)
 
 大家可以看到这几个系统变量的值都是 utf8 ，为了体现出字符集在请求处理过程中的变化，我们这里特意修改一个系统变量的值：
 ```sql
@@ -321,7 +321,7 @@ SELECT * FROM t WHERE s = '我';
 
 如果你读上边的文字有点晕，可以参照这个图来仔细分析一下这几个步骤：
 
-![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-14.png)
+![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-14.png)
 
 从这个分析中我们可以得出这么几点需要注意的地方：
 
@@ -352,7 +352,7 @@ default-character-set=utf8
 
 ## 比较规则的应用
 结束了字符集的漫游，我们把视角再次聚焦到 比较规则 ， 比较规则 的作用通常体现比较字符串大小的表达式以及对某个字符串列进行排序中，所以有时候也称为 排序规则 。比方说表 t 的列 col 使用的字符集是 gbk ，使用的比较规则是 gbk_chinese_ci ，我们向里边插入几条记录：
-如果输入不了中文，参考 [mysql安装](/docs/doc/advance/mysql/install.md?id=源码安装)
+如果输入不了中文，参考 [mysql安装](/docs/doc/framework/mysql/install.md?id=源码安装)
 ```sql
 # 创建表t
 CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -402,4 +402,4 @@ mysql> SELECT * FROM t ORDER BY s;
 'b' -> 98 （十进制）</br>
 '我' -> 25105 （十进制）
 
-![](/.images/doc/advance/mysql/book/03_character_and_collation/cac-15.png)
+![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-15.png)

@@ -30,16 +30,16 @@
         ```
         现在表中的记录就是这个样子的：
 
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-01.png ':size=48%')
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-02.png ':size=45%')
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-03.png ':size=48%')
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-04.png ':size=41%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-01.png ':size=48%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-02.png ':size=45%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-03.png ':size=48%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-04.png ':size=41%')
     
     2. ### COMPACT行格式
 
         ?> 大家从图中可以看出来，一条完整的记录其实可以被分为 **记录的额外信息** 和 **记录的真实数据** 两大部分，下边我们详细看一下这两部分的组成。
 
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-05.png ':size=80%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-05.png ':size=80%')
 
         * #### 记录的额外信息
 
@@ -64,7 +64,7 @@
             <br>**01 03 04**
             <br>把这个字节串组成的 变长字段长度列表 填入上边的示意图中的效果就是：
             
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-06.png ':size=80%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-06.png ':size=80%')
 
             由于第一行记录中 c1 、 c2 、 c4 列中的字符串都比较短，也就是说内容占用的字节数比较小，用1个字节就可以表示，但是如果变长列的内容占用的字节数比较多，可能就需要用2个字节来表示。具体用1个还是2个字节来表示真实数据占用的字节数， InnoDB 有它的一套规则，我们首先声明一下 W 、 M 和 L 的意思：
 
@@ -83,7 +83,7 @@
             
             总结一下就是说：如果该可变字段允许存储的最大字节数（ M×W ）超过255字节并且真实存储的字节数（ L ）超过127字节，则使用2个字节，否则使用1个字节。另外需要注意的一点是，`变长字段长度列表中只存储值为 非NULL 的列内容占用的长度，值为 NULL 的列的长度是不储存的`。也就是说对于第二条记录来说，因为 c4 列的值为 NULL ，所以第二条记录的 变长字段长度列表 只需要存储 c1 和 c2 列的长度即可。其中 c1 列存储的值为 'eeee' ，占用的字节数为 4 ， c2 列存储的值为 'fff' ，占用的字节数为 3 。数字 4 可以用1个字节表示， 3 也可以用1个字节表示，所以整个 变长字段长度列表 共需2个字节。填充完 变长字段长度列表 的两条记录的对比图如下：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-07.png ':size=80%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07.png ':size=80%')
 
             !> 并不是所有记录都有这个 变长字段长度列表 部分，比方说表中所有的列都不是变长的数据类型的话，这一部分就不需要有。
                 
@@ -98,13 +98,13 @@
 
                 因为表 record_format_demo 有3个值允许为 NULL 的列，所以这3个列和二进制位的对应关系就是这样：
 
-                ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-08.png ':size=25%')
+                ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-08.png ':size=25%')
 
                 再一次强调，二进制位按照列的顺序逆序排列，所以第一个列 c1 和最后一个二进制位对应。
 
                 3. MySQL 规定 NULL值列表 必须用整数个字节的位表示，如果使用的二进制位个数不是整数个字节，则在字节的高位补 0 。<br>表 record_format_demo 只有3个值允许为 NULL 的列，对应3个二进制位，不足一个字节，所以在字节的高位补 0 ，效果就是这样：
 
-                ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-09.png ':size=25%')
+                ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-09.png ':size=25%')
 
                 以此类推，如果一个表中有9个允许为 NULL ，那这个记录的 NULL 值列表部分就需要2个字节来表示了。
             
@@ -112,25 +112,25 @@
 
                 - 对于第一条记录来说， c1 、 c3 、 c4 这3个列的值都不为 NULL ，所以它们对应的二进制位都是 0 ，画个图就是这样：
 
-                ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-10.png ':size=25%')
+                ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-10.png ':size=25%')
 
                 所以第一条记录的 NULL值列表 用十六进制表示就是： 0x00 。
 
                 - 对于第二条记录来说， c1 、 c3 、 c4 这3个列中 c3 和 c4 的值都为 NULL ，所以这3个列对应的二进制位的情况就是：
 
-                ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-11.png ':size=25%')
+                ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-11.png ':size=25%')
 
                 所以第二条记录的 NULL值列表 用十六进制表示就是： 0x06 。
 
             所以这两条记录在填充了 NULL值列表 后的示意图就是这样：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-12.png ':size=80%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-12.png ':size=80%')
 
             + **记录头信息**
             
             ?> 除了 变长字段长度列表 、 NULL值列表 之外，还有一个用于描述记录的 记录头信息 ，它是由固定的 5 个字节组成。 5 个字节也就是 40 个二进制位，不同的位代表不同的意思，如图：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-13.png ':size=90%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-13.png ':size=90%')
 
             这些二进制位代表的详细信息如下表：
             | 名称 | 大小（单位：bit）| 描述
@@ -166,7 +166,7 @@
 
             因为表 record_format_demo 并没有定义主键，所以 MySQL 服务器会为每条记录增加上述的3个列。现在看一下加上 记录的真实数据 的两个记录长什么样吧：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-14.png ':size=99%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-14.png ':size=99%')
 
             看这个图的时候我们需要注意几点：
 
@@ -178,7 +178,7 @@
 
             record_format_demo 表的 c1 、 c2 、 c4 列的类型是 VARCHAR(10) ，而 c3 列的类型是 CHAR(10) ，我们说在Compact 行格式下只会把变长类型的列的长度逆序存到 变长字段长度列表 中，就像这样：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-15.png ':size=30%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-15.png ':size=30%')
 
             但是这只是因为我们的 record_format_demo 表采用的是 ascii 字符集，这个字符集是一个定长字符集，也就是说表示一个字符采用固定的一个字节，如果采用变长的字符集（也就是表示一个字符需要的字节数不确定，比如gbk 表示一个字符要12个字节、 utf8 表示一个字符要13个字节等）的话， c3 列的长度也会被存储到 变长字段长度列表 中，比如我们修改一下 record_format_demo 表的字符集：
 
@@ -188,7 +188,7 @@
 
             修改该列字符集后记录的 变长字段长度列表 也发生了变化，如图：
 
-            ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-16.png ':size=60%')
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-16.png ':size=60%')
 
             这就意味着：`对于 CHAR(M) 类型的列来说，当列采用的是定长字符集时，该列占用的字节数不会被加到变长字段长度列表，而如果采用变长字符集时，该列占用的字节数也会被加到变长字段长度列表`。
             
@@ -198,7 +198,7 @@
 
         ?> 其实知道了 Compact 行格式之后，其他的行格式就是依葫芦画瓢了。我们现在要介绍的 Redundant 行格式是MySQL5.0 之前用的一种行格式，也就是说它已经非常老了，但是本着知识完整性的角度还是要提一下，大家乐呵乐呵的看就好。画个图展示一下 Redundant 行格式的全貌：
 
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-17.png ':size=70%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-17.png ':size=70%')
 
         现在我们把表 record_format_demo 的行格式修改为 Redundant ：
         
@@ -208,7 +208,7 @@
 
         为了方便大家理解和节省篇幅，我们直接把表 record_format_demo 在 Redundant 行格式下的两条记录的真实存储数据提供出来，之后我们着重分析两种行格式的不同即可。
 
-        ![](/.images/doc/advance/mysql/book/04_innodb_record_struct/irs-18.png ':size=99%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-18.png ':size=99%')
 
         下边我们从各个方面看一下 Redundant 行格式有什么不同的地方：
 
