@@ -35,6 +35,8 @@
 
         1. #### 动态转发
 
+            ![](/.images/devops/network/ssh/ssh-tunnel-dynamic-00.png ':size=90%')
+
             > [!NOTE]动态转发指的是，本机与 SSH 服务器之间创建了一个加密连接，然后本机内部针对某个端口的通信，都通过这个加密连接转发。它的一个使用场景就是，访问所有外部网站，都通过 SSH 转发。
             <br>动态转发需要把本地端口绑定到 SSH 服务器。至于 SSH 服务器要去访问哪一个网站，完全是动态的，取决于原始通信，所以叫做动态转发。
             <br><br>比如：`ssh -D local-port tunnel-host -N`
@@ -53,6 +55,8 @@
 
         2. #### 本地转发
 
+            ![](/.images/devops/network/ssh/ssh-tunnel-local-00.png ':size=90%')
+
             > [!NOTE]本地转发（local forwarding）指的是，创建一个本地端口，将发往该端口的所有通信都通过 SSH 服务器，转发到指定的远程服务器的端口。这种情况下，SSH 服务器只是一个作为跳板的中介，**用于连接本地计算机无法直接连接的远程服务器**。本地转发是在本地计算机建立的转发规则。
             <br><br>它的语法如下，其中会指定本地端口（local-port）、SSH 服务器（tunnel-host）、远程服务器（target-host）和远程端口（target-port）。
             <br>`ssh -L -N -f local-port:target-host:target-port tunnel-host`。
@@ -69,6 +73,8 @@
             <!-- panels:end -->
 
         3. #### 远程转发
+
+            ![](/.images/devops/network/ssh/ssh-tunnel-remote-00.png ':size=90%')
 
             > [!NOTE]远程转发指的是在远程 SSH 服务器建立的转发规则。它跟本地转发正好反过来。建立本地计算机到远程 SSH 服务器的隧道以后，本地转发是通过本地计算机访问远程 SSH 服务器，而远程转发则是通过远程 SSH 服务器访问本地计算机。它的命令格式如下。
             <br>`ssh -R remote-port:target-host:target-port remotehost -N`
@@ -100,3 +106,4 @@
 * ## Reference
 
     + https://wangdoc.com/ssh/port-forwarding
+    + https://drive.google.com/file/d/129rEQvCHsYuwKsEcUkuZY-L44-jptuEy/view?usp=sharing
