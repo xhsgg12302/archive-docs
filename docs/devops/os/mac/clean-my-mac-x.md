@@ -1,5 +1,13 @@
-## CleanMyMacX
-?> 电脑清理软件
+* ## Intro(CleanMyMacX)
+    
+    ?> 电脑清理软件
+
+    <!-- panels:start -->
+    <!-- div:left-panel-50 -->
+    ![](/.images/devops/os/mac/clean-my-mac-x-01.png ':size=100% 关于')
+    <!-- div:right-panel-50 -->
+    ![](/.images/devops/os/mac/clean-my-mac-x-02.png ':size=78% 激活信息')
+    <!-- panels:end -->
 
 ## Reference
 * https://www.naodai.org/archives/56.html
