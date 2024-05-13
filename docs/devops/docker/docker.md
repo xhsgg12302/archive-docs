@@ -73,11 +73,38 @@
         |store  | {"ServerURL":"https://index.docker.io/v1","Username":"david","Secret":"passw0rd1"} ***CTRL+D***    | |
         |erase  | https://index.docker.io/v1    | |
 
+    + ### SEARCH
+
+        ?> 1.) 通过api使用 sha256进行镜像搜索，貌似不太准确[[本地sha256可能和hub上面的不一样：参见](https://github.com/docker/hub-feedback/issues/1925)]，但是可以作为验证的一种方法。
+        <br> 访问：官方的 repository 使用`library`.
+        <br>https://registry.hub.docker.com/v2/repositories/library/zookeeper/tags/?page=1&page_size=100
+        <br>https://hub.docker.com/v2/repositories/library/zookeeper/tags/?page=1&page_size=100
+        <br>https://registry.hub.docker.com/v2/repositories/yidadaa/chatgpt-next-web/tags/?page=1&page_size=100
+        <br><br> 2.) 另外一种就是野生的方法，直接使用grep看运气：`docker image inspect yidadaa/chatgpt-next-web | grep -i version`
+
+        <!-- panels:start -->
+        <!-- div:left-panel-43 -->
+        ![](/.images/devops/docker/docker-search-api-03.png ':size=100% sha256')
+        <!-- div:right-panel-57 -->
+        ![](/.images/devops/docker/docker-search-api-01.png ':size=99% api-01')
+        ![](/.images/devops/docker/docker-search-api-02.png ':size=99% api-02')
+        ![](/.images/devops/docker/docker-search-grep-01.png ':size=99% grep-01')
+        <!-- panels:end -->
+
+        - #### Reference
+
+            * https://gist.github.com/achetronic/2db363e6c2fbecd42ae67512fbea50ca
+            * https://docs.docker.com/docker-hub/api/latest/#tag/repositories
+            * https://github.com/docker/hub-feedback/issues/1925
+
 
 - ## 使用样例
     1. ### 常用镜像
     ```shell
     # https://hub.docker.com/r/ealen/echo-server
+    # redis:6.2.7
+    # zookeeper:3.6.3
+    # mysql:5.7.26, mysql:5.6.49
     ealen/echo-server
     ```
     2. ### 存储安装包
