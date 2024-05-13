@@ -251,7 +251,7 @@
 
         - #### LocalVariableTable
 
-            !> [局部变量表](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.14)：在编译期间可以加`-g`参数用来生成调试信息。Code块可选的属性。可以用来debug,调试器可以使用它来确定方法执行期间给定局部变量的值。
+            !> [局部变量表](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.14)：在编译期间可以加`-g:{none,lines,vars,source}`参数生成相关调试信息。Code块可选的属性。可以用来debug,调试器可以使用它来确定方法执行期间给定局部变量的值。
             <!-- panels:start -->
             <!-- div:left-panel-50 -->
             ```java
