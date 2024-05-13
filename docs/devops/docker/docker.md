@@ -102,9 +102,9 @@
     1. ### 常用镜像
     ```shell
     # https://hub.docker.com/r/ealen/echo-server
-    # redis:6.2.7
-    # zookeeper:3.6.3
-    # mysql:5.7.26, mysql:5.6.49
+    # redis:6.2.7, redis:6.2.8
+    # zookeeper:3.6.3, zookeeper:3.8.2[❌]
+    # mysql:5.6.49, mysql:5.7.26
     ealen/echo-server
     ```
     2. ### 存储安装包
