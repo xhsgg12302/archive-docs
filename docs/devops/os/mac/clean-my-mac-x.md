@@ -9,6 +9,10 @@
     ![](/.images/devops/os/mac/clean-my-mac-x-02.png ':size=78% 激活信息')
     <!-- panels:end -->
 
+    * ### 下载
+
+        ?> [CleanMyMac_v4_15_0_macOS.dmg](https://go.naodai.org/d/Software/CleanMyMac/CleanMyMac_v4_15_0_macOS.dmg)
+
 ## Reference
 * https://www.naodai.org/archives/56.html
 * https://go.naodai.org/d/Software/CleanMyMac/CleanMyMac_v4_15_0_macOS.dmg
