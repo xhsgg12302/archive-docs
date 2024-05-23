@@ -135,7 +135,39 @@
             * https://www.cnblogs.com/mic112/p/15520770.html#字面量是什么时候进入到字符串常量池的
             * https://cloud.tencent.com/developer/article/2110482
     
+    + ### 虚拟机栈
+
+        !> 运行过程可以参考[一个类运行的全过程](../javastrace.md)
+        - #### 局部变量表
+        
+            ?> 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
+            <br>存储单位是Slot【32bi t】,一个slot就是JVM规范对局部变量区里存储一个局部变量的存储单元的叫法。每个slot可以存储一个宽度在32位或以下的原始类型值，或者一个引用，或一个returnAddress；相邻的两个slot可存储一个double或long型的值。[参考](https://hllvm-group.iteye.com/group/topic/25858),另外参考中也有例子体现slot复用性。
+            <br>根据索引的方式定位局部变量表，下标从0开始。非静态方法的0位是this,静态方法的从参数开始排列
+            <br><br>slot复用：[影响GC](https://blog.csdn.net/weixin_38106322/article/details/108785468)。当同一个帧栈中局部方法中变量没有被复用，会导致无法垃圾回收。
+        
+        - #### 操作数栈
+        
+            ?> 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
+            <br><br>[栈顶缓存技术](https://blog.csdn.net/qq_40298351/article/details/120730602)。操作数在内存中，频繁操作影响性能。可以将栈顶全部元素缓存在物理CPU寄存器中
+        
+        - #### 动态链接
+        
+        - #### 方法返回地址
+
+            > [!COMMENT]
+            [参考](https://www.yuque.com/yangxiaofei-vquku/wmp1zm/mggrlr#yQ65Z)
+      
+    + ### 本地方法栈
+
+        > 类比虚拟机栈，不过这个是针对本地语言（c/c++），方法一般由native修饰。
+
+    + ### 程序计数器
+
+        > 一块比较小的内存空间，可以看做事当前线程所需执行字节码的行号指示器，通常由执行引擎开执行程序计数器所指向的行号内容。更确切的说。一个线程的执行，是通过字节码解释器改变当前线程 的计数器的值，来获取下一条需要执行的字节码指令，从而确保线程的正确执行。
+
     + ### 堆
+
+        ![](/.images/doc/advance/jvm/jvm-heap-struct-01.png ':size=80% :align=center')
 
         - #### 垃圾回收算法
 
@@ -158,12 +190,26 @@
 
         - #### 垃圾回收器
 
+            ![](/.images/doc/advance/jvm/jvm-gc-01.png ':size=100%')
+            <!-- panels:start -->
+            <!-- div:left-panel-38 -->
             > [!TIP|style:flat]
             [Ref:ParNew 和 PSYoungGen 和 DefNew 是一个东西么？](https://zhidao.baidu.com/question/602094329.html)
             <br>是这样的。 串行收集器： DefNew：是使用-XX:+UseSerialGC（新生代，老年代都使用串行回收收集器）。 并行收集器： ParNew：是使用-XX:+UseParNewGC（新生代使用并行收集器，老年代使用串行回收收集器）或者-XX:+UseConcMarkSweepGC(新生代使用并行收集器，老年代使用CMS)。 PSYoungGen：是使用-XX:+UseParallelOldGC（新生代，老年代都使用并行回收收集器）或者-XX:+UseParallelGC（新生代使用并行回收收集器，老年代使用串行收集器） garbage-first heap：是使用-XX:+UseG1GC（G1收集器).
             <br><br>[垃圾回收器优缺点](https://blog.csdn.net/high2011/article/details/80177473)
+            <br><br>[参考1](https://stackoverflow.com/questions/6236726/whats-the-difference-between-parallelgc-and-paralleloldgc)，[参考2](https://blog.ragozin.info/2011/07/hotspot-jvm-garbage-collection-options.html)中好像ParallelGC和ParallelOldGC描述反了。
 
-            ![](/.images/doc/advance/jvm/jvm-gc-01.png ':size=80%x560 :align=center')
+            <!-- div:right-panel-62 -->
+            | 名称              | 模式      | 分代  | 说明                                                         |
+            | ----------------- | --------- | ----- | ------------------------------------------------------------ |
+            | Serial            | 串行      | 新    | 单线程串行收集器                                             |
+            | ParNew            | 并行      | 新    | serial 的并行版本                                            |
+            | Parallel Scavenge | 并行      | 新    | 不同体系，并行吞吐量优先。可以通过参数来打开自适应调节策略，<br />虚拟机会根据当前运行情况收集性能监控信息，<br />动态调整这些参数以提供最合适的停顿时间或最大的吞吐量，<br />可以通过参数控制GC时间范围或者比例。 |
+            | Parallel Old      | 并行      | 老    | 针对PSScavenge的老年代收集器                                 |
+            | Serial Old        | 串行      | 老    | serial老年代                                                 |
+            | CMS               | 并发      | 老    | 并行最短时间收集器                                           |
+            | G1                | 并发/并行 | 新/老 | 面向局部收集和基于Region内存布局的新型低延时收集器           |
+            <!-- panels:end -->
 
             + ##### Serial
 
@@ -204,47 +250,9 @@
                 <br>牺牲CPU资源来减少用户线程的停顿。当CPU个数少于4的时候，有可能对吞吐量影响非常大
                 <br>CMS在并发清理的过程中，用户线程还在跑，这时候需要预留一部分空间给用户线程
                 <br>会带来碎片化问题，碎片过多很容易触发Full GC。
+                <br><br>1、初始标记（CMS initial mark）2、并发标记（CMS concurrent mark）3、重新标记（CMS remark）4、并发清除（CMS concurrent sweep）
+
         
-
-            | 名称              | 模式      | 分代  | 说明                                                         |
-            | ----------------- | --------- | ----- | ------------------------------------------------------------ |
-            | Serial            | 串行      | 新    | 单线程串行收集器                                             |
-            | ParNew            | 并行      | 新    | serial 的并行版本                                            |
-            | Parallel Scavenge | 并行      | 新    | 不同体系，并行吞吐量优先。可以通过参数来打开自适应调节策略，<br />虚拟机会根据当前运行情况收集性能监控信息，<br />动态调整这些参数以提供最合适的停顿时间或最大的吞吐量，<br />可以通过参数控制GC时间范围或者比例。 |
-            | Parallel Old      | 并行      | 老    | 针对PSScavenge的老年代收集器                                 |
-            | Serial Old        | 串行      | 老    | serial老年代                                                 |
-            | CMS               | 并发      | 老    | 并行最短时间收集器                                           |
-            | G1                | 并发/并行 | 新/老 | 面向局部收集和基于Region内存布局的新型低延时收集器           |
-
-    + ### 虚拟机栈
-
-        !> 运行过程可以参考[一个类运行的全过程](../javastrace.md)
-        - #### 局部变量表
-        
-            ?> 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
-            <br>存储单位是Slot【32bi t】,一个slot就是JVM规范对局部变量区里存储一个局部变量的存储单元的叫法。每个slot可以存储一个宽度在32位或以下的原始类型值，或者一个引用，或一个returnAddress；相邻的两个slot可存储一个double或long型的值。[参考](https://hllvm-group.iteye.com/group/topic/25858),另外参考中也有例子体现slot复用性。
-            <br>根据索引的方式定位局部变量表，下标从0开始。非静态方法的0位是this,静态方法的从参数开始排列
-            <br><br>slot复用：[影响GC](https://blog.csdn.net/weixin_38106322/article/details/108785468)。当同一个帧栈中局部方法中变量没有被复用，会导致无法垃圾回收。
-        
-        - #### 操作数栈
-        
-            ?> 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
-            <br><br>[栈顶缓存技术](https://blog.csdn.net/qq_40298351/article/details/120730602)。操作数在内存中，频繁操作影响性能。可以将栈顶全部元素缓存在物理CPU寄存器中
-        
-        - #### 动态链接
-        
-        - #### 方法返回地址
-
-            > [!COMMENT]
-            [参考](https://www.yuque.com/yangxiaofei-vquku/wmp1zm/mggrlr#yQ65Z)
-      
-    + ### 本地方法栈
-
-        > 类比虚拟机栈，不过这个是针对本地语言（c/c++），方法一般由native修饰。
-
-    + ### 程序计数器
-
-        > 一块比较小的内存空间，可以看做事当前线程所需执行字节码的行号指示器，通常由执行引擎开执行程序计数器所指向的行号内容。更确切的说。一个线程的执行，是通过字节码解释器改变当前线程 的计数器的值，来获取下一条需要执行的字节码指令，从而确保线程的正确执行。
 
 * ## 扩展
 
@@ -266,10 +274,10 @@
         
     + ### 新生代到老年代的标准
 
-        1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。
-        2. 动态对象年龄判断：survivor区域中年龄从低到高对象大小总和大于-XX:TargetSurvivorRatio[:50%]，则将当前年龄及大雨当前年龄的对象晋升。[误区](https://my.oschina.net/xpbob/blog/2221709 )
+        1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。【[参考|docs](/docs/doc/base/OO?id=对象头)】
+        2. 动态对象年龄判断：误区：~如果在survivor空间中相同年龄所有对象大小的总和大于survivor空间的一半，大于等于该年龄的可以直接进入老年代~ 。而是`survivor区域中年龄从1-N对象大小总和大于 -XX:TargetSurvivorRatio[:50%]，则将 >= N年龄的对象晋升`。[误区解释](https://segmentfault.com/a/1190000039805691 'https://my.oschina.net/xpbob/blog/2221709' )
         3. 大对象直接进入老年代：-XX:PretenureSizeThreshold。超过这个值的对象直接放在老年代。
-        4. 空间分配担保机制：[src](https://blog.csdn.net/qq_40662405/article/details/114783644)
+        4. 空间分配担保机制：[参考](https://blog.csdn.net/qq_40662405/article/details/114783644)
         ![](/.images/doc/advance/jvm/handler-promotion-failure.png)
 
     + ### GCROOT 对象
@@ -286,7 +294,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
-        ?> mac
+        ?> mac `-XX:+UseParalleGC = PSYoungGen + ParOldGen`
 
         ![](/.images/doc/advance/jvm/jvm-platform-diff-01.png)
         <!-- div:right-panel-50 -->
@@ -335,6 +343,18 @@
         >
         > 如何判断对象是那个代的？ 估计跟对象头有关。比如对象头中的年龄。
 
+    + ### 既时编译JIT(Just-in-time compilation)
+
+        ?> [参考](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html)
+
+        > java为了实现一次编译，处处运行。将编译分为两部，首先它由javac 编译成中间代码-字节码。然后由解释器逐条将字节码解释为机器码[本地代码]来执行。所以在性能上Java通常不如C++这样的编译类型语言。为了优化Java的性能。JVM在解释器之外引入了即时（just in time）编译。先由解释器解释执行，达到阈值后，编译成字节码，存入codeCache中。当下次执行，再遇到这段代码，就会从codeCache中读取机器码，直接执行。
+        >
+        > `-Xint ` 解释执行
+        >
+        > `-Xcomp` 编译执行
+        >
+        > JVM1.8 Macon 默认 mixed .混合执行。
+
     + ### JIT优化技术
 
         * 方法内联：把目标方法复制到调用方法中。避免发声真实调用带来的性能损耗
@@ -347,23 +367,10 @@
         * 标量替换/分离对象
         * 锁消除
 
-    + ### 既时编译JIT
-
-        ?> [参考](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html)
-
-        > java为了实现一次编译，处处运行。将编译分为两部，首先它由javac 编译成中间代码-字节码。然后由解释器逐条将字节码解释为机器码[本地代码]来执行。所以在性能上Java通常不如C++这样的编译类型语言。为了优化Java的性能。JVM在解释器之外引入了即时（just in time）编译。先由解释器解释执行，达到阈值后，编译成字节码，存入codeCache中。当下次执行，再遇到这段代码，就会从codeCache中读取机器码，直接执行。
-        >
-        > `-Xint ` 解释执行
-        >
-        > `-Xcomp` 编译执行
-        >
-        > JVM1.8 Macon 默认 mixed .混合执行。
-
     + ### SafePoint
-    + ### LTAB
+    + ### LTAB(Thread Local Allocation Buffer)
 
         ?> [Ref](https://juejin.cn/post/7159736747788599326)
-
 
 * ## 常见问题及调优
 
