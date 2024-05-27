@@ -27,7 +27,8 @@
 
     + ### 制作APP
 
-        ?> 参考：[Automator中的burp-suite-pro](./automator.md#burp-suite-pro)
+        ?> 使用如下命令制作 Mac APP,参考：[Automator中的burp-suite-pro](./automator.md#burp-suite-pro)
+        <br> JDK1.8启动命令 `java -Xbootclasspath/p:/path/burp-loader-keygen.jar -jar /path/burpsuite_pro_v1.7.31.jar`
 
 ## Reference
 * https://pan.baidu.com/s/1ftFPsURlTD_sCIzHziKwKQ?pwd=5rbq
