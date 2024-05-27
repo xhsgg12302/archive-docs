@@ -19,6 +19,17 @@ do shell script "open /path/to/your/script.app"
 ```
 ![](/.images/devops/os/mac/automator-quit-viscosity-01.png)
 
+#### **Burp-Suite-Pro**
+?> 使用Automator打开现有文稿，选择`burpsuite-pro.app`，新建运行shell脚本
+
+> [!ATTENTION] 启动命令中的`Xbootclasspath`在jdk1.8中有效，其他JDK环境不识别，所以得需要将1.8追加在PATH前面提前发现。
+```shell
+source ~/.bash_profile
+PATH=/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:$PATH
+echo $PATH
+nohup java -Xbootclasspath/p:/Users/stevenobelia/software/Burp_Suite_Pro_v1.7.31_Loader_Keygen/burp-loader-keygen.jar -jar /Users/stevenobelia/software/Burp_Suite_Pro_v1.7.31_Loader_Keygen/burpsuite_pro_v1.7.31.jar >/dev/null 2>&1 &
+```
+![](/.images/devops/os/mac/automator-startup-burpsuite-pro-app-01.png)
 
 #### **ommited**
 ```shell
