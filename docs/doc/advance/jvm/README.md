@@ -291,6 +291,7 @@
     + ### 同一个版本的垃圾回收器
 
         ?> 同一个版本的垃圾回收器[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)。 在不同的平台上使用的垃圾回收器不一样
+        <br>使用下列命令查看：`java -XX:+PrintGCDetails -XX:+PrintCommandLineFlags -version`
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
@@ -341,7 +342,7 @@
 
         > jvm 进行GC的时候有一种特殊情况，比如老年代引用了新生代的对象，俗称跨代引用。这样只按照GCROOT进行标记的话，跨代引用对象肯定就干掉了。所以jvm引入了一个新概念叫记忆集，在hotspot实现中叫卡表（CardTable，简单字节数组），将整个堆划分为多个卡页（card page）一般512字节[2^9]。当堆中存在跨代引用时，将此卡页对应卡表下表中的值置为1，也就是脏页。这样，GC回收的时候除了GCROOT，也对脏页中的对象进行扫描。避免全堆扫描。
         >
-        > 如何判断对象是那个代的？ 估计跟对象头有关。比如对象头中的年龄。
+        > 如何判断对象是那个代的？ ~估计跟对象头有关。比如对象头中的年龄~。<span style="color: red">对象分配位置或者地址引用。<span>
 
     + ### 既时编译JIT(Just-in-time compilation)
 
