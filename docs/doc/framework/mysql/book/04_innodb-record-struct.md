@@ -11,7 +11,7 @@
 * ## InnoDB行格式
 
     ?> 我们平时是以记录为单位来向表中插入数据的，这些记录在磁盘上的存放方式(`ROW_FORMAT`)也被称为 `行格式` 或者 `记录格式` 。设计 InnoDB 存储引擎的大叔们到现在为止设计了4种不同类型的 行格式 ，分别是:
-    <br> `Compact` 、 `Redundant` 、`Dynamic` 和 `Compressed` 行格式。
+    <br> `Compact` 、 `Redundant`(MySQL5.0 之前用的一种行格式) 、`Dynamic` 和 `Compressed` 行格式。
     <br>随着时间的推移，他们可能会设计出更多的行格式，但是不管怎么变，在原理上大体都是相同的。
 
     1. ### 指定行格式的语法
@@ -191,7 +191,7 @@
 
             ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-15.png ':size=30%')
 
-            但是这只是因为我们的 record_format_demo 表采用的是 ascii 字符集，这个字符集是一个定长字符集，也就是说表示一个字符采用固定的一个字节，如果采用变长的字符集（也就是表示一个字符需要的字节数不确定，比如gbk 表示一个字符要12个字节、 utf8 表示一个字符要13个字节等）的话， c3 列的长度也会被存储到 变长字段长度列表 中，比如我们修改一下 record_format_demo 表的字符集：
+            但是这只是因为我们的 record_format_demo 表采用的是 ascii 字符集，这个字符集是一个定长字符集，也就是说表示一个字符采用固定的一个字节，如果采用变长的字符集（也就是表示一个字符需要的字节数不确定，比如gbk 表示一个字符要2个字节、 utf8 表示一个字符要3个字节等）的话， c3 列的长度也会被存储到变长字段长度列表中，比如我们修改一下 record_format_demo 表的字符集：
 
             ```sql
             ALTER TABLE record_format_demo MODIFY COLUMN c3 CHAR(10) CHARACTER SET utf8;
@@ -225,7 +225,7 @@
 
         1. **字段长度偏移列表**
 
-            注意 Compact 行格式的开头是 变长字段长度列表 ，而 Redundant 行格式的开头是 字段长度偏移列表 ，与变长字段长度列表 有两处不同：
+            注意 Compact 行格式的开头是变长字段长度列表 ，而 Redundant 行格式的开头是字段长度偏移列表 ，与变长字段长度列表有两处不同：
 
             - 没有了`变长`两个字，意味着 Redundant 行格式会把该条记录中`所有列`（包括 隐藏列 ）的长度信息都按照`逆序`存储到 字段长度偏移列表 。
             - 多了个`偏移`两个字，这意味着计算列值长度的方式不像 Compact 行格式那么直观，它是采用两个相邻数值的`差值`来计算各个列值的长度。
@@ -240,6 +240,7 @@
 
                 按照两个相邻数值的差值来计算各个列值的长度的意思就是：
 
+                > [!WARNING|labelVisibility:hidden|iconVisibility:hidden|style:flat]
                 &nbsp;&nbsp;&nbsp;第一列(\`row_id\`)的长度就是 0x06个字节，也就是6个字节。
                 <br>&nbsp;&nbsp;&nbsp;第二列(\`transaction_id\`)的长度就是 (0x0C - 0x06)个字节，也就是6个字节。
                 <br>&nbsp;&nbsp;&nbsp;第三列(\`roll_pointer\`)的长度就是 (0x13 - 0x0C)个字节，也就是7个字节。
@@ -343,4 +344,119 @@
 
     4. ### 行溢出数据
 
+        * #### VARCHAR(M)最多能存储的数据
+
+            ?> 我们知道对于 VARCHAR(M) 类型的列最多可以占用 65535 个字节。其中的 M 代表该类型最多存储的字符数量，如果我们使用 ascii 字符集的话，一个字符就代表一个字节，我们看看 VARCHAR(65535) 是否可用：
+
+            ```sql
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65535)
+                -> ) CHARSET=ascii ROW_FORMAT=Compact;
+            ERROR 1118 (42000): Row size too large. The maximum row size for the used table type, not
+            counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to c
+            hange some columns to TEXT or BLOBs
+            mysql>
+            ```
+
+            从报错信息里可以看出， MySQL 对一条记录占用的最大存储空间是有限制的，除了 BLOB 或者 TEXT 类型的列之外，其他所有的列（不包括隐藏列和记录头信息）占用的字节长度加起来不能超过 65535 个字节。所以 MySQL 服务器建议我们把存储类型改为 TEXT 或者 BLOB 的类型。这个 65535 个字节除了列本身的数据之外，还包括一些其他的数据（ storage overhead ），比如说我们为了存储一个 VARCHAR(M) 类型的列，其实需要占用3部分存储空间：
+
+            1. 真实数据
+            2. 真实数据占用字节的长度
+            3. NULL 值标识，如果该列有 NOT NULL 属性则可以没有这部分存储空间
+
+         
+            如果该 VARCHAR 类型的列没有 NOT NULL 属性，那最多只能存储 65532 个字节的数据，因为真实数据的长度可能占用2个字节， NULL 值标识需要占用1个字节：
+
+            ```sql
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65532)
+                -> ) CHARSET=ascii ROW_FORMAT=Compact;
+            Query OK, 0 rows affected (0.02 sec)
+            ```
+
+            如果 VARCHAR 类型的列有 NOT NULL 属性，那最多只能存储 65533 个字节的数据，因为真实数据的长度可能占用2个字节，不需要 NULL 值标识：
+
+            ```sql
+            mysql> DROP TABLE varchar_size_demo;
+            Query OK, 0 rows affected (0.01 sec)
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65533) NOT NULL
+                -> ) CHARSET=ascii ROW_FORMAT=Compact;
+            Query OK, 0 rows affected (0.02 sec)
+            ```
+
+            如果 VARCHAR(M) 类型的列使用的不是 ascii 字符集，那会怎么样呢？来看一下:
+
+            ```sql
+            mysql> DROP TABLE varchar_size_demo;
+            Query OK, 0 rows affected (0.00 sec)
+
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65532)
+                -> ) CHARSET=gbk ROW_FORMAT=Compact;
+            ERROR 1074 (42000): Column length too big for column 'c' (max = 32767); use BLOB or TEXT instead
+
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65532)
+                -> ) CHARSET=utf8 ROW_FORMAT=Compact;
+            ERROR 1074 (42000): Column length too big for column 'c' (max = 21845); use BLOB or TEXT instead
+            ```
+
+            从执行结果中可以看出，如果 VARCHAR(M) 类型的列使用的不是 ascii 字符集，那 M 的最大取值取决于该字符集表示一个字符最多需要的字节数。在列的值允许为 NULL 的情况下， gbk 字符集表示一个字符最多需要 2 个字节，那在该字符集下， M 的最大取值就是 32766 （也就是：65532/2），也就是说最多能存储 32766 个字符；utf8 字符集表示一个字符最多需要 3 个字节，那在该字符集下， M 的最大取值就是 21844 ，就是说最多能存储 21844 （也就是：65532/3）个字符。
+
+            !> 上述所言在列的值允许为NULL的情况下，gbk字符集下M的最大取值就是32766，utf8字符集下M的最大取值就是21844，这都是在表中只有一个字段的情况下说的，一定要记住一个行中的所有列（不包括隐藏列和记录头信息）占用的字节长度加起来不能超过65535个字节！
+
+        * #### 记录中的数据太多产生的溢出
+
+            我们以 ascii 字符集下的 varchar_size_demo 表为例，插入一条记录：
+
+            ```sql
+            mysql> CREATE TABLE varchar_size_demo(
+                -> c VARCHAR(65532)
+                -> ) CHARSET=ascii ROW_FORMAT=Compact;
+            Query OK, 0 rows affected (0.01 sec)
+            mysql> INSERT INTO varchar_size_demo(c) VALUES(REPEAT('a', 65532));
+            Query OK, 1 row affected (0.00 sec)
+            ```
+
+            其中的 REPEAT('a', 65532) 是一个函数调用，它表示生成一个把字符 'a' 重复 65532 次的字符串。前边说过， MySQL 中磁盘和内存交互的基本单位是 页 ，也就是说 MySQL 是以 页 为基本单位来管理存储空间的，我们的记录都会被分配到某个 页 中存储。而一个页的大小一般是 16KB ，也就是 16384 字节，而一个 VARCHAR(M) 类型的列就最多可以存储 65532 个字节，这样就可能造成一个页存放不了一条记录的尴尬情况。
+
+            在 Compact 和 Reduntant 行格式中，对于占用存储空间非常大的列，在 记录的真实数据 处只会存储该列的一部分数据，把剩余的数据分散存储在几个其他的页中，然后 记录的真实数据 处用20个字节存储指向这些页的地址（当然这20个字节中还包括这些分散在其他页面中的数据的占用的字节数），从而可以找到剩余数据所在的页，如图所示：
+
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-19.png ':size=60%')
+
+            从图中可以看出来，对于 Compact 和 Reduntant 行格式来说，如果某一列中的数据非常多的话，在本记录的真实数据处只会存储该列的前 768 个字节的数据和一个指向其他页的地址，然后把剩下的数据存放到其他页中，这个过程也叫做 行溢出 ，存储超出 768 字节的那些页面也被称为 溢出页 。画一个简图就是这样：
+
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-20.png ':size=60%')
+
+            最后需要注意的是，<span style="color: red">不只是 VARCHAR(M) 类型的列，其他的 TEXT、BLOB 类型的列在存储数据非常多的时候也会发生 行溢出</span>。
+        
+        * #### 行溢出的临界点
+
+            那发生 行溢出 的临界点是什么呢？也就是说在列存储多少字节的数据时就会发生 **行溢出** ？
+            
+            MySQL 中规定<span style="color: blue">一个页中至少存放两行记录</span>，至于为什么这么规定我们之后再说，现在看一下这个规定造成的影响。以上边的 varchar_size_demo 表为例，它只有一个列 c ，我们往这个表中插入两条记录，每条记录最少插入多少字节的数据才会 行溢出 的现象呢？这得分析一下页中的空间都是如何利用的。
+
+            - 每个页除了存放我们的记录以外，也需要存储一些额外的信息，乱七八糟的额外信息加起来需要 136 个字节的空间（现在只要知道这个数字就好了），其他的空间都可以被用来存储记录。
+            - 每个记录需要的额外信息是 27 字节。
+
+            这27个字节包括下边这些部分：
+
+                + 2个字节用于存储真实数据的长度
+                + 1个字节用于存储列是否是NULL值
+                + 5个字节大小的头信息
+                + 6个字节的 row_id 列
+                + 6个字节的 transaction_id 列
+                + 7个字节的 roll_pointer 列
+
+            > [!WARNING|style:flat|iconVisibility:hidden|labelVisibility:hidden]假设一个列中存储的数据字节数为n，那么发生行溢出现象时需要满足这个式子：
+            <br>&nbsp;&nbsp;&nbsp;136 + 2×(27 + n) > 16384
+            <br>求解这个式子得出的解是： n > 8098 。也就是说如果一个列中存储的数据不大于 8098 个字节，那就不会发生行溢出 ，否则就会发生 行溢出 。不过这个 8098 个字节的结论只是针对只有一个列的 varchar_size_demo 表来说的，如果表中有多个列，那上边的式子和结论都需要改一改了，所以重点就是：<span style="color: red">你不用关注这个临界点是什么，只要知道如果我们想一个行中存储了很大的数据时，可能发生 行溢出 的现象</span>。
+
     5. ### Dynamic和Compressed行格式
+
+        下边要介绍另外两个行格式， Dynamic 和 Compressed 行格式，我现在使用的 MySQL 版本是 5.7 ，它的默认行格式就是 Dynamic ，这俩行格式和 Compact 行格式挺像，只不过在处理 行溢出 数据时有点儿分歧，它们不会在记录的真实数据处存储字段真实数据的前 768 个字节，而是把所有的字节都存储到其他页面中，只在记录的真实数据处存储其他页面的地址，就像这样：
+
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-21.png ':size=60%')
+
+        Compressed 行格式和 Dynamic 不同的一点是， Compressed 行格式会采用压缩算法对页面进行压缩，以节省空间。
