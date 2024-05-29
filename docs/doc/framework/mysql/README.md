@@ -36,10 +36,16 @@ https://github.com/jeremycole/innodb_ruby/wiki
 | _bin | binary |以二进制方式比较|
 
 ## mysql查看通过`use`激活的数据库
-SELECT DATABASE();
+`SELECT DATABASE();`
+
+## mysql查看建表语句
+`show create table record_format_demo;`
+
+## mysql查看数据库中表的状态
+`show table status in myemployees where name = 'record_format_demo'\G`
 
 ## 用于显示当前会话的状态信息，包括当前使用的数据库、服务器版本、连接信息等
-mysql> \s
+mysql> `\s`
 
 ![](/.images/doc/framework/mysql/readme-01.png)
 
