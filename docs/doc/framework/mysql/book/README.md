@@ -1,6 +1,26 @@
 * ## Intro(MySql)
 
-    + ### innodb_ruby数据还原
+    + ### innodb_ruby对书中的数据库分析环境搭建
+
+        ?> 1). 启动一个干净的数据库，并将datadir映射到宿主机`/tmp/mysql`目录，方便后期使用innodb_ruby工具对数据进行分析。
+        <br>`docker run -d -p 3339:3339 --rm -e MYSQL_ALLOW_EMPTY_PASSWORD='yes' -v /tmp/mysql:/data/mysql --name mysql-5.6.49-learning--mysql-book mysql:5.6.49 --datadir=/data/mysql  --port=3339`
+        <br><br>2). 使用客户端连接并执行sql查看效果
+        <br>`docker run -it --rm --network=host --name mysql-book-client -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3339 -p` ，空密码连接(直接回车就行)
+        <br><br>`create database demos; USE demos;`
+        <br>`CREATE TABLE record_format_demo (c1 VARCHAR(10), c2 VARCHAR(10) NOT NULL, c3 CHAR(10), c4 VARCHAR(10)) CHARSET=ascii ROW_FORMAT=COMPACT;`
+        <br>`INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES('aaaa', 'bbb', 'cc', 'd'),('eeee', 'fff', NULL, NULL);`
+        <br><br>3). 使用innodb_ruby工具进行验证：比如命令<span style='color: blue'>需要注意: 截图中使用脚本执行的`innodb_space`命令，如果是工具的话需要转换，如下</span>
+        <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo space-page-type-regions`
+        <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo -p 3 page-records`
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ![](/.images/doc/framework/mysql/book/readme-book-01.png ':size=100%')
+        <!-- div:right-panel-50 -->
+        ![](/.images/doc/framework/mysql/book/readme-book-02.png ':size=100%')
+        <!-- panels:end -->
+
+    + ### innodb_ruby官方数据还原方法
 
         ?> 1). 从[innodb_ruby代码仓库](https://github.com/jeremycole/innodb_ruby.git)克隆项目到本地，里面包含一些样例数据，比如[compact行格式数据库](https://github.com/jeremycole/innodb_ruby/tree/master/spec/data/sakila/compact)。
         <br>2). 因为数据是mysql内部文件的形式存放的，所以我们需要用一个mysql服务器来驱动这些数据，此处使用docker容器来处理，将这些文件挂载到容器中，达到还原的效果。
@@ -42,3 +62,5 @@
 
 * ## Reference
     + [MySQL是怎样运行的：从根儿上理解MySQL.pdf]()
+    + https://dev.mysql.com/doc/sakila/en/
+    + https://dev.mysql.com/doc/index-other.html ，sakila数据集官方下载地址，引用自上一个官方install页面。
