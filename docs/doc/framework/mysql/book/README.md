@@ -9,7 +9,7 @@
         <br><br>`create database demos; USE demos;`
         <br>`CREATE TABLE record_format_demo (c1 VARCHAR(10), c2 VARCHAR(10) NOT NULL, c3 CHAR(10), c4 VARCHAR(10)) CHARSET=ascii ROW_FORMAT=COMPACT;`
         <br>`INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES('aaaa', 'bbb', 'cc', 'd'),('eeee', 'fff', NULL, NULL);`
-        <br><br>3). 使用innodb_ruby工具进行验证：比如命令<span style='color: blue'>需要注意: 截图中使用脚本执行的`innodb_space`命令，如果是工具的话需要转换，如下</span>
+        <br><br>3). 使用innodb_ruby工具进行验证：比如命令: (<span style='color: blue'>需要注意: 截图中使用脚本执行的 <span style='color: #89903f'>innodb_space</span> 命令，如果是工具的话需要转换，如下</span>)
         <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo space-page-type-regions`
         <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo -p 3 page-records`
 
