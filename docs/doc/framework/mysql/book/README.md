@@ -59,6 +59,13 @@
 
         - #### Reference
             + https://github.com/jeremycole/innodb_ruby/wiki
+    
+    + ### innodb_ruby通过gem安装
+
+        > [!WARNING]参考[官方文档](https://github.com/jeremycole/innodb_ruby/wiki#installing-using-rubygems)安装完成后发现使用不了`innodb_space`命令。可能多个环境造成的。排查过程如下：
+        <br><br>1). 确认安装：首先，再次确认innodb_ruby是否已成功安装。可以在命令行输入以下命令来查看：`gem list innodb_ruby`
+        <br>2). 查找可执行文件位置：找到gem安装的innodb_space可执行文件的位置。通常，gem的可执行脚本会被安装到Ruby的bin目录下：`gem environment | grep "EXECUTABLE DIRECTORY"`
+        <br>3). 添加到系统路径即可。
 
 * ## Reference
     + [MySQL是怎样运行的：从根儿上理解MySQL.pdf]()
