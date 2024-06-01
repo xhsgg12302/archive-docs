@@ -24,7 +24,15 @@
     ![](/.images/devops/os/softwares/idea-stacktrace-unknown-source-02.png ':size=95%')
     <!-- panels:end -->
 
+    ### Idea设置debug面板等宽字体
+
+    ?> 1). 因为需要对比debug内容，尤其是字节数组，所以设置[`JetBrains Mono`](https://www.jetbrains.com/zh-cn/lp/mono/)等宽字体。
+    <br>2). 设置debug面板[\[参考\]](https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000113064-How-to-change-debugger-font-size)，通过全局来控制或影响`Settings | Appearance & Behavior | Appearance | Use custom font`。Editor或者console面板可以通过`Settings | Editor | Font`，`Settings | Editor | Color Scheme | Console Font`单独设置.
+
+    ![](/.images/devops/os/softwares/idea-display-width-font-01.png ':size=70%')
+
 * ## Reference
 
     * https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs
+    * https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000113064-How-to-change-debugger-font-size
     * https://stackoverflow.com/questions/66565398/why-do-i-see-unknown-source-in-stack-traces-when-i-have-sources-downloaded/66565466
