@@ -17,11 +17,12 @@
 
     + ### 分析工具
 
-        ?> [innodb_ruby](https://github.com/jeremycole/innodb_ruby) ，[innodb-java-reader](https://github.com/alibaba/innodb-java-reader)
+        ?> 通过工具进行分析，结合书中的概念学习innodb存储引擎。
 
         - #### innodb-java-reader
 
-            > [!NOTE]通过开源innodb文件java解析框架，对数据文件`/tmp/mysql/demos/record_format_demo.ibd`进行分析。例如如下获取所有行记录。
+            > [!NOTE][开源仓库](https://github.com/alibaba/innodb-java-reader)
+            <br>通过开源innodb文件java解析框架，对数据文件`/tmp/mysql/demos/record_format_demo.ibd`进行分析。例如如下获取所有行记录。
 
             > [!ATTENTION]1). 当前使用的版本为 [9866b27](https://github.com/alibaba/innodb-java-reader/tree/9866b27eefdc61ed6f3282a68ce1948d462d6751)
             <br>2). 自定义了一些数据，比如`GenericRecord#toString`，修改一些错误逻辑：`TableDefUtil#handleCharset`方法中判断应该是`indexof > -1`,而不是`indexof > 0`，另外扩展了自定义逻辑等。
@@ -30,7 +31,8 @@
         
         - #### innodb_ruby
 
-            > [!NOTE]使用innodb_ruby工具进行文件`/tmp/mysql/ibdata1`分析：比如命令: (<span style='color: blue'>需要注意: 截图中使用脚本执行的 <span style='color: #89903f'>innodb_space</span> 命令，如果是工具的话需要转换，如下</span>)
+            > [!NOTE][开源仓库](https://github.com/jeremycole/innodb_ruby)
+            <br>使用innodb_ruby工具进行文件`/tmp/mysql/ibdata1`分析：比如命令: (<span style='color: blue'>需要注意: 截图中使用脚本执行的 <span style='color: #89903f'>innodb_space</span> 命令，如果是工具的话需要转换，如下</span>)
             <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo space-page-type-regions`
             <br>`innodb_space -s /tmp/mysql/ibdata1 -T demos/record_format_demo -p 3 page-records`
 
