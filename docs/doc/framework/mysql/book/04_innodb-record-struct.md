@@ -38,10 +38,10 @@
         ```
         现在表中的记录就是这个样子的：
 
-        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-01.png ':size=48%')
-        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-02.png ':size=45%')
-        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-03.png ':size=48%')
-        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-04.png ':size=41%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-01.png ':size=21%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-02.png ':size=20%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-03.png ':size=30%')
+        ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-04.png ':size=23%')
     
     2. ### COMPACT行格式
 
@@ -126,7 +126,7 @@
 
                 再一次强调，二进制位按照列的顺序逆序排列，所以第一个列 c1 和最后一个二进制位对应。
 
-                3. MySQL 规定 NULL值列表 必须用整数个字节的位表示，如果使用的二进制位个数不是整数个字节，则在字节的高位补 0 。<br>表 record_format_demo 只有3个值允许为 NULL 的列，对应3个二进制位，不足一个字节，所以在字节的高位补 0 ，效果就是这样：
+                3. MySQL规定<span style='color: blue'>NULL值列表 必须用整数个字节的位表示，如果使用的二进制位个数不是整数个字节，则在字节的高位补 0 </span>。<br>表 record_format_demo 只有3个值允许为 NULL 的列，对应3个二进制位，不足一个字节，所以在字节的高位补 0 ，效果就是这样：
 
                 ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-09.png ':size=25%')
 
