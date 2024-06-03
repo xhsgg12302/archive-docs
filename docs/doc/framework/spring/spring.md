@@ -209,3 +209,4 @@
 ## Reference
 * [Spring Bean的作用域(Scope)的原理及源码解析](https://blog.csdn.net/qq_27529917/article/details/78468731)
 * [Spring为什么使用三级缓存而不是两级解决循环依赖问题？](https://www.51cto.com/article/747437.html)
+* [@Scope注解的proxyMode的作用以及如何影响IoC容器的依赖查找](https://blog.csdn.net/m0_43448868/article/details/111643397)
