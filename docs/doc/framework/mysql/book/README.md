@@ -35,7 +35,7 @@
             <br>通过开源innodb文件java解析框架，对数据文件`/tmp/mysql/demos/record_format_demo.ibd`进行分析。例如如下获取所有行记录。
 
             > [!ATTENTION]1). 当前使用的版本为 [9866b27](https://github.com/alibaba/innodb-java-reader/tree/9866b27eefdc61ed6f3282a68ce1948d462d6751)
-            <br>2). 自定义了一些数据，比如`GenericRecord#toString`，修改一些错误逻辑：`TableDefUtil#handleCharset`方法中判断应该是`indexof > -1`,而不是`indexof > 0`，另外扩展了自定义逻辑等。
+            <br>2). 自定义了一些代码，比如`GenericRecord#toString`，修改一些错误逻辑：[`TableDefUtil#handleCharset`](https://github.com/alibaba/innodb-java-reader/blob/9866b27eefdc61ed6f3282a68ce1948d462d6751/innodb-java-reader/src/main/java/com/alibaba/innodb/java/reader/schema/TableDefUtil.java#L69)方法中判断应该是`indexof > -1`,而不是`indexof > 0`，另外扩展了自定义逻辑等。
 
             ![](/.images/doc/framework/mysql/book/readme-innodb-java-reader-01.png ':size=60%')
         
