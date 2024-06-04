@@ -20,7 +20,7 @@
         - [gem install 提示 You don't have write permissions for the /Library/Ruby/Gems/2.3.0 directory](https://blog.csdn.net/LYYCasablanca000/article/details/86024688)
         - [MySQL 页完全指南——浅入深出页的原理](https://xie.infoq.cn/article/e5a721616fc4cf100b73fa296)
 
-* ## comment
+* ## comment[40100]
 
     + https://stackoverflow.com/questions/9298368/in-mysql-what-does-this-mean-40100-default-character-set-latin1
 
