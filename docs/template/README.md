@@ -237,6 +237,14 @@
 
         ?> [offical site](https://github.com/fzankl/docsify-plugin-flexible-alerts)
 
+        > [?] [offical site](https://github.com/fzankl/docsify-plugin-flexible-alerts)
+        <br>hello newline
+
+        !> hello world
+
+        > [!] hello world tip
+        <br>hello newline
+
         > hello
         abc
 
