@@ -1,6 +1,6 @@
 * ## Intro(JavaStrace)
 
-    ?> 一个java程序的运行全过程解析。
+    > [?] 一个java程序的运行全过程解析。
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
@@ -238,7 +238,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel -->
-        ?> JVM中通过java栈，保存方法调用运行的相关信息，每当调用一个方法，会根据该方法的在字节码中的信息为该方法创建栈帧，不同的方法，其栈帧的大小有所不同。栈帧中的内存空间还可以分为3块，分别存放不同的数据：
+        > [?] JVM中通过java栈，保存方法调用运行的相关信息，每当调用一个方法，会根据该方法的在字节码中的信息为该方法创建栈帧，不同的方法，其栈帧的大小有所不同。栈帧中的内存空间还可以分为3块，分别存放不同的数据：
         <br><br>1). `局部变量表`：存放该方法调用者所传入的参数，及在该方法的方法体中创建的局部变量。
         <br>2). `操作数栈`：用于存放操作数及计算的中间结果等。
         <br>3). `其他栈帧信息`：如返回地址、当前方法的引用等。
@@ -261,7 +261,7 @@
                 return a+b*c-d;
             }
             ```
-            ?> 对于下列LocalVariableTable属性的解释：
+            > [?] 对于下列LocalVariableTable属性的解释：
             <br>`Start`:code块有值时候的始偏移量，
             <br>`Length`:code块有值时候的长度，
             <br>`Slot`:存放变量的槽位。
@@ -309,7 +309,7 @@
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### into-main()
-        ?> main方法的运行过程
+        > [?] main方法的运行过程
         <br><br> stack 指定当前方法即main()方法对应栈帧中的操作数栈的最大深度，当前值为5
         <br> locals 指定main()方法中局部变量表的大小，当前为2，及有两个slot用于存放方法的参数及局部变量。
         <br> code length 指定main()方法中代码的长度，当前为31。
@@ -356,7 +356,7 @@
         ```
         <!-- panels:end -->
 
-        ?> [`new #7`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.new)指令：在java堆中创建一个Student对象，并将其引用值放入栈顶。
+        > [?] [`new #7`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.new)指令：在java堆中创建一个Student对象，并将其引用值放入栈顶。
         <br><br>[`dup`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.dup)：复制栈顶的值，然后将复制的结果入栈。
         <br>`bipush 23`：将单字节常量值23入栈。
         <br>`ldc #8`：将#8这个常量池中的常量即”dqrcsc”取出，并入栈。
@@ -368,7 +368,7 @@
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### into-Student.construct()
-        ?> [`invokespecial #10`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokespecial)：调用#10这个常量所代表的方法，即Student.\<init\>()这个方法
+        > [?] [`invokespecial #10`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokespecial)：调用#10这个常量所代表的方法，即Student.\<init\>()这个方法
 
         > [!] \<init\>()方法，是编译器将调用父类的\<init\>()的语句、构造代码块、实例字段赋值语句，以及自己编写的构造方法中的语句整合在一起生成的一个方法。保证调用父类的\<init\>()方法在最开头，自己编写的构造方法语句在最后，而构造代码块及实例字段赋值语句按出现的顺序按序整合到\<init\>()方法中。
         <br><br>注意到Student.\<init\>()方法的最大操作数栈深度为3，局部变量表大小为4。 从dup到ldc #9这四条指令向栈中添加了4个数据，虽然定义中只显式地定义了传入3个参数，而实际上会隐含传入一个当前对象的引用作为第一个参数，所以四个参数依次为this，age，name，sid。`参数传递`后调用了Student.\<init\>()方法，会创建该方法的栈帧，并入栈。栈帧中的局部变量表的第0到4个slot分别保存着入栈的那四个参数值。
@@ -409,7 +409,7 @@
         ```
         <!-- panels:end -->
 
-        ?> `aload_0`：将局部变量表slot0处的引用值入栈
+        > [?] `aload_0`：将局部变量表slot0处的引用值入栈
         <br>`iload_1`：将局部变量表slot1处的int值入栈
         <br>`aload_2`：将局部变量表slot2处的引用值入栈
         <br><br>`invokespecial #1`：调用Person.\<init\>()方法，同调用Student.\<init\>过程类似，创建栈帧，将三个参数的值存放到局部变量表等，从Person.<init>()返回之后，用于传参的栈顶的3个值被回收了。
@@ -421,7 +421,7 @@
         ![](/.images/doc/advance/javastrace/runtime-stack-main-05.png ':size=49%')
         ![](/.images/doc/advance/javastrace/runtime-stack-main-06.png ':size=49%')
 
-        ?> 重新回到main()方法中，继续执行下面的字节码指令：
+        > [?] 重新回到main()方法中，继续执行下面的字节码指令：
         <br>`astore_1`：将当前栈顶引用类型的值赋值给slot1处的局部变量，然后出栈。
         <br>`aload_1`：slot1处的引用类型的值入栈。
         <br>`iconst_5`：将常数5入栈，int型常数只有0-5有对应的iconst_x指令。
@@ -433,7 +433,7 @@
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### into-s.study()
-        ?> [`invokevirtual #11`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokevirtual)：调用虚方法study()，这个方法是重写的接口中的方法，需要动态分派，所以使用了invokevirtual指令。
+        > [?] [`invokevirtual #11`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokevirtual)：调用虚方法study()，这个方法是重写的接口中的方法，需要动态分派，所以使用了invokevirtual指令。
         <br><br>最大栈深度3，局部变量表5。
         <!-- div:left-panel-45 -->
         ```java
@@ -470,7 +470,7 @@
         ```
         <!-- panels:end -->
 
-        ?> `bipush 10`：将10入栈
+        > [?] `bipush 10`：将10入栈
         <br>`istore_3`：将栈顶的10赋值给slot3处的int局部变量，即c，出栈。
         <br>`bipush 20`：将20入栈
         <br>`istore 4`：将栈顶的20付给slot4处的int局部变量，即d，出栈。
@@ -490,7 +490,7 @@
         <!-- panels:start -->
         <!-- div:title-panel -->
         #### into-Student.getCnt()-and-s.run()
-        ?> 重新回到main()方法中：
+        > [?] 重新回到main()方法中：
         <br>`pop`指令，将study()方法的返回值出栈
         <br>`invokestatic #12` 调用静态方法getCnt()不需要传任何参数
         <br>`pop`：getCnt()方法有返回值，将其出栈

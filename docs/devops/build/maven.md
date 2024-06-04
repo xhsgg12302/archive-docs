@@ -1,6 +1,6 @@
 * ## MAVEN分享
 
-    ?> 今天这次分享的主要就是maven构建工具使用的一些经验， 和大家起分享，交流一下。也是为了日后能够更加灵活的使用。内容中也包括我原来对maven存在的误解和疑问的一些答疑。以交流学习，整理归纳为主。
+    > [?] 今天这次分享的主要就是maven构建工具使用的一些经验， 和大家起分享，交流一下。也是为了日后能够更加灵活的使用。内容中也包括我原来对maven存在的误解和疑问的一些答疑。以交流学习，整理归纳为主。
 
     + ### Tips
 
@@ -295,7 +295,7 @@
 
     #### **pom.xml**
 
-    ?> [[version]版本规范](https://maven.apache.org/pom.html#dependency-version-requirement-specification)
+    > [?] [[version]版本规范](https://maven.apache.org/pom.html#dependency-version-requirement-specification)
     ```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -428,7 +428,7 @@
 
 * ## 工具链
 
-    ?> 简单理解就是，使用工具链可以配置插件调用过程中需要使用到的工具比如JDK.在maven系统中。有一些默认的工具链感知插件。比如.compile,javadoc等。这个可以[参考官方](https://maven.apache.org/guides/mini/guide-using-toolchains.html)给出的图。
+    > [?] 简单理解就是，使用工具链可以配置插件调用过程中需要使用到的工具比如JDK.在maven系统中。有一些默认的工具链感知插件。比如.compile,javadoc等。这个可以[参考官方](https://maven.apache.org/guides/mini/guide-using-toolchains.html)给出的图。
 
     + #### 先决条件
 
@@ -480,7 +480,7 @@
 
 * ## 插件篇
 
-    ?> 插件的[执行/调用](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#executing-your-first-mojo)方式： mvn groupId__colon__artifactId__colon__version__colon__goal
+    > [?] 插件的[执行/调用](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#executing-your-first-mojo)方式： mvn groupId__colon__artifactId__colon__version__colon__goal
     <br> 插件配置：https://maven.apache.org/guides/mini/guide-configuring-plugins.html
     <br> 插件executions执行配置： https://maven.apache.org/guides/mini/guide-default-execution-ids.html
     <br> 插件执行[单元测试样例](https://github.com/12302-haohuo/haohuo-component/blob/master/hh-cpt-maven-plugin/gencode-maven-plugin/src/test/java/com/haohuo/framework/mojo/MojoTest.java), 也可以debug了。也可以参考[官网介绍](https://maven.apache.org/plugin-developers/plugin-testing.html).
@@ -1100,7 +1100,7 @@
 
     + ### maven-gpg-plugin
 
-        ?> 可以参考[官方](https://maven.apache.org/plugins/maven-gpg-plugin/usage.html)指定配置，建议使用env配置方式。
+        > [?] 可以参考[官方](https://maven.apache.org/plugins/maven-gpg-plugin/usage.html)指定配置，建议使用env配置方式。
 
         > [!ATTENTION]
         以下配置方式由于放置敏感（即使加密过）数据在settings.xml中，被官方认为是`pseudo security`伪安全的。所以在版本`3.1.0`之后，这个插件对settings.xml中配置的`passphrase`支持出现bug了。大概原因是因为`3.1.0`之后的版本移除了`'/META-INF/plexus/components.xml'`，导致查找主密码的文件查找使用了**DefaultSecDispatcher**中默认的`~/.settings-security.xml`,而不是`~/.m2/settings-security.xml`,导致解密失败，近而影响到签名。
@@ -1210,7 +1210,7 @@
 
         > [!] [源代码](https://github.com/12302-haohuo/haohuo-component/tree/master/hh-cpt-maven-plugin/gencode-maven-plugin)
 
-        ?> **version:1.4.3**
+        > [?] **version:1.4.3**
         <br> `<pluginGroups><pluginGroup>com.haohuo.framework</pluginGroup></pluginGroups>`
         <br><br> `mvn gencode:decode  -DaccessKey=*** -Dsettings="$HOME/software/apache-maven-3.3.9/conf/settings.xml"`
         <br> `mvn gencode:decode-single  -DaccessKey=*** -DencryptString='******'`

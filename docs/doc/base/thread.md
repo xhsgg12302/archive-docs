@@ -95,7 +95,7 @@
         ```
         <!-- panels:end -->
 
-        ?> 其余的都是扩展，比如new Thread(futureTask),其实 FutureTask 一起实现了 Runnable, Future接口。运行结束后通过futureTask对象的get（）阻塞获取值。另外FutureTask构造器需要Callable
+        > [?] 其余的都是扩展，比如new Thread(futureTask),其实 FutureTask 一起实现了 Runnable, Future接口。运行结束后通过futureTask对象的get（）阻塞获取值。另外FutureTask构造器需要Callable
 
         <!-- panels:start -->
         <!-- div:title-panel -->
@@ -119,7 +119,7 @@
     
     + ### 线程相关的方法
 
-        ?> （sleep,join,wait,interrupted,interrupt,isInterrupted）
+        > [?] （sleep,join,wait,interrupted,interrupt,isInterrupted）
 
         <!-- panels:start -->
         <!-- div:title-panel -->
@@ -159,7 +159,7 @@
         <!-- div:title-panel -->
         #### 2. join
         <!-- div:left-panel-40 -->
-        ?> 1). join() <=等价与=> join(0)
+        > [?] 1). join() <=等价与=> join(0)
         <br><br>2). 等待该线程死亡的时间最多为`millis`毫秒。`0`意味着永久等待。
         <br><br>3). 通过循环调用`this.wait`来实现join逻辑，需要在当前线程存活的情况下。
         <br><br>4). 当一个线程终止时，`this.notifyAll`方法会被调用。所以`thread1`无限wait到`thread2`对象上时。`thread1`被唤醒的情况之一就是`thread2`死亡，JVM会调用`thread2`线程对象的notifyAll方法，释放wait在上面的其他资源(例如:`thread1`)。
@@ -202,7 +202,7 @@
         <!-- div:title-panel -->
         #### 3. wait/notify/notifyAll
         <!-- div:left-panel-40 -->
-        ?> JVM会为一个使用内部锁（synchronized）的对象维护两个集合，Entry Set和Wait Set，也有人翻译为锁池和等待池，意思基本一致。[参考](https://www.jianshu.com/p/25e243850bd2)
+        > [?] JVM会为一个使用内部锁（synchronized）的对象维护两个集合，Entry Set和Wait Set，也有人翻译为锁池和等待池，意思基本一致。[参考](https://www.jianshu.com/p/25e243850bd2)
         <!-- div:right-panel-60 -->
         ```java
         public final native void wait(long timeout) throws InterruptedException;
@@ -274,7 +274,7 @@
         ```
         <!-- panels:end -->
 
-        ?> `isInterrupted()`返回标志。`interrupt()`设置中断标志。
+        > [?] `isInterrupted()`返回标志。`interrupt()`设置中断标志。
         <br>`interrupted()` 表示返回标志，如果为true,清除。
 
         <details><summary>代码示例</summary>
@@ -305,21 +305,21 @@
 
     + ### synchronzied关键字
 
-        ?> 锁住代码，对象解释
+        > [?] 锁住代码，对象解释
         <br><br>1. 对象锁和类锁不同步
         <br>2. 加synchronized的方法，线程会读锁，而没有加的线程不会读锁，直接进入执行。(也就是一个对象两个syn方法会同步，一个syn方法和普通方法不同步)
         <br>3. 加载方法上通过字节码方法修饰符`ACC_SYNCHRONIZED`保证,代码块通过字节码指令`monitorenter`,`monitorexit`来保证。
 
     + ### volatile关键字
 
-        ?> 1). 原理及作用：为了提高处理器的执行速度，在处理器和内存之间增加了多级缓存来提升。但是由于引入了多级缓存，就存在缓存数据不一致问题。但是，对于volatile变量，当对volatile变量进行写操作的时候，JVM会向处理器发送一条lock前缀的指令，将这个缓存中的变量回写到系统主存中。
+        > [?] 1). 原理及作用：为了提高处理器的执行速度，在处理器和内存之间增加了多级缓存来提升。但是由于引入了多级缓存，就存在缓存数据不一致问题。但是，对于volatile变量，当对volatile变量进行写操作的时候，JVM会向处理器发送一条lock前缀的指令，将这个缓存中的变量回写到系统主存中。
         <br><br>但是就算写回到内存，如果其他处理器缓存的值还是旧的，再执行计算操作就会有问题，所以在多处理器下，为了保证各个处理器的缓存是一致的，就会实现缓存一致性协议
         <br><br>缓存一致性协议：每个处理器通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置成无效状态，当处理器要对这个数据进行修改操作的时候，会强制重新从系统内存里把数据读到处理器缓存里。
         <br><br>所以，如果一个变量被volatile所修饰的话，在每次数据变化之后，其值都会被强制刷入主存。而其他处理器的缓存由于遵守了缓存一致性协议，也会把这个变量的值从主存加载到自己的缓存中。这就保证了一个volatile在并发编程中，其值在多个缓存中是可见的。[参考](https://juejin.cn/post/6844903656274264078)
 
         <!-- panels:start -->
         <!-- div:left-panel -->
-        ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
+        > [?] 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
         <!-- div:right-panel -->
         > [!] 1. 它确保指令重排时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面，即在执行到内存屏障这句指令时，在它前面的错作已经全部完成。
         <br>2. 它会强制将对缓存的修改立即写入主存。
@@ -330,7 +330,7 @@
         <!-- div:title-panel -->
         #### 可见性
         <!-- div:left-panel-40 -->
-        ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
+        > [?] 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
         <!-- div:right-panel-60 -->
         ```java
         class TestVisual {
@@ -360,7 +360,7 @@
         <!-- div:title-panel -->
         #### 非原子性
         <!-- div:left-panel-40 -->
-        ?> 非原子性
+        > [?] 非原子性
         <!-- div:right-panel-60 -->
         ```java
         class TestNotAtomicity {

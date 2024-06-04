@@ -14,7 +14,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-55 -->
-        ?> 1). 启动一个干净的数据库，并将datadir映射到宿主机`/tmp/mysql`目录，方便后期使用(innodb_ruby|innodb-java-reader)工具对数据进行分析。
+        > [?] 1). 启动一个干净的数据库，并将datadir映射到宿主机`/tmp/mysql`目录，方便后期使用(innodb_ruby|innodb-java-reader)工具对数据进行分析。
         <br>`docker run -d -p 3339:3339 --rm -e MYSQL_ALLOW_EMPTY_PASSWORD='yes' -v /tmp/mysql:/data/mysql --name mysql-5.6.49-learning--mysql-book mysql:5.6.49 --datadir=/data/mysql  --port=3339`
         <br><br>2). 使用客户端连接并执行sql查看效果
         <br>`docker run -it --rm --network=host --name mysql-book-client -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3339 -p` ，空密码连接(直接回车就行)
@@ -27,7 +27,7 @@
 
     + ### 分析工具
 
-        ?> 通过工具进行分析，结合书中的概念学习innodb存储引擎。
+        > [?] 通过工具进行分析，结合书中的概念学习innodb存储引擎。
 
         - #### innodb-java-reader
 
@@ -57,13 +57,13 @@
 
             * ##### innodb_ruby官方数据还原方法
 
-                ?> 1). 从[innodb_ruby代码仓库](https://github.com/jeremycole/innodb_ruby.git)克隆项目到本地，里面包含一些样例数据，比如[compact行格式数据库](https://github.com/jeremycole/innodb_ruby/tree/master/spec/data/sakila/compact)。
+                > [?] 1). 从[innodb_ruby代码仓库](https://github.com/jeremycole/innodb_ruby.git)克隆项目到本地，里面包含一些样例数据，比如[compact行格式数据库](https://github.com/jeremycole/innodb_ruby/tree/master/spec/data/sakila/compact)。
                 <br>2). 因为数据是mysql内部文件的形式存放的，所以我们需要用一个mysql服务器来驱动这些数据，此处使用docker容器来处理，将这些文件挂载到容器中，达到还原的效果。
                 <br><br>目的：<span style="color: blue">与`innodb_space`工具分析出的结论作适当对比</span>。
 
                 **启动服务器**：
 
-                ?> 在docker环境中使用如下命令启动：
+                > [?] 在docker环境中使用如下命令启动：
                 <br>`docker run -d -p 3338:3338 --rm -e MYSQL_ROOT_PASSWORD='compact4321' -v /Users/stevenobelia/Documents/project_rubymine_test/innodb_ruby/spec/data/sakila/compact:/data/mysql --name mysql-5.6.49-innodb_ruby mysql:5.6.49 --datadir=/data/mysql  --port=3338`
 
                 > [!ATTENTION] 1). <span style="color: blue">MYSQL_ROOT_PASSWORD对应的密码可以随便给一个大于6位的就行，用于客户端链接。</span>
@@ -75,7 +75,7 @@
 
                 <!-- panels:start -->
                 <!-- div:left-panel-70 -->
-                ?> 可以使用下列命令进行客户端连接测试：
+                > [?] 可以使用下列命令进行客户端连接测试：
                 <br><br>`docker run -it --rm --network=host --name mysql-client -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3338 -p`
                 <br><br>输入如上`compact4321`密码登入。
 
@@ -85,7 +85,7 @@
 
                 **验证record_dump**:
 
-                ?> 按照wiki中的[record_dump](https://github.com/jeremycole/innodb_ruby/wiki#record-dump) 命令`innodb_space -s ibdata1 -T sakila/film -p 7 -R 128 record-dump` dump 出的结果如下左，对比查询出的数据记录如下右。
+                > [?] 按照wiki中的[record_dump](https://github.com/jeremycole/innodb_ruby/wiki#record-dump) 命令`innodb_space -s ibdata1 -T sakila/film -p 7 -R 128 record-dump` dump 出的结果如下左，对比查询出的数据记录如下右。
 
                 <!-- panels:start -->
                 <!-- div:left-panel-45 -->

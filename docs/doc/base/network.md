@@ -6,7 +6,7 @@
 
     + ### 流程解析
 
-        ?> 根据域名实例化一个InetAddress对象的流程解析。
+        > [?] 根据域名实例化一个InetAddress对象的流程解析。
         <br>比如：`InetAddress byName = InetAddress.getByName("wtfu.site");`。如果是域名的话，会涉及到系统调用`getaddrinfo`.里面包括DNS解析。
         <br><br>1. `getAllByName(String host, InetAddress reqAddr)`
         <br>2. 不属于ip地址的话，会继续进入到`getAllByName0()`
@@ -57,7 +57,7 @@
 
         2. 追踪系统调用
 
-            ?> 使用`gcc -o test test.c`编译源码，然后使用`strace ./test` 追踪调用。按顺序摘选输出：
+            > [?] 使用`gcc -o test test.c`编译源码，然后使用`strace ./test` 追踪调用。按顺序摘选输出：
             <br>可以看到从`/etc/resolv.conf`中读取到`nameserver`,然后使用`53`端口进行连接查询。
 
             ```shell

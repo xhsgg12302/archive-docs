@@ -2,12 +2,12 @@
 
     + ### 保留位数
 
-        ?> `echo 'scale=3; 10 / 3' | bc `
+        > [?] `echo 'scale=3; 10 / 3' | bc `
         <br>`echo 'scale=5; 820 / (480 + 90)' | bc`
 
     + ### 进制转换
 
-        ?> 特别需要注意 ibase，obase，以及值之间的联系，不然会出现意想不到的结果。如下图：[参见](https://unix.stackexchange.com/questions/199615/understand-ibase-and-obase-in-case-of-conversions-with-bc)
+        > [?] 特别需要注意 ibase，obase，以及值之间的联系，不然会出现意想不到的结果。如下图：[参见](https://unix.stackexchange.com/questions/199615/understand-ibase-and-obase-in-case-of-conversions-with-bc)
         <br><br> 二进制-八进制
         <br>`echo 'ibase=2;obase=1000;  11010111' | bc` ，output: ***327***
         <br><br> 二进制-十进制

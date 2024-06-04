@@ -130,7 +130,7 @@ like_or_where: {
 ## 字符集和比较规则的应用
 
 ### 各级别的字符集和比较规则
-?> MySQL 有4个级别的字符集和比较规则，分别是：服务器级别,数据库级别,表级别,列级别.
+> [?] MySQL 有4个级别的字符集和比较规则，分别是：服务器级别,数据库级别,表级别,列级别.
 #### 1. ___服务器级别___
 
 MySQL 提供了两个系统变量来表示服务器级别的字符集和比较规则：
@@ -332,7 +332,7 @@ SELECT * FROM t WHERE s = '我';
 
 知道了在 MySQL 中从发送请求到返回结果过程里发生的各种字符集转换，但是为啥要转来转去的呢？不晕么？
 
-?> 答：是的，很头晕，所以我们通常都把 character_set_client 、character_set_connection、character_set_results 这三个系统变量设置成和客户端使用的字符集一致的情况，这样减少了很多无谓的字符集转换。为了方便我们设置， MySQL 提供了一条非常简便的语句：`SET NAMES 字符集名;`
+> [?] 答：是的，很头晕，所以我们通常都把 character_set_client 、character_set_connection、character_set_results 这三个系统变量设置成和客户端使用的字符集一致的情况，这样减少了很多无谓的字符集转换。为了方便我们设置， MySQL 提供了一条非常简便的语句：`SET NAMES 字符集名;`
 
 > [!] 小贴士：如果你使用的是Windows系统，那应该设置成gbk。
 

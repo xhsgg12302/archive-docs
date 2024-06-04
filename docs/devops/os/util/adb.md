@@ -2,7 +2,7 @@
 
     + ### PUSH
 
-        ?> push moive to android: 
+        > [?] push moive to android: 
         <br>`adb push /Users/stevenobelia/Downloads/temporary-download/阳光电影dygod.org.八角笼中.2023.HD.1080P.国语中字.mp4/阳光电影dygod.org.八角笼中.2023.HD.1080P.国语中字.mp4  /sdcard/`
 
 ## Reference

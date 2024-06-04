@@ -9,7 +9,7 @@
     <br>进制转换`echo 'ibase=16;12'| bc`
     <br>十六进制转utf-8`echo -n "6E756D" | xxd -r -p | iconv -f utf-8`
 
-    ?> 下面为java源代码和class字节码。编译使用`-g`参数，会包含 [***LocalVariableTable***](./javastrace.md#localvariabletable) 。
+    > [?] 下面为java源代码和class字节码。编译使用`-g`参数，会包含 [***LocalVariableTable***](./javastrace.md#localvariabletable) 。
     <br><br>用vim打开class文件`vim -b Hello.class`。[不加`-b`会在末尾追加`0x0A`多一个字节]
     <br>并且使用xxd工具查看`:%!xxd -u`;
     <br><br>右边为使用`javap -v Hello.class`工具输出的字节码信息。
@@ -98,14 +98,14 @@
 
     + ### 文件定义
 
-        ?> Java字节码类文件（.class）是Java编译器编译Java源文件（.java）产生的“目标文件”。它是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间（方便于网络的传输）。
+        > [?] Java字节码类文件（.class）是Java编译器编译Java源文件（.java）产生的“目标文件”。它是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间（方便于网络的传输）。
         <br><br>Java源文件在被Java编译器编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述， 由于class文件很灵活， 它甚至比Java源文件有着更强的描述能力。
         <br><br>class文件中的信息是一项一项排列的， 每项数据都有它的固定长度， 有的占一个字节， 有的占两个字节， 还有的占四个字节或8个字节。数据项的不同长度分别用
         <br>`u1, u2, u4, u8`表示，分别表示一种数据项在class文件中占据`1个字节， 2个字节， 4个字节，8个字节`。 可以把u1, u2, u3, u4看做class文件数据项的“类型” 。
 
     + ### 文件结构
 
-        ?> 一个典型的class文件分为：
+        > [?] 一个典型的class文件分为：
         <br>`MagicNumber`，`Version`，`Constant_pool`，`Access_flag`，`This_class`，`Super_class`，`Interfaces`，`Fields`，`Methods` 和`Attributes`这十个部分，用一个数据结构可以表示如下：
 
         | type           | descriptor                             | remark |
@@ -148,7 +148,7 @@
         | CONSTANT_InterfaceMethodref | 11       | 对接口中声明方法的符号引用 |
         | CONSTANT_NameAndType        | 12       | 对一个字段或方法的部分符号引用 |
         <!-- div:right-panel-46 -->
-        ?> 每个数据项叫做一个XXX_info项，比如，一个常量池中一个CONSTANT_Utf8类型的项，就是一个CONSTANT_Utf8_info 。除此之外， 每个info项中都有一个标志值（tag），这个标志值表明了这个常量池中的info项的类型是什么， 从左边的表格中可以看出，一个CONSTANT_Utf8_info中的tag值为1，而一个CONSTANT_Fieldref_info中的tag值为9 。
+        > [?] 每个数据项叫做一个XXX_info项，比如，一个常量池中一个CONSTANT_Utf8类型的项，就是一个CONSTANT_Utf8_info 。除此之外， 每个info项中都有一个标志值（tag），这个标志值表明了这个常量池中的info项的类型是什么， 从左边的表格中可以看出，一个CONSTANT_Utf8_info中的tag值为1，而一个CONSTANT_Fieldref_info中的tag值为9 。
         <br><br>Java程序是动态链接的， 在动态链接的实现中， 常量池扮演者举足轻重的角色。 除了存放一些字面量之外， 常量池中还存放着以下几种符号引用：
         ***（1） 类和接口的全限定名***
         ***（2） 字段的名称和描述符***
@@ -160,15 +160,15 @@
 
         - #### magic(u4)
 
-            ?> `CAFE BABE`, class magic。
+            > [?] `CAFE BABE`, class magic。
 
         - #### version(u4)
 
-            ?> `0000 0034`, 次版本号 0， 主版本号 52，表示jdk8编译 `52.0`.
+            > [?] `0000 0034`, 次版本号 0， 主版本号 52，表示jdk8编译 `52.0`.
         
         - #### constant_pool(*)
 
-            ?> 1). constant_pool_count
+            > [?] 1). constant_pool_count
             <br>紧接着version下来的两个自己是`0013`代表常量池里面包含的常量的数目，因为字节码的常量池是从 ***1*** 开始计数的。这个常量池中包含`18`(0x0013 - 1)个常量.
             <br><br>第1个常量：type`0A`对应到`CONSTANT_Methodref_info`数据项。数据项内容为`0A00 0400 0F`，class_index=4，name_and_type=15。
             <br>第2个常量：type`09`对应到`CONSTANT_Fieldref_info`数据项。数据项内容为`09 0003 0010`，class_index=3，name_and_type=16。
@@ -221,7 +221,7 @@
         
         - #### access_flags(u2)
             
-            ?> `00 21` = bin(0x0001 or  0x0020) = 0x0021,表示`ACC_PUBLIC | ACC_SUPER `
+            > [?] `00 21` = bin(0x0001 or  0x0020) = 0x0021,表示`ACC_PUBLIC | ACC_SUPER `
 
             | Flag Name	| Value	| Interpretation|
             | - | - | - 
@@ -236,27 +236,27 @@
 
         - #### this_class(u2)
             
-            ?> `00 03` this_class指向constant pool的索引值，该值必须是CONSTANT_Class_info类型，这里是3，即指向常量池中的第三项，即是`Hello`。
+            > [?] `00 03` this_class指向constant pool的索引值，该值必须是CONSTANT_Class_info类型，这里是3，即指向常量池中的第三项，即是`Hello`。
 
         - #### super_class(u2)
             
-            ?> `00 04` super_class存的是父类的名称在常量池里的索引，这里指向第4个常量，即是`java/lang/Object`。
+            > [?] `00 04` super_class存的是父类的名称在常量池里的索引，这里指向第4个常量，即是`java/lang/Object`。
 
         - #### interfaces_count(u2)
 
-            ?> `00 00` 因为这里没有实现接口，所以就不存在interfces选项，所以这里的interfaces_count为0（0000），所以后面的内容也对应为空。
+            > [?] `00 00` 因为这里没有实现接口，所以就不存在interfces选项，所以这里的interfaces_count为0（0000），所以后面的内容也对应为空。
 
         - #### interfaces[interfaces_count] (u2)
 
-            ?> 因为上面为0，所以此处没有值。
+            > [?] 因为上面为0，所以此处没有值。
 
         - #### fields_count(u2)
 
-            ?> `00 01` 表示成员变量的个数，此处为1个。
+            > [?] `00 01` 表示成员变量的个数，此处为1个。
         
         - #### fields[fields_count] (*)
 
-            ?> `00 02` access_flags = ACC_PRIVATE。
+            > [?] `00 02` access_flags = ACC_PRIVATE。
             <br>`00 05` 指向常量池中的第五个常量，为'num'。
             <br>`00 06` 指向常量池中的第六个常量，为'I'。 上述三个合起来就是`private int num;`
             <br>`00 00` attributes数量，因为这个变量没有附加属性，所以attributes_count=0。
@@ -294,11 +294,11 @@
         
         - #### methods_count(u2)
 
-            ?> `00 02` 表示方法的个数，此处为2个。写了一个，出现了两个，是因为JVM会自动生成一个构造方法`<init>`.
+            > [?] `00 02` 表示方法的个数，此处为2个。写了一个，出现了两个，是因为JVM会自动生成一个构造方法`<init>`.
         
         - #### methods[methods_count] (*)
 
-            ?> ***init方法***
+            > [?] ***init方法***
             <br>`00 01` access_flags = ACC_PUBLIC。
             <br>`00 07` name_index 指向常量池中的第七个常量，为'\<init\>'。
             <br>`00 08` descriptor_index 指向常量池中的第八个常量，为'()V'。 上述三个合起来就是 ***public void \<init\>()***
@@ -399,11 +399,11 @@
 
         - #### attributes_count(u2)
 
-            ?> `00 01` 表示整个class文件的附加属性，这里有1个。
+            > [?] `00 01` 表示整个class文件的附加属性，这里有1个。
 
         - #### attributes[attributes_count] (*)
 
-            ?> `00 0D` attribute_name_index 常量池中索引13的值为 ***SourceFile***
+            > [?] `00 0D` attribute_name_index 常量池中索引13的值为 ***SourceFile***
             <br>`00 0000 02` attribute_length 长度为2。
             <br>`00 0E` sourcefile_index 常量池中索引位置为14的值为 ***Hello.java***
 

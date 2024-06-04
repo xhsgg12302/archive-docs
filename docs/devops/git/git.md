@@ -13,7 +13,7 @@
 			git credential -h
 			/Library/Developer/CommandLineTools/usr/libexec/git-core/git-credential -h
 			```
-		* ?> 查看git credential 帮助信息`git help credential`
+		* > [?] 查看git credential 帮助信息`git help credential`
 
 			| option | des |
 			|-- | -- |
@@ -21,7 +21,7 @@
 			| approve 	| 将标准输入发送到所有helper保存起来，方便后续使用 |
 			| reject	| 将标准输入匹配到的所有helper中的描述行删除 |
 
-		* ?> 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
+		* > [?] 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
 
 	2. ### 内置的两种基本helper(`store`,`cache`)
 		```shell

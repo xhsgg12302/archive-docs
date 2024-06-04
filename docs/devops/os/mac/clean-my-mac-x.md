@@ -1,6 +1,6 @@
 * ## Intro(CleanMyMacX)
     
-    ?> 电脑清理软件
+    > [?] 电脑清理软件
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
@@ -11,7 +11,7 @@
 
     * ### 下载
 
-        ?> [CleanMyMac_v4_15_0_macOS.dmg](https://go.naodai.org/d/Software/CleanMyMac/CleanMyMac_v4_15_0_macOS.dmg)
+        > [?] [CleanMyMac_v4_15_0_macOS.dmg](https://go.naodai.org/d/Software/CleanMyMac/CleanMyMac_v4_15_0_macOS.dmg)
 
 ## Reference
 * https://www.naodai.org/archives/56.html

@@ -2,7 +2,7 @@
 
     + ### 方法区
 
-        ?> [JVMS](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4): The Java Virtual Machine has a method area that is shared among all Java Virtual Machine threads. The method area is analogous to the storage area for compiled code of a conventional language or analogous to the "text" segment in an operating system process. It stores per-class structures such as the run-time constant pool, field and method data, and the code for methods and constructors, including the special methods (§2.9) used in class and instance initialization and interface initialization.
+        > [?] [JVMS](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4): The Java Virtual Machine has a method area that is shared among all Java Virtual Machine threads. The method area is analogous to the storage area for compiled code of a conventional language or analogous to the "text" segment in an operating system process. It stores per-class structures such as the run-time constant pool, field and method data, and the code for methods and constructors, including the special methods (§2.9) used in class and instance initialization and interface initialization.
         <br><br>The method area is created on virtual machine start-up. Although the method area is logically part of the heap, simple implementations may choose not to either garbage collect or compact it. This specification does not mandate the location of the method area or the policies used to manage compiled code. The method area may be of a fixed size or may be expanded as required by the computation and may be contracted if a larger method area becomes unnecessary. The memory for the method area does not need to be contiguous.
         <br><br>翻译：Java虚拟机有一个在所有Java虚拟机线程之间共享的方法区域。方法区域类似于传统语言编译代码的存储区域或类似于操作系统进程中的“文本”段。它存储 ___每个类的结构，如运行时常量池、字段和方法数据，以及方法和构造函数的代码，包括类和实例初始化以及接口初始化中使用的特殊方法(2.9)___ 。
         <br><br> ___方法区域在虚拟机启动时创建. 虽然方法区域在逻辑上是堆的一部分___ ，但简单的实现可能选择不进行垃圾收集或压缩它。该规范不强制要求方法区域的位置或用于管理编译代码的策略。方法区域可以是固定大小的，也可以根据计算的需要扩展，如果不需要更大的方法区域，也可以收缩。方法区域的 ___内存不必是连续的___ 。
@@ -20,7 +20,7 @@
 
     + ### 运行时常量池
 
-        ?> [JVMS](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.5): A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file (§4.4). It contains several kinds of constants, ranging from numeric literals known at compile-time to method and field references that must be resolved at run-time. The run-time constant pool serves a function similar to that of a symbol table for a conventional programming language, although it contains a wider range of data than a typical symbol table.
+        > [?] [JVMS](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.5): A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file (§4.4). It contains several kinds of constants, ranging from numeric literals known at compile-time to method and field references that must be resolved at run-time. The run-time constant pool serves a function similar to that of a symbol table for a conventional programming language, although it contains a wider range of data than a typical symbol table.
         <br><br>Each run-time constant pool is allocated from the Java Virtual Machine's method area (§2.5.4). The run-time constant pool for a class or interface is constructed when the class or interface is created (§5.3) by the Java Virtual Machine.
         <br><br>翻译：运行时常量池是每个类或者接口运行时类文件中`constant_pool`表的表达形式。它包含几种常量，从编译时已知的数值字面量到必须在运行时解析的方法和字段引用。运行时常数池的功能类似于传统编程语言的符号表，尽管它比典型的符号表包含更广泛的数据。
         <br><br>每个运行时常数池都是从Java虚拟机的方法区分配的(2.5.4)。类或接口的运行时常数池是在Java虚拟机创建类或接口时构造的(5.3)。
@@ -31,7 +31,7 @@
 
         - #### 获取运行时常量池中的数据
 
-            ?> 主要通过反射获取Class类中的Method`getConstantPool`,然后结合实际类获取常量池[`sun.reflect.ConstantPool`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/reflect/ConstantPool.java)。[参考](https://stackoverflow.com/questions/33981540/getting-a-class-constant-pool-programmatically)
+            > [?] 主要通过反射获取Class类中的Method`getConstantPool`,然后结合实际类获取常量池[`sun.reflect.ConstantPool`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/reflect/ConstantPool.java)。[参考](https://stackoverflow.com/questions/33981540/getting-a-class-constant-pool-programmatically)
 
             <!-- panels:start -->
             <!-- div:left-panel-50 -->
@@ -72,7 +72,7 @@
 
         - #### 类文件常量池解析时机
 
-            ?> JVM加载类的时候并不是一上来就会将原来字节码文件中的常量池全部解析。比如下面这段代码，查看字面量确实存在`"example@126.com"`。但是使用`jvisualvm`dumpheap后没有找到对应的字符串。
+            > [?] JVM加载类的时候并不是一上来就会将原来字节码文件中的常量池全部解析。比如下面这段代码，查看字面量确实存在`"example@126.com"`。但是使用`jvisualvm`dumpheap后没有找到对应的字符串。
 
             > [!] 字符串字面量，和其他基本类型的字面量或常量不同，并不会在类加载中的解析（resolve） 阶段填充并驻留在字符串常量池中，而是以特殊的形式存储在 运行时常量池（Run-Time Constant Pool） 中。而是只有当此字符串字面量被调用时（如对其执行ldc字节码指令，将其添加到栈顶），HotSpot VM才会对其进行resolve，为其在字符串常量池中创建对应的String实例。
             <br>具体来说，应该是在执行ldc指令时（该指令表示int、float或String型常量从常量池推送至栈顶）在JDK1.8的HotSpot VM中，这种未真正解析（resolve）的String字面量，被称为pseudo-string，以JVM_CONSTANT_String的形式存放在运行时常量池中，此时并未为其创建String实例。
@@ -140,14 +140,14 @@
         > [!] 运行过程可以参考[一个类运行的全过程](../javastrace.md)
         - #### 局部变量表
         
-            ?> 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
+            > [?] 帧栈中，有局部变量表来存储数据，包括参数，所需的内存空间在编译期间就确定了。
             <br>存储单位是Slot【32bi t】,一个slot就是JVM规范对局部变量区里存储一个局部变量的存储单元的叫法。每个slot可以存储一个宽度在32位或以下的原始类型值，或者一个引用，或一个returnAddress；相邻的两个slot可存储一个double或long型的值。[参考](https://hllvm-group.iteye.com/group/topic/25858),另外参考中也有例子体现slot复用性。
             <br>根据索引的方式定位局部变量表，下标从0开始。非静态方法的0位是this,静态方法的从参数开始排列
             <br><br>slot复用：[影响GC](https://blog.csdn.net/weixin_38106322/article/details/108785468)。当同一个帧栈中局部方法中变量没有被复用，会导致无法垃圾回收。
         
         - #### 操作数栈
         
-            ?> 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
+            > [?] 先进后出的数据存储结构，可以存储任意的Java数据类型。用来进行算数运算，参数传递及临时存储
             <br><br>[栈顶缓存技术](https://blog.csdn.net/qq_40298351/article/details/120730602)。操作数在内存中，频繁操作影响性能。可以将栈顶全部元素缓存在物理CPU寄存器中
         
         - #### 动态链接
@@ -213,7 +213,7 @@
 
             + ##### Serial
 
-                ?> 单线程收集器，收集时会暂停所有工作线程（stop the world，简称STW），使用复制收集算法，虚拟机运行在client模式时默认的新生代收集器。
+                > [?] 单线程收集器，收集时会暂停所有工作线程（stop the world，简称STW），使用复制收集算法，虚拟机运行在client模式时默认的新生代收集器。
                 <br><br>最早的收集器，单线程进行GC
                 <br>New和Old都可以使用。
                 <br>新生代采用复制算法，老年代采用Mark-Compact算法。
@@ -221,28 +221,28 @@
 
             + ##### ParNew
 
-                ?> ParNew收集器就是Serial的多线程版本，除了使用多个收集线程外，其余行为包括算法，STW，对象分配规则，回收策略等都与Serial收集器一模一样。
+                > [?] ParNew收集器就是Serial的多线程版本，除了使用多个收集线程外，其余行为包括算法，STW，对象分配规则，回收策略等都与Serial收集器一模一样。
                 <br>对应的这种收集器是虚拟机运行在Server模式的默认新生代收集器，在单CPU的环境中，ParNew并不会比Serial有很好的效果。
                 <br><br>使用复制算法（仅对新生代）
                 <br>只有在多CPU的情况下，效率才会比Serial高。
                 <br>可以通过`-XX:ParallelGCThreads`来控制GC线程数的多少。需要结合具体的CPU个数
             + ##### Parallel Scavenge
 
-                ?> Parallel Scavenge收集器也是一个多线程收集器，也是使用复制算法，但它的对象分配规则和回收策略都与ParNew收集器有所不同，它是以吞吐量最大化（即GC时间占总运行时间最小）为目标的收集器实现，它允许较长时间的STW换取总吞吐量最大化。
+                > [?] Parallel Scavenge收集器也是一个多线程收集器，也是使用复制算法，但它的对象分配规则和回收策略都与ParNew收集器有所不同，它是以吞吐量最大化（即GC时间占总运行时间最小）为目标的收集器实现，它允许较长时间的STW换取总吞吐量最大化。
 
             + ##### Serail Old
 
-                ?> Serial Old是单线程收集器，使用标记-整理算法的老年代收集器
+                > [?] Serial Old是单线程收集器，使用标记-整理算法的老年代收集器
 
             + ##### Parallel Old
 
-                ?> 老年代版本吞吐量优先的收集器，使用多线程和标记-整理算法，JVM 1.6 提供，在此之前，新生代使用PS收集器的话，老年代除了Serial Old外别无选择，因为PS无法与CMS收集器配置工作。
+                > [?] 老年代版本吞吐量优先的收集器，使用多线程和标记-整理算法，JVM 1.6 提供，在此之前，新生代使用PS收集器的话，老年代除了Serial Old外别无选择，因为PS无法与CMS收集器配置工作。
                 <br><br>Parallel Scavenge在老年代的实现
                 <br>PS + PO = 高吞吐量，但GC停顿时间可能不理想。
             
             + ##### CMS
 
-                ?> CMS（Concurrent Mark-Swap） 是一种以最短停顿时间为目标的收集器，使用CMS并不能达到GC效率最高（总GC时间最小），但它能尽可能降低服务的停顿时间，使用的是标记-清除算法。
+                > [?] CMS（Concurrent Mark-Swap） 是一种以最短停顿时间为目标的收集器，使用CMS并不能达到GC效率最高（总GC时间最小），但它能尽可能降低服务的停顿时间，使用的是标记-清除算法。
                 <br><br>追求最短停顿时间，非常适合web应用
                 <br>只针对老年区，一般结合ParNew使用
                 <br>GC和用户线程并发（尽量并发）
@@ -290,16 +290,16 @@
 
     + ### 同一个版本的垃圾回收器
 
-        ?> 同一个版本的垃圾回收器[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)。 在不同的平台上使用的垃圾回收器不一样
+        > [?] 同一个版本的垃圾回收器[JDK](https://repo.huaweicloud.com/java/jdk/8u181-b13/)。 在不同的平台上使用的垃圾回收器不一样
         <br>使用下列命令查看：`java -XX:+PrintGCDetails -XX:+PrintCommandLineFlags -version`
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
-        ?> mac `-XX:+UseParalleGC = PSYoungGen + ParOldGen`
+        > [?] mac `-XX:+UseParalleGC = PSYoungGen + ParOldGen`
 
         ![](/.images/doc/advance/jvm/jvm-platform-diff-01.png)
         <!-- div:right-panel-50 -->
-        ?> centos
+        > [?] centos
         
         ![](/.images/doc/advance/jvm/jvm-platform-diff-02.png)
         <!-- panels:end -->
@@ -318,7 +318,7 @@
 
     + ### GC类型：
 
-        ?> minorGC，majorGC/FullGC.[参考](https://blog.csdn.net/weixin_42615068/article/details/102813947)
+        > [?] minorGC，majorGC/FullGC.[参考](https://blog.csdn.net/weixin_42615068/article/details/102813947)
         > 新生代GC（minor GC），GC非常频繁，回收速度比较快
         >
         > 老年代GC（majorGC/FullGC)，发生在老年代的GC，出现了 major GC经常 伴随至少一次minorGC（并非绝对），major速度一般比minor慢10倍以上。
@@ -332,13 +332,13 @@
 
     + ### 永久代回收
 
-        ?> [参考](https://www.nowcoder.com/questionTerminal/8f393a761e0f4b67b1c442d092eb484d)
+        > [?] [参考](https://www.nowcoder.com/questionTerminal/8f393a761e0f4b67b1c442d092eb484d)
 
         > 回收的对象是废弃的常量及无用的类
         
     + ### 卡表
 
-        ?> [参考](https://blog.csdn.net/lishe9452/article/details/108215214)
+        > [?] [参考](https://blog.csdn.net/lishe9452/article/details/108215214)
 
         > jvm 进行GC的时候有一种特殊情况，比如老年代引用了新生代的对象，俗称跨代引用。这样只按照GCROOT进行标记的话，跨代引用对象肯定就干掉了。所以jvm引入了一个新概念叫记忆集，在hotspot实现中叫卡表（CardTable，简单字节数组），将整个堆划分为多个卡页（card page）一般512字节[2^9]。当堆中存在跨代引用时，将此卡页对应卡表下表中的值置为1，也就是脏页。这样，GC回收的时候除了GCROOT，也对脏页中的对象进行扫描。避免全堆扫描。
         >
@@ -346,7 +346,7 @@
 
     + ### 既时编译JIT(Just-in-time compilation)
 
-        ?> [参考](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html)
+        > [?] [参考](https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html)
 
         > java为了实现一次编译，处处运行。将编译分为两部，首先它由javac 编译成中间代码-字节码。然后由解释器逐条将字节码解释为机器码[本地代码]来执行。所以在性能上Java通常不如C++这样的编译类型语言。为了优化Java的性能。JVM在解释器之外引入了即时（just in time）编译。先由解释器解释执行，达到阈值后，编译成字节码，存入codeCache中。当下次执行，再遇到这段代码，就会从codeCache中读取机器码，直接执行。
         >
@@ -371,7 +371,7 @@
     + ### SafePoint
     + ### LTAB(Thread Local Allocation Buffer)
 
-        ?> [Ref](https://juejin.cn/post/7159736747788599326)
+        > [?] [Ref](https://juejin.cn/post/7159736747788599326)
 
 * ## 常见问题及调优
 

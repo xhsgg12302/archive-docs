@@ -1,5 +1,5 @@
 ## bridge网络
-?> 目前的理解是  
+> [?] 目前的理解是  
 </br> 1. 容器中的eth0接口通过veth pair 连接到docker0 网桥。
 </br> 2. docker0网桥创建的时候会自动生成一个网络接口并附有172.17.0.1的ip，参考
 </br> 3. docker0 与 eth0 之间没有直接的关联，而是通过 ip_forward/ docker-proxy 等技术进行转发的。参考[文档](https://medium.com/@diegogabrielschurch/how-docker-network-works-bridge-driver-e4819459cc8a)， 有以下片段。
@@ -43,11 +43,11 @@
 
 2. ### 删除容器到eth0的DNAT
 
-    ?> 目前需要一些netfilter知识。以及对docker-proxy的认知。发现清空iptables后，容器映射的服务还可以访问。
+    > [?] 目前需要一些netfilter知识。以及对docker-proxy的认知。发现清空iptables后，容器映射的服务还可以访问。
 
 3. ### iptables 和 docker-proxy 相关
     
-    ?> 删除iptables相关数据后，，还是可以直接访问，原理目前大概是 使用 docker-proxy 监听 0.0.0.0：13500 --> 172.17.0.2:25500 使用代理将流量请求到容器。
+    > [?] 删除iptables相关数据后，，还是可以直接访问，原理目前大概是 使用 docker-proxy 监听 0.0.0.0：13500 --> 172.17.0.2:25500 使用代理将流量请求到容器。
     <br> docker-proxy [源代码](https://github.com/docker/docker-ce/blob/master/components/engine/cmd/docker-proxy/main.go)
 
     #### Reference

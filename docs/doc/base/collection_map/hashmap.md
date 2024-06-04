@@ -1,6 +1,6 @@
 * ## Intro(HashMap)
 
-    ?> hello hashmap
+    > [?] hello hashmap
 
     + ### 构造器
     
@@ -40,7 +40,7 @@
 
     + ### 初始容量
 
-        ?> 实际是求取一个整形数值的最接近 ${\color{red}2^{n}}$ 的值。
+        > [?] 实际是求取一个整形数值的最接近 ${\color{red}2^{n}}$ 的值。
         <br><br>可以通过以下方法获取：
         <br> $2^{0} < x <= 2^{1}-1$  $\hspace{5em} [00000000\quad00000000\quad00000000\quad0000000{\color{red}1}] - [00000000\quad00000000\quad00000000\quad0000000{\color{red}1}]$
         <br> $2^{1} < x <= 2^{2}-1$  $\hspace{5em} [00000000\quad00000000\quad00000000\quad000000{\color{red}10}] - [00000000\quad00000000\quad00000000\quad000000{\color{red}11}]$
@@ -101,7 +101,7 @@
 
     + ### 扰动函数
 
-        ?> 理论上散列值是一个int型，如果直接拿散列值作为下标访问HashMap主数组的话，考虑到2进制32位带符号的int表值范围从`-2147483648`到`2147483648`。前后加起来大概`40亿`的映射空间。只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。
+        > [?] 理论上散列值是一个int型，如果直接拿散列值作为下标访问HashMap主数组的话，考虑到2进制32位带符号的int表值范围从`-2147483648`到`2147483648`。前后加起来大概`40亿`的映射空间。只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。
 
         > [!] 使用扰动函数的目的是让`hashcode`的高16位也参与散列运算。混合原始哈希码的高位和低位，以此来使低位的随机性更好。
 
@@ -114,7 +114,7 @@
     
     + ### 计算下标
 
-        ?> 通过`(n - 1) & hash` 代码计算table下标[`n 为table的长度`]。将通过扰动后的hash值与`table长度 - 1`的值进行`&`运算取得下标index。
+        > [?] 通过`(n - 1) & hash` 代码计算table下标[`n 为table的长度`]。将通过扰动后的hash值与`table长度 - 1`的值进行`&`运算取得下标index。
         <br><br>为什么会`& (n - 1)`?
         <br>因为 n 为 ${\color{red}2^{n}}$ ,假如 n = 16 = $(2^{4})$ 。则 n - 1 = $[0000 1111]$
         <br>则将任何值与 $[0000 1111]$ 进行 & 运算都会得到 $[0000 0000] \sim [0000 1111]$ ，即 0 ~ 15，也就是table的下标值。___这也是为什么table长度取 ${\color{red}2^{n}}$ 的原因。___
@@ -313,7 +313,7 @@
 
             1. [转换过程图](https://www.autodraw.com/share/IGYQ4DFC0JL8)
 
-                ?> 转换过程就是，在`index位置引用`和`它所指向的节点【NULL或者其他node】`之间不断插入原来需要移动的节点。
+                > [?] 转换过程就是，在`index位置引用`和`它所指向的节点【NULL或者其他node】`之间不断插入原来需要移动的节点。
                 <br>$31 \to null$
                 <br>$31 \to a \to null$
                 <br>$31 \to b \to a \to null$
@@ -334,7 +334,7 @@
 
     + ### 解决哈希冲突的方法
 
-        ?> 举例数列：`[25, 18, 23, 3, 56, 87, 19, 37, 59]`。
+        > [?] 举例数列：`[25, 18, 23, 3, 56, 87, 19, 37, 59]`。
 
         - #### 开放定址法
 
@@ -342,21 +342,21 @@
 
             1. 线性探测法
 
-                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                > [?] $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
                 <br> $d = 1,2,3,4,5...n $
 
                 ![](/.images/doc/base/collection/hashmap/hash-conflict-01.png ':size=70%')
              
             2. 平方探测法
 
-                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                > [?] $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
                 <br> $d = 1^2, -1^2, 2^2, -2^2, ... $
 
                 ![](/.images/doc/base/collection/hashmap/hash-conflict-02.png ':size=70%')
              
             3. 随机探测法
 
-                ?> $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
+                > [?] $ H(key) = (H(key) + d) \hspace{0.4em} MOD \hspace{0.4em} m$;
                 <br> $d = 3, 1, 9, 2, ... $ //一组伪随机数列
 
                 ![](/.images/doc/base/collection/hashmap/hash-conflict-03.png ':size=70%')

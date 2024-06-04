@@ -1,18 +1,18 @@
 
 * ## 目录结构
     
-    ?> Gradle uses two main directories to perform and manage its work: the Gradle User Home directory and the Project Root directory.[参考](https://docs.gradle.org/current/userguide/directory_layout.html)
+    > [?] Gradle uses two main directories to perform and manage its work: the Gradle User Home directory and the Project Root directory.[参考](https://docs.gradle.org/current/userguide/directory_layout.html)
 
     ![](/.images/devops/build/gradle/usage/gradle-usage-02.png ':size=49%')
     ![](/.images/devops/build/gradle/usage/gradle-usage-03.png ':size=50%')
 
 * ## 初始化脚本
 
-    ?> 在项目构建之前进行初始化。[参考](https://docs.gradle.org/current/userguide/init_scripts.html#init_scripts)
+    > [?] 在项目构建之前进行初始化。[参考](https://docs.gradle.org/current/userguide/init_scripts.html#init_scripts)
 
     + ### 基本用法
 
-    ?> 初始化脚本（又名init 脚本）与 Gradle 中的其他脚本类似。但是，这些脚本是在构建开始之前运行的。
+    > [?] 初始化脚本（又名init 脚本）与 Gradle 中的其他脚本类似。但是，这些脚本是在构建开始之前运行的。
     <br>以下是几种可能的用途：
     
         - 设置企业范围的配置，例如在哪里可以找到自定义插件。
@@ -26,7 +26,7 @@
 
     + ### 使用初始化脚本
 
-    ?> 使用 init 脚本有多种方法：
+    > [?] 使用 init 脚本有多种方法：
     <br>如果找到多个 init 脚本，它们都将按照下面指定的顺序执行。
     <br>给定目录中的脚本按字母顺序执行。例如，工具可以在命令行上指定一个 init 脚本，并在主目录中指定另一个 init 脚本来定义环境。这两个脚本都会在 Gradle 执行时运行。 
 
@@ -37,12 +37,12 @@
 
     + ### 编写初始化脚本
 
-    ?> 与 Gradle 构建脚本一样，init 脚本是 Groovy 或 Kotlin 脚本。每个 init 脚本都有一个与其关联的[Gradle](https://docs.gradle.org/current/dsl/org.gradle.api.invocation.Gradle.html)实例。初始化脚本中的任何属性引用和方法调用都将委托给此Gradle实例。
+    > [?] 与 Gradle 构建脚本一样，init 脚本是 Groovy 或 Kotlin 脚本。每个 init 脚本都有一个与其关联的[Gradle](https://docs.gradle.org/current/dsl/org.gradle.api.invocation.Gradle.html)实例。初始化脚本中的任何属性引用和方法调用都将委托给此Gradle实例。
     <br>每个 init 脚本还实现[Script](https://docs.gradle.org/current/dsl/org.gradle.api.Script.html)接口。
 
         - #### 从初始化脚本配置项目
 
-            ?> 您可以使用 init 脚本来配置构建中的项目。这与在多项目构建中配置项目类似。
+            > [?] 您可以使用 init 脚本来配置构建中的项目。这与在多项目构建中配置项目类似。
             <br>以下示例展示了如何在评估项目之前从 init 脚本执行额外配置：
             <br>此示例使用此功能来配置仅用于特定环境的附加repo。
 
@@ -90,7 +90,7 @@
 
     + ### init 脚本的外部依赖项
 
-    ?> Init 脚本还可以声明与该initscript()方法的依赖关系，传入一个声明 init 脚本类路径的闭包。
+    > [?] Init 脚本还可以声明与该initscript()方法的依赖关系，传入一个声明 init 脚本类路径的闭包。
     <br><br>还可以传递给该initscript()方法的闭包配置一个[ScriptHandler](https://docs.gradle.org/current/javadoc/org/gradle/api/initialization/dsl/ScriptHandler.html)实例。您可以通过向配置添加依赖项来声明 init 脚本类路径classpath。
     <br>例如，这与声明 Java 编译类路径的方式相同。您可以使用[声明依赖项中](https://docs.gradle.org/current/userguide/declaring_dependencies.html#declaring-dependencies)描述的任何依赖项类型，项目依赖项除外。
     <br>声明 init 脚本类路径后，您可以像使用类路径上的任何其他类一样使用 init 脚本中的类。以下示例添加到前面的示例中，并使用 init 脚本类路径中的类。
@@ -121,7 +121,7 @@
 
     + ### 初始化脚本插件
 
-    ?> 与 Gradle 构建脚本或 Gradle 设置文件一样，插件可以应用于 init 脚本。
+    > [?] 与 Gradle 构建脚本或 Gradle 设置文件一样，插件可以应用于 init 脚本。
     <br>在初始化脚本中使用插件： 
 
     ```groovy

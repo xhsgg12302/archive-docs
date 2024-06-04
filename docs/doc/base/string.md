@@ -7,7 +7,7 @@
 
     + ### intern()
 
-        ?> `String.intern()`方法表示获取一个字符串对象的值在常量池中的引用。如果常量池中存在，则直接返回引用。如果不存在，常量池创建并返回引用。
+        > [?] `String.intern()`方法表示获取一个字符串对象的值在常量池中的引用。如果常量池中存在，则直接返回引用。如果不存在，常量池创建并返回引用。
         <br><br>不同jdk版本创建并返回引用是有区别的：
         <br>JDK1.6，不存在则在**永久代字符串常量池**创建`等值字符串`，
         <br>JDK1.6之后，在**堆区字符串常量池**创建的是`堆中String obj的引用`。[参考1](https://stackoverflow.com/questions/27812666/why-string-intern-behave-differently-in-oracle-jdk-1-7)，[参考2](https://blog.csdn.net/tyyking/article/details/82496901)
@@ -71,7 +71,7 @@
         ```
         ![](/.images/doc/base/string/string-intern-03.png ':size=99%')
         ##### **case3**
-        ?> 下面的代码在main方法以及JUnit中运行的效果不同。
+        > [?] 下面的代码在main方法以及JUnit中运行的效果不同。
         <br><br>[解释](https://blog.csdn.net/tyyking/article/details/82496901#comments_31667673)：
         <br>此处的不正常现象在于JUnit会加载一些其他类，这些类里面定义了一些需要加载到字符串常量池(SCP)的字面量。而且JVM的SCP仅有一个，所以出现这种现象。
         <br>现象分析：

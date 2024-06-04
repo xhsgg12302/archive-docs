@@ -2,7 +2,7 @@
 
 * ### Groovy语言的学习
 
-    ?> 学习Geadle我们需要先来学习一下Groovy，很多同学估计听说过Groovy语言，有的也许没听说过，其实我们每天在配置Gradle的时候就是在跟Groovy接触了。Groovy是一门jvm语言，最终编译成class文件然后在jvm上执行，Java语言的特性Groovy都支持，我们可以混写Java和Groovy，就是在同一文件中可以混写， 注意，这里与Java和Kotlin可不一样，Java和Kotlin是可以互相调用，而不能在同一文件混写 。
+    > [?] 学习Geadle我们需要先来学习一下Groovy，很多同学估计听说过Groovy语言，有的也许没听说过，其实我们每天在配置Gradle的时候就是在跟Groovy接触了。Groovy是一门jvm语言，最终编译成class文件然后在jvm上执行，Java语言的特性Groovy都支持，我们可以混写Java和Groovy，就是在同一文件中可以混写， 注意，这里与Java和Kotlin可不一样，Java和Kotlin是可以互相调用，而不能在同一文件混写 。
     <br><br>Groovy的优势是什么呢？Groovy增强了Java的很多功能。比如解析xml文件，文件读写等，Groovy只需要几行代码就能搞定，而如果用Java则需要几十行代码，简单说就是使用Groovy实现某些功能比Java要少些很多代码。
     <br><br>好了，说了那么多"废话"，下面就具体来了解一下Groovy语言，我们只需要了解其中核心的一些使用就可以了，没必要完全了解，作为一门语言Groovy也算比较复杂的，但是我们学习Groovy是为了编写Gradle插件那就只需要了解其核心部分就可以了，其实从我的经验来说学习Groovy更多是为了写更少的代码来实现一些功能，否则我直接用Java写不就完了。
 
@@ -71,7 +71,7 @@
 
         + **Java中基本数据类型**
 
-            ?> Groovy中的所有事物都是对象。int，double等Java中的基本数据类型，在Groovy中对应的是它们的包装数据类型。比如int对应为Integer。比如：
+            > [?] Groovy中的所有事物都是对象。int，double等Java中的基本数据类型，在Groovy中对应的是它们的包装数据类型。比如int对应为Integer。比如：
 
             ```groovy
             def x = 23
@@ -185,7 +185,7 @@
 
         + **闭包**
 
-            ?> 闭包Closure一开始接触的时候真是有点蒙圈的感觉，这是什么玩意，Kotlin中也有这玩意，接触多了也就慢慢习惯了，其实就是一段可执行的代码，我们可以像定义变量一样定义可执行的代码。关于闭包，刚接触肯定不习惯，自己一定要花时间慢慢体会，闭包在Gradle中大量使用，后面讲Gradle的时候会大量接触闭包的概念。
+            > [?] 闭包Closure一开始接触的时候真是有点蒙圈的感觉，这是什么玩意，Kotlin中也有这玩意，接触多了也就慢慢习惯了，其实就是一段可执行的代码，我们可以像定义变量一样定义可执行的代码。关于闭包，刚接触肯定不习惯，自己一定要花时间慢慢体会，闭包在Gradle中大量使用，后面讲Gradle的时候会大量接触闭包的概念。
 
             ```groovy
             // 闭包一般定义如下：
@@ -247,7 +247,7 @@
     
     4. #### Groovy中的文件操作
 
-        ?> 假设对in.txt与out.txt文件进行IO操作。
+        > [?] 假设对in.txt与out.txt文件进行IO操作。
 
         + **读文件**
 
@@ -284,7 +284,7 @@
 
         + **写文件**
 
-            ?> 写文件的操作同样很简单，我们看下将in.txt文件拷贝到out.txt中怎么操作：
+            > [?] 写文件的操作同样很简单，我们看下将in.txt文件拷贝到out.txt中怎么操作：
 
             ```groovy
             //写数据
@@ -295,7 +295,7 @@
             }
             ```
 
-            ?> 我们也可以逐行写入数据：
+            > [?] 我们也可以逐行写入数据：
 
             ```groovy
             des.withWriter('utf-8') { writer ->
@@ -305,7 +305,7 @@
             }
             ```
             
-            ?> 我们也可以这样写入数据：
+            > [?] 我们也可以这样写入数据：
 
             ```groovy
             des << '''i love groovy'''
@@ -398,13 +398,13 @@
 
     + #### 初识
 
-        ?> Gradle是一个开源的构建自动化工具，既然是用于项目构建，那它肯定要制定一些规则，在Gradle中每一个待编译的工程都称为Project，每个Project都可以引入自己需要的插件，引入插件的目的其实就是引入插件中包含的Task，一个Project可以引入多个插件，每个插件同样可以包含一个或多个Task，关于插件和Task我们后面还会单独细说。
+        > [?] Gradle是一个开源的构建自动化工具，既然是用于项目构建，那它肯定要制定一些规则，在Gradle中每一个待编译的工程都称为Project，每个Project都可以引入自己需要的插件，引入插件的目的其实就是引入插件中包含的Task，一个Project可以引入多个插件，每个插件同样可以包含一个或多个Task，关于插件和Task我们后面还会单独细说。
 
         ![](/.images/devops/build/gradle/gradle-01.png '工程目录结构 :size=40%')
 
     + #### 模块
 
-        ?> 工程my-gradle包含五个module：app，groovy-test, lib1，lib4, springboot。其中app是App module，而lib1，lib4均是library module。
+        > [?] 工程my-gradle包含五个module：app，groovy-test, lib1，lib4, springboot。其中app是App module，而lib1，lib4均是library module。
         <br>相信现在大部分都是这种多module项目了，对于Gradle来说这种叫做multiprojects，看这意思是多projects的项目，那么对于Gradle来说有多少个项目呢？
         <br>我们可以通过`gradle projects`命令来查看有多少个projects：
 
@@ -425,7 +425,7 @@
 
     + #### settings.gradle
 
-        ?> 那Gradle怎么知道有多少个Project呢？在我们创建工程的时候在根目录下有个settings.gradle文件，我们看下其中内容：
+        > [?] 那Gradle怎么知道有多少个Project呢？在我们创建工程的时候在根目录下有个settings.gradle文件，我们看下其中内容：
 
         ```gradle
         rootProject.name = 'my-gradle'
@@ -436,11 +436,11 @@
         include 'springboot'
         ```
 
-        ?> 默认只有app模块，之后我们新建的lib1,lib4模块都会自动包含进来，Gradle就是通过查看这个配置文件来确定我们工程有多少了project的，我们修改settings.gradle文件,删除 include 'lib4',然后在执行gradle projects命令，就不会出现':lib4'了。
+        > [?] 默认只有app模块，之后我们新建的lib1,lib4模块都会自动包含进来，Gradle就是通过查看这个配置文件来确定我们工程有多少了project的，我们修改settings.gradle文件,删除 include 'lib4',然后在执行gradle projects命令，就不会出现':lib4'了。
 
     + #### build.gradle
 
-        ?> 好了，现在我们对settings.gradle有了初步的认识，我们在看看build.gradle文件的作用，工程根目录下有个build.gradle，每个module下也有自己的build.gradle文件：
+        > [?] 好了，现在我们对settings.gradle有了初步的认识，我们在看看build.gradle文件的作用，工程根目录下有个build.gradle，每个module下也有自己的build.gradle文件：
         记得刚接触Gradle的时候这几个build.gradle文件真是让我蒙圈，怎么这么多，都干什么的，相信很多同学刚开始都有这疑问。
         <br><br>上面我们提到my-gradle叫做Root project，其余四个moudule均叫做Project，其实在Gradle中GradleLearn被当做三个module的父级project，在父project的build.gradle中配置的信息可以作用在子project中，比如根目录build.gradle内容片段如下：
 
@@ -473,21 +473,21 @@
     
     + #### .gradle文件本质
 
-        ?> 大家有没有想过这样一个问题为什么settings.gradle可以include子模块，又为什么build.gradle可以写成如上那样的配置呢。其实我们在settings.gradle与build.gradle中看似配置的信息其实都是调用对应对象的方法或者脚本块设置对应信息。
+        > [?] 大家有没有想过这样一个问题为什么settings.gradle可以include子模块，又为什么build.gradle可以写成如上那样的配置呢。其实我们在settings.gradle与build.gradle中看似配置的信息其实都是调用对应对象的方法或者脚本块设置对应信息。
         <br><br>对应对象是什么？其实settings.gradle文件最终会被翻译为Settings对象，而build.gradle文件最终会被翻译为Project对象，build.gradle文件对应的就是每个project的配置。
         <br><br>Settings与Project在Gradle中都有对应的类，也就是说只有Gradle这个框架定义的我们才能用，至于Settings与Project都定义了什么我们只能查看其官方文档啊。
 
         - ##### Settings对象
 
-            ?> 比如[Settings](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html)类中定义了include方法：
+            > [?] 比如[Settings](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html)类中定义了include方法：
 
             ![](/.images/devops/build/gradle/gradle-02.png ':size=80%')
 
-            ?> `include`方法[API](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.Iterable))说明
+            > [?] `include`方法[API](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.Iterable))说明
 
             ![](/.images/devops/build/gradle/gradle-03.png ':size=80%')
 
-            ?> 看到了吧，我们每一个配置都是调用对应对象的方法。我还发现Settings类中定义了如下方法：`findProject(projectDir)`、`findProject(path)`方法。
+            > [?] 看到了吧，我们每一个配置都是调用对应对象的方法。我还发现Settings类中定义了如下方法：`findProject(projectDir)`、`findProject(path)`方法。
             <br><br>那我们在**setting.gradle**文件里面追加上如下代码试一下：
 
             ```gradle
@@ -504,7 +504,7 @@
 
         - ##### Project对象
 
-        ?> 每个build.gradle文件都会被翻译为对应的Project对象，build.gradle文件最重要的作用就是：
+        > [?] 每个build.gradle文件都会被翻译为对应的Project对象，build.gradle文件最重要的作用就是：
 
             1. 引入插件并配置相应信息
             2. 添加依赖信息
@@ -537,7 +537,7 @@
 
         - ##### Gradle对象
 
-        ?> 在我们执行gradle相关命令的时候，Gradle框架会为我们创建一个gradle对象，并且整个工程只有这一个gradle对象，这个对象不像上面两个一样有对应文件，这个对象一般不需要我们配置什么，主要用于给我们提供一些工程信息，具体有哪些信息呢？查看文档中Gradle类包含以下信息：
+        > [?] 在我们执行gradle相关命令的时候，Gradle框架会为我们创建一个gradle对象，并且整个工程只有这一个gradle对象，这个对象不像上面两个一样有对应文件，这个对象一般不需要我们配置什么，主要用于给我们提供一些工程信息，具体有哪些信息呢？查看文档中Gradle类包含以下信息：
         
         ![](/.images/devops/build/gradle/gradle-08.png ':size=80%')
 
@@ -556,7 +556,7 @@
 
 * ### Gradle工作时序
 
-    ?> Gradle执行分为三个过程：
+    > [?] Gradle执行分为三个过程：
 
     1. #### Initiliazation
 
@@ -572,7 +572,7 @@
 
     + #### 测试流程
 
-        ?> 在每个阶段我们可以通过gradle对象添加回调监听。我们在settings.gradle文件与每个module的build.gradle文件添加如下信息：
+        > [?] 在每个阶段我们可以通过gradle对象添加回调监听。我们在settings.gradle文件与每个module的build.gradle文件添加如下信息：
 
         <!-- tabs:start -->
         ##### **settings.gradle**
@@ -642,7 +642,7 @@
 
 * ### Gradle任务
 
-    ?> task可以说Gradle中很重要的部分，task是Gradle的执行单元，一个task就是具体执行某一任务。在idea中我们一创建工程的时候就存在很多task：
+    > [?] task可以说Gradle中很重要的部分，task是Gradle的执行单元，一个task就是具体执行某一任务。在idea中我们一创建工程的时候就存在很多task：
 
     ![](/.images/devops/build/gradle/gradle-12.png ':size=30%')
 
@@ -652,7 +652,7 @@
 
     + #### task自定义
 
-        ?> 我们可以定义自己的task，在app模块的build.gradle中添加如下代码：
+        > [?] 我们可以定义自己的task，在app模块的build.gradle中添加如下代码：
 
         ```gradle
         task aTask{
@@ -713,7 +713,7 @@
 
     + #### task的依赖关系
 
-        ?> 1. task之间可以指定依赖关系，比如指定A task依赖B task那么在执行A task的时候需要先执行B task，我们修改代码为**显示指定**：
+        > [?] 1. task之间可以指定依赖关系，比如指定A task依赖B task那么在执行A task的时候需要先执行B task，我们修改代码为**显示指定**：
         <br>2. 我们也可以创建task的时候就直接指定依赖，修改代码为**创建任务时指定**
 
         <!-- tabs:start -->
@@ -823,7 +823,7 @@
 
 * ### Gradle任务的增量构建
 
-    ?> 作为构建工具我们要防止做重复工作。例如AS编译出APK文件，如果我们已经编译出了APK文件，再次编译的时候如果我们没有删除APK文件并且代码资源等都没变化那么就没必要在重新走一遍流程执行各个task任务最重输出APK文件，中间的任务都可以跳过，这样可以提升效率缩短编译时间。
+    > [?] 作为构建工具我们要防止做重复工作。例如AS编译出APK文件，如果我们已经编译出了APK文件，再次编译的时候如果我们没有删除APK文件并且代码资源等都没变化那么就没必要在重新走一遍流程执行各个task任务最重输出APK文件，中间的任务都可以跳过，这样可以提升效率缩短编译时间。
     <br><br>Gradle是通过增量构建的特性来支持这个功能的。
     <br><br>Gradle在执行任务的时候会检查任务的输入输出是否有变化，如果任务的输入输出均没有变化则认为任务是up-to-date的，会跳过任务不去执行它，任务至少有一个输出否则增量构建不起作用。<br><br>我们改造IncrementTask，使其成为可以增量构建的任务，指明其输入输出:
 
@@ -885,7 +885,7 @@
 
     + #### 描述
 
-        ?> 引入插件最大的作用就是引入其中包含的一个个任务，一个任务往往完成一项工作，比如java代码编译为class字节码的任务，处理ndk的任务等等。接下来我们先看看怎么自定义插件，说那么多显得很苍白。Gradle提供了三种方式：① build.gradle脚本中直接编写，② buildSrc中编写，③ 独立Module中编写。
+        > [?] 引入插件最大的作用就是引入其中包含的一个个任务，一个任务往往完成一项工作，比如java代码编译为class字节码的任务，处理ndk的任务等等。接下来我们先看看怎么自定义插件，说那么多显得很苍白。Gradle提供了三种方式：① build.gradle脚本中直接编写，② buildSrc中编写，③ 独立Module中编写。
         <br><br>其中前两种方式只能用在自己项目，而第三种方式比较灵活，可以发布到jcenter仓库供别人引入使用，这里我采用独立module的方式编写。
 
     + #### 模块(module)结构
@@ -954,14 +954,14 @@
     
     + #### 发布插件到本地仓库
 
-        ?> 接下来我们就可以将我们的插件发布到仓库了，这里为了简便我发布到本地仓库，引入maven-publish插件用来发布到本地仓库
+        > [?] 接下来我们就可以将我们的插件发布到仓库了，这里为了简便我发布到本地仓库，引入maven-publish插件用来发布到本地仓库
         <br><br>同步工程后，会发现`publishPluginPublicationToMavenLocal`任务。运行任务发布到本地maven仓库。
 
         ![](/.images/devops/build/gradle/gradle-21.png ':size=90%') 
         
     + #### 引入测试
 
-        ?> 这样我们就可以在别的module引入自己写的插件了，比如我在app模块下引入：
+        > [?] 这样我们就可以在别的module引入自己写的插件了，比如我在app模块下引入：
         ```gradle
         buildscript{
             repositories{
@@ -982,7 +982,7 @@
 
     + #### 添加任务
 
-        ?> 上面只是输出简单的信息，还没有为我们的插件添加任何任务，下面为插件添加任务，新建FirstTask.groovy类，编写如下代码：
+        > [?] 上面只是输出简单的信息，还没有为我们的插件添加任何任务，下面为插件添加任务，新建FirstTask.groovy类，编写如下代码：
         ```groovy
         package site.wtfu.framework
 
@@ -1032,7 +1032,7 @@
     
     + #### 传递参数
 
-        ?> 引入安卓插件我们可以配置一些信息。如下：
+        > [?] 引入安卓插件我们可以配置一些信息。如下：
 
         ```gradle
         android {

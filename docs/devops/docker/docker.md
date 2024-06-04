@@ -75,7 +75,7 @@
 
     + ### SEARCH
 
-        ?> 1.) 通过api使用 sha256进行镜像搜索，貌似不太准确[[本地sha256可能和hub上面的不一样：参见](https://github.com/docker/hub-feedback/issues/1925)]，但是可以作为验证的一种方法。
+        > [?] 1.) 通过api使用 sha256进行镜像搜索，貌似不太准确[[本地sha256可能和hub上面的不一样：参见](https://github.com/docker/hub-feedback/issues/1925)]，但是可以作为验证的一种方法。
         <br> 访问：官方的 repository 使用`library`.
         <br>https://registry.hub.docker.com/v2/repositories/library/zookeeper/tags/?page=1&page_size=100
         <br>https://hub.docker.com/v2/repositories/library/zookeeper/tags/?page=1&page_size=100
@@ -109,7 +109,7 @@
     ```
     2. ### 存储安装包
         * #### 简要说明
-        ?> 将一些日常工作中用到的软件或者破解工具以及流程做个记录，利用公共仓库进行存储，使用的时候直接docker拉取镜像运行，然后挂载容器内文件到本地，直接进行安装。
+        > [?] 将一些日常工作中用到的软件或者破解工具以及流程做个记录，利用公共仓库进行存储，使用的时候直接docker拉取镜像运行，然后挂载容器内文件到本地，直接进行安装。
 
         * #### 流程
             
@@ -174,7 +174,7 @@
 
     3. ### 项目打包
         * #### 简要说明
-        ?> 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
+        > [?] 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
 
         * #### 方式一：(把依赖组件(redis,zk,mysql)编排，一次性构建)
             - 基于依赖镜像构建，比如：
@@ -325,12 +325,12 @@
 
     4. ### 数据卷容器(MYSQL)
         * #### 简要说明
-        ?> 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
+        > [?] 将以往的mysql数据库中的数据目录`datadir`进行保存，制作成数据卷容器，方便保存及后续供mysql镜像挂载
 
         * #### 流程
             1. 获取 MySQL datadir目录中的数据
              
-            ?> 第一种可以直接获取到存储数据的mysql`${datadir}`目录。</br>
+            > [?] 第一种可以直接获取到存储数据的mysql`${datadir}`目录。</br>
             第二种是根据文件进行导入的，如下： 
             ```shell
             # offical site: https://hub.docker.com/_/mysql
@@ -374,7 +374,7 @@
                 ```
             6. 使用docker内部`mysql客户端`进行测试
              
-            ?> `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
+            > [?] `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
 
         #### 具体使用
             * [mysql install docker](/docs/doc/framework/mysql/install.md?id=压缩包安装)
@@ -397,7 +397,7 @@
 
 
 ## 安装
-?> 参考链接： </br>
+> [?] 参考链接： </br>
 https://docs.docker.com/engine/install/ubuntu/ </br>
 https://zhuanlan.zhihu.com/p/628536643 </br>
 https://help.aliyun.com/document_detail/51853.html

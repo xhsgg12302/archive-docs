@@ -1,11 +1,11 @@
 ## tcp flag
 
 ### 图例
-* ?> IP 报头（最小20Byte,最大 15[1111]  * 32 / 8, 可填充 40Byte ）： 首部长度的单位为 4Byte.
+* > [?] IP 报头（最小20Byte,最大 15[1111]  * 32 / 8, 可填充 40Byte ）： 首部长度的单位为 4Byte.
 
     ![](/.images/devops/network/tcp/tcp-flag-01.png)
 
-* ?> TCP 报头(20Byte)
+* > [?] TCP 报头(20Byte)
 
     ![](/.images/devops/network/tcp/tcp-flag-02.jpeg)
 
@@ -33,22 +33,22 @@
 * ***猜想***
     1. ack值：
 
-        ?> 存在SYN时，ack为对方的seq+1，</br>
+        > [?] 存在SYN时，ack为对方的seq+1，</br>
         存在PSH时，ack为对方的seq+len,
     2. seq值：
 
-        ?> 存在ACK时，seq为对方的ack.
+        > [?] 存在ACK时，seq为对方的ack.
 
 ## socket_keepalive理解
 * ### 前言
 
-    ?> 1. net.ipv4.tcp_keepalive_intvl = 75 （发送探测包的周期，前提是当前连接一直没有数据交互，才会以该频率进行发送探测包，如果中途有数据交互，则会重新计时tcp_keepalive_time，到达规定时间没有数据交互，才会重新以该频率发送探测包）
+    > [?] 1. net.ipv4.tcp_keepalive_intvl = 75 （发送探测包的周期，前提是当前连接一直没有数据交互，才会以该频率进行发送探测包，如果中途有数据交互，则会重新计时tcp_keepalive_time，到达规定时间没有数据交互，才会重新以该频率发送探测包）
     </br> 2. net.ipv4.tcp_keepalive_probes = 9  （探测失败的重试次数，发送探测包达次数限制对方依旧没有回应，则关闭自己这端的连接）
     </br> 3. net.ipv4.tcp_keepalive_time = 7200 （空闲多长时间，则发送探测包）
 
 * ### 响应结果
 
-    ?> 1. 正常ack，继续保持连接；
+    > [?] 1. 正常ack，继续保持连接；
     </br> 2. 对方响应rst信号，双方重新连接。
     </br> 3. 对方无响应。
 
