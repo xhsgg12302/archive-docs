@@ -235,7 +235,7 @@
 
     + ### 11-文字样式
 
-        > [?] [offical site](https://github.com/fzankl/docsify-plugin-flexible-alerts)
+        ?> [offical site](https://github.com/fzankl/docsify-plugin-flexible-alerts)
 
         > [?] [offical site](https://github.com/fzankl/docsify-plugin-flexible-alerts)
         <br>hello newline
