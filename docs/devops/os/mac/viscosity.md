@@ -1,9 +1,9 @@
 ## viscosity
-?> 多vpn链接软件，和 TunnelBlick属于同一类软件
+> [?] 多vpn链接软件，和 TunnelBlick属于同一类软件
 
 * ### 下载
 
-	?> [https://www.digit77.com/macapps/viscosity/#download-explan](https://www.digit77.com/macapps/viscosity/#download-explan)
+	> [?] [https://www.digit77.com/macapps/viscosity/#download-explan](https://www.digit77.com/macapps/viscosity/#download-explan)
 	<br>[https://pan.baidu.com/disk/main#/index?category=all&path=%2FMAC](https://pan.baidu.com/disk/main#/index?category=all&path=%2FMAC)
 
 	![](/.images/devops/os/softwares/viscosity-download-01.png ':size=42%')

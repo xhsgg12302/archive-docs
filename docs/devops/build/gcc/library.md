@@ -3,7 +3,7 @@
 
 * ### 介绍
 
-    ?> 程序函数库可分为3种类型：静态函数库（static libraries）、共享函数库（shared libraries）、动态加载函数库（dynamically loaded libraries):
+    > [?] 程序函数库可分为3种类型：静态函数库（static libraries）、共享函数库（shared libraries）、动态加载函数库（dynamically loaded libraries):
 
     1. 静态函数库，是在程序执行前就加入到目标程序中去了 ；
     2. 动态函数库同共享函数库是一个东西（在linux上叫共享对象库， 文件后缀是.so ，windows上叫动态加载函数库， 文件后缀是.dll）

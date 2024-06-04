@@ -23,7 +23,7 @@ public class HelloJNI{
 
 
 ##### 2. 编译HelloJNI.java 并且生成C/C++头文件 HelloJNI.h
-?> Starting from JDK 8, you should use "javac -h" to compile the Java program AND generate C/C++ header file called HelloJNI.h as follows:</br>
+> [?] Starting from JDK 8, you should use "javac -h" to compile the Java program AND generate C/C++ header file called HelloJNI.h as follows:</br>
 `javac -h . HelloJNI.java` </br>
 The "-h dir" option generates C/C++ header and places it in the directory specified (in the above example, '.' for the current directory). </br>
 </br>

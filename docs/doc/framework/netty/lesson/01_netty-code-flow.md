@@ -1,6 +1,6 @@
 ## Netty编码流程
 
-?> 写一个简单的http server
+> [?] 写一个简单的http server
 
 ```java
 public class TestServer {

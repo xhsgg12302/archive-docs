@@ -113,18 +113,18 @@
 		| !f() { echo "password=s3cre7"; }; f	| Code after ! evaluated in shell |
 
 	4. ### 具体helper使用格式：`git-credential-foo [args] <action>`
-	?> action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject. </br>
+	> [?] action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject. </br>
 	也就是执行 git credential fill 的时候会在配置的credential helper中找到每个具体实现依次执行他们的get. </br>
 	git credential approve 依次执行每个具体helper的 store，reject -> erase同理。
 
 	5. ### 自定义helper
-	?> 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
+	> [?] 针对不同的场景可以自己编写程序，例如，多人协作，使用一个共享的credential配置。方式有ruby,java,python,shell等。可以参考官方文档。
 
 
 + ## GIT基本操作
 	* ### learngitbranching常用命令
 
-		?> [help,levels,level move1, objective,undo,reset,show solution, show goal,hide goal]
+		> [?] [help,levels,level move1, objective,undo,reset,show solution, show goal,hide goal]
 	
 	* ### 文件查看
 		> `git ls-files` show information about files in the index and the working tree <br>
@@ -223,7 +223,7 @@
 			```
 
 		* #### HEAD分离 
-			?> 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit(或者远程分支)。
+			> [?] 通常来说，HEAD一般指向某个分支(比如main)。而HEAD分离指的是HEAD没有指向任何分支，而是指向某个commit(或者远程分支)。
 			<br><br>如果在分离状态下提交commit，则需要在提交之后(`f178964`)新建分支与其关联`git branch <新分支名> f178964`,否则会丢失提交。
 			<br>或者直接新建分支`git branch detached_3`,但是此时仍是分离状态，可以通过`git checkout detached_3`将HEAD指向新建分支。退出分离状态。
 			<br>或者在新版中：如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令中添加参数 -c(创建并切换一个新分支) 来实现（现在或稍后）。例如：`git switch -c <新分支名>`
@@ -480,7 +480,7 @@
 		![](/.images/devops/git/remote-pull-02.gif)
 
 + ## GIT仓库迁移
-	?> 1、git clone --bare https://github.com/xhsgg12302/helloworld.git
+	> [?] 1、git clone --bare https://github.com/xhsgg12302/helloworld.git
 	<br>2、cd helloworld.git
 	<br>3、git push --mirror https://github.com/new.git
 

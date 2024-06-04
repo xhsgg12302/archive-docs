@@ -6,7 +6,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        ?> 1). 类加载器是一个负责加载类的对象。`ClassLoader`是一个抽象类。给定一个类的二进制名称，类加载器尝试定位或者生成构成类定义的数据。一个典型的策略是：转换一个名字到一个文件然后读取名字对应的类文件从文件系统。
+        > [?] 1). 类加载器是一个负责加载类的对象。`ClassLoader`是一个抽象类。给定一个类的二进制名称，类加载器尝试定位或者生成构成类定义的数据。一个典型的策略是：转换一个名字到一个文件然后读取名字对应的类文件从文件系统。
         <br><br>2). 每个类对象都包含一个定义它的类加载器`ClassLoader`的引用。
         <br><br>3). 数组类的类对象不是通过类加载器创建的。但会根据java运行时的需要自动创建（也就是JVM自己创建）。对于数组的`Class.getClassLoader()`返回的类加载器和它加载它元素类型的加载器一样。如果元素是`primitive type`原始类型(有别于复合类型)，则数组类没有类加载器。
         <br><br>4). 应用程序实现 ClassLoader 的子类，以扩展 Java 虚拟机动态加载类的方式。
@@ -114,7 +114,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        ?> JVM 启动的时候，并不会一次性加载所有的类，而是根据需要去动态加载。也就是说，大部分类在具体用到的时候才会去加载，这样对内存更加友好。
+        > [?] JVM 启动的时候，并不会一次性加载所有的类，而是根据需要去动态加载。也就是说，大部分类在具体用到的时候才会去加载，这样对内存更加友好。
         <br><br>对于已经加载的类会被放在 ClassLoader 中。在类加载的时候，系统会首先判断当前类是否被加载过。已经被加载的类会直接返回，否则才会尝试加载。也就是说，对于一个类加载器来说，相同二进制名称的类只会被加载一次。
 
         > [!] 通过注释可以看出：
@@ -142,7 +142,7 @@
     
     + ### 分类
 
-        ?> JVM 中内置了三个重要的 ClassLoader：
+        > [?] JVM 中内置了三个重要的 ClassLoader：
         <br><br>1). ___BootstrapClassLoader(启动类加载器)___ ：最顶层的加载类，由 C++实现，没有对应的Java类。所以在Java中是取不到的。如果一个类的classloader是null。已经足可以证明他就是由BootStrapClassLoader 加载的,通常表示为 null，并且没有父级，主要用来加载JDK内部的核心类库`%JAVA_HOME%/lib目录下的rt.jar、resources.jar、charsets.jar等 jar 包和类`以及被`-Xbootclasspath`参数指定的路径下的所有类。
         <br><br>2). ___ExtClassLoader(扩展类加载器)___ ：主要负责加载`%JRE_HOME%/lib/ext`目录下的 jar 包和类以及被`java.ext.dirs`系统变量所指定的路径下的所有类。
         <br><br>3). ___AppClassLoader(应用程序类加载器)___ ：面向我们用户的加载器，负责加载当前应用`classpath`下的所有 jar 包和类。
@@ -156,7 +156,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        ?> 参考[定义<sup>5). </sup>](#定义)。如果一个类加载器收到了类加载器的请求，它首先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类时，子加载类才会尝试自己去加载)。
+        > [?] 参考[定义<sup>5). </sup>](#定义)。如果一个类加载器收到了类加载器的请求，它首先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类时，子加载类才会尝试自己去加载)。
 
         > [!] 自定义加载器的话，需要继承 ClassLoader 。如果我们不想打破双亲委派模型，就重写 ClassLoader 类中的 findClass() 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 loadClass() 方法。
 
@@ -285,7 +285,7 @@
     + ### 两种方式
         
         - #### JDK
-            ?> 基于接口的动态代理，代理类必须实现某个接口。
+            > [?] 基于接口的动态代理，代理类必须实现某个接口。
             <br>代理配置： -Dsun.misc.ProxyGenerator.saveGeneratedFiles=true  源码：[`ProxyGenerator`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/misc/ProxyGenerator.java#L341C13-L341C31)。可以生成代理类字节文件，方便反编译查看生成内容。
             <br>repo: [jdk_dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/jdk_dynamic)
 
@@ -406,7 +406,7 @@
         
         - #### CGLIB
 
-            ?> 基于ASM字节码操作框架。由于继承关系，不能代理final类。
+            > [?] 基于ASM字节码操作框架。由于继承关系，不能代理final类。
             <br>代理类生成配置： -Dcglib.debugLocation=/path/to/somewhere   源码：[`DebuggingClassWriter`](https://github.com/cglib/cglib/blob/RELEASE_3_3_0/cglib/src/main/java/net/sf/cglib/core/DebuggingClassWriter.java#L79) 
             <br>cglib生成代理类的过程当中会生成一些辅助类，所以打断点获取Class字节数组的时候需要注意，一般来说最后一次生成的才是正真的Proxy。
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. class net.sf.cglib.proxy.Enhancer\$EnhancerKey\$\$KeyFactoryByCGLIB\$\$7fb24d72 
@@ -725,14 +725,14 @@
 
     + ### 定义
 
-        ?> [wiki](https://en.wikipedia.org/wiki/Service_provider_interface): ___Service provider interface (SPI)___ 是一种API，打算让第三方厂商实现和扩展。它可以用来扩展和替换组件。
+        > [?] [wiki](https://en.wikipedia.org/wiki/Service_provider_interface): ___Service provider interface (SPI)___ 是一种API，打算让第三方厂商实现和扩展。它可以用来扩展和替换组件。
         <br>换句话说：是一种服务发现机制。它通过在 ClassPath 路径下的 META-INF/services 文件夹查找文件，自动加载文件里所定义的类。
 
     + ### 样例
         
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        ?> <br>[测试代码](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/spi)
+        > [?] <br>[测试代码](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/spi)
         <br><br>1). 定义接口`ISpiTest`.
         <br><br>2). 接口`ISpiTest`实现类`SpiTestImpl`.
         <br><br>3). 按照规范在`META-INF/services/`目录下放置接口名`_jvm.classLoader.spi.service.ISpiTest`,内容为`_jvm.classLoader.spi.service.impl.SpiTestImpl`实现类的文件。
@@ -778,14 +778,14 @@
 
     + ### 结构
 
-        ?> 目前有两种实现技术，一种是JDK自带的[`java.util.ServiceLoader`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/ServiceLoader.java)，另外一种是sun公司提供的[`sun.misc.Service`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/misc/Service.java)。
+        > [?] 目前有两种实现技术，一种是JDK自带的[`java.util.ServiceLoader`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/ServiceLoader.java)，另外一种是sun公司提供的[`sun.misc.Service`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/misc/Service.java)。
         <br>下面主要已JDK的进行分析。
 
         <!-- panels:start -->
         <!-- div:title-panel -->
         ##### ServiceLoader
         <!-- div:left-panel-50 -->
-        ?> 初始化`ServiceLoader`
+        > [?] 初始化`ServiceLoader`
 
         ```java
         // 调用
@@ -822,7 +822,7 @@
         }
         ```
         <!-- div:right-panel-50 -->
-        ?> 懒加载迭代
+        > [?] 懒加载迭代
 
         ```java
         // 调用 iterator()方法返回一个迭代器，迭代器内部有一个类型为 LazyIterator lookupIterator懒加载迭代器。
@@ -864,14 +864,14 @@
 
         - #### JDBC
 
-            ?> JDBC 4.0 开始增加了[`Autoloading of JDBC drivers`](https://docs.oracle.com/javadb/10.8.3.0/ref/rrefjdbc4_0summary.html)自动加载驱动的特性。主要使用的是 ***SPI*** 以及破坏双亲委派机制的 ***Thread Context ClassLoader*** 技术。
+            > [?] JDBC 4.0 开始增加了[`Autoloading of JDBC drivers`](https://docs.oracle.com/javadb/10.8.3.0/ref/rrefjdbc4_0summary.html)自动加载驱动的特性。主要使用的是 ***SPI*** 以及破坏双亲委派机制的 ***Thread Context ClassLoader*** 技术。
             <br><br>Autoloading of JDBC drivers. In earlier versions of JDBC, applications had to manually register drivers before requesting Connections. With JDBC 4.0, applications no longer need to issue a Class.forName() on the driver name; instead, the DriverManager will find an appropriate JDBC driver when the application requests a Connection.
 
             <!-- panels:start -->
             <!-- div:title-panel -->
             ##### 数据库驱动注册方式(老版本)
             <!-- div:left-panel-50 -->
-            ?> **Mysql**
+            > [?] **Mysql**
             ```java
             /**
              * 方式①
@@ -910,7 +910,7 @@
             ```
             
             <!-- div:right-panel-50 -->
-            ?> **SQLServer**
+            > [?] **SQLServer**
             ```java
             /**
              * 方式①

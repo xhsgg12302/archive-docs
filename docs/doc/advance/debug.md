@@ -15,7 +15,7 @@
     
     + ### 参数样例
 
-        ?> Command line arguments for remote JVM.
+        > [?] Command line arguments for remote JVM.
 
         | JDK版本 | (attach mode)启动追加命令[参考下图] | (listen mode)启动追加命令 |
         | - | - | - |
@@ -28,7 +28,7 @@
 
 * ## mode
 
-    ?> debug mode:
+    > [?] debug mode:
     <br>`Attach`: 此种模式下，server=y,address=port。被调试的代码端充当服务器开放端口等待`jdi客户端`去连接。
     <br>`Listen`: 此种模式下，server=n,address=ip:port。应当先在ip机器上启动`jdi客户端`去监听端口port，然后启动需要被调试的代码。例如： ***[IDEA debug按钮采用的方式](#idea本地debug按钮采用listen方式debug)***
 
@@ -40,7 +40,7 @@
 
         - **targetVM**
 
-            ?> `java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8800 _draft.test.debug.HelloWorld` 运行后会暂停，等待jdi客户端attach后才开始执行。
+            > [?] `java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8800 _draft.test.debug.HelloWorld` 运行后会暂停，等待jdi客户端attach后才开始执行。
 
         - **JDI client**
 
@@ -50,7 +50,7 @@
 
         - **targetVM**
 
-            ?> `java -agentlib:jdwp=transport=dt_socket,server=n,suspend=n,address=localhost:8800 _draft.test.debug.HelloWorld` 等待下图jdi客户端监听开始之后再运行此命令。
+            > [?] `java -agentlib:jdwp=transport=dt_socket,server=n,suspend=n,address=localhost:8800 _draft.test.debug.HelloWorld` 等待下图jdi客户端监听开始之后再运行此命令。
 
         - **JDI client**
 
@@ -95,7 +95,7 @@
 
 * ## 问题
 
-    ?> 使用idea运行JDI程序的时候会在捕获到`VMStartEvent`事件后，不会有`ClassPrepareEvent`,`BreakpointEvent`事件。
+    > [?] 使用idea运行JDI程序的时候会在捕获到`VMStartEvent`事件后，不会有`ClassPrepareEvent`,`BreakpointEvent`事件。
     <br>当前使用的JDI环境为JDK17自带的。并非1.8中`${JAVA_HOME}/lib/tools.jar`中的类库。
     <br>现象如下图(idea Run按钮运行后与命令行的方式运行出来的结果不同):
 
@@ -103,7 +103,7 @@
 
     + ### 原因：
 
-        ?> Connector在launch的时候，会解析参数，并且生成 shell 执行指令数组。比如`[/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java, -Xdebug, -Xrunjdwp:transport=dt_socket,address=localhost:63879,suspend=y, site.wtfu.framework.HelloWorld]`。并通过`Runtime.getRuntime().exec(commandArray)`执行。[代码参考](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/jdk.jdi/share/classes/com/sun/tools/jdi/AbstractLauncher.java#L189)。重点在于，使用Runtime.getRuntime().exec()执行命令的时候，默认使用当前工程项目（比如本例中的`idea-debug`）为执行目录。而上面传递的参数中需要被targetVM执行的类`site.wtfu.framework.HelloWorld`在执行目录中没有，所以targetVM启动的时候报错了。也就直接退出了。
+        > [?] Connector在launch的时候，会解析参数，并且生成 shell 执行指令数组。比如`[/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java, -Xdebug, -Xrunjdwp:transport=dt_socket,address=localhost:63879,suspend=y, site.wtfu.framework.HelloWorld]`。并通过`Runtime.getRuntime().exec(commandArray)`执行。[代码参考](https://github.com/openjdk/jdk/blob/a474b37212da5edbd5868c9157aff90aae00ca50/src/jdk.jdi/share/classes/com/sun/tools/jdi/AbstractLauncher.java#L189)。重点在于，使用Runtime.getRuntime().exec()执行命令的时候，默认使用当前工程项目（比如本例中的`idea-debug`）为执行目录。而上面传递的参数中需要被targetVM执行的类`site.wtfu.framework.HelloWorld`在执行目录中没有，所以targetVM启动的时候报错了。也就直接退出了。
         <br><br>如果需要验证，可以在编写的debugger程序中加入如下代码：使用`process.getErrorStream()`获取targetVM异常退出信息。
 
         ```java
@@ -140,7 +140,7 @@
         
         2. 满足targetVM
 
-            ?> 将编译好的HelloWorld.class 按照`Runtime.getRuntime().exec(cmdarray)`所需要的目录构造即可。如下图：
+            > [?] 将编译好的HelloWorld.class 按照`Runtime.getRuntime().exec(cmdarray)`所需要的目录构造即可。如下图：
 
             ![](/.images/doc/advance/debug/debug-05.png ':size=99%')
 

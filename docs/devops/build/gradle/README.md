@@ -9,7 +9,7 @@
 
 ## 查看gradle具体执行参数
 
-?> 将GradleHome 下bin 中的gradle最后一行修改为`echo "$JAVACMD" "$@"`,将完整打印执行命令。
+> [?] 将GradleHome 下bin 中的gradle最后一行修改为`echo "$JAVACMD" "$@"`,将完整打印执行命令。
 
 ## IDEA 配置截图
 ![](/.images/devops/build/gradle/usage/gradle-usage-01.png ':size=80%')

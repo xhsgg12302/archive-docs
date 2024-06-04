@@ -11,7 +11,7 @@
 </dependency>
 ```
 ##### 2. 编写代码
-?> The following program loads the local C standard library implementation and uses it to call the printf function. </br>
+> [?] The following program loads the local C standard library implementation and uses it to call the printf function. </br>
 Note: The following code is portable and works the same on Windows and POSIX (Linux / Unix / macOS) platforms.
 ```java
 import com.sun.jna.Library;
@@ -78,7 +78,7 @@ public class HelloJNA {
     }
 }
 ```
-?> 编译可以和第2步编译动态链接库并行，互不相关 </br>
+> [?] 编译可以和第2步编译动态链接库并行，互不相关 </br>
 `$ javac -cp .:jna-5.13.0.jar HelloJNA.java `
 
 ##### 2. 编写动态链接库C代码 hello.c
@@ -87,10 +87,10 @@ int add(int a, int b){
     return a + b;
 }
 ```
-?> 使用`$ gcc  -dynamiclib -o libhello.dylib hello.c `编译成动态链接库 **libhello.dylib**
+> [?] 使用`$ gcc  -dynamiclib -o libhello.dylib hello.c `编译成动态链接库 **libhello.dylib**
 
 ##### 3. 运行
-?> `$ java -cp .:jna-5.13.0.jar HelloJNA`
+> [?] `$ java -cp .:jna-5.13.0.jar HelloJNA`
 
 ##### 4. 记录
 ![](/.images/doc/advance/native/jna-library-01.png)

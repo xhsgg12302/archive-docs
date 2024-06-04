@@ -1212,17 +1212,17 @@ $ FLUSH PRIVILEGES;
 ## 修改密码的几种方式
 * 用SET PASSWORD命令
  
-?> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass'); FLUSH PRIVILEGES;
+> [?] SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass'); FLUSH PRIVILEGES;
 * 用mysqladmin
  
-?> mysqladmin -u root password "newpass" <br>
+> [?] mysqladmin -u root password "newpass" <br>
 \# 如果设置过 mysqladmin -u root password oldpass "newpass"
 * 用UPDATE直接编辑user表
  
-?> UPDATE user SET Password = PASSWORD('newpass') WHERE user = 'root'; FLUSH PRIVILEGES;
+> [?] UPDATE user SET Password = PASSWORD('newpass') WHERE user = 'root'; FLUSH PRIVILEGES;
 * 在丢失root密码的时候，可以这样
  
-?> mysqld_safe --skip-grant-tables & mysql -u root mysql <br>
+> [?] mysqld_safe --skip-grant-tables & mysql -u root mysql <br>
 \# UPDATE user SET password=PASSWORD("new password") WHERE user='root'; FLUSH PRIVILEGES;
 
 ## 注意事项

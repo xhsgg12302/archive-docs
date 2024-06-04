@@ -31,7 +31,7 @@
 
 * ### debug
 
-    ?> 使用lldb debug的时候会出现 Signal: SIGSEGV (signal SIGSEGV) ,`目前切换到gdb断点不生效，未解决。`
+    > [?] 使用lldb debug的时候会出现 Signal: SIGSEGV (signal SIGSEGV) ,`目前切换到gdb断点不生效，未解决。`
     <br> 可以[参考](https://lrting.top/backend/11766/)添加下列代码解决。如果是gdb的话，[参考](https://jiawanggjia.github.io/post/openjdk-bian-yi-zhi-nan/)
 
     <!-- tabs:start -->

@@ -2,13 +2,13 @@
 
 - ### 基础
     *  #### 简介
-    ?> gcc </br>gcc是用来编译c文件的编译器。简单来说就是给他输入一个（或几个）c文件，它可以输出一个可执行文件。当你的程序只有一个源文件时，直接就可以用gcc命令编译它。但是当你的程序包含很多个源文件时，用gcc命令逐个去编译时，容易混乱而且工作量大。
+    > [?] gcc </br>gcc是用来编译c文件的编译器。简单来说就是给他输入一个（或几个）c文件，它可以输出一个可执行文件。当你的程序只有一个源文件时，直接就可以用gcc命令编译它。但是当你的程序包含很多个源文件时，用gcc命令逐个去编译时，容易混乱而且工作量大。
 
         
-    ?> make </br> 因此出现了make工具。它本身没有编译和链接功能。但是它可以按照`Makefile`文件中的命令调用gcc来编译工程。有了make，我们就不用一个一个文件去编译，只要把他们的编译指令都写在Makefile中，然后make就可以一键完成。
+    > [?] make </br> 因此出现了make工具。它本身没有编译和链接功能。但是它可以按照`Makefile`文件中的命令调用gcc来编译工程。有了make，我们就不用一个一个文件去编译，只要把他们的编译指令都写在Makefile中，然后make就可以一键完成。
 
      
-    ?> cmake </br> 为了进一步简化Makefile的书写，出现了`cmake`。cmake根据CMakeLists.txt文件生成项目的makefile，而且写法也大大简化。总的来说，CMake，make，gcc组成一个工具链，让我们在构建项目时只需要编写源文件以及CmakeLists.txt即可。它的流程如下：
+    > [?] cmake </br> 为了进一步简化Makefile的书写，出现了`cmake`。cmake根据CMakeLists.txt文件生成项目的makefile，而且写法也大大简化。总的来说，CMake，make，gcc组成一个工具链，让我们在构建项目时只需要编写源文件以及CmakeLists.txt即可。它的流程如下：
     ```mermaid
     graph LR
     A(编写CMakeLists.txt)-->B((Cmake))
@@ -40,7 +40,7 @@
         >    * ***PROJECT_SOURCE_DIR*** : 源文件目录
 
         2. ##### 指令
-        ?> 指令就是CMake里的函数。它的名称不区分大小写，调用的格式如下:
+        > [?] 指令就是CMake里的函数。它的名称不区分大小写，调用的格式如下:
             * 指令名（参数1，参数2，参数3） 
         参数之间用空格或者分号隔开。
         如果参数中包含括号，可以使用双引号将参数分开，如下所示：
@@ -50,7 +50,7 @@
         ```
 
         3. ##### 使用
-        ?> CMake命令用于生成中间文件，使用时要传入CmakeLists.txt文件所在的目录。如果在主目录下直接生成配置文件，**内部构建**，这样做的坏处是使代码文件与中间文件相互混淆，因此最好的做法时**外部构件**。<br>
+        > [?] CMake命令用于生成中间文件，使用时要传入CmakeLists.txt文件所在的目录。如果在主目录下直接生成配置文件，**内部构建**，这样做的坏处是使代码文件与中间文件相互混淆，因此最好的做法时**外部构件**。<br>
         如下所示：在主目录下
         ```shell
         mkdir build && cd build     # 用于存放中间文件
@@ -72,7 +72,7 @@
             ├── hello.c
             └── CMakeLists.txt  # 要为任何代码目录添加Cmakelists
         ```
-        ?> 最终安装工程时，如下操作：
+        > [?] 最终安装工程时，如下操作：
         ```shell
         # 把bin/下文件和runhello.sh撞到可执行文件目录下面
         mv bin/* runhello.sh -t /usr/bin
@@ -82,19 +82,19 @@
         ```
 
     <!-- * #### 具体指令
-    ?> 1. 最低CMake版本（每个CmakeLists.txt文件都必须有）</br>
+    > [?] 1. 最低CMake版本（每个CmakeLists.txt文件都必须有）</br>
     `CMAKE_MINIMUM_PREQUIRED(VERSION 2.6)` </br> 2. 指定工程名 </br>
     `PROJECT(PRJNAME)` <br> 3. 输出提示信息 </br>
     `MESSAGE(STATUS "This is binary dir" ${PROJECT_BINARY_DIR})` -->
 
     * #### 具体指令
-        1. ?> 最低CMake版本（每个CmakeLists.txt文件都必须有）
+        1. > [?]  最低CMake版本（每个CmakeLists.txt文件都必须有）
         
         `CMAKE_MINIMUM_PREQUIRED(VERSION 2.6)`
-        2. ?> 指定工程名
+        2. > [?]  指定工程名
         
         `PROJECT(PRJNAME)`
-        3. ?> 输出提示信息
+        3. > [?]  输出提示信息
 
         `MESSAGE(STATUS "This is binary dir" ${PROJECT_BINARY_DIR})`
 
@@ -103,7 +103,7 @@
             * **SEND_ERROR**: 产生错误，生成过程中被跳过
             * **FATAL_ERROR**: 重要错误，CMake进城终止。
         
-        4. ?> 添加要编译的可执行程序
+        4. > [?]  添加要编译的可执行程序
 
         `ADD_EXECUTABLE(hello main.c src1.c)`  # hello为一个target
         等效于在makefile里写
@@ -112,7 +112,7 @@
             gcc -o hello main.c src1.c
         ```
 
-        5. ?> 指定子目录
+        5. > [?]  指定子目录
 
         由于子目录src下也有CMakeLists.txt，是用来编译源代码的，如果不在主目录下的cmakelists里面声明子目录，就不会包含这部分代码，因此主目录的文件中需要添加：
 
@@ -123,7 +123,7 @@
         
         注意：采用外部编译时，例如在build目录下面`camke ..`,那么输出目录就会以 `build/` 作为相对路径的参考，因此会在build/下生成一个bin/目录来存放二进制文件，若没有指定bin，则会生成build/src目录。
 
-        6. ?> 更改二进制输出目录
+        6. > [?]  更改二进制输出目录
 
         除了用命令指定二进制文件输出目录，还可以通过更改路径变量来指定目录。指定可执行文件或共享库输出目录的变量分别是
             * **EXECUTABLE_OUTPUT_PATH**
@@ -135,7 +135,7 @@
         SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
         ```
 
-        7. ?> 指定安装目录
+        7. > [?]  指定安装目录
 
             * (1)makefile中如何写安装目录
                 ```shell
@@ -229,32 +229,32 @@
 
 - ### 常用变量
     + #### 一、cmake变量的引用方式
-    ?> 使用${}进行变量的引用。在 IF 等语句中,是直接使用变量名而不通过${}取值
+    > [?] 使用${}进行变量的引用。在 IF 等语句中,是直接使用变量名而不通过${}取值
 
     + #### 二、cmake常用变量
-    ?> `CMAKE_BINARY_DIR| PROJECT_BINARY_DIR| <projectname\>_BINARY_DIR`</br>
+    > [?] `CMAKE_BINARY_DIR| PROJECT_BINARY_DIR| <projectname\>_BINARY_DIR`</br>
     这三个变量指代的内容是一致的,如果是 in source 编译,指得就是工程顶层目录,如果是 out-of-source 编译,指的是工程编译发生的目录。PROJECT_BINARY_DIR 跟其他指令稍有区别,现在,你可以理解为他们是一致的。
 
-    ?> `CMAKE_SOURCE_DIR|PROJECT_SOURCE_DIR|<projectname\>_SOURCE_DIR`</br>
+    > [?] `CMAKE_SOURCE_DIR|PROJECT_SOURCE_DIR|<projectname\>_SOURCE_DIR`</br>
     这三个变量指代的内容是一致的,不论采用何种编译方式,都是工程顶层目录。
     也就是在 in source 编译时,他跟 CMAKE_BINARY_DIR 等变量一致。
     PROJECT_SOURCE_DIR 跟其他指令稍有区别,现在,你可以理解为他们是一致的。
 
-    ?> `CMAKE_CURRENT_SOURCE_DIR` </br>
+    > [?] `CMAKE_CURRENT_SOURCE_DIR` </br>
     指的是当前处理的 CMakeLists.txt 所在的路径,比如上面我们提到的 src 子目录。
 
-    ?> `CMAKE_CURRRENT_BINARY_DIR` </br>
+    > [?] `CMAKE_CURRRENT_BINARY_DIR` </br>
     如果是 in-source 编译,它跟 CMAKE_CURRENT_SOURCE_DIR 一致,如果是 out-of-source 编译,他指的是 target 输出目录。</br>
     使用我们上面提到的 ADD_SUBDIRECTORY(src bin)可以更改这个变量的值。</br>
     使用 SET(EXECUTABLE_OUTPUT_PATH <新路径>)并不会对这个变量造成影响,它仅仅修改了最终目标文件存放的路径。
 
-    ?> `CMAKE_CURRENT_LIST_FILE` </br>
+    > [?] `CMAKE_CURRENT_LIST_FILE` </br>
     调用这个变量的 CMakeLists.txt 的完整路径 
 
-    ?> `CMAKE_CURRENT_LIST_LINE` </br>
+    > [?] `CMAKE_CURRENT_LIST_LINE` </br>
     输出这个变量所在的行
 
-    ?> `CMAKE_MODULE_PATH` </br>
+    > [?] `CMAKE_MODULE_PATH` </br>
     这个变量用来定义自己的 cmake 模块所在的路径。如果你的工程比较复杂,有可能会自己编写一些 cmake 模块,这些 cmake 模块是随你的工程发布的,为了让 cmake 在处理CMakeLists.txt 时找到这些模块,你需要通过 SET 指令,将自己的 cmake 模块路径设置一下。</br>
     比如
     ```shell
@@ -262,10 +262,10 @@
     ```
     这时候你就可以通过 INCLUDE 指令来调用自己的模块了。
 
-    ?> `EXECUTABLE_OUTPUT_PATH | LIBRARY_OUTPUT_PATH`</br>
+    > [?] `EXECUTABLE_OUTPUT_PATH | LIBRARY_OUTPUT_PATH`</br>
     分别用来重新定义最终结果的存放目录,前面我们已经提到了这两个变量。
 
-    ?> `PROJECT_NAME`</br>
+    > [?] `PROJECT_NAME`</br>
     返回通过 PROJECT 指令定义的项目名称。
 
     * #### 三、cmake调用环境变量的方式
@@ -300,7 +300,7 @@
 
 - ### 常用指令
     + #### 一、基本指令
-    ?> 1. `ADD_DEFINITIONS` </br>
+    > [?] 1. `ADD_DEFINITIONS` </br>
     向 C/C++编译器添加-D 定义,比如:
     ```shell
     ADD_DEFINITIONS(-DENABLE_DEBUG  -DABC)  # 参数之间用空格分割。
@@ -308,16 +308,16 @@
     如果你的代码中定义了这个，则`#ifdef ENABLE_DEBUG #endif`代码块就会生效。</br>
     如果要添加其他的编译器开关,可以通过 CMAKE_C_FLAGS 变量和 CMAKE_CXX_FLAGS 变量设置。
 
-    ?> 2. `ADD_DEPENDENCIES` </br>
+    > [?] 2. `ADD_DEPENDENCIES` </br>
     定义 target 依赖的其他 target,确保在编译本 target 之前,其他的 target 已经被构建。
     ```shell
     ADD_DEPENDENCIES(target-name depend-target1 depend-target2 ...)
     ```
 
-    ?> 3. `ADD_EXECUTABLE、ADD_LIBRARY、ADD_SUBDIRECTORY` </br>
+    > [?] 3. `ADD_EXECUTABLE、ADD_LIBRARY、ADD_SUBDIRECTORY` </br>
     添加可执行程序，库和子目录
 
-    ?> 4. `ADD_TEST 与 ENABLE_TESTING` </br>
+    > [?] 4. `ADD_TEST 与 ENABLE_TESTING` </br>
     `ENABLE_TESTING` 指令用来控制 Makefile 是否构建 test 目标,涉及工程所有目录。语法很简单,没有任何参数`ENABLE_TESTING()`,一般情况这个指令放在工程的主CMakeLists.txt 中。</br>
     `ADD_TEST` 指令的语法是:
     ```shell
@@ -329,7 +329,7 @@
     ENABLE_TESTING()    </br>
     生成 Makefile 后,就可以运行 make test 来执行测试了。
 
-    ?> 5. `AUX_SOURCE_DIRECTORY` </br>
+    > [?] 5. `AUX_SOURCE_DIRECTORY` </br>
     基本语法是:
     ```shell
     AUX_SOURCE_DIRECTORY(dir VARIABLE)
@@ -342,12 +342,12 @@
     ```
     你也可以通过后面提到的 FOREACH 指令来处理这个 LIST
 
-    ?> 6. `CMAKE_MINIMUM_REQUIRED` </br>
+    > [?] 6. `CMAKE_MINIMUM_REQUIRED` </br>
     其语法为 CMAKE_MINIMUM_REQUIRED(VERSION versionNumber [FATAL_ERROR]) </br>
     比如 CMAKE_MINIMUM_REQUIRED(VERSION 2.5 FATAL_ERROR) </br>
     如果 cmake 版本小与 2.5,则出现严重错误,整个过程中止。
 
-    ?> 7. `EXEC_PROGRAM` </br>
+    > [?] 7. `EXEC_PROGRAM` </br>
     在 CMakeLists.txt 处理过程中执行命令,并不会在生成的 Makefile 中执行。</br>
     具体语法为:
     ```shell
@@ -369,7 +369,7 @@
     ```
     在 cmake 生成 Makefile 的过程中,就会执行 ls 命令,如果返回 0,则说明成功执行,那么就输出 ls *.c 的结果。关于 IF 语句,后面的控制指令会提到。
 
-    ?> 8. `FILE 指令`
+    > [?] 8. `FILE 指令`
     文件操作指令,基本语法为:
     ```shell
     FILE(WRITE filename "message to write"... )
@@ -386,7 +386,7 @@
     ```
     这里的语法都比较简单,不在展开介绍了。
 
-    ?> 9. `INCLUDE 指令` </br>
+    > [?] 9. `INCLUDE 指令` </br>
     用来载入 CMakeLists.txt 文件,也用于载入预定义的 cmake 模块.
     ```shell
     INCLUDE(file1 [OPTIONAL])
@@ -396,7 +396,7 @@
     你可以指定载入一个文件,如果定义的是一个模块,那么将在 CMAKE_MODULE_PATH 中搜索这个模块并载入。 </br>
     载入的内容将在处理到 INCLUDE 语句时直接执行。</br>
 
-    ?> 10. `FIND_<\>指令` </br>
+    > [?] 10. `FIND_<\>指令` </br>
     FIND_系列指令主要包含以下指令:
     ```shell
     FIND_FILE(<VAR> name1 path1 path2 ...)
@@ -420,7 +420,7 @@
     ```
 
     + #### 二、控制指令:
-    ?> 1. `IF 指令`
+    > [?] 1. `IF 指令`
         - ##### (1) 基本语法为：
             ```shell
             IF(expression_r_r)
@@ -504,7 +504,7 @@
             ENDIF(WIN32)
             ```
 
-    ?> 2. `WHILE指令`</br>
+    > [?] 2. `WHILE指令`</br>
     WHILE 指令的语法是:
     ```shell
     WHILE(condition)
@@ -515,7 +515,7 @@
     ```
     其真假判断条件可以参考 IF 指令。
 
-    ?> 3. `FOREACH指令`</br>
+    > [?] 3. `FOREACH指令`</br>
     FOREACH 指令的使用方法有三种形式:
         - ##### (1)列表
         ```shell

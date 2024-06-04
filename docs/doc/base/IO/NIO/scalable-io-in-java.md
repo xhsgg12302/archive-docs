@@ -155,7 +155,7 @@
 
             <!-- panels:start -->
             <!-- div:left-panel-40 -->
-            ?> `Reactor` and `Acceptor`
+            > [?] `Reactor` and `Acceptor`
             ```java
             public class Reactor {
 
@@ -214,7 +214,7 @@
             }
             ```
             <!-- div:right-panel-60 -->
-            ?> Normal `Handler` and GoF `Handler`
+            > [?] Normal `Handler` and GoF `Handler`
             ```java
             final class Handler implements Runnable {
 
@@ -315,7 +315,7 @@
                 2. Offload non-IO processing to other threads.
             
 
-                ?> `Offload non-IO processing to speed up Reactor thread` (Similar to POSA2 Proactor designs)
+                > [?] `Offload non-IO processing to speed up Reactor thread` (Similar to POSA2 Proactor designs)
                 <br> `Simpler than reworking compute-bound processing into event-driven form` (Should still be pure nonblocking computation,
                 Enough processing to outweigh overhead)
                 <br>`But harder to overlap processing with IO` (Best when can first read all input into a buffer)
@@ -349,7 +349,7 @@
 
                 <!-- panels:start -->
                 <!-- div:left-panel-50 -->
-                ?> Coordinating Tasks
+                > [?] Coordinating Tasks
                 1. __Handoffs__ (Each task enables, triggers, or calls next one Usually fastest but can be brittle)
                 2. __Callbacks to per-handler dispatcher__
                     * Sets state, attachment, etc
@@ -362,7 +362,7 @@
              
                 ---
                 <!-- div:right-panel-50 -->
-                ?> Using PooledExecutor
+                > [?] Using PooledExecutor
                 1. __A tunable worker thread pool__
                 2. __Main method execute(Runnable r)__
                 3. __Controls for:__
@@ -390,7 +390,7 @@
                 <!-- div:title-panel -->
                 ##### 
                 <!-- div:left-panel-50 -->
-                ?> Using other java.nio features
+                > [?] Using other java.nio features
                 1. __Multiple Selectors per Reactor__ (To bind different handlers to different IO events, May need careful synchronization to coordinate)
                 2. __File transfer__ (Automated file-to-net or net-to-file copying)
                 3. __Memory-mapped files__ (Access files via buffers)
@@ -402,7 +402,7 @@
              
                 ---
                 <!-- div:right-panel-50 -->
-                ?> Connection-Based Extensions
+                > [?] Connection-Based Extensions
                 1. __Instead of a single service request__
                     * Client connects
                     * Client sends a series of messages/requests

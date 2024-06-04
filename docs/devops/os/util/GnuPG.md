@@ -35,7 +35,7 @@
         <!-- div:left-panel-60 -->
         <!-- tabs:start -->
         ##### **SourceCode**
-        ?> # 1. 源码安装
+        > [?] # 1. 源码安装
         <br># https://www.gnupg.org/download/index.en.html
         <br>`./configure`
         <br>`make && make install`

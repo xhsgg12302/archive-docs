@@ -20,7 +20,7 @@ do shell script "open /path/to/your/script.app"
 ![](/.images/devops/os/mac/automator-quit-viscosity-01.png)
 
 #### **Burp-Suite-Pro**
-?> 使用Automator打开现有文稿，选择`burpsuite-pro.app`，新建运行shell脚本
+> [?] 使用Automator打开现有文稿，选择`burpsuite-pro.app`，新建运行shell脚本
 
 > [!ATTENTION] 启动命令中的`Xbootclasspath`在jdk1.8中有效，其他JDK环境不识别，所以得需要将1.8追加在PATH前面提前发现。
 ```shell

@@ -1,5 +1,5 @@
 ## 函数
-?> For server side help, type 'help contents'
+> [?] For server side help, type 'help contents'
 ```shell
 mysql> help contents
 You asked for help about help category: "Contents"

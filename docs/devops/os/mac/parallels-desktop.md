@@ -9,7 +9,7 @@
     
     + ### 下载
     
-        ?> [ParallelsDesktop-19.1.0-54729.dmg](https://download.parallels.com/desktop/v19/19.1.0-54729/ParallelsDesktop-19.1.0-54729.dmg)
+        > [?] [ParallelsDesktop-19.1.0-54729.dmg](https://download.parallels.com/desktop/v19/19.1.0-54729/ParallelsDesktop-19.1.0-54729.dmg)
         <br>[Parallels Desktop Activation Tool 4.0.0 [MacKed].dmg](https://pan.luoxx.top/api/v3/file/download/j9XKsZ1niPhPlzxW?sign=Ao9lg-CY10B9ij93XWJGRLok7hAkj1QD9bufTk9IRmE%3D%3A1713414743)
 
     + ### 激活

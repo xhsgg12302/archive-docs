@@ -2,7 +2,7 @@
 
     + OQL控制台
 
-        ?> 使用样例
+        > [?] 使用样例
         <br>`select s from java.lang.String s where s.toString().contains("hello")`
         <br>`select s from java.lang.String s where s.toString().equals("12")`
         <br>`select s from java.lang.String s where /^\d+$/.test(s.toString())`

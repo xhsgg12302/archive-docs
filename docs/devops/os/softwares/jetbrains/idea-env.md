@@ -13,7 +13,7 @@
 
     - ### 生成serialVersionUID
 
-        ?> [参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/14718197525906-intellij-serialversionuid-generate):
+        > [?] [参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/14718197525906-intellij-serialversionuid-generate):
         <br> File -> Settings -> Editor -> Inspections -> JVM Languages : Find `serialization class without 'serialVersionUID'` and check it.
         <br> Back to the editor, clicks on the class name, ALT + ENTER (Windows), it will prompts the Add serialVersionUID field option.A new serialVersionUID is auto-generated.
 

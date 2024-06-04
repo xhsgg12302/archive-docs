@@ -2,7 +2,7 @@
 
 	1. #### 介绍
 
-		?> Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
+		> [?] Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
 
 	2. #### 功能
 		* 反向代理

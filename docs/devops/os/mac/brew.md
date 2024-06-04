@@ -10,7 +10,7 @@
 
     <!-- tabs:start -->
     #### **1、官网旧版本Formula**
-    ?> gdb example
+    > [?] gdb example
     ```shell
     # ref from: https://stackoverflow.com/questions/62785290/installing-previous-versions-of-a-formula-with-brew-extract
 

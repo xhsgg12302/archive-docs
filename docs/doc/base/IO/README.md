@@ -4,12 +4,12 @@
 
 * ## FileDescriptor
 
-    ?> 文件描述符类的实例充当底层机器特定结构的不透明句柄，表示打开的文件、打开的套接字或另一个字节源或接收器。文件描述符的主要实际用途是创建FileInputStream或FileOutputStream来包含它。
+    > [?] 文件描述符类的实例充当底层机器特定结构的不透明句柄，表示打开的文件、打开的套接字或另一个字节源或接收器。文件描述符的主要实际用途是创建FileInputStream或FileOutputStream来包含它。
     <br><br>它相当于将指定文件的信息与新建的文件指针fp相关联，在 FILE 结构内部记录了这样一些信息：文件内部的当前读写位置、读写报错的记录、文件结尾指示器、缓冲区开始位置的指针、文件标识符、一个计数器（统计拷贝进缓冲区的字节数）等等。后继的操作就可以使用这个指针（而不是文件名）来处理指定文件。[参考](https://wangdoc.com/clang/file)
 
 * ## InputStream
 
-    ?> signature： `public abstract class InputStream implements Closeable {}`
+    > [?] signature： `public abstract class InputStream implements Closeable {}`
 
     ![](/.images/doc/base/io/io-01.png ':size=60%')
 

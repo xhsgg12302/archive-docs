@@ -2,7 +2,7 @@
 
 * ### 配置模板
 
-    ?> `vim $(dirname $(which java))/../jre/lib/logging.properties`
+    > [?] `vim $(dirname $(which java))/../jre/lib/logging.properties`
     <br>`vim ``dirname $(which java)``/../jre/lib/logging.properties`
     ```properties
     ############################################################

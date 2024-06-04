@@ -168,7 +168,7 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
     > [!] 服务器证书中包含：明文信息（若干），一段CA签名（用来验证当前证书的有效性）。例如：PortSwigger的CA公匙信息在cacert.der这个证书中。如果可以解密CA签名，则表示就是PortSwigger这个证书机构签发的。也进一步说明明文信息中的服务器公匙没问题. 
 
 ### 使用curl验证邮件服务器
-?> 使用curl测试126邮箱服务器，smtp相关返回码可以[参考](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes)
+> [?] 使用curl测试126邮箱服务器，smtp相关返回码可以[参考](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes)
 <br> `--ssl-reqd`: 如果交互不支持SSL/TLS。则中断连接，比`--ssl`尝试ssl/tls 更加安全。如果使用带S的scheme,则这个选项不是必须的。
 <br> `--login-options ['AUTH=PLAIN'|'AUTH=LOGIN'|...]` : 设置登录选项[参考1](https://curl.se/libcurl/c/CURLOPT_LOGIN_OPTIONS.html),[参考2](https://www.samlogic.net/articles/smtp-commands-reference-auth.htm),认证方式不一致导致请求发送细节不同。也可以参考服务器返回的（250-AUTH）。
 

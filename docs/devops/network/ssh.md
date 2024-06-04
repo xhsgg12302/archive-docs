@@ -12,7 +12,7 @@
 
             * ##### ssh-copy-id使用
 
-                ?> **(ssh-copy-id)** 是一个可执行的脚本文件，可以把本地的`ssh公钥文件`安装到远程主机对应的账户下。也就是将你的公共密钥填充到一个远程机器上的`authorized_keys`文件中。如果远程机器上存在`authorizedkeys`文件，且`authorizedkeys`有内容，则`ssh-copy-id` 可以将待传公钥 _追加_ 到`authorizedkeys`文件里。它也能够改变远程用户名的权限，如`~/.ssh`和`~/.ssh/authorized_keys`删除其写的权限，所以一般`/.ssh`给予`700`，`/.ssh/authorized_keys`给予`600`权限。
+                > [?] **(ssh-copy-id)** 是一个可执行的脚本文件，可以把本地的`ssh公钥文件`安装到远程主机对应的账户下。也就是将你的公共密钥填充到一个远程机器上的`authorized_keys`文件中。如果远程机器上存在`authorizedkeys`文件，且`authorizedkeys`有内容，则`ssh-copy-id` 可以将待传公钥 _追加_ 到`authorizedkeys`文件里。它也能够改变远程用户名的权限，如`~/.ssh`和`~/.ssh/authorized_keys`删除其写的权限，所以一般`/.ssh`给予`700`，`/.ssh/authorized_keys`给予`600`权限。
                 <br><br>查看帮助：`ssh-copy-id -h`
                 <br>复制命令：`ssh-copy-id [-i [identity_file]] [user@]machine`
 
@@ -27,7 +27,7 @@
 
     + ### SSH隧道
 
-        ?> SSH 除了登录服务器，还有一大用途，就是作为加密通信的中介，充当两台服务器之间的通信加密跳板，使得原本不加密的通信变成加密通信。这个功能称为端口转发（port forwarding），又称 SSH 隧道（tunnel）。
+        > [?] SSH 除了登录服务器，还有一大用途，就是作为加密通信的中介，充当两台服务器之间的通信加密跳板，使得原本不加密的通信变成加密通信。这个功能称为端口转发（port forwarding），又称 SSH 隧道（tunnel）。
         <br><br>端口转发有两个主要作用：
         <br>（1）将不加密的数据放在 SSH 安全连接里面传输，使得原本不安全的网络服务增加了安全性，比如通过端口转发访问 Telnet、FTP 等明文服务，数据传输就都会加密。
         <br>（2）作为数据通信的加密跳板，绕过网络防火墙。

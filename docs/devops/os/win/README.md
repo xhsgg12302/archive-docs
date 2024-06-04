@@ -34,7 +34,7 @@
         <!-- div:title-panel -->
         #### **Index**
         <!-- div:left-panel-50 -->
-        ?> **备用激活码**
+        > [?] **备用激活码**
         ```shell
         # 1、专业版：
         W269N-WFGWX-YVC9B-4J6C9-T83GX
@@ -71,7 +71,7 @@
         NPPR9-FWDCX-D2C8J-H872K-2YT43
         ```
         <!-- div:right-panel-50 -->
-        ?> **激活服务器列表**
+        > [?] **激活服务器列表**
         ```shell
         kms(server:1688)
         kms.03k.org
