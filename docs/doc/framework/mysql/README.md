@@ -42,16 +42,24 @@
 * ## mysql对库和表的概览查询
 
     > [?] 
-    查看所有的数据库：`show databases;`
+    查看服务器版本号：`select version();`
+    <br>查看所有的数据库：`show databases;`
     <br>查看当前使用的库：`select database();`
     <br>查看当前库中存在的表：`show tables;`
     <br>查看其他库中存在的表：`show tables from mysql;`
 
 * ## mysql查看建表语句
 
+    <!-- panels:start -->
+    <!-- div:left-panel-50 -->
     `show create table record_format_demo;`
 
-    ![](/.images/doc/framework/mysql/readme-03.png ':size=40%')
+    ![](/.images/doc/framework/mysql/readme-03.png ':size=100%')
+    <!-- div:right-panel-50 -->
+    `desc employees;`
+
+    ![](/.images/doc/framework/mysql/readme-03-01.png ':size=75%')
+    <!-- panels:end -->
 
 * ## mysql查看数据库中表的状态
     
@@ -59,9 +67,10 @@
     
     ![](/.images/doc/framework/mysql/readme-02.png ':size=50%')
 
-* ## 用于显示当前会话的状态信息，包括当前使用的数据库、服务器版本、连接信息等
+* ## 用于显示当前会话的状态信息
 
-    mysql> `\s`
+    > [?] 包括当前使用的数据库、服务器版本、连接信息等
+    <br>mysql> `\s`
 
     ![](/.images/doc/framework/mysql/readme-01.png)
 

@@ -5,8 +5,11 @@
 
 * ### DML(Data Manipulation Language)
 
-    > [?] 数据操纵语言statements are used for managing data within schema objects. 由DBMS提供，用于让用户或程序员使用，实现对数据库中数据的操作。DML分成交互型DML和嵌入型DML两类。依据语言的级别，DML又可分成过程性DML和非过程性DML两种。 需要commit. SELECT、INSERT、UPDATE、DELETE、MERGE、CALL、EXPLAIN PLAN、LOCK TABLE。
+    > [?] 数据操纵语言statements are used for managing data within schema objects. 由DBMS提供，用于让用户或程序员使用，实现对数据库中数据的操作。DML分成交互型DML和嵌入型DML两类。依据语言的级别，DML又可分成过程性DML和非过程性DML两种。 需要commit. INSERT、UPDATE、DELETE、MERGE、CALL、EXPLAIN PLAN、LOCK TABLE。
 
+* ### DQL(Data Query Language)
+    > [?] 数据查询语言 SELECT、
+    
 * ### DCL(Data Control Language)
     > [?] 数据库控制语言  授权，角色控制等。GRANT 授权、REVOKE 取消授权
 

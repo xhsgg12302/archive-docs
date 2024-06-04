@@ -46,9 +46,10 @@
 
     - ### idea 激活方式2
 
-        https://jetbra.in/s </br>
-        https://3.jetbra.in/  
-        下载相印的jar包，根据vmoptions文件夹配置，然后放入激活码。激活配置目录  在 application 下 content, clion.vmoptions
+        > [?] https://jb-server.211678.top/, https://riid7yr8pux.feishu.cn/docx/TxGhdiMg1oDVbexEuUKcQG7nnYe
+        <br>https://jetbra.in/s
+        <br>https://3.jetbra.in/  
+        <br>下载相印的jar包，根据vmoptions文件夹配置，然后放入激活码。激活配置目录  在 application 下 content, clion.vmoptions
 
         <br><span style="font-size: 2em;color: red">激活码记录：</span>
         <!-- tabs:start -->

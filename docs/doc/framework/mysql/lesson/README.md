@@ -14,5 +14,17 @@
         ![](/.images/doc/framework/mysql/lesson/readme-lesson-01.png ':size=96%')
         <!-- panels:end -->
 
+    + ### 语法规范
+
+        > [!NOTE]
+        <br>`1). ` 不区分大小写，但建议<span style='color: blue'>关键字大写，表名，列名小写</span>
+        <br>`2). ` 每条命令最好用分号结尾
+        <br>`3). ` 每条命令可以根据需要进行`缩进或者换行`
+        <br>`4). ` 注释：单行注释`# 注释文字`，单行注释`-- 注释文字`，多行注释`/* 注释文字 */`
+
+    + ### 数据库ER图
+
+        ![](/.images/doc/framework/mysql/lesson/readme-lesson-02.png ':size=90% :align=center')
+
 * ## Reference
     + https://www.bilibili.com/video/BV12b411K7Zu
