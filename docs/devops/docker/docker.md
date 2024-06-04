@@ -65,7 +65,7 @@
             "credsStore": "desktop"
         }
         ```
-        !> 可以使用命令`file $(which docker-credential-desktop)`查看工具位置
+        > [!] 可以使用命令`file $(which docker-credential-desktop)`查看工具位置
         |ope    |  <div style="width: 610px">payload</div>   |   output  |
         -|-|-
         |list   | | {"https://gitlab.pixdaddy.com:5050":"w****","https://harbor.meixiu.mobi":"zh****",</br>"https://registry.cn-hangzhou.aliyuncs.com":"5127****@qq.com"} |
@@ -380,7 +380,7 @@
             * [mysql install docker](/docs/doc/framework/mysql/install.md?id=压缩包安装)
         
     5. ### 搭建chatgpt
-        !> 通过token调用openai或别的厂商的API的typescript的前端项目，并非部署模型直接生成。
+        > [!] 通过token调用openai或别的厂商的API的typescript的前端项目，并非部署模型直接生成。
 
         ```shell
         docker run -d --rm --name chatgpt -p 4000:3000 \

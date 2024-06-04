@@ -43,7 +43,7 @@
     * POD与service之间的通信，IPVS，iptables，
 
 ## 构建K8S集群
-!> ommited
+> [!] ommited
 
 ## 资源清单
 * ### K8s中的资源

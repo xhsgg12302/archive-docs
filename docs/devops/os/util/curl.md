@@ -165,7 +165,7 @@ curl --connect-timeout 1 telnet://wtfu.site:30000
         2. [看懂HTTPS、证书机构（CA）、证书、数字签名、私钥、公钥](https://yuhongjun.github.io/tech/2020/11/30/%E7%9C%8B%E6%87%82HTTPS-%E8%AF%81%E4%B9%A6%E6%9C%BA%E6%9E%84-CA-%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D-%E7%A7%81%E9%92%A5-%E5%85%AC%E9%92%A5.html#%E8%BA%AB%E4%BB%BD%E8%AF%86%E5%88%AB%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6)
         3. [HTTPS 客户端验证 服务端证书流程](http://t.zoukankan.com/kabi-p-6200434.html)
     - #### 总结
-    !> 服务器证书中包含：明文信息（若干），一段CA签名（用来验证当前证书的有效性）。例如：PortSwigger的CA公匙信息在cacert.der这个证书中。如果可以解密CA签名，则表示就是PortSwigger这个证书机构签发的。也进一步说明明文信息中的服务器公匙没问题. 
+    > [!] 服务器证书中包含：明文信息（若干），一段CA签名（用来验证当前证书的有效性）。例如：PortSwigger的CA公匙信息在cacert.der这个证书中。如果可以解密CA签名，则表示就是PortSwigger这个证书机构签发的。也进一步说明明文信息中的服务器公匙没问题. 
 
 ### 使用curl验证邮件服务器
 ?> 使用curl测试126邮箱服务器，smtp相关返回码可以[参考](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes)

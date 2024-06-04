@@ -35,7 +35,7 @@
 
     2. #### Groovy的字符串
 
-        !> Groovy中字符串分为三种，我们一个个来看。
+        > [!] Groovy中字符串分为三种，我们一个个来看。
 
         + 单引号字符串，单引号字符串不会对$号进行转义，原样输出，如下：
 
@@ -637,7 +637,7 @@
         ![](/.images/devops/build/gradle/gradle-10.png ':size=60%')
         ![](/.images/devops/build/gradle/gradle-11.png ':size=38%')
 
-        !> 注意：root build.gradle中没有出现**beforeProject,afterProject**是因为需要解析配置这个文件后才会给gradle添加回调监听。如果放在`settings.gradle`就正常了。
+        > [!] 注意：root build.gradle中没有出现**beforeProject,afterProject**是因为需要解析配置这个文件后才会给gradle添加回调监听。如果放在`settings.gradle`就正常了。
 
 
 * ### Gradle任务
@@ -695,7 +695,7 @@
 
         ![](/.images/devops/build/gradle/gradle-17.png ':size=60%')
 
-        !> 此外`doLast`还有另外一些写法:
+        > [!] 此外`doLast`还有另外一些写法:
 
         ```gradle
         // 1.
@@ -819,7 +819,7 @@
         }
         ```
 
-        !> [tasks](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.Project.html#org.gradle.api.Project:tasks) 为Project对象的一个属性`TaskContainer tasks (read-only)`。所以可以通过[TaskContainer](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.tasks.TaskContainer.html) 类的方法`create`创建一个任务。
+        > [!] [tasks](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.Project.html#org.gradle.api.Project:tasks) 为Project对象的一个属性`TaskContainer tasks (read-only)`。所以可以通过[TaskContainer](https://docs.gradle.org/5.6.4/dsl/org.gradle.api.tasks.TaskContainer.html) 类的方法`create`创建一个任务。
 
 * ### Gradle任务的增量构建
 

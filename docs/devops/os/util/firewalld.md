@@ -15,7 +15,7 @@
     |开启自启服务| `chkconfig iptables on` |
 
 * ### 格式 （-t没有 默认filter）
-!> iptables [-t 表名] 操作选项 [链名] [条件] [-j 控制类型]
+> [!] iptables [-t 表名] 操作选项 [链名] [条件] [-j 控制类型]
 
 * ### 样例
     ```shell

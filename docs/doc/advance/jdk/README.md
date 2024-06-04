@@ -7,7 +7,7 @@
             ?> ~special：macosx[Sonoma]安装特殊版本[1.6.0_65](https://updates.cdn-apple.com/2019/cert/041-88384-20191011-3d8da658-dca4-4a5b-b67c-26e686876403/JavaForOSX.dmg)，oracle没有提供~ 。
             <br>上面的没有源码，[参考](https://stackoverflow.com/questions/4011002/java-eclipse-on-macosx-where-is-the-src-zip) 改用[`Java for OS X 2013-005 Developer Package`](https://developer.apple.com/download/all/?q=java)，对应的JAVA版本为 **1.6.0_65-b14-462.jdk** 。
 
-            !> Please be aware that IntelliJ IDEA 2022.3 won’t support running and testing Java applications that use Java 6. Java 6 reached “end of life” status several years ago
+            > [!] Please be aware that IntelliJ IDEA 2022.3 won’t support running and testing Java applications that use Java 6. Java 6 reached “end of life” status several years ago
             <br>对于JDK1.6，可以使用[`IDEA 2022.2`](https://download-cdn.jetbrains.com/idea/ideaIU-2022.2.5.dmg)，[参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/14203092325906-Which-version-of-Intellij-IDEA-works-with-Java-6-and-how-i-get-it)
 
             + https://mirrors.huaweicloud.com/java/jdk/

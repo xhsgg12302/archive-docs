@@ -1,6 +1,6 @@
 * ## Intro(HSDB)
 
-    !> `-XX:-UseCompressedOops`oops: ordinary object pointer，普通对象指针压缩，例如Object o = new Object();其中o就是个指向new Object()对象的指针，o在指针压缩前占用8个字节，在指针压缩后占用4个字节。
+    > [!] `-XX:-UseCompressedOops`oops: ordinary object pointer，普通对象指针压缩，例如Object o = new Object();其中o就是个指向new Object()对象的指针，o在指针压缩前占用8个字节，在指针压缩后占用4个字节。
     <br>`-XX:-UseCompressedClassPointers`压缩Klass Pointer，压缩前8个字节，压缩后4个字节。
 
     ?> `sudo java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB`

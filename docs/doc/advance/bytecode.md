@@ -2,7 +2,7 @@
 
     <!-- panels:start -->
     <!-- div:left-panel-55 -->
-    !> 参考
+    > [!] 参考
     <br>[JDK8 JVM虚拟机实现规范 Chapter 4. The class File Format](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1)，包括[常量池](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4)数据结构
     <br>[JDK8 JVM虚拟机实现规范 Chapter 6. The Java Virtual Machine Instruction Set](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html)
     <br><br>工具：
@@ -127,7 +127,7 @@
         | u2             | attributes_count                       | 列表中包含的attribute_info的数量 |
         | attribute_info | attributes[attributes_count]           | 属性可以出现在class文件的很多地方，而不只是出现在attributes列表里。<br>如果是attributes表里的属性，那么它就是对整个class文件所对应的类或者接口的描述；<br>如果出现在fileds的某一项里，那么它就是对该字段额外信息的描述；<br>如果出现在methods的某一项里，那么它就是对该方法额外信息的描述。 |
 
-        !> ***constant_pool*** :
+        > [!] ***constant_pool*** :
         <br><br> 在class文件中， 位于版本号后面的就是常量池相关的数据项。 常量池是class文件中的一项非常重要的数据。 常量池中存放了文字字符串， 常量值， 当前类的类名， 字段名， 方法名， 各个字段和方法的描述符， 对当前类的字段和方法的引用信息， 当前类中对其他类的引用信息等等。 常量池中几乎包含类中的所有信息的描述， class文件中的很多其他部分都是对常量池中的数据项的引用，比如后面要讲到的this_class, super_class, field_info, attribute_info等， 另外字节码指令中也存在对常量池的引用， 这个对常量池的引用当做字节码指令的一个操作数。此外，常量池中各个项也会相互引用。
         <br><br>常量池是一个类的结构索引，其它地方对“对象”的引用可以通过索引位置来代替，我们知道在程序中一个变量可以不断地被调用，要快速获取这个变量常用的方法就是通过索引变量。这种索引我们可以直观理解为“内存地址的虚拟”。我们把它叫静态池的意思就是说这里维护着经过编译“梳理”之后的相对固定的数据索引，它是站在整个JVM（进程）层面的共享池。
         <br><br>class文件中的项constant_pool_count的值为1, 说明每个类都只有一个常量池。 常量池中的数据也是一项一项的， 没有间隙的依次排放。常量池中各个数据项通过索引来访问， 有点类似与数组， 只不过常量池中的第一项的索引为1, 而不为0, 如果class文件中的其他地方引用了索引为0的常量池项， 就说明它不引用任何常量池项。class文件中的每一种数据项都有自己的类型， 相同的道理，常量池中的每一种数据项也有自己的类型。 常量池中的数据项的类型如下表：

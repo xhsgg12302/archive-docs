@@ -17,7 +17,7 @@
 
         - #### 摘抄代码
 
-            !> jdk代码来自【openjdk 23-internal】
+            > [!] jdk代码来自【openjdk 23-internal】
 
             <!-- tabs:start -->
             ##### **FileInputStream.java**

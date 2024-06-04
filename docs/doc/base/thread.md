@@ -80,7 +80,7 @@
         <!-- div:title-panel -->
         #### 1. 重写run方法
         <!-- div:left-panel-40 -->
-        !> 重写`Runnable`的run方法相当于自定义target，start启动后调用start0()native方法给线程分配运行资源，近而重新调度到`Thread`的run方法。并传递给`Runnbale target`中的run方法。
+        > [!] 重写`Runnable`的run方法相当于自定义target，start启动后调用start0()native方法给线程分配运行资源，近而重新调度到`Thread`的run方法。并传递给`Runnbale target`中的run方法。
         <br><br>因为这个是直接通过Thread类启动的。所以run方法没有被重载。所以会调度到target --> run()方法中。
         <!-- div:right-panel-60 -->
         ```java
@@ -101,7 +101,7 @@
         <!-- div:title-panel -->
         #### 2. 继承Thread
         <!-- div:left-panel-40 -->
-        !> 而继承的线程和刚才的实现接口不太一样的地方是：不需要target，也无需调用target的 run()方法。并且整个运行过程中target为NULL.
+        > [!] 而继承的线程和刚才的实现接口不太一样的地方是：不需要target，也无需调用target的 run()方法。并且整个运行过程中target为NULL.
         <br>因为整个Thread对象run方法被子类`PrimeThread`给重写了。
 
         <!-- div:right-panel-60 -->
@@ -125,7 +125,7 @@
         <!-- div:title-panel -->
         #### 1. sleep
         <!-- div:left-panel-40 -->
-        !> 使当前执行的线程在指定的毫秒数内休眠(暂时停止执行)，这取决于系统计时器和调度器的精度和准确性。线程不会失去任何监视器的所有权(意味着不会释放锁)。
+        > [!] 使当前执行的线程在指定的毫秒数内休眠(暂时停止执行)，这取决于系统计时器和调度器的精度和准确性。线程不会失去任何监视器的所有权(意味着不会释放锁)。
         <!-- div:right-panel-60 -->
         ```java
         // Causes the currently executing thread to sleep (temporarily cease execution) 
@@ -212,7 +212,7 @@
         <!-- panels:end -->
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        !> `wait,notify`容易造成的死锁
+        > [!] `wait,notify`容易造成的死锁
         <br> 解释：假设有四个线程，C1,C2,P1,P2 正在锁池
         <br><br> 现在C1，拿到锁，没数据，进入等待池,C2 同理进入等待池
         <br><br> P1 拿到锁，生产，notify C1进入锁重新争取。P1退出。此时P2也在。若P2拿到锁，进入等待池。此时P2,C2都在等待池。
@@ -226,7 +226,7 @@
         <!-- div:title-panel -->
         #### 4. interrupted/interrupt/isInterrupted
         <!-- div:left-panel-40 -->
-        !> 1). interrupt()用于设置中断标志。如果在碰见以下情况:清除标志位，并且抛出一个`InterruptedException`异常
+        > [!] 1). interrupt()用于设置中断标志。如果在碰见以下情况:清除标志位，并且抛出一个`InterruptedException`异常
         <br> 此线程正在调用一个对象的`wait()`,`join()`,或者`sleep()`方法。等等...
         <br><br>2). 静态方法，获取当前线程的中断标志，并给native方法传参数`true`清除标志位。
         <br>换句话说，如果连续调用两次这个方法。则第二次会返回`false`。
@@ -321,7 +321,7 @@
         <!-- div:left-panel -->
         ?> 2). 可见性和有序性实现：查看加入`volatile`关键字编译后的汇编代码，发现多了一个`lock`前缀指令。它实际上相当于一个`内存屏障`（也称内存栅栏）,提供三个功能。
         <!-- div:right-panel -->
-        !> 1. 它确保指令重排时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面，即在执行到内存屏障这句指令时，在它前面的错作已经全部完成。
+        > [!] 1. 它确保指令重排时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面，即在执行到内存屏障这句指令时，在它前面的错作已经全部完成。
         <br>2. 它会强制将对缓存的修改立即写入主存。
         <br>3. 如果是写操作，它会导致其他cpu中对应的缓存行无效。
         <!-- panels:end -->
@@ -437,7 +437,7 @@
         ThreadLocal.ThreadLocalMap threadLocals = null;
         ```
         <!-- panels:end -->
-        !> 1). 主要是通过ThreadLocal对象给Thread中的属性`ThreadLocalMap`赋值。
+        > [!] 1). 主要是通过ThreadLocal对象给Thread中的属性`ThreadLocalMap`赋值。
         <br>但是因为这个属性`ThreadLocalMap`是默认类型，也只允许同包下的类可以访问。所以外部[我们编写的代码]不可以直接访问这个属性。
         <br><br>2). ThreadLocal造成内存泄露:
         <br>继承`WeakReference`的目的是为了调用`super(k)`，将这个Entry中的ThreadLocal类型的key进行虚化。

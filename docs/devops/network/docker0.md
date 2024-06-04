@@ -18,7 +18,7 @@
 
 
 ## 验证docker0->eth0原理
-!> 当前操作系统的iptables服务是关闭的。但是不影响netfilter以及 ip_forward 规则。
+> [!] 当前操作系统的iptables服务是关闭的。但是不影响netfilter以及 ip_forward 规则。
 
 ![](/.images/devops/network/docker0/docker0-01.png)
 

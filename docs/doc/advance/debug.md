@@ -32,7 +32,7 @@
     <br>`Attach`: 此种模式下，server=y,address=port。被调试的代码端充当服务器开放端口等待`jdi客户端`去连接。
     <br>`Listen`: 此种模式下，server=n,address=ip:port。应当先在ip机器上启动`jdi客户端`去监听端口port，然后启动需要被调试的代码。例如： ***[IDEA debug按钮采用的方式](#idea本地debug按钮采用listen方式debug)***
 
-    !> 需要注意的是：suspend=y/n. 指定是否被调试JVM需要被挂起。
+    > [!] 需要注意的是：suspend=y/n. 指定是否被调试JVM需要被挂起。
     <br>&nbsp;&nbsp;&nbsp;attach模式下： 如果调试简单application，则最好是`suspend=y`,这样的话不至于还没attach上targetVM,程序已经运行完了。如果是web应用，因为一直在运行。所以`suspend=n`也无妨。后续只要attach上targetVM就可以对targetVM进行控制。
     <br>&nbsp;&nbsp;&nbsp;listen模式下： 感觉没有什么用。启动targetVM 的时候就要与指定ip:port的`jdi客户端`进行连接。比如：idea 设置远程debug 为listen模式。先启动监听本地localhost:8800.顺便打上断点。然后再启动需要被调试的JVM，启动的时候不管`suspend=y/n`,都会步入断点。
 
@@ -136,7 +136,7 @@
 
         1. 源代码
 
-            !> 修改AbstractLauncher.java源代码,利用`Runtime.getRuntime().exec(String[] cmdarray, String[] envp, File dir)`传入directory。显然不方便。
+            > [!] 修改AbstractLauncher.java源代码,利用`Runtime.getRuntime().exec(String[] cmdarray, String[] envp, File dir)`传入directory。显然不方便。
         
         2. 满足targetVM
 

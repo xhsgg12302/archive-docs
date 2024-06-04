@@ -1,6 +1,6 @@
 ## AUTO 
 
-!> 使用密码自动登录
+> [!] 使用密码自动登录
 
 ### /usr/local/bin/ssh
 ```shell

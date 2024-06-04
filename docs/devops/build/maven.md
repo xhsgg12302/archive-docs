@@ -630,7 +630,7 @@
 
     + ### maven-release-plugin
 
-        !> 需要注意release插件直接使用-D系统变量不会生效，需要通过 -Darguments="" 传递。[参见引用](https://stackoverflow.com/questions/28948048/how-to-make-maven-release-plugin-skip-tests)。
+        > [!] 需要注意release插件直接使用-D系统变量不会生效，需要通过 -Darguments="" 传递。[参见引用](https://stackoverflow.com/questions/28948048/how-to-make-maven-release-plugin-skip-tests)。
         
         ```shell
         mvn -Darguments="-Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dswagger2markup.skip=true -Dasciidoctor.skip=true -DautoVersionSubmodules=true -DscmCommentPrefix='[3.0.0-M5]' -DscmDevelopmentCommitComment='@{prefix} next development iteration @{releaseLabel}...' -DscmReleaseCommitComment='@{prefix} release @{releaseLabel}...'" org.apache.maven.plugins:maven-release-plugin:3.0.0-M5:clean
@@ -1208,7 +1208,7 @@
 
     + ### gencode-maven-plugin
 
-        !> [源代码](https://github.com/12302-haohuo/haohuo-component/tree/master/hh-cpt-maven-plugin/gencode-maven-plugin)
+        > [!] [源代码](https://github.com/12302-haohuo/haohuo-component/tree/master/hh-cpt-maven-plugin/gencode-maven-plugin)
 
         ?> **version:1.4.3**
         <br> `<pluginGroups><pluginGroup>com.haohuo.framework</pluginGroup></pluginGroups>`

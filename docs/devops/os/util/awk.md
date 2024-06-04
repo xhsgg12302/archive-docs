@@ -1,4 +1,4 @@
-!> awk (Alfred Aho 、Peter Weinberger 和 Brian Kernighan):
+> [!] awk (Alfred Aho 、Peter Weinberger 和 Brian Kernighan):
     <br /> 样式扫描和处理语言，它允许您创建简短的程序。读取输入文件，为数据排序，处理数据，对输入执行计算以及生成报表等。其中语法方面有借鉴C语言。
  
 ## 一.语法格式：

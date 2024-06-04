@@ -1,6 +1,6 @@
 # hashcat 简单使用
 
-!> <https://github.com/hashcat/hashcat.git>
+> [!] <https://github.com/hashcat/hashcat.git>
 
 * ## rar crack
 

@@ -4,7 +4,7 @@
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
-    !> 右上java源代码，右下常量池，左下为Code方法块。
+    > [!] 右上java源代码，右下常量池，左下为Code方法块。
     ```java
     {
         public _jvm.classPrase.Student(int, java.lang.String, java.lang.String);
@@ -251,7 +251,7 @@
 
         - #### LocalVariableTable
 
-            !> [局部变量表](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.14)：在编译期间可以加`-g:{none,lines,vars,source}`参数生成相关调试信息。Code块可选的属性。可以用来debug,调试器可以使用它来确定方法执行期间给定局部变量的值。
+            > [!] [局部变量表](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.14)：在编译期间可以加`-g:{none,lines,vars,source}`参数生成相关调试信息。Code块可选的属性。可以用来debug,调试器可以使用它来确定方法执行期间给定局部变量的值。
             <!-- panels:start -->
             <!-- div:left-panel-50 -->
             ```java
@@ -370,7 +370,7 @@
         #### into-Student.construct()
         ?> [`invokespecial #10`](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokespecial)：调用#10这个常量所代表的方法，即Student.\<init\>()这个方法
 
-        !> \<init\>()方法，是编译器将调用父类的\<init\>()的语句、构造代码块、实例字段赋值语句，以及自己编写的构造方法中的语句整合在一起生成的一个方法。保证调用父类的\<init\>()方法在最开头，自己编写的构造方法语句在最后，而构造代码块及实例字段赋值语句按出现的顺序按序整合到\<init\>()方法中。
+        > [!] \<init\>()方法，是编译器将调用父类的\<init\>()的语句、构造代码块、实例字段赋值语句，以及自己编写的构造方法中的语句整合在一起生成的一个方法。保证调用父类的\<init\>()方法在最开头，自己编写的构造方法语句在最后，而构造代码块及实例字段赋值语句按出现的顺序按序整合到\<init\>()方法中。
         <br><br>注意到Student.\<init\>()方法的最大操作数栈深度为3，局部变量表大小为4。 从dup到ldc #9这四条指令向栈中添加了4个数据，虽然定义中只显式地定义了传入3个参数，而实际上会隐含传入一个当前对象的引用作为第一个参数，所以四个参数依次为this，age，name，sid。`参数传递`后调用了Student.\<init\>()方法，会创建该方法的栈帧，并入栈。栈帧中的局部变量表的第0到4个slot分别保存着入栈的那四个参数值。
 
         <!-- div:left-panel-61 -->

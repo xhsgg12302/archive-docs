@@ -27,7 +27,7 @@
     ![](/.images/devops/os/mac/brew-search-01.png)
 
     #### **2、自定义仓库**
-    !> brew安装
+    > [!] brew安装
     ```shell
     # 修改了 max-connection-per-server from 16 to 128,
     # 参考： https://ntsd.dev/aria2-max-connections-per-server/
@@ -46,7 +46,7 @@
     aria2c -s128 -k20M https://releases.ubuntu.com/22.04/ubuntu-22.04.2-desktop-amd64.iso
     ```
 
-    !> ubuntu安装
+    > [!] ubuntu安装
     ```shell
     # Ubuntu20.04 install aria2c from source code
     git clone https://github.com/aria2/aria2.git

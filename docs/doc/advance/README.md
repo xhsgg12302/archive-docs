@@ -1,6 +1,6 @@
 * ## 类加载器
 
-    !> 类加载器从 JDK 1.0 就出现了，最初只是为了满足 Java Applet（已经被淘汰） 的需要。后来，慢慢成为 Java 程序中的一个重要组成部分，赋予了 Java 类可以被动态加载到 JVM 中并执行的能力。
+    > [!] 类加载器从 JDK 1.0 就出现了，最初只是为了满足 Java Applet（已经被淘汰） 的需要。后来，慢慢成为 Java 程序中的一个重要组成部分，赋予了 Java 类可以被动态加载到 JVM 中并执行的能力。
 
     + ### 定义
 
@@ -117,7 +117,7 @@
         ?> JVM 启动的时候，并不会一次性加载所有的类，而是根据需要去动态加载。也就是说，大部分类在具体用到的时候才会去加载，这样对内存更加友好。
         <br><br>对于已经加载的类会被放在 ClassLoader 中。在类加载的时候，系统会首先判断当前类是否被加载过。已经被加载的类会直接返回，否则才会尝试加载。也就是说，对于一个类加载器来说，相同二进制名称的类只会被加载一次。
 
-        !> 通过注释可以看出：
+        > [!] 通过注释可以看出：
         <br>JVM 会自己调用`addClass`方法用来记录当前类加载器已经加载的类。
         <!-- div:right-panel-60 -->
         ```java
@@ -147,7 +147,7 @@
         <br><br>2). ___ExtClassLoader(扩展类加载器)___ ：主要负责加载`%JRE_HOME%/lib/ext`目录下的 jar 包和类以及被`java.ext.dirs`系统变量所指定的路径下的所有类。
         <br><br>3). ___AppClassLoader(应用程序类加载器)___ ：面向我们用户的加载器，负责加载当前应用`classpath`下的所有 jar 包和类。
 
-        !> 属性parent是通过`ClassLoader(Void unused, ClassLoader parent)`方法传进去的。`AppClassLoader`和`ExtClassLoader`并非继承关系。
+        > [!] 属性parent是通过`ClassLoader(Void unused, ClassLoader parent)`方法传进去的。`AppClassLoader`和`ExtClassLoader`并非继承关系。
 
         ![](/.images/doc/advance/advance/class-loader-03.png ':size=66%')
         ![](/.images/doc/advance/advance/class-loader-02.png ':size=33%')
@@ -158,9 +158,9 @@
         <!-- div:left-panel-40 -->
         ?> 参考[定义<sup>5). </sup>](#定义)。如果一个类加载器收到了类加载器的请求，它首先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类时，子加载类才会尝试自己去加载)。
 
-        !> 自定义加载器的话，需要继承 ClassLoader 。如果我们不想打破双亲委派模型，就重写 ClassLoader 类中的 findClass() 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 loadClass() 方法。
+        > [!] 自定义加载器的话，需要继承 ClassLoader 。如果我们不想打破双亲委派模型，就重写 ClassLoader 类中的 findClass() 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 loadClass() 方法。
 
-        !> 由于双亲委派模型以及类加载器的一些特性(使用当前类加载器去加载引用类)，会出现一些情况。
+        > [!] 由于双亲委派模型以及类加载器的一些特性(使用当前类加载器去加载引用类)，会出现一些情况。
         <br><br>比如：
         <br> 使用当前类加载器`CustomClassLoader1`去加载子类`CustomClassLoader2`管理路径下的class。会找不到类，以至于加载不了。[代码实现]()
         <br><br>解决办法：
@@ -208,7 +208,7 @@
         <!-- panels:end -->
 
     + ### 初始化顺序
-        !> 父，子，静态代码块  -- 和静态变量  等级初始化
+        > [!] 父，子，静态代码块  -- 和静态变量  等级初始化
         <br>父，子，普通代码块  -- 和普通变量  -- 构造方法（最后）  等级初始化
         <br>继续new Parent()，只执行父类的普通属性赋值和普通代码块，最后父类构造方法
         <br>继续new Child(), 执行父类的普通属性和代码块，构造方法，然后是子类的
@@ -278,7 +278,7 @@
 
     + ### 简介
 
-        !> 动态代理就是，在程序运行期，创建目标对象的代理对象，并对目标对象中的方法进行功能性增强的一种技术。
+        > [!] 动态代理就是，在程序运行期，创建目标对象的代理对象，并对目标对象中的方法进行功能性增强的一种技术。
         <br>在生成代理对象的过程中，目标对象不变，代理对象中的方法是目标对象方法的增强方法。
         <br>可以理解为运行期间，对象中方法的动态拦截，在拦截方法的前后执行功能操作。
 
@@ -949,7 +949,7 @@
             ```
             <!-- panels:end -->
 
-            !> 新老版本之间的区别就是，不用手动注册驱动了。新版本可以直接通过`DriverManager.getConnection()`获取连接，只要classpath存在合适的驱动包。
+            > [!] 新老版本之间的区别就是，不用手动注册驱动了。新版本可以直接通过`DriverManager.getConnection()`获取连接，只要classpath存在合适的驱动包。
             <br>比如`mysql-connector-java-5.1.34.jar`或者`sqljdbc4.jar`。之所以可以这样，是因为：
             <br><br>1). 调用`DriverManager.getConnection()`代码会进行`DriverManager`类加载。而`DriverManager`属于java.sql.包。根据类加载器的特性，这个类会被`BootstrapClassLoader`进行加载并且会初始化静态方法。近而调用`loadInitialDrivers()`方法。
             <br><br>2). 方法里面分为两部分，一个是获取系统属性`jdbc.drivers`的字符串进行:分割，使用`Class.forName(aDriver, true,ClassLoader.getSystemClassLoader());`进行加载并 ___初始化___ ，注意使用的是`ClassLoader.getSystemClassLoader()`系统类加载器，因为`BootstrapClassLoader`本身加载不了。

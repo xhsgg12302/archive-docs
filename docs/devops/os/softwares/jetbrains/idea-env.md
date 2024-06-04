@@ -27,7 +27,7 @@
 
     - ### 登录github授权总是失败
 
-        !> 此次的原因是因为浏览器代理使用http:8889,而idea使用socks5:1089
+        > [!] 此次的原因是因为浏览器代理使用http:8889,而idea使用socks5:1089
 
     - ### idea gradle create separate module per source set in gradle.xml
 

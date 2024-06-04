@@ -86,7 +86,7 @@
 
     ./demo_use_static
     ```
-    !> static 中 删除中间对象，比如`rm -f libhello-static.a libhello-static.o` 后，编译出来的 demo_use_static也可以正常执行。
+    > [!] static 中 删除中间对象，比如`rm -f libhello-static.a libhello-static.o` 后，编译出来的 demo_use_static也可以正常执行。
 
     ![](/.images/devops/build/gcc/lib/lib-static-01.png) ![](/.images/devops/build/gcc/lib/lib-static-02.png '02 :size=40%')
 
