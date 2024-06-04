@@ -21,7 +21,8 @@
         <br>`select version();`
         <br><br>7.起别名 
         <br>① 便于理解，② 如果查询字段有重名，使用别名可以区分开来，③ 别名中有特殊字符使用引号扩起来
-        <br>`select 100%98 as 结果;`,`select last_name as 姓,first_name as 名 from employees limit 10;`
+        <br>`select 100%98 as 结果;`
+        <br>`select last_name as 姓,first_name as 名 from employees limit 10;`
         <br><br>8.去重
         <br># case: 查询员工表中涉及到的所有的部门编号
         <br>`select distinct department_id from employees;`
