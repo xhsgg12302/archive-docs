@@ -91,7 +91,7 @@
 
     + ### 05-Emoji表示
 
-        ?> [参考](https://gist.github.com/rxaviers/7360908)
+        > [?] [参考](https://gist.github.com/rxaviers/7360908)
 
         :100: :stuck_out_tongue_closed_eyes: :sweat_smile: :neckbeard: :imp: :star: :sweat_drops: :fire:
         <!-- 
@@ -104,12 +104,12 @@
     
     + ### 06-反斜杠转义
 
-        ?> 反斜杠 转义 `` # https://github.com/docsifyjs/docsify/issues/1881
+        > [?] 反斜杠 转义 `` # https://github.com/docsifyjs/docsify/issues/1881
         <br>single backslash (status: opening)
 
     + ### 07-段落逃逸
 
-        ?> 如果`end of the each li`需要跳出bullet,则需添加一空白行。需要注意空白行, 得预留一个跟外部顶格一样多的空格。比如`start of file text` 前面有四个空格,所以要添加有四个空格的空白行。
+        > [?] 如果`end of the each li`需要跳出bullet,则需添加一空白行。需要注意空白行, 得预留一个跟外部顶格一样多的空格。比如`start of file text` 前面有四个空格,所以要添加有四个空格的空白行。
         
         * paragraph
 
@@ -135,7 +135,7 @@
 
         ---
 
-        ?> 两个紧挨着的 `panel`，如果第一个有层级关系，比如在第二个开始之前添加前一行添加一个空格。并且添加换一个类似分割线(---)的东西。
+        > [?] 两个紧挨着的 `panel`，如果第一个有层级关系，比如在第二个开始之前添加前一行添加一个空格。并且添加换一个类似分割线(---)的东西。
         <!-- panels:start -->
         <!-- div:title-panel -->
         ##### Coordinating Tasks
@@ -209,7 +209,7 @@
 
     + ### 09-查看mermaid版本号
 
-        ?> [参考](https://github.com/orgs/community/discussions/37498#discussioncomment-7152968)
+        > [?] [参考](https://github.com/orgs/community/discussions/37498#discussioncomment-7152968)
         
         ```mermaid
         info
@@ -221,10 +221,10 @@
         <!-- div:title-panel -->
         ##### Hello World
         <!-- div:left-panel-40 -->
-        ?> If you are on widescreen, checkout the *right* panel, *right* there →
+        > [?] If you are on widescreen, checkout the *right* panel, *right* there →
         
         <!-- div:right-panel-60 -->
-        ?> This is an example panel.
+        > [?] This is an example panel.
         <br>You can see it's usage in practice in the docs listed below:
         
         - [Fairlay API](https://fairlay.com/api)
@@ -282,9 +282,9 @@
         > An alert of type 'attention' using locality style 'flat'.
         <!-- panels:end -->
 
-        ?> 扩展样式1
+        > [?] 扩展样式1
 
-        !> 扩展样式2
+        > [!] 扩展样式2
 
     + ### 12-折叠展开
 
