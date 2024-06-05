@@ -9,6 +9,16 @@
     <br>[innodb-java-reader](https://github.com/alibaba/innodb-java-reader)
     <br>[innodb_ruby](https://github.com/jeremycole/innodb_ruby)
 
+    - ### frm-parser
+
+        > [!NOTE] [开源仓库](https://github.com/fpspammers/frm-parser)
+        <br>使用frm解析工具对`/tmp/mysql/demos/record_format_demo.frm` ,进行分析，解析结果如下。
+
+        > [!ATTENTION]
+        1). 对代码稍作修改，使用cmake构建，修改文件位置为绝对路径，`show_tables()`,`show_db()`函数中的文件位置也需要改变。
+
+        ![](/.images/doc/framework/mysql/mysql-analyze-tool-01.png ':size=60%')
+
     - ### innodb-java-reader
 
         > [!NOTE][开源仓库](https://github.com/alibaba/innodb-java-reader)
