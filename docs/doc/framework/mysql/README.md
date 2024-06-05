@@ -6,10 +6,7 @@
         - https://sucs.swan.ac.uk/~grepwood/teamx/frm_2.html
 
     2. ### .frm 解析工具
-        > [?] 
-        [dbsake(a(s)wiss-(a)rmy-(k)nif(e) for MySQL)](https://dbsake.readthedocs.io/en/latest/readme.html),&nbsp;&nbsp;&nbsp; [github](https://github.com/abg/dbsake)
-        <br> [mysqlfrm](https://github.com/mysql/mysql-utilities/blob/master/scripts/mysqlfrm.py), &nbsp;&nbsp;&nbsp;[download archive](https://downloads.mysql.com/archives/utilities/),&nbsp;&nbsp;&nbsp; [mysql-utilities pdf](https://downloads.mysql.com/docs/mysql-utilities-1.5-en.pdf)
-        <br> [frm-parser](https://github.com/fpspammers/frm-parser)
+        > [!] [解析工具参见](./analyze_tools.md)
 
     3. ### .frm 参考链接
 
