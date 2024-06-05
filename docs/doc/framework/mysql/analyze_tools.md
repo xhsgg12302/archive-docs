@@ -19,6 +19,30 @@
 
         ![](/.images/doc/framework/mysql/mysql-analyze-tool-01.png ':size=60%')
 
+    - ### dbsake
+
+        > [!NOTE] 参考[官方文档](https://dbsake.readthedocs.io/en/latest/readme.html#quickstart)进行安装测试。自定义安装位置,比如：`cd /usr/local/bin`
+        <br>`curl -s get.dbsake.net > dbsake`
+        <br>`chmod u+x dbsake`
+        <br>`dbsake -?`
+
+        <!-- panels:start -->
+        <!-- div:left-panel-35 -->
+        ![](/.images/doc/framework/mysql/mysql-analyze-tool-02.png ':size=100%')
+        <!-- div:right-panel-52 -->
+        ![](/.images/doc/framework/mysql/mysql-analyze-tool-03.png ':size=100%')
+        <!-- panels:end -->
+
+    - ### mysql-utilities
+
+        > [!NOTE][开源仓库](https://github.com/mysql/mysql-utilities)
+        <br><br>环境搭建，项目语法采用的是python2的，所以需要先安装 [python2](https://www.python.org/ftp/python/2.7.18/python-2.7.18-macosx10.9.pkg)，[下载页面](https://www.python.org/downloads/release/python-2718/)
+        <br><br>如果使用`--server`参数的话，还得安装python数据库驱动。根据`package.py`中的安装描述,需要安装`Connector/Python 1.0.9`,[官方下载页面](https://downloads.mysql.com/archives/c-python/)，但是我启动的时候会报如下错误：
+        <br>ERROR: The MYSQL Connector/Python module was found but it is either not properly installed or it is an old version. MySQL Utilities requires Connector/Python version > '(1, 2, 1)'. Download and install Connector/Python from http://dev.mysql.com.
+        <br><br>根据错误信息从新下载1.2.2版本：[mysql-connector-python-1.2.2.zip](https://cdn.mysql.com/archives/mysql-connector-python-1.2/mysql-connector-python-1.2.2.zip)
+
+        ![](/.images/doc/framework/mysql/mysql-analyze-tool-04.png ':size=60%')
+
     - ### innodb-java-reader
 
         > [!NOTE][开源仓库](https://github.com/alibaba/innodb-java-reader)
