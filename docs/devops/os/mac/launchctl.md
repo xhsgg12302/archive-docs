@@ -6,8 +6,8 @@
     -|-
     |帮助|`launchctl help`|
     |列出所有由launchd管理的进程 | `launchctl list` |
-    |加载 | `launchctl load ~/Library/LaunchAgents/dos.wtfu.site.plist`|
-    |卸载 | `launchctl unload ~/Library/LaunchAgents/dos.wtfu.site.plist`|
+    |加载 | `launchctl load ~/Library/LaunchAgents/docs.wtfu.site.plist`|
+    |卸载 | `launchctl unload ~/Library/LaunchAgents/docs.wtfu.site.plist`|
     |启动 | `launchctl start dos.wtfu.site`|
     |关闭 | `launchctl stop dos.wtfu.site`|
 
