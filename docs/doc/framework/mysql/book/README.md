@@ -10,6 +10,7 @@
         6. [第6章 快速查询的秘籍-B+树索引](./06_B+tree_index.md)
         7. [第7章 好东西也得先学会怎么用-B+树索引的使用](./07_B+tree_index_use.md)
         8. [第8章 数据的家-MySQL的数据目录](./08_data_home_with_datadir.md)
+        9. [第9章 存放页面的大池子-InnoDB的表空间](./09_innodb_table-space.md)
 
     + ### 书中数据库分析环境准备
 
