@@ -89,6 +89,104 @@
         <br>`select * from employees order by salary asc, employee_id desc;`
 
     + ### 4.常见函数
+
+        > [?] 语法： `select 函数名(实参列表) [from 表名];`
+        <br><br>函数帮助：`help substr;`
+        <br>特点：1，叫什么(函数名) 2，干什么(函数功能)
+        <br>好处：1，隐藏了实现的细节 2，提高代码的重用性
+        <br>分类：`单行函数`，`分组函数(做统计用，又称为统计函数，聚合函数，组函数)`
+
+        - #### 一、字符函数
+
+            > [!NOTE]
+            一、length()获取参数值的字节个数，和**字符集**有关系
+            <br>`select length('John');`
+            <br>`select length('张三丰hahaha');`
+            <br><br>二、concat() 拼接字符串
+            <br>`select concat(last_name, '_', first_name) 姓名 from employees;`
+            <br><br>三、upper(), lower() 大小写转换
+            <br>`select concat(upper(last_name), '_', lower(first_name)) 姓名 from employees;`
+            <br><br>四、substr(), substring() 字符串截取
+            <br>`select substr('李莫愁爱上了陆展元', 7) out_put;`
+            <br>`select substr('李莫愁爱上了陆展元', 1, 3) out_put;`
+            <br>case1: 姓名中首字符大写，其他字符小写然后用_拼接，显示出来
+            <br>`select concat(upper(substr(last_name, 1, 1)), '_', lower(substr(last_name, 2))) out_put from employees;`
+            <br><br>五、instr() 返回子串第一次出现的索引，如果找不到返回0
+            <br>`select instr('杨不殷六侠悔爱上了殷六侠', '殷六侠') out_put;`
+            <br>`select instr('杨不殷六侠悔爱上了殷六侠', '殷八侠') out_put;`
+            <br><br>六、trim() 去前后空格
+            <br>`select length(trim('  张翠山   ')) out_put;`
+            <br>`select trim('a' from 'aaaaahello a cworldaaaaaaa') out_put;`
+            <br><br>七、lpad()，rpad() 用指定的字符实现左,右填充指定长度
+            <br>`select lpad('殷素素', 10, '*') out_put;`
+            <br>`select rpad('殷素素', 12, '*') out_put;`
+            <br><br>八、replace() 全部替换
+            <br>`select replace('张无忌第一次碰见周芷若就爱上了周芷若','周芷若', '赵敏') out_put;`
+
+        - #### 二、数学函数
+
+            > [!NOTE]
+            一、round() 四舍五入
+            <br>`select round( 1.65);` // 2
+            <br>`select round( 1.45);` // 1
+            <br>`select round(-1.55);` // -2
+            <br>`select round(1.567, 2);` // 1.57
+            <br><br>二、ceil() 向上取整，返回 >= 该参数的最小整数
+            <br>`select ceil( 1.52);` // 2
+            <br>`select ceil(-1.02);` // -1
+            <br><br>三、floor() 向下取整，返回 <= 该参数的最大整数
+            <br>`select floor( 9.99);` // 9
+            <br>`select floor(-9.99);` // -10
+            <br><br>四、truncate 截断
+            <br>`select truncate(1.65, 1);` // 1.6
+            <br><br>五、mod 取余 mod(a,b) ==> a - a/b * b
+            <br>`select mod(-10, -3);` // -1
+            <br>`select mod(-10,  3);` // -1
+            <br>`select mod( 10,  3);` // 1
+            <br>`select mod( 10, -3);` // 1
+
+        - #### 三、日期函数
+
+            <!-- panels:start -->
+            <!-- div:left-panel-50 -->
+            > [!NOTE]
+            一、now() 返回当前系统日期+时间
+            <br>`select now();` // 2024-06-06 07__colon__03__colon__35
+            <br><br>二、curdate() 返回当前系统日期，不包含时间
+            <br>`select curdate();` // 2024-06-06
+            <br><br>三、curtime() 返回当前系统时间，不包含日期
+            <br>`select curtime();` // 07__colon__05__colon__20
+            <br><br>四、获取自定的部分，年，月，日，小时，分钟，秒
+            <br>`select year(now());`
+            <br>`select year('1998-1-01');`
+            <br>`select month(now());`
+            <br>`select monthname(now());` // June
+            <br><br>五、str_to_date() 将日期格式的字符串转换成指定格式的日期
+            <br>`select str_to_date('9-13-1999', '%m-%d-%Y');` // 1999-09-13
+            <br><br>六、date_format() 将日期转成字符
+            <br>`select date_format('2018/6/6','%Y年%m月%d日');` // 2018年06月06日
+            <!-- div:right-panel-50 -->
+            ![](/.images/doc/framework/mysql/lesson/03-dql/dql-01.png ':size=100%')
+            <!-- panels:end -->
+
+        - #### 四、其他函数
+
+            > [!NOTE]
+            `select version();` ,`select database();`,`select user();`
+
+        - #### 五、流程控制函数
+
+            > [!NOTE]
+            一、if()
+            <br>`select if(10 < 5, 'hello', 'world');`
+            <br><br>二、case()
+            <br> 语法一： case 表达式 when 常量1 then 显示值1 when 常量2 then 显示值2 ... else 显示值else end
+            <br>case1: 查询员工的工资，要求，部门号=30，工资为1.1倍：40，1.2：50，1.3
+            <br>`select salary, department_id, case department_id when 30 then salary * 1.1 when 40 then salary * 1.2 when 50 then salary * 1.3 else salary end as after from employees;`
+            <br> 语法二： case when 条件1 then 显示值 when 条件2 then 显示值 else 显示值 else end
+            <br>case2: 查询员工的工资的情况，要求，工资大于20000，显示A， >15000:B，>10000:C
+            <br>`select salary, case when salary > 20000 then 'A' when salary > 15000 then 'B' when salary > 10000 then 'C' else 'D' end as after from employees;`
+
     + ### 5.分组函数
     + ### 6.分组查询
     + ### 7.连接查询
