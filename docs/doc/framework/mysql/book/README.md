@@ -2,13 +2,14 @@
 
     + ### 目录结构
 
-        1.  [第1章 装作自己是个小白-重新认识MySQL](./01_recognize.md)
-        2.  [第2章 MySQL的调控按钮-启动选项和系统变量](./02_cmd-and-system-variables.md)
-        3.  [第3章 乱码的前世今生-字符集和比较规则](./03_character_and_collation.md)
-        4.  [第4章 从一条记录说起-InnoDB记录结构](./04_innodb-record-struct.md)
-        5.  [第5章 盛放记录的大盒子-InnoDB数据页结构](./05_innodb-page-struct.md)
-        6.  [第6章 快速查询的秘籍-B+树索引](./06_B+tree_index.md)
-        7.  [第7章 好东西也得先学会怎么用-B+树索引的使用](./07_B+tree_index_use.md)
+        1. [第1章 装作自己是个小白-重新认识MySQL](./01_recognize.md)
+        2. [第2章 MySQL的调控按钮-启动选项和系统变量](./02_cmd-and-system-variables.md)
+        3. [第3章 乱码的前世今生-字符集和比较规则](./03_character_and_collation.md)
+        4. [第4章 从一条记录说起-InnoDB记录结构](./04_innodb-record-struct.md)
+        5. [第5章 盛放记录的大盒子-InnoDB数据页结构](./05_innodb-page-struct.md)
+        6. [第6章 快速查询的秘籍-B+树索引](./06_B+tree_index.md)
+        7. [第7章 好东西也得先学会怎么用-B+树索引的使用](./07_B+tree_index_use.md)
+        8. [第8章 数据的家-MySQL的数据目录](./08_data_home_with_datadir.md)
 
     + ### 书中数据库分析环境准备
 
