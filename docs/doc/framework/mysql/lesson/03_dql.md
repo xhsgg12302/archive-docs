@@ -92,6 +92,7 @@
 
         > [?] 语法： `select 函数名(实参列表) [from 表名];`
         <br><br>函数帮助：`help substr;`
+        <br><span style='color: blue'>以下都是单行函数</span>
         <br>特点：1，叫什么(函数名) 2，干什么(函数功能)
         <br>好处：1，隐藏了实现的细节 2，提高代码的重用性
         <br>分类：`单行函数`，`分组函数(做统计用，又称为统计函数，聚合函数，组函数)`
@@ -188,7 +189,83 @@
             <br>`select salary, case when salary > 20000 then 'A' when salary > 15000 then 'B' when salary > 10000 then 'C' else 'D' end as after from employees;`
 
     + ### 5.分组函数
+
+        > [?] 语法： `select 函数名(实参列表) [from 表名];`
+        <br><br>功能：用作统计使用，又称为聚合函数或统计函数或组函数
+        <br><br>分类：`sum 求和`,`avg 平均值`,`max 最大值`,`min 最小值`,`count 个数`
+        <br><br>特点：
+        <br>`1).` **sum,avg**一般用于处理数值类型
+        <br>`2).` 以上分组函数都忽略 NULL 值
+        <br>`3).` 可以和 **distinct** 搭配实现去重的运算
+        <br>`4).` **count**函数的单独介绍: 一般使用count(\*)用作统计行数
+        <br>`5).` 和分组函数一同查询的字段要求是**group by**后的字段
+        <br><br>一、简单的使用
+        <br>`select sum(salary) from employees;` 
+        <br>`select avg(salary) from employees;` 
+        <br>`select min(salary) from employees;` 
+        <br>`select max(salary) from employees;` 
+        <br>`select count(salary) from employees;` 
+        <br><br>`select sum(salary), avg(salary), min(salary), max(salary), count(salary) from employees;` 
+        <br>`select sum(salary), round(avg(salary), 2), min(salary), max(salary), count(salary) from employees;` 
+        <br><br>二、参数支持哪些类型
+        <br>`select sum(last_name), avg(last_name) from employees;` // 返回0，不报错，无意义
+        <br>`select max(last_name), min(last_name), count(last_name) from employees;`
+        <br><br>三、忽略NULL
+        <br>`select sum(commission_pct), avg(commission_pct), sum(commission_pct) / 35, sum(commission_pct) / 109 from employees;`
+        <br>`select count(commission_pct) from employees;`
+        <br><br>四、和 distinct 搭配
+        <br>`select sum(distinct salary), sum(salary) from employees;`
+        <br>`select count(distinct salary), count(salary) from employees;`
+        <br><br>五、count函数的详细介绍
+        <br> MYISAM 中 count(\*) 的效率高，
+        <br> INNODB count(\*),count(1) 差不多，但比count(field)要高一些。
+        <br>`select count(salary) from employees;`
+        <br>`select count(*) from employees;` // <span style='color: blue'>~可以认为如果当前字段为NULL，会测试下一个~</span>
+        <br>`select count(1) from employees;`
+        <br><br>六、和分组函数一同查询的字段有限制
+        <br>`select employee_id, avg(salary) from employees;` // 此处的 employee_id 没有任何意义。
+
     + ### 6.分组查询
+
+        > [?] 语法： `select columnM, func(columnN) from 表名 [where 筛选条件] [group by colomnM] [order by 排序列表 [asc|desc]];`
+        <br><br>注意：查询列表比较特殊，要求是分组函数和group by 后出现的字段。
+        <br><br>特点：
+        <br>`1).` 分组查询中的筛选条件分为两类，分组前和分组后。也就是下文中的**having**解释
+        <br>`2).` group by 子句支持单个字段分组，多个字段分组(多个字段之间用逗号分隔开没有顺序要求)，表达式或函数(用的较少)
+        <br>`3).` 也可以添加排序(排序放在整个分组查询的最后)
+        <br><br>技巧：
+        <br>`①`: 分组函数做条件肯定是放在having子句中
+        <br>`②`: 能用分组前筛选的，就优先考试使用分组前筛选(也就是where后面)，关乎性能问题
+        <br><br>*引入、查询每个部分的平均工资*
+        <br>`select department_id, avg(salary) from employees group by department_id;`
+        <br>![](/.images/doc/framework/mysql/lesson/03-dql/dql-02.png ':size=50%')
+        <br><br>一、查询每个工种的最高工资
+        <br>`select job_id, max(salary) from employees group by job_id;`
+        <br><br>二、查询每个部门上的部门个数
+        <br>`select location_id, count(1) from departments group by location_id;`
+        <br><br>*添加筛选条件*
+        <br>一、查询邮箱中包含a字符的，每个部分的平均工资
+        <br>`select department_id, avg(salary) from employees where email like '%a%' group by department_id;`
+        <br>二、查询有奖金的每个领导手下员工的最高工资
+        <br>`select manager_id, max(salary) from employees where commission_pct is not null group by manager_id;`
+        <br><br>*添加复杂的筛选条件*
+        <br>`having`: <span style='color: blue'>与where相比，where作用在分组动作前，而having作用在分组动作后</span>。
+        <br>一、查询哪个部分的员工个数 > 2
+        <br>`select department_id, count(1) AS _count from employees group by department_id having _count > 2;`
+        <br><br>二、查询每个工种有奖金的员工的最高工资>12000的工种编号和最高工资
+        <br>`select job_id, max(salary) AS _max from employees where commission_pct is not null group by job_id having _max > 12000;`
+        <br><br>三、查询领导编号>102的每个领导手下的最低工资>5000的领导编号是哪个，以及其最低工资
+        <br>`select manager_id, min(salary) _min from employees where manager_id > 102 group by manager_id having _min > 5000;`
+        <br><br>*按表达式或函数分组*
+        <br>一、按员工姓名的长度分组，查询每一组的员工个数，筛选员工个数>5 的有哪些？
+        <br>`select length(last_name) as _len, count(1) as _count from employees group by _len having _count > 5;`
+        <br><br>*按多个字段分组*
+        <br>一、查询每个部门每个工种的员工的平均工资
+        <br>`select department_id, job_id, avg(salary) from employees group by department_id, job_id;`
+        <br><br>*添加排序*
+        <br>一、查询每个部门每个工种的员工的平均工资，并且按平均工资的高低显示
+        <br>`select department_id, job_id, avg(salary) AS _avg from employees group by department_id, job_id order by _avg;`
+
     + ### 7.连接查询
     + ### 8.子查询
     + ### 9.分页查询
