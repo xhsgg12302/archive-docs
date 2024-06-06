@@ -70,6 +70,24 @@
         <br>`select last_name, commission_pct from employees where commission_pct is not null;`
 
     + ### 3.排序查询
+
+        > [?] 语法： `select 查询列表 from 表名 [where 筛选条件] order by 排序列表 [asc|desc];`
+        <br><br>特点： 
+        <br>1，asc代表的是升序，desc代表的是降序，如果不写，默认是升序。
+        <br>2，order by 子句中可以支持单个字段，多个字段，表达式，函数，别名。
+        <br>3，order by 子句一般是放在查询语句的最后面，limit子句除外。
+        <br><br>case1: 查询员工信息，要求工资(从高到低|从低到高)排序
+        <br>`select * from employees order by salary desc;`
+        <br>`select * from employees order by salary;`
+        <br>case2: 查询部门编号 >=90 的员工信息，按入职时间的先后进行排序【添加筛选条件】
+        <br>`select * from employees where department_id >= 90 order by hiredate asc;`
+        <br>case3: 按年薪的高低显示员工的信息和年薪【按(表达式|别名)排序】
+        <br>`select *, salary * 12 * ( 1 + ifnull(commission_pct, 0)) as 年薪 from employees order by 年薪 desc;`
+        <br>case4: 按姓名的长度显示员工的姓名和工资【按函数排序】
+        <br>`select length(last_name) 字节长度, last_name, salary from employees order by 字节长度 desc;`
+        <br>case5: 查询员工信息，要求先按照工资排序，再按照员工编号排序【按多个字段排序】
+        <br>`select * from employees order by salary asc, employee_id desc;`
+
     + ### 4.常见函数
     + ### 5.分组函数
     + ### 6.分组查询
