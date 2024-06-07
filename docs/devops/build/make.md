@@ -6,6 +6,7 @@
         <!-- div:left-panel-60 -->
         ```makefile
         # makefile 对空格相当挑剔，必须是制表符
+        # https://stackoverflow.com/questions/24145650/makefile6-missing-separator-stop
         OBJS = main.o tool1.o tool2.o
         CC = gcc
         CFLAGS += -c -Wall -g
@@ -23,7 +24,7 @@
             @$(RM) *.o mytool -r
         ```
         <!-- div:right-panel-40 -->
-        ![](/.images/devops/build/make-process-01.png ':size=81%')
+        ![](/.images/devops/build/make-process-01.png ':size=85%')
         <!-- panels:end -->
 
 * ## Reference
