@@ -324,10 +324,13 @@
         + [代码行号](https://sa-token.cc/doc.html#/)
         + [更换谷歌字体](https://u.sb/css-cdn/)
 
-**以下github 语法**[参见](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
-> [!TIP] github tip syntax
+**以下是github 语法,好像不支持缩写书写**[参见](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
 
-> [!NOTE] github note syntax
+> [!NOTE]
+> Useful information that users should know, even when skimming content.
+
+> [!TIP]
+> Helpful advice for doing things better or more easily.
 
 > [!IMPORTANT]
 > Key information users need to know to achieve their goal.
