@@ -323,3 +323,17 @@
         + [404页面](https://imageranger.com/tips/how_to_resize_images/)
         + [代码行号](https://sa-token.cc/doc.html#/)
         + [更换谷歌字体](https://u.sb/css-cdn/)
+
+**以下github 语法**[参见](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
+> [!TIP] github tip syntax
+
+> [!NOTE] github note syntax
+
+> [!IMPORTANT]
+> Key information users need to know to achieve their goal.
+
+> [!WARNING]
+> Urgent info that needs immediate user attention to avoid problems.
+
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
