@@ -324,7 +324,12 @@
         + [代码行号](https://sa-token.cc/doc.html#/)
         + [更换谷歌字体](https://u.sb/css-cdn/)
 
-**以下是github 语法,好像不支持缩写书写**[参见](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
+**以下是github 语法**[参见](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts),好像不支持缩写书写，部分兼容docsify
+
+* List
+
+    > [!NOTE]
+    > the style content in the indent block
 
 > [!NOTE]
 > Useful information that users should know, even when skimming content.
