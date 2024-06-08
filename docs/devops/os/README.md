@@ -21,7 +21,7 @@ hello os
 		* cat /proc/cpuinfo | grep "cpu cores" |uniq 查看CPU核心数
 
 	
-		> [!ATTENTION] <span style='color: blue'>Macosx 查看文件实际占用字节：</span>
+		> [!CAUTION] <span style='color: blue'>Macosx 查看文件实际占用字节：</span>
 		<br><br>`stat -f%z record_format_demo.frm`
 		<br>`wc -c record_format_demo.frm`
 

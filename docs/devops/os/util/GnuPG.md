@@ -67,7 +67,7 @@
         ![](/.images/devops/os/util/gpg-usage-2-01.png ':size=99%')
         <hr>
 
-        > [!ATTENTION|style:flat] 删除的时候得先删除私匙
+        > [!CAUTION|style:flat] 删除的时候得先删除私匙
         
         ![](/.images/devops/os/util/gpg-usage-2-03.png ':size=99%')
         <!-- div:right-panel-50 -->
@@ -150,7 +150,7 @@
         `gpg --decrypt demo.txt.asc`
         <br>将上述步骤生成的`demo.txt.asc`进行解密验签名。
 
-        > [!ATTENTION|style:flat]
+        > [!CAUTION|style:flat]
         需要注意的是：不能单独验证，可能是因为先加密的原因，需要解密后才可以看见签名，发现签名后顺带验证签名了。
 
         ![](/.images/devops/os/util/gpg-de-verify-01.png ':size=90%')

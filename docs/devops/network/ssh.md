@@ -44,7 +44,7 @@
             <br><br>举例来说，如果本地端口是2121，那么动态转发的命令就是下面这样。`ssh -D 12302 12302 -N`。此时程序hang住，监听12302端口，后面的12302是我本地配置的主机名。
             <br>端口转发使用`curl -v -x socks5://localhost:12302 https://wtfu.site/robots.txt`
             
-            > [!ATTENTION|style:flat]***注意，这种转发采用了 `SOCKS5` 协议。访问外部网站时，需要把 HTTP 请求转成 SOCKS5 协议，才能把本地端口的请求转发出去。***
+            > [!CAUTION|style:flat]***注意，这种转发采用了 `SOCKS5` 协议。访问外部网站时，需要把 HTTP 请求转成 SOCKS5 协议，才能把本地端口的请求转发出去。***
 
             <!-- panels:start -->
             <!-- div:left-panel-55 -->
@@ -83,7 +83,7 @@
             <br>1. 第一个例子是内网某台服务器localhost在 3000 端口开了一个docosify服务，可以通过远程转发将这个 3000 端口，映射到具有公网 IP 地址的`'12302'`服务器的`13402`端口，使得访问**wtfu.site:13402**这个地址，就可以访问到那台内网服务器的 3000 端口。
             <br>具体命令：`ssh -R 13402:localhost:3000 12302 -N`
 
-            > [!ATTENTION|style:flat]
+            > [!CAUTION|style:flat]
             ***1. 一般来说服务器在公网上可以访问的话，可能会有防火墙或者访问策略组之类的东西，我们需要的端口`13402`权限得放开***
             <br>***2. 远程sshd服务一般对于`GatewayPorts`此选项的默认值为`on`, 要想可以在远程服务器上监听所有网络接口(interface)，在sshd配置文件`/etc/ssh/sshd_config`中必须启用`GatewayPorts yes`***
 
