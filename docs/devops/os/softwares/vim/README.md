@@ -10,6 +10,7 @@
         > [?] `<Leader>`是一个特殊的键，它是 Vim 中用户定义的前缀键。你可以通过设置 **mapleader** 变量来自定义`<Leader>`键。例如：`let mapleader = ","`
         <br>默认情况下，`<Leader>`是反斜杠`\`。
         <br><br>作用：当你在定义快捷键时使用leader修饰符，表示这个快捷键是基于你定义的前缀键的。这样可以避免与默认快捷键发生冲突，并使你的快捷键更具可读性和组织性。
+        <br>其他定义关键字可以参考[这个](https://github.com/lymslive/vimllearn/blob/master/z/20170818_2.md)
 
 * ## Reference
 
