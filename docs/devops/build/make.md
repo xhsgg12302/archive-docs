@@ -27,6 +27,8 @@
         ![](/.images/devops/build/make-process-01.png ':size=85%')
         <!-- panels:end -->
 
+        * https://github.com/junegunn/fzf/blob/master/Makefile
+
     + ### Spec
 
         - #### rule
