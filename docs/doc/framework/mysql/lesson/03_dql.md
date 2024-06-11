@@ -267,6 +267,105 @@
         <br>`select department_id, job_id, avg(salary) AS _avg from employees group by department_id, job_id order by _avg;`
 
     + ### 7.连接查询
+
+        > [?] 含义：又称多表查询，当查询的字段来自于多个表时，就会用到`连接查询`
+        <br><br>笛卡尔乘积现象：表1 有m行，表2，有n行，结果=m*n行。发生原因：没有有效的连接条件，添加条件可以避免。
+        <br><br>分类：
+        <br>`1).` 按年代分：sql92标准：仅仅支持内连接，sql99标准（推荐）：支持内连接+外连接（左外+右外）+ 交叉连接
+        <br>`2).` 按功能：内连接(等值连接，非等值连接，自连接)，外连接(左外连接，右外连接，全外连接)，交叉连接
+
+        > [!NOTE]*一、sql92标准*
+        <br>语法： `select 查询列表 from 表1 别名, 表2 别名 [where 筛选条件] [group by 分组] [having 筛选条件] [order by 排序列表 [asc|desc]];`
+        <br>特点：
+        <br>`①`: 多表等值连接的结果为多表的交集部分
+        <br>`②`: n表连接，至少需要n-1个连接条件
+        <br>`③`: 多表的顺序没有要求 
+        <br>`④`: 一般需要为表起别名
+        <br>`⑤`: 可以搭配前面介绍的所有子句使用，比如排序，分组，筛选。
+        <br><br>*sql92.1 等值连接*:
+        <br>sql92.1.1 demo
+        <br>case1: 查询女神名和对应的男神名
+        <br>`select name, boyName from boys,beauty where boys.id = beauty.boyfriend_id;`
+        <br>case2: 查询员工名和对应的部门名
+        <br>`select last_name, department_name from employees, departments where employees.department_id = departments.department_id;`
+        <br>sql92.1.2 为表起别名
+        <br>①提高语句的简洁度，②区分多个重名的字段,注意：如果为表起别名，则查询字段就不能用原来的表名去限定了。
+        <br>case1: 查询员工名，工种号，工种名
+        <br>`select last_name, j.job_id,j.job_title from employees e, jobs j where e.job_id = j.job_id;`
+        <br>sql92.1.3 两个表的顺序可以调换
+        <br>case1: 查询员工名，工种号，工种名
+        <br>`select last_name, j.job_id,j.job_title from jobs j, employees e where e.job_id = j.job_id;`
+        <br>sql92.1.4 可以添加筛选
+        <br>case1: 查询有奖金的员工名，部门名
+        <br>`select last_name, department_name, commission_pct from employees e, departments d where e.department_id = d.department_id and e.commission_pct is not null;`
+        <br>case2 : 查询城市名中第二个字符为o的部门名和城市名
+        <br>`select department_name, city from departments d, locations l where d.location_id = l.location_id and city like '_o%';`
+        <br>sql92.1.5 可以添加分组
+        <br>case1: 查询每个城市的部门个数
+        <br>`select location_id, count(1) as _count from departments group by location_id;`
+        <br>case2: ~查询有奖金的每个部门的部门名和部门的领导编号和该部门的最低工资~
+        <br>`select department_name, e.manager_id, min(salary) as _min from employees e, departments d where e.commission_pct is not null group by d.department_id;`
+        <br><br>*sql92.2 非等值连接*:
+        <br>sql92.2.1 demo
+        <br>case1: 查询员工的工资和工资级别
+        <br>`select salary, grade_level from employees e, job_grades g where salary between g.lowest_sal and g.highest_sal;`
+        <br>`select salary, grade_level from employees e, job_grades g where salary between g.lowest_sal and g.highest_sal and g.grade_level = 'A';`
+        <br><br>*sql92.3 自连接*:
+        <br>sql92.3.1 demo
+        <br>case1: 查询 员工名和上级的名称
+        <br>`select e.employee_id, e.last_name, m.employee_id, m.last_name from employees e, employees m where e.manager_id = m.employee_id;`
+
+        > [!NOTE]*一、sql99标准*
+        <br>语法： `select 查询列表 from 表1 别名 [连接类型] join 表2 别名 on 连接条件 [where 筛选条件] [group by 分组] [having 筛选条件] [order by 排序列表 [asc|desc]];`
+        <br>分类：内连接(inner),外连接：左外(left[outer])，右外(right[outer])，全外(full[outer])，交叉连接(cross)
+        <br>特点：
+        <br>`①`: 多表等值连接的结果为多表的交集部分
+        <br>`②`: n表连接，至少需要n-1个连接条件
+        <br>`③`: 多表的顺序没有要求 
+        <br>`④`: 一般需要为表起别名
+        <br>`⑤`: 可以搭配前面介绍的所有子句使用，比如排序，分组，筛选。
+        <br><br>*sql99.1 内连接*:
+        <br>分类：等值，非等值，自连接
+        <br>特点：
+        <br>`①`: 添加排序，分组
+        <br>`②`: inner 可以省略
+        <br>`③`: 筛选条件放在where后面,连接条件放在on后面，提高分离性，便于阅读
+        <br>`④`: inner join连接和sql92语法中的等值连接效果是一样的，都是查询多表的交集
+        <br>sql99.1.1 等值连接
+        <br>case1: 查询员工名，部门名
+        <br>`select last_name, department_name from employees e inner join departments d on e.department_id = d.department_id;`
+        <br>case2: 查询名字中包含e的员工名和工种名（添加筛选）
+        <br>`select last_name, job_title from employees e inner join jobs j on e.job_id = j.job_id where e.last_name like '%e%';`
+        <br>case3: 查询部门个数>3的城市名和部门个数（添加分组+筛选）
+        <br>`select city, count(1) as _count from departments d inner join locations l on d.location_id = l.location_id group by city having _count > 3;`
+        <br>case4: 查询哪个部门的员工个数>3的部门名和员工个数，并按照个数降序（添加排序）
+        <br>`select department_name, count(1) as _count from employees e inner join departments d on e.department_id = d.department_id group by e.department_id having _count > 3 order by _count desc;`
+        <br>case5: 查询员工名，部门名，工种名，并按部门名降序
+        <br>`select last_name, department_name, job_title from employees e inner join departments d on e.department_id = d.department_id inner join jobs j on e.job_id = j.job_id order by d.department_name desc;`
+        <br>sql99.1.2 非等值连接
+        <br>case1: 查询员工的工资级别
+        <br>`select last_name, grade_level from employees e inner join job_grades g on e.salary between g.lowest_sal and g.highest_sal;`
+        <br>case1: 查询工资级别个数>2的个数，并按照工资降级排序
+        <br>`select grade_level, count(1) as _count from employees e inner join job_grades g on e.salary between g.lowest_sal and g.highest_sal group by grade_level having _count > 20 order by _count desc;`
+        <br>sql99.1.3 自连接
+        <br>case1: 查询员工的名字，上级的名字
+        <br>`select e.last_name, m.last_name from employees e inner join employees m on e.manager_id = m.employee_id;`
+        <br>case1: 查询员工姓名中包含字符k的员工的名字，上级的名字
+        <br>`select e.last_name, m.last_name from employees e inner join employees m on e.manager_id = m.employee_id where e.last_name like '%k%';`
+        <br><br>*sql99.2 外连接*:
+        <br>特点：
+        <br>`①`: 外连接的查询结果为主表中的所有记录(从表中有，则显示，没有显示NULL)
+        <br>`②`: 左外连接(left join 左边的是主表），右外连接，right join右边的是主表。
+        <br>`③`: 左外和右外交换两表的顺序，可以实现同样的效果
+        <br>`④`: 全外连接就是两表的并集(mysql不支持)
+        <br>`⑤`: 交叉连接(就是sql92中的逗号连接)
+        <br>case1: 查询没有男朋友的女神
+        <br>`select b.id, b.name from beauty b left join boys y on b.boyfriend_id = y.id where y.id is null;`
+        <br>case2: 查询哪个部门没有员工
+        <br>`select d.department_name from departments d left join employees e on d.department_id = e.department_id where e.employee_id is null;`
+        <br>case3: 交叉连接
+        <br>`select b.*, bo.* from beauty b cross join boys bo;`
+
     + ### 8.子查询
     + ### 9.分页查询
     + ### 10.联合查询

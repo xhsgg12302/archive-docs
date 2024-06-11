@@ -24,7 +24,12 @@
 
     + ### 数据库ER图
 
-        ![](/.images/doc/framework/mysql/lesson/readme-lesson-02.png ':size=90% :align=center')
+         <!-- panels:start -->
+        <!-- div:left-panel-78 -->
+        ![](/.images/doc/framework/mysql/lesson/readme-lesson-02.png ':size=100%')
+        <!-- div:right-panel-22 -->
+        ![](/.images/doc/framework/mysql/lesson/readme-lesson-03.png ':size=98%')
+        <!-- panels:end -->
 
 * ## Reference
     + https://www.bilibili.com/video/BV12b411K7Zu
