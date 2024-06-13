@@ -149,7 +149,36 @@
             > [!NOTE] 综上所述，表空间是由若干个区组成的，每个区都对应一个 XDES Entry 的结构，直属于表空间的区对应的 XDESEntry 结构可以分成 FREE 、 FREE_FRAG 和 FULL_FRAG 这3个链表；每个段可以附属若干个区，每个段中的区对应的 XDES Entry 结构可以分成 FREE 、 NOT_FULL 和 FULL 这3个链表。每个链表都对应一个 List Base Node 的结构，这个结构里记录了链表的头、尾节点的位置以及该链表中包含的节点数。正是因为这些链表的存在，管理这些区才变成了一件so easy的事情。
 
     + ### 段的结构
+
+        > [?] 我们前边说过，段其实不对应表空间中某一个连续的物理区域，而是一个逻辑上的概念，由若干个零散的页面以及一些完整的区组成。像每个区都有对应的 XDES Entry 来记录这个区中的属性一样，设计 InnoDB 的大叔为每个段都定义了一个 INODE Entry 结构来记录一下段中的属性。大家看一下示意图：
+        <br>![](/.images/doc/framework/mysql/book/09_innodb_table_space/its-07.png ':size=70%')
+        <br><br>它的各个部分释义如下：
+        <br>`Segment ID` 就是指这个 INODE Entry 结构对应的段的编号（ID）。
+        <br>`NOT_FULL_N_USED` 这个字段指的是在 NOT_FULL 链表中已经使用了多少个页面。下次从 NOT_FULL 链表分配空闲页面时可以直接根据这个字段的值定位到。而不用从链表中的第一个页面开始遍历着寻找空闲页面。
+        <br>`3个 List Base Node`分别为段的 FREE 链表、 NOT_FULL 链表、 FULL 链表定义了 List Base Node ，这样我们想查找某个段的某个链表的头节点和尾节点的时候，就可以直接到这个部分找到对应链表的 List Base Node 。so easy!
+        <br>`Magic Number` 这个值是用来标记这个 INODE Entry 是否已经被初始化了（初始化的意思就是把各个字段的值都填进去了）。如果这个数字是值的 97937874 ，表明该 INODE Entry 已经初始化，否则没有被初始化。（不用纠结这个值有啥特殊含义，人家规定的）。
+        <br>`Fragment Array Entry` 我们前边强调过无数次段是一些零散页面和一些完整的区的集合，每个 Fragment Array Entry 结构都对应着一个零散的页面，这个结构一共4个字节，表示一个零散页面的页号。
+        <br><br>结合着这个 INODE Entry 结构，大家可能对段是一些零散页面和一些完整的区的集合的理解再次深刻一些。
+
     + ### 各类型页面详细情况
+
+        > [?] 到现在为止我们已经大概清楚了表空间、段、区、XDES Entry、INODE Entry、各种以 XDES Enty 为节点的链表的基本概念了，可是总有一种飞在天上不踏实的感觉，每个区对应的 XDES Entry 结构到底存储在表空间的什么地方？直属于表空间的 FREE 、 FREE_FRAG 、 FULL_FRAG 链表的基节点到底存储在表空间的什么地方？每个段对应的 INODE Entry 结构到底存在表空间的什么地方？我们前边介绍了每256个连续的区算是一个组，想解决刚才提出来的这些个疑问还得从每个组开头的一些类型相同的页面说起，接下来我们一个页面一个页面的分析，真相马上就要浮出水面了。
+
+        - #### FSP_HDR 类型
+
+            > [!NOTE] 首先看第一个组的第一个页面，当然也是表空间的第一个页面，页号为 0 。这个页面的类型是 FSP_HDR ，它存储了表空间的一些整体属性以及第一个组内256个区的对应的 XDES Entry 结构，直接看这个类型的页面的示意图：
+            <br>![](/.images/doc/framework/mysql/book/09_innodb_table_space/its-08.png ':size=70%')
+            <br><br>从图中可以看出，一个完整的 FSP_HDR 类型的页面大致由5个部分组成，各个部分的具体释义如下表：
+            <br>File Header 和 File Trailer 就不再强调了，另外的几个部分中， Empty Space 是尚未使用的空间，我们不用管它，重点来看看 File Space Header 和 XDES Entry 这两个部分。
+
+            | 名称 | 中文名 | 占用空间大小 | 简单描述 |
+            | :--: | :--: | :--: | :--: |
+            | File Header | 文件头部 | 38 字节 | 页的一些通用信息 |
+            | File Space  Header | 表空间头部 | 112 字节 | 表空间的一些整体属性信息 |
+            | XDES Entry | 区描述信息 | 10240 字节 | 存储本组256个区对应的属性信息 |
+            | Empty Space | 尚未使用空间 | 5986 字节 | 用于页结构的填充，没啥实际意义 |
+            | File Trailer | 文件尾部 | 8 字节 | 校验页是否完整 |
+
     + ### Segment Header 结构的运用
     + ### 真实表空间对应的文件大小
 
