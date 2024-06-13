@@ -16,3 +16,4 @@
 
     - https://github.com/oldratlee/vim-practice
     - https://github.com/rxedu/practical-vim
+    - https://www.vimgolf.com/

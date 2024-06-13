@@ -367,6 +367,61 @@
         <br>`select b.*, bo.* from beauty b cross join boys bo;`
 
     + ### 8.子查询
+
+        > [?] 含义：出现在其他语句中的select语句，称为`子查询或内查询`，内部嵌套其他select语句的查询，称为`外查询或主查询`。
+        <br>`select first_name from employees where department_id in (select department_id from departments where location_id = 1700);`
+        <br><br>分类：
+        <br>`1).` 按子查询出现的位置：select后面(仅仅支持标量子查询)，from后面（支持表子查询），where或having后面（标量子查询，列子查询，行子查询），exists后面（表子查询） 
+        <br>`2).` 按结果集的行列数不同：标量子查询（结果集只有一行一列），列子查询（结果集只有一列多行），行子查询（结果集有一行多列），表子查询（结果集一般为多行多列）
+
+        > [!NOTE]*一、where或者having后面*
+        <br>语法： `select 查询列表 from 表 [where (子查询)] [group by 分组] [having (子查询)] [order by 排序列表 [asc|desc]];`
+        <br>特点：
+        <br>`①`: 子查询放在小括号内
+        <br>`②`: 子查询一般放在条件的右侧
+        <br>`③`: 标量子查询一般搭配着单行操作符使用: `>, <, >=, <=, =, <>`，列子查询一般搭配着多行操作符时候用: `in, any/some, all`
+        <br>`④`: 子查询的执行优先于主查询的执行，主查询的条件用到了子查询的结果。
+        <br><br>非法使用标量子查询（1,不是一行一列，2,干脆没有值）
+        <br><br>*1. 标量子查询*:
+        <br>case1: 谁的工资比Abel高
+        <br>`select * from employees where salary > (select salary from employees where last_name = 'Abel');`
+        <br>case2: 返回iob_id 与 141 号员工相同，salary 比 143号员工多的员工的姓名，job_id 和工资
+        <br>`select last_name, job_id, salary from employees where job_id = (select job_id from employees where employee_id = 141) and salary > (select salary from employees where employee_id = 143);`
+        <br>case3: 返回公司工资最少的员工的last_name, job_id 和 salary
+        <br>`select last_name, job_id, salary from employees where salary = (select min(salary) from employees);`
+        <br>case4: 查询最低工资大于 50号部门的最低工资 的部门的部门Id 和 其最低工资
+        <br>`select department_id, min(salary) as _min from employees group by department_id having _min > (select min(salary) from employees where department_id = 50);`
+        <br><br>*2. 列子查询（多行子查询）*:
+        <br>case1: 返回location_id是1400或1700 的部门中的所有员工姓名
+        <br>`select last_name from employees where department_id in (select distinct department_id from departments where location_id in(1400, 1700));`
+        <br>case2: ~返回其他部门中比job_id 为'IT_PROG'部门任意工资低的 员工的工号，姓名，job_id以及salary。~
+        <br>case2: 返回其他工种中比job_id 为'IT_PROG'工种任意工资低的 员工的工号，姓名，job_id以及salary。
+        <br>`select employee_id, last_name, job_id, salary from employees where job_id <> 'IT_PROG' and salary < (select max(salary) from employees where job_id = 'IT_PROG');`
+        <br>case2: 返回其他工种中比job_id 为'IT_PROG'工种所有工资低的 员工的工号，姓名，job_id以及salary。
+        <br>`select employee_id, last_name, job_id, salary from employees where job_id <> 'IT_PROG' and salary < (select min(salary) from employees where job_id = 'IT_PROG');`
+        <br><br>*3. 行子查询（结果集一行多列或多行多列）*:
+        <br>case1: 查询员工编号最小并且工资最高的员工信息
+        <br>`select * from employees where (employee_id, salary) = (select min(employee_id), max(salary) from employees);`
+
+        > [!NOTE]*二、select后面*
+        <br>case1: 查询每个部门的个数
+        <br>`select d.*, (select count(1) from employees e where  e.department_id = d.department_id) from departments d;`
+        <br>case2: ~查询员工号 = 102 的部门名~
+
+        > [!NOTE]*三、from后面*
+        <br>要求：将子查询结果充当一张表，要求必须起别名
+        <br>case1: 查询每个部门的平均工资的工资等级
+        <br>`select temp.*, jg.grade_level from (select department_id, avg(salary) as _avg from employees group by department_id) temp inner join job_grades jg on temp._avg between lowest_sal and highest_sal;`
+
+        > [!NOTE]*四、exists后面(相关子查询)*
+        <br>语法： `select exists(完整的查询语句)` ,结果 1或0
+        <br>case1: 查询有员工的部门名
+        <br>`select department_name from departments d where exists (select * from employees e where e.department_id = d.department_id);`
+        <br>`select department_name from departments d where department_id in (select department_id from employees);`
+        <br>case2: 查询没有女朋友的男神信息
+        <br>`select bo.* from boys bo where not exists (select * from beauty b where b.boyfriend_id = bo.id);`
+        <br>`select bo.* from boys bo where bo.id not in (select boyfriend_id from beauty);`
+
     + ### 9.分页查询
     + ### 10.联合查询
 
