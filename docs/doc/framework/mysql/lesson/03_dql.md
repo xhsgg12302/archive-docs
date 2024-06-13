@@ -423,5 +423,29 @@
         <br>`select bo.* from boys bo where bo.id not in (select boyfriend_id from beauty);`
 
     + ### 9.分页查询
+
+        > [?] 语法：`select 查询列表 from 表 [where 筛选条件] [order by 排序列表 [asc|desc]] limit [[offize,] size];`
+        <br><br>特点：
+        <br>`1).` limit语句放在整个查询语句的最后。
+        <br>`2).` 公式：page, size ==> limit (page - 1) * size, size
+        <br>case1: 查询前5条员工的信息
+        <br>`select * from employees limit 0, 5;`
+        <br>`select * from employees limit 5;`
+        <br>case2: 查询第11条到25条
+        <br>`select * from employees limit 10, 15;`
+        <br>case3: 有奖金的员工信息，并且工资较高的前10名显示出来
+        <br>`select * from employees where commission_pct is not null order by salary desc limit 10;`
+
     + ### 10.联合查询
+
+        > [?] 语法：`() union () union () ...`
+        <br>将多条查询语句的结果合并成一个结果
+        <br><br>特点：
+        <br>`1).` 要求多条查询语句的查询列数是一致的
+        <br>`2).` 要求多条查询语句的每一列的类型和顺序最好一致
+        <br>`3).` <span style='color: blue'>union关键字默认去重，如果使用union all可以包含重复项</span>
+        <br>case1: 查询部门编号 >90 或 邮箱中包含a的员工的信息
+        <br>`select * from employees where email like '%a%' union select * from employees where department_id > 90;`
+        <br>case1: 查询中国用户中男性的信息以及外国用户中男性的信息
+        <br>`select id, cname, csex from t_ca where csex = '男' union select t_id, tName, tGender from t_ua where tGender = 'male';`
 
