@@ -93,3 +93,25 @@
             <br>`4).` 插入时：先主后从。删除时，先从后主（不然又外键约束引用，删除会报错。比如此处先删major,后删stu_info会报错）
 
         - #### 修改表时添加约束
+
+            > [?]特点:
+            <br>`1).` 添加列级约束：`alter table 表名 modify column 字段名 字段类型 新约束;`
+            <br>`2).` 添加表级约束：`alter table 表名 add [constraint 约束名] 约束类型(字段名) [外键的引用]`
+            <br><br>一、添加非空约束： `alter table stu_info modify column stuname varchar(20) not null;`
+            <br>二、添加默认约束：`alter table stu_info modify column age int default 18;`
+            <br>三、添加主键：
+            <br>&nbsp;&nbsp;&nbsp; 列级：`alter table stu_info modify column id int primary key;`
+            <br>&nbsp;&nbsp;&nbsp; 表级：`alter table stu_info add primary key(id);`
+            <br>四、添加唯一：
+            <br>&nbsp;&nbsp;&nbsp; 列级：`alter table stu_info modify column seat int unique;`
+            <br>&nbsp;&nbsp;&nbsp; 表级：`alter table stu_info add unique(seat);`
+            <br>五、添加外键：`alter table stu_info add constraint fk_stuinfo_major foreign key(majorid) references major(id);`
+
+        - #### 修改表时删除约束
+
+            > [?]
+            一、删除非空约束： `alter table stu_info modify column stuname varchar(20) null;`
+            <br>二、删除默认约束：`alter table stu_info modify column age int;`
+            <br>三、删除主键：`alter table stu_info drop primary key;`
+            <br>四、删除唯一：`alter table stu_info drop index seat;`，可以通过`show index from stu_info`来查看名字。
+            <br>五、删除外键：`alter table stu_info drop foreign key fk_stuinfo_major;`
