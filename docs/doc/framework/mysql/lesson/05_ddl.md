@@ -37,7 +37,9 @@
 
         - #### 创建表时添加约束
 
-            1. ##### 添加列级约束
+            <!-- panels:start -->
+            <!-- div:left-panel-50 -->
+            ##### 添加列级约束
             ```sql
             # 1.1 添加列级约束
             drop table if exists stu_info;
@@ -55,7 +57,9 @@
             insert into stu_info values (2,' lily', '男', null, 19, 2);
             select * from stu_info;
             ```
-            2. ##### 添加表级约束
+
+            <!-- div:right-panel-50 -->
+            ##### 添加表级约束
             ```sql
             # 1.2添加表级约束
             drop table if exists stu_info;
@@ -73,8 +77,7 @@
                 constraint fk_stu_info_major foreign key (majorId) references major(id) # 外键
             );
             ```
-
-         
+            <!-- panels:end -->
             <hr/>
 
             ###### 主键和唯一对比
@@ -82,5 +85,11 @@
             | :--: |:--: |:--: |:--: |:--: |
             | 主键 | ✅ | ❌ | 至多有1个主键 | ✅ <br>【primary key(id,name)】|
             | 唯一 | ✅ | ✅ <br>(可以有多个NULL) | 可以有多个唯一字段 | ✅ <br>【unique(seat, seat2】|
+
+            ###### 外键的特点
+            > [!NOTE] `1).` 要求在从表上设置外键关系
+            <br>`2).` 要求从表的外键列的类型和主表而关联列的类型 一致或兼容。名称无要求
+            <br>`3).` 主表的关联列必须是一个key（一般是主键或者唯一）
+            <br>`4).` 插入时：先主后从。删除时，先从后主（不然又外键约束引用，删除会报错。比如此处先删major,后删stu_info会报错）
 
         - #### 修改表时添加约束
