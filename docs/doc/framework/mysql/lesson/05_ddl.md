@@ -115,3 +115,17 @@
             <br>三、删除主键：`alter table stu_info drop primary key;`
             <br>四、删除唯一：`alter table stu_info drop index seat;`，可以通过`show index from stu_info`来查看名字。
             <br>五、删除外键：`alter table stu_info drop foreign key fk_stuinfo_major;`
+
+    + ### 4.标识列
+
+        > [?] 又称为自增长列
+        <br>含义：可以不用手动的插入值，系统提供默认的序列值
+        <br><br>特点：
+        <br>`1).` 标识列必须和key搭配（主键，唯一）
+        <br>`2).` 一个表至多一个
+        <br>`3).` 标识列的类型只能是数值型
+        <br>`4).` 标识列可以通过`set auto_increment_increment = 3;`设置步长，通过手动插入值设置offset起始值。
+        <br><br>查看相关变量使用`show variables like '%auto_increment%';`
+        <br><br>一、创建表时设置标识列`create table t1(id int primary key auto_increment);`
+        <br>二、修改表时设置标识列`alter table t1 modify column id int primary key auto_increment;`
+        <br>三、修改表时删除标识列`alter table t1 modify column id int;`
