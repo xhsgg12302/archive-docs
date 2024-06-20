@@ -53,8 +53,8 @@
             );
             desc stu_info;
             show index from stu_info;
-            insert into stu_info values (1,' john', '男', null, 19, 1);
-            insert into stu_info values (2,' lily', '男', null, 19, 2);
+            insert into stu_info values (1,'john', '男', null, 19, 1);
+            insert into stu_info values (2,'lily', '男', null, 19, 2);
             select * from stu_info;
             ```
 
