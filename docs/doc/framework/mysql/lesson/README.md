@@ -1,5 +1,18 @@
 * ## Intro(Lesson)
 
+    + ### 目录结构
+
+        1. [数据库相关概念](./01_database_related_concepts.md)
+        2. [帮助函数](./02_function.md)
+        3. [DQL-数据查询语言](./03_dql.md)
+        4. [DML-数据操纵语言](./04_dml.md)
+        5. [DDL-数据定义语言](./05_ddl.md)
+        6. [TCL-事务控制语言](./06_tcl.md)
+        7. [视图](./07_view.md)
+        8. [变量](./08_variables.md)
+        9. [存储过程](./09_procedure_function.md)
+        10. [流程控制](./10_flow_control.md)
+
     + ### 练习环境准备
 
         <!-- panels:start -->
