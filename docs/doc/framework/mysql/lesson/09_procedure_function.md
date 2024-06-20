@@ -1,6 +1,6 @@
 * ## Intro(PROCEDURE AND FUNCTION)
 
-    > [!] 类似于java中的方法
+    > [!] 类似于java中的方法，MySQL 5.0 版本开始支持存储过程。
     <br>含义：一组预先编译好的sql语句的集合，理解成批处理语句。
     <br><br>好处：
     <br>`1).` 提高代码的重用性
