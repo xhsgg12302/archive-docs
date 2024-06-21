@@ -138,6 +138,8 @@
         <br>~`desc myp2;`~
         <br>`show create procedure myp2;`
 
+---
+
 * ## Intro(FUNCTION)
 
     > [!] 类似于java中的方法，
