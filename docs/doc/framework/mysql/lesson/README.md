@@ -10,7 +10,7 @@
         6. [TCL-事务控制语言](./06_tcl.md)
         7. [视图](./07_view.md)
         8. [变量](./08_variables.md)
-        9. [存储过程](./09_procedure_function.md)
+        9. [存储过程和函数](./09_procedure_function.md)
         10. [流程控制](./10_flow_control.md)
 
     + ### 练习环境准备
