@@ -19,7 +19,7 @@ public class HelloJNI{
     }
 }
 ```
-> The static initializer invokes System.loadLibrary() to load the native library "hello" (which contains a native method called sayHello()) during the class loading. It will be mapped to "hello.dll" in Windows; or "libhello.so" in Unixes/Mac OS X. This library shall be included in Java's library path (kept in Java system variable java.library.path). You could include the library into Java's library path via VM argument -Djava.library.path=/path/to/lib. The program will throw a UnsatisfiedLinkError if the library cannot be found in runtime.
+> [?] The static initializer invokes System.loadLibrary() to load the native library "hello" (which contains a native method called sayHello()) during the class loading. It will be mapped to "hello.dll" in Windows; or "libhello.so" in Unixes/Mac OS X. This library shall be included in Java's library path (kept in Java system variable java.library.path). You could include the library into Java's library path via VM argument -Djava.library.path=/path/to/lib. The program will throw a UnsatisfiedLinkError if the library cannot be found in runtime.
 
 
 ##### 2. 编译HelloJNI.java 并且生成C/C++头文件 HelloJNI.h
