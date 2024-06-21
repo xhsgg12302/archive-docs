@@ -82,3 +82,83 @@
         <br><br>循环控制：
         <br>`iterate`: 类似于 continue 继续，结束本次循环，继续下一次
         <br>`leave`: 类似于 break，跳出，结束当前所在的循环
+
+        <!-- tabs:start -->
+        #### **while**
+        > [!NOTE] omited
+        ```sql
+        [标签:] 
+        while 循环条件 do
+            循环体;
+        end while;
+        [标签];
+        ```
+        - ##### demo
+
+            > [?] 没有添加循环控制的情况 
+            <br>case1：批量插入，根据次数插入到admin表中多条记录
+            <br>调用：`call pro_while1(100);`
+            ```sql
+            create procedure pro_while1(in insertCount int)
+            begin
+                declare i int default 1;
+                while i <= insertCount do
+                    insert into admin(username, password) values (concat('Rose' , i), '666');
+                    set i = i + 1;
+                end while;
+            end $
+            ```
+
+            > [?] 添加leave 循环控制语句 
+            <br>case2：批量插入，根据次数插入到admin表中多条记录，如果次数 >20 则停止
+            <br>调用：`call pro_while2(100);`
+            ```sql
+            create procedure pro_while2(in insertCount int)
+            begin
+                declare i int default 1;
+                a:while i <= insertCount do
+                    insert into admin(username, password) values (concat('xiaohua' , i), '666');
+                    if i >= 20 then leave a;
+                    end if;
+                    set i = i + 1;
+                end while a;
+            end $
+            ```
+
+            > [?] 添加iterate 循环控制语句 
+            <br>case3：批量插入，根据次数插入到admin表中多条记录，只记录偶数次
+            <br>调用：`call pro_while3(100);`
+            ```sql
+            create procedure pro_while3(in insertCount int)
+            begin
+                declare i int default 0;
+                flag:while i <= insertCount do
+                    set i = i + 1;
+                    if mod(i, 2) != 0 then iterate flag;
+                    end if;
+                    insert into admin(username, password) values (concat('xiaohua' , i), '666');
+                end while flag;
+            end $
+            ```
+
+        #### **loop**
+        > [!NOTE] 可以用来模拟简单的死循环
+        ```sql
+        [标签:] 
+        loop
+            循环体;
+        end loop;
+        [标签];
+        ```
+
+        #### **repeat**
+        > [!NOTE] omited
+        ```sql
+        [标签:] 
+        repeat
+            循环体;
+        until 结束条件
+        end repeat;
+        [标签];
+        ```
+        <!-- tabs:end -->
