@@ -15,7 +15,7 @@
             存储过程题（一组合法的sql语句）
         end
         ```
-        > [?] 注意：
+        > [!NOTE] 注意：
         <br>`1).` 参数列表包含三部分（参数模式，参数名，参数类型），例如：`IN stuname varchar(20)`
         <br>参数模式：
         <br>in: 该参数可以作为输入，也就是该参数需要调用方传入值
@@ -130,11 +130,11 @@
 
     + ### 删除语法
 
-        > [?] 语法：`drop procedure 存储过程名;` 一次只能删除一个。
+        > [!NOTE] 语法：`drop procedure 存储过程名;` 一次只能删除一个。
         <br>`drop procedure myp3;`
     + ### 查看语法
 
-        > [?] 语法
+        > [!NOTE] 语法
         <br>~`desc myp2;`~
         <br>`show create procedure myp2;`
 
@@ -160,7 +160,7 @@
             函数体
         end
         ```
-        > [?] 注意：
+        > [!NOTE] 注意：
         <br>参数列表包含两部分：函数名，参数类型
         <br><br>函数体：肯定会有return语句，如果没有会报错
         <br>如果return语句没有放在函数体的最后也不保存，但不建议
@@ -220,11 +220,11 @@
     
     + ### 查看语法
 
-        > [?] 语法
+        > [!NOTE] 语法
         <br>~`desc myf3;`~
         <br>`show create function myf3;`
 
     + ### 删除语法
 
-        > [?] 语法：`drop function 函数名;` 一次只能删除一个。
+        > [!NOTE] 语法：`drop function 函数名;` 一次只能删除一个。
         <br>`drop function myf3;`
