@@ -1,4 +1,115 @@
--- MySQL dump 10.13  Distrib 5.7.44, for osx10.18 (x86_64) -- -- Host: 127.0.0.1    Database: girls -- ------------------------------------------------------ -- Server version	5.6.49 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */; /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */; /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */; /*!40101 SET NAMES utf8 */; /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */; /*!40103 SET TIME_ZONE='+00:00' */; /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */; /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */; /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */; /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */; -- -- Current Database: `girls` -- CREATE DATABASE /*!32312 IF NOT EXISTS*/ `girls` /*!40100 DEFAULT CHARACTER SET utf8 */; USE `girls`; -- -- Table structure for table `admin` -- DROP TABLE IF EXISTS `admin`; /*!40101 SET @saved_cs_client     = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `admin` ( `id` int(11) NOT NULL AUTO_INCREMENT, `username` varchar(10) NOT NULL, `password` varchar(10) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `admin` -- /*!40000 ALTER TABLE `admin` DISABLE KEYS */; INSERT INTO `admin` VALUES (1,'john','8888'),(2,'lyt','6666'); /*!40000 ALTER TABLE `admin` ENABLE KEYS */; -- -- Table structure for table `beauty` -- DROP TABLE IF EXISTS `beauty`; /*!40101 SET @saved_cs_client     = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `beauty` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(50) NOT NULL, `sex` char(1) DEFAULT '女', `borndate` datetime DEFAULT '1987-01-01 00:00:00', `phone` varchar(11) NOT NULL, `photo` blob, `boyfriend_id` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `beauty` -- /*!40000 ALTER TABLE `beauty` DISABLE KEYS */; INSERT INTO `beauty` VALUES (1,'柳岩','女','1988-02-03 00:00:00','18209876577',NULL,8),(2,'苍老师','女','1987-12-30 00:00:00','18219876577',NULL,9),(3,'Angelababy','女','1989-02-03 00:00:00','18209876567',NULL,3),(4,'热巴','女','1993-02-03 00:00:00','18209876579',NULL,2),(5,'周冬雨','女','1992-02-03 00:00:00','18209179577',NULL,9),(6,'周芷若','女','1988-02-03 00:00:00','18209876577',NULL,1),(7,'岳灵珊','女','1987-12-30 00:00:00','18219876577',NULL,9),(8,'小昭','女','1989-02-03 00:00:00','18209876567',NULL,1),(9,'双儿','女','1993-02-03 00:00:00','18209876579',NULL,9),(10,'王语嫣','女','1992-02-03 00:00:00','18209179577',NULL,5),(11,'夏雪','女','1993-02-03 00:00:00','18209876579',NULL,9),(12,'赵敏','女','1992-02-03 00:00:00','18209179577',NULL,1); /*!40000 ALTER TABLE `beauty` ENABLE KEYS */; -- -- Table structure for table `boys` -- DROP TABLE IF EXISTS `boys`; /*!40101 SET @saved_cs_client     = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `boys` ( `id` int(11) NOT NULL AUTO_INCREMENT, `boyName` varchar(20) DEFAULT NULL, `userCP` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `boys` -- /*!40000 ALTER TABLE `boys` DISABLE KEYS */; INSERT INTO `boys` VALUES (1,'张无忌',100),(2,'鹿晗',800),(3,'黄晓明',50),(4,'段誉',300); /*!40000 ALTER TABLE `boys` ENABLE KEYS */; -- -- Table structure for table `t_ca` -- DROP TABLE IF EXISTS `t_ca`; /*!40101 SET @saved_cs_client     = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `t_ca` ( `id` int(11) NOT NULL, `cname` varchar(20) DEFAULT NULL, `csex` varchar(1) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8; /*!40101 SET character_set_client = @saved_cs_client */;
+-- MySQL dump 10.13  Distrib 5.7.44, for osx10.18 (x86_64)
+--
+-- Host: 127.0.0.1    Database: girls
+-- ------------------------------------------------------
+-- Server version	5.6.49
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `girls`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `girls` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `girls`;
+
+--
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(10) NOT NULL,
+  `password` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin`
+--
+
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1,'john','8888'),(2,'lyt','6666');
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+
+--
+-- Table structure for table `beauty`
+--
+
+DROP TABLE IF EXISTS `beauty`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beauty` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `sex` char(1) DEFAULT '女',
+  `borndate` datetime DEFAULT '1987-01-01 00:00:00',
+  `phone` varchar(11) NOT NULL,
+  `photo` blob,
+  `boyfriend_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `beauty`
+--
+
+/*!40000 ALTER TABLE `beauty` DISABLE KEYS */;
+INSERT INTO `beauty` VALUES (1,'柳岩','女','1988-02-03 00:00:00','18209876577',NULL,8),(2,'苍老师','女','1987-12-30 00:00:00','18219876577',NULL,9),(3,'Angelababy','女','1989-02-03 00:00:00','18209876567',NULL,3),(4,'热巴','女','1993-02-03 00:00:00','18209876579',NULL,2),(5,'周冬雨','女','1992-02-03 00:00:00','18209179577',NULL,9),(6,'周芷若','女','1988-02-03 00:00:00','18209876577',NULL,1),(7,'岳灵珊','女','1987-12-30 00:00:00','18219876577',NULL,9),(8,'小昭','女','1989-02-03 00:00:00','18209876567',NULL,1),(9,'双儿','女','1993-02-03 00:00:00','18209876579',NULL,9),(10,'王语嫣','女','1992-02-03 00:00:00','18209179577',NULL,5),(11,'夏雪','女','1993-02-03 00:00:00','18209876579',NULL,9),(12,'赵敏','女','1992-02-03 00:00:00','18209179577',NULL,1);
+/*!40000 ALTER TABLE `beauty` ENABLE KEYS */;
+
+--
+-- Table structure for table `boys`
+--
+
+DROP TABLE IF EXISTS `boys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `boys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `boyName` varchar(20) DEFAULT NULL,
+  `userCP` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `boys`
+--
+
+/*!40000 ALTER TABLE `boys` DISABLE KEYS */;
+INSERT INTO `boys` VALUES (1,'张无忌',100),(2,'鹿晗',800),(3,'黄晓明',50),(4,'段誉',300);
+/*!40000 ALTER TABLE `boys` ENABLE KEYS */;
+
+--
+-- Table structure for table `t_ca`
+--
+
+DROP TABLE IF EXISTS `t_ca`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_ca` (
+  `id` int(11) NOT NULL,
+  `cname` varchar(20) DEFAULT NULL,
+  `csex` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `t_ca`
@@ -16,10 +127,10 @@ DROP TABLE IF EXISTS `t_ua`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_ua` (
-`t_id` int(11) NOT NULL,
-`tName` varchar(50) DEFAULT NULL,
-`tGender` varchar(10) DEFAULT NULL,
-PRIMARY KEY (`t_id`)
+  `t_id` int(11) NOT NULL,
+  `tName` varchar(50) DEFAULT NULL,
+  `tGender` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,13 +158,13 @@ DROP TABLE IF EXISTS `departments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `departments` (
-`department_id` int(4) NOT NULL AUTO_INCREMENT,
-`department_name` varchar(3) DEFAULT NULL,
-`manager_id` int(6) DEFAULT NULL,
-`location_id` int(4) DEFAULT NULL,
-PRIMARY KEY (`department_id`),
-KEY `loc_id_fk` (`location_id`),
-CONSTRAINT `loc_id_fk` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`)
+  `department_id` int(4) NOT NULL AUTO_INCREMENT,
+  `department_name` varchar(3) DEFAULT NULL,
+  `manager_id` int(6) DEFAULT NULL,
+  `location_id` int(4) DEFAULT NULL,
+  PRIMARY KEY (`department_id`),
+  KEY `loc_id_fk` (`location_id`),
+  CONSTRAINT `loc_id_fk` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=gb2312;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -73,22 +184,22 @@ DROP TABLE IF EXISTS `employees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employees` (
-`employee_id` int(6) NOT NULL AUTO_INCREMENT,
-`first_name` varchar(20) DEFAULT NULL,
-`last_name` varchar(25) DEFAULT NULL,
-`email` varchar(25) DEFAULT NULL,
-`phone_number` varchar(20) DEFAULT NULL,
-`job_id` varchar(10) DEFAULT NULL,
-`salary` double(10,2) DEFAULT NULL,
-`commission_pct` double(4,2) DEFAULT NULL,
-`manager_id` int(6) DEFAULT NULL,
-`department_id` int(4) DEFAULT NULL,
-`hiredate` datetime DEFAULT NULL,
-PRIMARY KEY (`employee_id`),
-KEY `dept_id_fk` (`department_id`),
-KEY `job_id_fk` (`job_id`),
-CONSTRAINT `dept_id_fk` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`),
-CONSTRAINT `job_id_fk` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`)
+  `employee_id` int(6) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(20) DEFAULT NULL,
+  `last_name` varchar(25) DEFAULT NULL,
+  `email` varchar(25) DEFAULT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
+  `job_id` varchar(10) DEFAULT NULL,
+  `salary` double(10,2) DEFAULT NULL,
+  `commission_pct` double(4,2) DEFAULT NULL,
+  `manager_id` int(6) DEFAULT NULL,
+  `department_id` int(4) DEFAULT NULL,
+  `hiredate` datetime DEFAULT NULL,
+  PRIMARY KEY (`employee_id`),
+  KEY `dept_id_fk` (`department_id`),
+  KEY `job_id_fk` (`job_id`),
+  CONSTRAINT `dept_id_fk` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`),
+  CONSTRAINT `job_id_fk` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=gb2312;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,9 +219,9 @@ DROP TABLE IF EXISTS `job_grades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job_grades` (
-`grade_level` varchar(3) DEFAULT NULL,
-`lowest_sal` int(11) NOT NULL,
-`highest_sal` int(11) NOT NULL
+  `grade_level` varchar(3) DEFAULT NULL,
+  `lowest_sal` int(11) NOT NULL,
+  `highest_sal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,11 +241,11 @@ DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jobs` (
-`job_id` varchar(10) NOT NULL,
-`job_title` varchar(35) DEFAULT NULL,
-`min_salary` int(6) DEFAULT NULL,
-`max_salary` int(6) DEFAULT NULL,
-PRIMARY KEY (`job_id`)
+  `job_id` varchar(10) NOT NULL,
+  `job_title` varchar(35) DEFAULT NULL,
+  `min_salary` int(6) DEFAULT NULL,
+  `max_salary` int(6) DEFAULT NULL,
+  PRIMARY KEY (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gb2312;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -154,13 +265,13 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `locations` (
-`location_id` int(11) NOT NULL AUTO_INCREMENT,
-`street_address` varchar(40) DEFAULT NULL,
-`postal_code` varchar(12) DEFAULT NULL,
-`city` varchar(30) DEFAULT NULL,
-`state_province` varchar(25) DEFAULT NULL,
-`country_id` varchar(2) DEFAULT NULL,
-PRIMARY KEY (`location_id`)
+  `location_id` int(11) NOT NULL AUTO_INCREMENT,
+  `street_address` varchar(40) DEFAULT NULL,
+  `postal_code` varchar(12) DEFAULT NULL,
+  `city` varchar(30) DEFAULT NULL,
+  `state_province` varchar(25) DEFAULT NULL,
+  `country_id` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3202 DEFAULT CHARSET=gb2312;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
