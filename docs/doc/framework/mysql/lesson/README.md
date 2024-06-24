@@ -27,10 +27,7 @@
         ![](/.images/doc/framework/mysql/lesson/readme-lesson-01.png ':size=96%')
         <!-- panels:end -->
 
-        <details><summary>lesson.sql</summary>
-
-        [lesson.sql](./lesson.sql ':include :type=code')
-        </detail>
+        [lesson.sql](https://raw.githubusercontent.com/xhsgg12302/knownledges/master/docs/doc/framework/mysql/lesson/lesson.sql ':include')
 
     + ### 语法规范
 
