@@ -4,9 +4,9 @@
     + ### 参数解释
 
         |index | explain|
-        | -: | - |
+        | :- | - |
         |-Xdebug |启用调试特性|
-        |-Xrunjdwp| <sub-options> 在目标 VM 中加载 JDWP 实现。它通过传输和 JDWP 协议与独立的调试器应用程序通信。下面介绍一些特定的子选项从 Java V5 开始，您可以使用 -agentlib:jdwp 选项，而不是 -Xdebug 和 -Xrunjdwp。但如果连接到 V5 以前的 VM，只能选择 -Xdebug 和 -Xrunjdwp。|
+        |-Xrunjdwp| <sub-options> 在目标 VM 中加载 JDWP 实现。它通过传输和 JDWP 协议与独立的调试器应用程序通信。从 Java V5 开始，您可以使用 -agentlib:jdwp 选项，而不是 -Xdebug 和 -Xrunjdwp。|
         |-Djava.compiler=NONE| 禁止 JIT 编译器的加载|
         |transport| 传输方式，有 socket 和 shared memory 两种，我们通常使用 socket（套接字）传输，但是在 Windows 平台上也可以使用shared memory（共享内存）传输。|
         |server（y/n）| VM 是否需要作为调试服务器执行|
