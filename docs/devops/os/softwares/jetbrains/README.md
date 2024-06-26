@@ -15,7 +15,7 @@
 
     > [?] 可能原因是当前使用的jar包在编译的时候没有加入调试信息，比如(`LineNumberTable`, [`LocalVariableTable`](/docs/doc/advance/javastrace.md#localvariabletable), etc. )
     <br> [参考1：Why do I see unknown source in stack traces when I have sources downloaded?](https://stackoverflow.com/questions/66565398/why-do-i-see-unknown-source-in-stack-traces-when-i-have-sources-downloaded/66565466)
-    <br> [参考2：bouncy castle: How to get bcpkix-jdk15on-1.47.jar with debug information](https://stackoverflow.com/questions/12894129/bouncy-castle-how-to-get-bcpkix-jdk15on-1-47-jar-with-debug-information)
+    <br> [参考2：bouncy castle: How to get bcpkix-jdk15on-1.47.jar with debug information](https://stackoverflow.com/questions/12894129/bouncy-castle-how-to-get-bcpkix-jdk15on-1-47-jar-with-debug-information) <span style="padding-left:100px">[解决方案:version[-debug]](https://github.com/bcgit/bc-java/issues/1450)</span>
 
     <!-- panels:start -->
     <!-- div:left-panel-60 -->
