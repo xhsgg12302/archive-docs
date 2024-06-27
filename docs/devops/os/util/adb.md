@@ -15,6 +15,10 @@
         ![](/.images/devops/os/util/adb-prop-01.png ':size=48%')
         ![](/.images/devops/os/util/adb-prop-02.png ':size=49%')
 
+    + ### ADB添加系统证书的方法
+
+        > [?] 【[Docs|参见](./openssl.md#adb-添加系统证书方法)】
+
 ## Reference
 * https://github.com/12302-bak/awesome-adb
 * https://forum.xda-developers.com/t/a-magisk-script-to-set-adb-tcpip-port-at-startup-without-bricking-my-phone.4533603/
