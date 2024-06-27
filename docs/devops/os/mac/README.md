@@ -6,9 +6,18 @@
     ### macOS_14_Sonoma_关闭输入法图标提示
     > [?] [参考](https://discussionschinese.apple.com/thread/255178136?sortBy=best)：终端输入`sudo defaults write /Library/Preferences/FeatureFlags/Domain/UIKit.plist redesigned_text_cursor -dict-add Enabled -bool YES `
 
-    ### [command+Shift+F]呼出访达聚焦搜索
+    ### 快捷键记录
+    
+    <!-- panels:start -->
+    <!-- div:left-panel-50 -->
+    > [!NOTE] [command+Shift+F]呼出访达聚焦搜索
 
-    ![](/.images/devops/os/mac/macosx-keyboard-conflict-01.png ':size=60%')
+    ![](/.images/devops/os/mac/macosx-keyboard-conflict-01.png ':size=100%')
+    <!-- div:right-panel-50 -->
+    > [!NOTE] [command+Shift+/]呼出帮助菜单
+
+    ![](/.images/devops/os/mac/macosx-keyboard-conflict-02.png ':size=100%')
+    <!-- panels:end -->
 
 * ## Reference
 

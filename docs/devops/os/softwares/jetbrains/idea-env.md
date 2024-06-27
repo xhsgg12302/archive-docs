@@ -19,6 +19,12 @@
 
         ![](/.images/devops/os/softwares/idea-config-serial-01.png ':size=70%')
 
+    - ### 快捷键冲突
+
+        > [?] idea代码块注释<span style='color:blue'>[⇧⌘/]</span>和系统快捷键冲突
+
+        ![](/.images/devops/os/mac/macosx-keyboard-conflict-02.png ':size=70%x500')
+
 + ## 其他
 
     - ### 使用idea 插件反编译整个jar到文件夹
