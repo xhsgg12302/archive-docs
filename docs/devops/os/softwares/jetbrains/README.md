@@ -33,7 +33,7 @@
 
     ### Idea不能读取系统环境变量
 
-    > [!] 原先因为调试IDEA启不动问题，手贱将idea启动目录下的一个C`/Applications/IntelliJ IDEA.app/Contents/bin/printenv`程序因为打印格式问题替换成了`/usr/bin/printenv`，导致IDEA读取不到系统设置的环境变量。效果类似如下图所示。但是好在有大佬们的文章[Env variables not sourced when launched from Mac OS X Monterey Dock](https://issuetracker.google.com/issues/216364005#comment7)可以借鉴，最终成功解决。
+    > [!] 原先因为调试IDEA启不动问题，手贱将idea启动目录下的一个C`/Applications/IntelliJ IDEA.app/Contents/bin/printenv`程序因为打印格式问题替换成了`/usr/bin/printenv`（辛好有备份:stuck_out_tongue_closed_eyes:），导致IDEA读取不到系统设置的环境变量。效果类似如下图所示。但是好在有大佬们的文章[Env variables not sourced when launched from Mac OS X Monterey Dock](https://issuetracker.google.com/issues/216364005#comment7)可以借鉴，最终成功解决。
 
     ![](/.images/devops/os/softwares/idea-not-read-env-01.png ':size=49%')
     ![](/.images/devops/os/softwares/idea-not-read-env-02.png ':size=49%')
