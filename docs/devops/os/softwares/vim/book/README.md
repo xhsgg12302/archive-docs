@@ -15,9 +15,9 @@
         <br>`7).` 停顿时请移开画笔，想象在作画，经常`<C-[>`。
         <br>`8).` 需要换行尽量使用`<Esc>o`,把修改切成最小粒度。使用`<up>,<down>,<left>,<right>`会产生新的撤销块。
         <br>`9).` 构造可重复的修改，比如删除【The end is nig<span style='color: blue;text-decoration: underline;'>h</span>】中的 nigh 。可以使用如下，也可以在[vimgolf](https://www.vimgolf.com/)中进行判决
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 反向删除`dbx` , `. == x`
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正向删除`bdw` , `. == dw`
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 删除整的单词`daw` , `. == daw` ✅
+        <br><span style='padding-left:2.8em' />反向删除`dbx` , `. == x`
+        <br><span style='padding-left:2.8em' />正向删除`bdw` , `. == dw`
+        <br><span style='padding-left:2.8em' />删除整的单词`daw` , `. == daw` ✅
         <br>`10).` 使用`<C-a>,[count]<C-x>`对光标下|后的数字进行加减，默认八进制，通过配置文件设置`set nrformats=`修改成十进制
         <br>`11).` 能重复就别用次数
         <br>`12).` 操作符待决策模式`g`：`g~`,`gu`,`gU`,`gUgU | gUU`,`>`,`>>`,`<`,`=`,
@@ -31,6 +31,12 @@
         <br>`16).` 随时随地做运算：在插入模式中，使用`<C-r>=`调用表达式寄存器，输入表达式`6*35<CR>`做运算，将结果插入到当前光标下。
         <br>`17).` 用字符编码插入非常用字符: `<C-v>u{四位十六进制 unicode}`：例`<C-v>u00bf`-`¿`。查看贯标下的字符使用：`ga`。
         <br>`18).` 插入以二合字母{char1}{char2}表示的字符</span>`<C-k>{char}{char}`,例如`<C-k>12`-`½`，`<C-k>?I`-`¿`，使用命令查看二合字母`:digraphs`,`:h digraph-table`。`:h digraphs-default`
+
+    + ### 第四章 可视模式
+
+        > [?]
+        <br>`20).` 深入理解可视模式: 使用：`<C-g>`在 visual 模式和 select 模式切换，选择模式相当于普通编辑器中选择后直接输入替换那种效果。
+        <br>`21).` 选择高亮选区: 【`v`:面向字符,`V`:面向行,`<C-v>`:面相列块,`gv`:重选上次高亮区域】，重复会取消选择，比如连着按两次`v`。<span>
 
     + ### 第五章 命令行模式
 
