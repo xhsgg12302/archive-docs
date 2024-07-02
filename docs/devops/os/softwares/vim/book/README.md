@@ -39,7 +39,7 @@
         <br>`21).` 选择高亮选区: 【`v`:面向字符,`V`:面向行,`<C-v>`:面相列块,`gv`:重选上次高亮区域】，重复会取消选择，比如连着按两次`v`。<span>
         <br>`22).` 重复执行面向行的可视命令: `Vj>.`,`Vj2>`
         <br>`23).` 只要可能，最好用操作符命令，而不是可视命令: `vitU`可是模式中会影响部分（等长），`gUit`普通模式在的操作符刚好。
-        <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-023.png ':size=30%')<span style='padding-left:1em' />![](/.images/devops/os/softwares/vim/vim-b1-023-02.png ':size=30%')
+        <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-023-01.png ':size=30%')<span style='padding-left:1em' />![](/.images/devops/os/softwares/vim/vim-b1-023-02.png ':size=30%')
         <br>`24).` 用面向列块的可视模式编辑表格数据: 减少列之间的间距并以竖线分割，`<C-v>3jx...gvr|`,添加横线`yypVr-`
         <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-024.png ':size=25%')
 
