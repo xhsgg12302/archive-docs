@@ -40,8 +40,12 @@
         <br>`22).` 重复执行面向行的可视命令: `Vj>.`,`Vj2>`
         <br>`23).` 只要可能，最好用操作符命令，而不是可视命令: `vitU`可是模式中会影响部分（等长），`gUit`普通模式在的操作符刚好。
         <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-023-01.png ':size=30%')<span style='padding-left:1em' />![](/.images/devops/os/softwares/vim/vim-b1-023-02.png ':size=30%')
-        <br>`24).` 用面向列块的可视模式编辑表格数据: 减少列之间的间距并以竖线分割，`<C-v>3jx...gvr|`,添加横线`yypVr-`
+        <br><br>`24).` 用面向列块的可视模式编辑表格数据: 减少列之间的间距并以竖线分割，`<C-v>3jx...gvr|`,添加横线`yypVr-`。
         <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-024.png ':size=25%')
+        <br><br>`25).` 修改列文本: 删除影响所有行，但是修改的话只影响顶行，使用`<CR>`后会变得正常。修改sprite -> components。`<C-v>jjec`,`components`,`<Esc>`。
+        <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-025.png ':size=40%')
+        <br><br>`26).` 在长短不一的高亮块后添加文本: （可视模式中的`i,a`被视为文本对象的组成部分）。在每行末尾添加`;`: `<C-v>jj$A;<Esc>`
+        <br><span style='padding-left:3.5em' />![](/.images/devops/os/softwares/vim/vim-b1-026.png ':size=30%')
 
     + ### 第五章 命令行模式
 
