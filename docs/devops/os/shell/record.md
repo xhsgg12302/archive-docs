@@ -57,3 +57,6 @@ ls ./ | grep -v 'docs' | xargs -n 1 -I {} mv {} docs
 # 批量修改问价后缀
 rename 's/\.jpg$/.webp/' *.jpg
 ```
+
+> [?] 批量转换 webm 到gif
+<br>`find webps/ -type f -name "*.webp" -print0 | xargs -0 -I{} sh -c 'ffmpeg -y -loglevel quiet  -i "{}" -pix_fmt rgb24 "webps-gif/$(basename {}).gif"'`
