@@ -60,3 +60,6 @@ rename 's/\.jpg$/.webp/' *.jpg
 
 > [?] 批量转换 webm 到gif
 <br>`find webps/ -type f -name "*.webp" -print0 | xargs -0 -I{} sh -c 'ffmpeg -y -loglevel quiet  -i "{}" -pix_fmt rgb24 "webps-gif/$(basename {}).gif"'`
+
+> [?] 将'download 下 each/gif 中的gif文件复制到 all/gif下。比如 ./download/each/gif/abc.gif -> ./download/all/gif/abc.gif'
+<br>`find . -maxdepth 1 -mindepth 1 -type d ! -name 'all' -exec sh -c 'find "$1" -name  "*.gif" -print ' _ {} \; | xargs -n 1 -I {} cp {} all/gif`
