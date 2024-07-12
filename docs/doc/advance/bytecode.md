@@ -424,6 +424,13 @@
 
             ![](/.images/doc/advance/bytecode/bytecode-struct-01.png ':size=80%')
 
+            **使用ImHex分析**
+
+            > [?] 起因：在公众号上看见一篇名为【[39.1K酷!!!十六进制编辑器中的瑞士军刀](https://mp.weixin.qq.com/s/0UDfrlTrjokV-Dn39tnZGA)】的文章，根据介绍大概得知可以使用自定义的模式分析和可视化数据，正好我们可以用到。
+            <br>然后访问[ImHex官网](https://github.com/WerWolv/ImHex)，根据README中的介绍，一路找到pattern仓库，发现[支持列表](https://github.com/WerWolv/ImHex-Patterns?tab=readme-ov-file#table-of-contents)中正好有官方对[java字节码分析文件](https://github.com/WerWolv/ImHex-Patterns/blob/master/patterns/java_class.hexpat)。随下载安装一气呵成。然后加载Hello.class文件，与手动分析的做对比。
+
+            ![](/.images/doc/advance/bytecode/bytecode-struct-02.png ':size=100%')
+
 
 * ## Reference
 
