@@ -496,6 +496,14 @@
 	# 同理，取消其他文件追踪也一样。
 	```
 
++ ## GIT推送缓冲区
+
+	> [?] 在推送数据时会使用一个称为“对象数据库”（object database）的概念来存储对象。在推送过程中，Git 会将这些对象通过网络传输到远程仓库。
+	<br>对于缓冲区大小的配置，Git 本身并没有直接的设置选项。但是，你可以通过一些间接的方式来影响推送过程中的数据传输效率，比如使用压缩算法来减小数据量。
+	<br><br>例如，你可以通过以下命令来查看 Git 的配置：`git config --get http.postBuffer`.如果没有设置 http.postBuffer，那么 Git 将使用默认值，通常是 1 MiB（1048576 字节）。
+	<br>这个值可以通过以下命令设置：`git config --global http.postBuffer 52428800`.这里设置的 http.postBuffer 是以字节为单位的，表示 Git 在执行推送操作时可以使用的最大缓冲区大小。例如，上面的命令设置了 50 MB 的缓冲区大小。
+	<br>![](/.images/devops/git/git-push-01.png ':size=47%') ![](/.images/devops/git/git-push-02.png ':size=46%')
+
 + ## Reference
 	* https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
 	* https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
