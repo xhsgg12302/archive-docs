@@ -1,5 +1,8 @@
 * ## Intro(Vim实用技巧_高清_中文版.pdf)
 
+    > [!] 练习文件「practical-vim」repo：https://github.com/rxedu/practical-vim
+    <br>当前clone文件路径`~/Desktop/_scratch/practical-vim`。
+
     + ### 第一章 vim解决问题的方式
 
         > [?] 

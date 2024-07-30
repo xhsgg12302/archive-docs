@@ -63,3 +63,9 @@ rename 's/\.jpg$/.webp/' *.jpg
 
 > [?] 将'download 下 each/gif 中的gif文件复制到 all/gif下。比如 ./download/each/gif/abc.gif -> ./download/all/gif/abc.gif'
 <br>`find . -maxdepth 1 -mindepth 1 -type d ! -name 'all' -exec sh -c 'find "$1" -name  "*.gif" -print ' _ {} \; | xargs -n 1 -I {} cp {} all/gif`
+
+> [?] 查看视频像素
+<br>`ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 WechatIMG1185--d14_trim_concat.mp4`
+
+> [?] 裁剪视频
+<br>`ffmpeg -y -i WechatIMG1185--d14_trim_concat.mp4 -vf "crop=512:512:1024:0" cropped_video.mp4`
