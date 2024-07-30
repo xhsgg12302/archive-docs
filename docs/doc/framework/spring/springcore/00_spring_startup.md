@@ -46,32 +46,47 @@
                     <br><br>**initBeanDefinitionReader(beanDefinitionReader)** ，初始化reader属性，比如设置validate=true.
                     <br>**loadBeanDefinitions(beanDefinitionReader)** ，使用reader从配置文件中加载beandefinitions到beanfactory中。
 
-            - ##### 03). prepareBeanFactory(beanFactory);
+            - ##### 03). prepareBeanFactory(beanFactory)
 
                 > [?]
                 ![](/.images/doc/framework/spring/00-spring-startup/ss-09.png ':size=60%')
                 <br>准备/配置beanfactory为接下来的使用，配置一些标准的特性，比如上下文加载器和后置处理器。
+                <br>`1).` 增加两个默认的bean后置处理器`ApplicationContextAwareProcessor`,`ApplicationListenerDetector`。
+                <br>`2).` 其中的**resolvableDependency**用来注册一些默认类型的对象。例如有ApplicationContext类型的注入，当在population的时候通过`findAutowireCandidates()`方法中就可以使用到刚才默认的这些值了。
 
-            - ##### 04). postProcessBeanFactory(beanFactory);
+            - ##### 04). postProcessBeanFactory(beanFactory)
 
-            - ##### 05). invokeBeanFactoryPostProcessors(beanFactory);
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-10.png ':size=60%')
+                <br>允许子类修改应用上下文中的内部beanfactory在初始化完成之后。所有的beandefinitions已经加载完成，但是并没有实例化。所以此处子类可以适当添加一些bean后置处理器。
 
-            - ##### 06). registerBeanPostProcessors(beanFactory);
+            - ##### 05). invokeBeanFactoryPostProcessors(beanFactory)
 
-            - ##### 07). initMessageSource();
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-11.png ':size=60%')
+                <br>调用beanfactory的后置处理器。当前上下文通过`getBeanFactoryPostProcessors()`获取到为0，所以忽略。但是mvc或者boot就不会为0了。
 
-            - ##### 08). initApplicationEventMulticaster();
+            - ##### 06). registerBeanPostProcessors(beanFactory)
 
-            - ##### 09). onRefresh();
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-12.png ':size=60%')
+                <br>注册bean的后置处理器。当前上下文也为0，所以忽略。
 
-            - ##### 10). registerListeners();
+            - ##### 07). initMessageSource()
 
-            - ##### 11). finishBeanFactoryInitialization(beanFactory);
+            - ##### 08). initApplicationEventMulticaster()
 
-            - ##### 12). finishRefresh();
+            - ##### 09). onRefresh()
+
+            - ##### 10). registerListeners()
+
+            - ##### 11). finishBeanFactoryInitialization(beanFactory)
+
+            - ##### 12). finishRefresh()
 
     + ### 总结
 
 * ## Reference
 
     + [Spring ioc 源码分析之--beanFactory.registerResolvableDependency(）方法](https://www.cnblogs.com/yangxiaohui227/p/13413980.html)
+    + [Spring容器的启动流程](https://blog.csdn.net/a745233700/article/details/113761271)
