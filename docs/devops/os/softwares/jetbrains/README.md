@@ -38,6 +38,22 @@
     ![](/.images/devops/os/softwares/idea-not-read-env-01.png ':size=49%')
     ![](/.images/devops/os/softwares/idea-not-read-env-02.png ':size=49%')
 
+    ### Idea编码设置
+
+    > [!TIP] 默认情况下：使用idea创建的properties文件是`ISO 8859-1`编码格式（如果没有专门设置过的话）。
+    <br>在使用中文的情况下，错误字符下面会有黄线警告，如果保存文件，使用其他十六进制查看的话，会是一个`?` **[0x3F]** 乱码。
+    <br>原因如下：使用`ISO 8859-1`单字节编码保存了中文(多字节)，不认识，所以插入`?`，以表尊重。
+    <br><br>还有另外需要注意的点：<span style='color:blue'>(java resource bundle，用于国际化的**i18n**)</span>
+    <br>不论文件的编码方式是`ISO 8859-1`还是`utf-8`，文件内容必须是 unicode 或者 ascii ，例如`hello=\u9ed8\u8ba4\u5185\u5bb9`. 参考：[Resource bundles must be created in ASCII, or use Unicode escape codes to represent Unicode characters. Since you don't compile a property file to byte code, there is no way to tell the JVM which character set to use](https://docs.jboss.org/seam/2.2.1.CR3/reference/en-US/html/i18n.html#d0e14039)
+    <br><br>如果需要编辑，可读，可以通过idea自带的`Transparent native-to-ascii conversion`功能将unicode转化成可读文字（GBK|UTF-8）
+    <br>如果已经存在可读文字（GBK|UTF-8），需要将其转化成unicode，可以使用JAVA_HOME/bin中的工具`native2ascii`，
+    <br>使用命令`native2ascii -encoding UTF-8 messages_cs.properties messages_cs_escaped.properties`进行转换。
+
+    > [!CAUTION] UTF-8 is a multibyte encoding that can represent any Unicode character. ISO 8859-1 is a single-byte encoding that can represent the first 256 Unicode characters. Both encode ASCII exactly the same way. [参考](https://stackoverflow.com/questions/7048745/what-is-the-difference-between-utf-8-and-iso-8859-1/7048774#7048774)
+    <br> first 256 unicode char [参考](https://www.utf8-chartable.de/) 、ISO 8859-1 编码表 [参考](https://en.wikipedia.org/wiki/ISO/IEC_8859-1#Code_page_layout)
+
+    ![](/.images/devops/os/softwares/idea-encoding-01.png ':size=100%')
+
 * ## Reference
 
     * https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs

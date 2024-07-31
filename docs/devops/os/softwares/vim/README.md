@@ -1,5 +1,16 @@
 * ## Intro(VIM)
 
+    - ### 十六进制查看文件内容
+
+        > [?] 用vim打开文件`vim -b file`。*不加`-b`会在末尾追加0x0A多一个字节*
+        <br>然后使用xxd工具查看`:%!xxd -u`。 *`-u`表示大写字母显示* 
+
+    - ### 设置和查看文件编码
+
+        > [?] 检查当前文件的编码：`:set encoding?`
+        <br>检查 Vim 的默认编码：`:set fileencodings?`
+        <br>设置文件编码：`:set encoding=utf-8`、`:set encoding=latin1`(**ISO 8859-1 编码通常被称为 latin1**)。
+
     - ### __colon__wq 和 __colon__x 的区别
 
         > [?] 作用和`:wq`相同，但是`:x`<span style='color: blue'>只有文件内容发生改变的时候才会发生写入操作</span>。[参考](https://stackoverflow.com/questions/13844098/difference-between-wq-and-x-in-vi)
