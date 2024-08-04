@@ -74,6 +74,10 @@
 
             - ##### 07). initMessageSource()
 
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-13.png ':size=60%')
+                <br>主要用来消息国际化，此处会实例化一个叫`MessageSource`类型的bean对象（如果配置的话）。[【demo参考】](https://github.com/12302-bak/idea-test-project/blob/d6602307b3f5c275e806fd61724c5d40d1cee3d2/_0_base-learning/src/main/java/_framework/spring/i18n/SpringI18nTest.java)
+
             - ##### 08). initApplicationEventMulticaster()
 
             - ##### 09). onRefresh()
@@ -90,3 +94,4 @@
 
     + [Spring ioc 源码分析之--beanFactory.registerResolvableDependency(）方法](https://www.cnblogs.com/yangxiaohui227/p/13413980.html)
     + [Spring容器的启动流程](https://blog.csdn.net/a745233700/article/details/113761271)
+    + [和小伙伴们仔细梳理一下 Spring 国际化吧！从用法到源码！](https://blog.csdn.net/u012702547/article/details/134570847)
