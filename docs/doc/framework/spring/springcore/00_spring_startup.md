@@ -80,13 +80,32 @@
 
             - ##### 08). initApplicationEventMulticaster()
 
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-14.png ':size=60%')
+                <br>和上面的国际化差不多，默认给容器中注册一个事件多播器`ApplicationEventMulticaster`。<span style='color:blue'>在如下的  `10.registerListeners()`中进行配置注册</span>
+
             - ##### 09). onRefresh()
+
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-15.png ':size=60%')
+                <br>空的模板方法，web类型的ac主要用来创建服务器，比如`tomcat,jetty,mock,undertow`等。
 
             - ##### 10). registerListeners()
 
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-16.png ':size=60%')
+                <br>注册监听器，包括（静态自定的监听器|实现ApplicationListener类型的bean监听器），目前数量为0，然后通过多播器发布之前收集的事件。
+
             - ##### 11). finishBeanFactoryInitialization(beanFactory)
 
+                > [?]
+                <br>初始化非懒加载单例bean对象。
+
             - ##### 12). finishRefresh()
+
+                > [?]
+                ![](/.images/doc/framework/spring/00-spring-startup/ss-18.png ':size=60%')
+                <br>调用生命周期处理器的`onRefresh()`方法，并且发布一个`ContextRefreshEvent`类型事件。
 
     + ### 总结
 
@@ -95,3 +114,4 @@
     + [Spring ioc 源码分析之--beanFactory.registerResolvableDependency(）方法](https://www.cnblogs.com/yangxiaohui227/p/13413980.html)
     + [Spring容器的启动流程](https://blog.csdn.net/a745233700/article/details/113761271)
     + [和小伙伴们仔细梳理一下 Spring 国际化吧！从用法到源码！](https://blog.csdn.net/u012702547/article/details/134570847)
+    + [Spring 事件监听机制及原理分析](https://www.cnblogs.com/admol/p/14036564.html)
