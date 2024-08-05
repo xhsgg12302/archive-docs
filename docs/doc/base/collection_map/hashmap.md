@@ -254,6 +254,15 @@
         if (p.hash == hash &&
                 ((k = p.key) == key || (key != null && key.equals(k))))
                 e = p;
+        ...
+
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value; //替换存在的 null 值
+            afterNodeAccess(e);
+            return oldValue;
+        }
         ```
     
     + ### 死链的形成(JDK1.7)
