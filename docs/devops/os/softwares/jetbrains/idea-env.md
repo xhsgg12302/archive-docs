@@ -96,7 +96,11 @@
         + 历史记录
 
             - [ ] http://idea.javatiku.cn/460bbf73-1d7d-4b5e-a537-43ea8b23f502
-            - [x] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
+            - [ ] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
+            - [ ] https://jrebel.com.cn/c904ed35-1491-48f8-98b4-c8c2ad6678da
+            - [x] http://42.193.18.168:8088/4e7defb7-09ad-45da-bf9c-11eda2ab0f6a (879271507@qq.com) (https://www.jpy.wang/page/jrebel.html)
+            - [ ] https://jrebel.speedcow.top/e74fd726-f540-4dda-77fa-df484c286d3b
+            - [ ] https://jrebel.haitim.cn/05b4a954-84f2-48ae-8cc2-02dc09a7468e
 
 * ## References
 
