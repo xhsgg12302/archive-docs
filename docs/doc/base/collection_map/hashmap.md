@@ -328,7 +328,7 @@
                 <br>$31 \to b \to a \to null$
                 <br>$31 \to c \to b \to a -> null$
 
-                ![](/.images/doc/base/collection/hashmap/hashmap-transfer-01.png ':size=70%')
+                ![](/.images/doc/base/collection/hashmap/hashmap-transfer-01-01.png ':size=100%')
 
             2. 死链形成过程如下图
 
