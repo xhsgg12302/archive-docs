@@ -45,7 +45,7 @@
     <br>原因如下：使用`ISO 8859-1`单字节编码保存了中文(多字节)，不认识，所以插入`?`，以表尊重。
     <br><br>还有另外需要注意的点：<span style='color:blue'>(java resource bundle，用于国际化的**i18n**)</span>
     <br>不论文件的编码方式是`ISO 8859-1`还是`utf-8`，文件内容必须是 unicode 或者 ascii ，例如`hello=\u9ed8\u8ba4\u5185\u5bb9`. 参考：[Resource bundles must be created in ASCII, or use Unicode escape codes to represent Unicode characters. Since you don't compile a property file to byte code, there is no way to tell the JVM which character set to use](https://docs.jboss.org/seam/2.2.1.CR3/reference/en-US/html/i18n.html#d0e14039)
-    <br><br>如果需要编辑，可读，可以通过idea自带的`Transparent native-to-ascii conversion`功能将unicode转化成可读文字（GBK|UTF-8）
+    <br><br>如果需要编辑，可读，可以通过idea自带的`Transparent native-to-ascii conversion`功能将unicode展示成可读文字（GBK|UTF-8）
     <br>如果已经存在可读文字（GBK|UTF-8），需要将其转化成unicode，可以使用JAVA_HOME/bin中的工具`native2ascii`，
     <br>使用命令`native2ascii -encoding UTF-8 messages_cs.properties messages_cs_escaped.properties`进行转换。
 
