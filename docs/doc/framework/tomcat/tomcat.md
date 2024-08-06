@@ -5,11 +5,15 @@
     <br> [tomcat-8.5-doc](https://tomcat.apache.org/tomcat-8.5-doc/introduction.html)
     <br> [download 8.5.35](https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.35/)
 
+    + ### 概念解释
+    
     + ### 整体架构
 
         > [?] Connector（【coyote】处理socket连接，负责网络字节流）
         <br> Container（【Catalina】加载servlet处理具体请求）
-    
+
+        https://stackoverflow.com/questions/32985051/what-are-the-tomcat-component-what-is-catalina-and-coyote
+
     + ### 启动流程
 
         > [?] 先是初始化
@@ -43,12 +47,18 @@
         <br>`3).` 修改tomcat默认关机指令，或者禁用
         <br>`4).` 配置错误页面。
 
+    + ### JK protocol
+
 * ## Reference
 
     + https://github.com/apache/tomcat/tree/8.5.35
     + https://github.com/12302-bak/tomcat-analysis
     + https://tomcat.apache.org/tomcat-8.5-doc/introduction.html
     + https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.35/
+    + https://tomcat.apache.org/connectors-doc/ajp/ajpv13a.html <span style='padding-left: 2em'>【AJP protocol introduce】</span>  <span style='padding-left: 2em'>[【AJP protocol CVE】](https://yq1ng.github.io/2021/05/19/cve-2020-1938-you-ling-mao-ghostcat-tomcat-ajp-xie-yi-ren-yi-wen-jian-du-qu-jsp-wen-jian-bao-han-lou-dong-fen-xi/)</span>
+    + 
+    + https://www.bilibili.com/video/BV1dJ411N7Um
+    + https://segmentfault.com/a/1190000023475177
     + 
     + 以下是环境搭建
     + https://www.bilibili.com/video/BV1dJ411N7Um?p=5
