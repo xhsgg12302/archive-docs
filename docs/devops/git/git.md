@@ -484,6 +484,13 @@
 	<br>2、cd helloworld.git
 	<br>3、git push --mirror https://github.com/new.git
 
++ ## GIT管理项目
+	> [?] `1).` 在github创建仓库 *https://github.com/user/repo.git*
+	<br>`2).` 本地项目`git init`
+	<br>`3).` 追踪本地资源`git add README.md`
+	<br>`4).` 设置远程信息`git remote add origin https://github.com/user/repo.git`
+	<br>`5).` 推送本地提交`git push -u origin main`
+
 + ## GIT忽略文件提交
 	```shell
 	# 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
