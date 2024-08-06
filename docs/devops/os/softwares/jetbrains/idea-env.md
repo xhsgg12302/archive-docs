@@ -25,6 +25,12 @@
 
         ![](/.images/devops/os/mac/macosx-keyboard-conflict-02.png ':size=70%x500')
 
+    - ### 添加框架支持
+
+        > [?] 比如添加框架支持或者添加为maven项目，（Add Maven Projects | Add Framework Support）等通过全局查找 [【手动添加】](https://www.jetbrains.com/help/idea/adding-support-for-frameworks-and-technologies.html#manually-add-facet-to-module)
+
+        ![](/.images/devops/os/softwares/idea-search-anywhere-01.png ':size=49%') ![](/.images/devops/os/softwares/idea-search-anywhere-02.png ':size=49%')
+
 + ## 其他
 
     - ### 使用idea 插件反编译整个jar到文件夹

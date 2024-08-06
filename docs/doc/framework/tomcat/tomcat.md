@@ -44,3 +44,15 @@
         <br>`4).` 配置错误页面。
 
 * ## Reference
+
+    + https://github.com/apache/tomcat/tree/8.5.35
+    + https://github.com/12302-bak/tomcat-analysis
+    + https://tomcat.apache.org/tomcat-8.5-doc/introduction.html
+    + https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.35/
+    + 
+    + 以下是环境搭建
+    + https://www.bilibili.com/video/BV1dJ411N7Um?p=5
+    + https://www.cnblogs.com/kukuxjx/p/17701288.html
+    + https://www.cnblogs.com/grasp/p/10061577.html
+    + https://www.cnblogs.com/LiPengFeiii/p/15228789.html
+    + https://blog.csdn.net/xuan_lu/article/details/106314487
