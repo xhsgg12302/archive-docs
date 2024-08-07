@@ -1,9 +1,13 @@
-* ## Intro(TOMCAT)
+* ## Intro(TOMCAT-CORE)
 
     > [!] tomcat.version = 8.5.35 
     <br> [offical git repo | tag = 3.5.35](https://github.com/apache/tomcat/tree/8.5.35)  <span style='padding-left:5em' /> [learning git repo](https://github.com/12302-bak/tomcat-analysis)
     <br> [tomcat-8.5-doc](https://tomcat.apache.org/tomcat-8.5-doc/introduction.html)
     <br> [download 8.5.35](https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.35/)
+
+    ![](/.images/doc/framework/tomcat/core/tomcat-process-01.png ':size=100%')
+
+    ![](/.images/doc/framework/tomcat/core/tomcat-process-02.png ':size=100%')
 
     + ### 概念解释
     
@@ -49,6 +53,7 @@
 
     + ### JK protocol
 
+
 * ## Reference
 
     + https://github.com/apache/tomcat/tree/8.5.35
@@ -60,7 +65,10 @@
     + https://www.bilibili.com/video/BV1dJ411N7Um
     + https://segmentfault.com/a/1190000023475177
     + 
-    + 以下是环境搭建
+    + tomcat启动类中使用反射调用的意义
+    + https://stackoverflow.com/questions/7672466/why-does-tomcat-use-reflection-for-catalina-instancilization
+    + 
+    + 以下是源码调试环境搭建
     + https://www.bilibili.com/video/BV1dJ411N7Um?p=5
     + https://www.cnblogs.com/kukuxjx/p/17701288.html
     + https://www.cnblogs.com/grasp/p/10061577.html

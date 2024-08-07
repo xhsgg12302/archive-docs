@@ -46,6 +46,10 @@
 
             ![](/.images/doc/advance/debug/debug-02.png ':size=80%')
 
+        - ####  **Tomcat Debug**
+
+            > [!] attach模式也可以参考 [调试本地或远程的tomcat](../framework/tomcat/README.md#调试本地或远程的tomcat)
+
     + ### listen
 
         - **targetVM**
