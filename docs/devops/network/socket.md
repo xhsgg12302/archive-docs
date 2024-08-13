@@ -20,7 +20,7 @@
         - #### listen()
 
             原型：`int listen(int sockfd, int backlog);` 例如：`listen(listenfd, 10);`[【man2】](https://man7.org/linux/man-pages/man2/listen.2.html) 
-            <br>listen函数将 socket 文件描述符标记为被动 socket,也就是服务端的socket，执行完之后，文件描述符处于监听状态。使用accept获取客户端连接。backlog 定义 socket允许待处理的客户端连接的队列长度。全连接和半连接会使用到这个值(和内核版本有关)
+            <br>listen函数将 socket 文件描述符标记为被动 socket,也就是服务端的socket，执行完之后，文件描述符处于监听状态。使用accept获取客户端连接。backlog 定义 socket允许待处理的客户端连接的队列长度。[全连接和半连接](https://blog.isayme.org/posts/issues-47/)会使用到这个值(和内核版本有关)
 
 * ## Reference
 
