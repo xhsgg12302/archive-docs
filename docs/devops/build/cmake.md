@@ -602,3 +602,4 @@ cmake --build .
 * https://www.gnu.org/software/make/manual/make.html
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%9F%BA%E7%A1%80.md
 * https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F.md
+* https://github.com/12302-bak/practise-demo  <span style='padding-left:1em'>练习DEMO(整合三方lib以及子模块依赖lib)</span>

@@ -39,7 +39,7 @@
 
         > [?] `2).` 默认`Socket`内部使用的 impl 为`SocksSocketImpl`,也就是`PlainSocketImpl`子类。根据 [RFC 1928](https://www.rfc-editor.org/rfc/rfc1928) SOCKS(V4 & V5) socket实现。也就是具有socks代理功能的 Socket。
         <br><span style='padding-left:2.7em'/>主要体现在 [**java.net.SocksSocketImpl#connect**](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/net/SocksSocketImpl.java#L327) 方法上。先是通过`DefaultProxySelector`获取当前系统代理，没有代理直接连接，
-        <br><span style='padding-left:2.7em'/>发现代理 [参考](/docs/doc/base/misc/properties.md#systemproperties) 实例后，判断socks版本，v4时候 **connectV4** , 不是的话，继续V5 的鉴权。完成后在刚才的TCP连接上继续发送数据。比如：http报文。
+        <br><span style='padding-left:2.7em'/>发现代理 [参考](/docs/doc/base/misc/properties.md#systemproperties) 实例后，判断socks版本，v4时候进入 **connectV4** 方法, 不是的话，继续V5 的鉴权。完成后在刚才的TCP连接上继续发送数据。比如：http报文。
 
 * ## Reference
 
@@ -50,3 +50,9 @@
     + 
     + https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/solaris/native/java/net/PlainSocketImpl.c
     + https://github.com/openjdk/jdk/blob/jdk8-b120/hotspot/src/share/vm/prims/jvm.cpp
+    + 
+    + socks
+    + http://chu-studio.com//posts/2015/SOCKS5协议阅读笔记
+    + https://stackoverflow.com/questions/7186601/is-socks5-bind-persistent-or-one-time-only
+    + https://www.rfc-editor.org/rfc/rfc1928
+    + https://en.wikipedia.org/wiki/SOCKS#SOCKS_proxy_server_implementations

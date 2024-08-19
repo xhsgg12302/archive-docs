@@ -32,7 +32,7 @@
     ```
 
     <!-- tabs:start -->
-    #### **[STATIC/SHARED] main**
+    #### **[STATIC、SHARED] **
     **demo_use.c**
     ```c
     /* demo_use.c -- demonstrate direct use of the "hello" routine */
@@ -87,6 +87,8 @@
     ./demo_use_static
     ```
     > [!] static 中 删除中间对象，比如`rm -f libhello-static.a libhello-static.o` 后，编译出来的 demo_use_static也可以正常执行。
+    <br><br>**ar** 归档工具的作用就是将多个`.o`文件压缩到一个`.a`文件中(包括一些额外的元信息)。方便使用 **-l** 对`.a`、`.o`文件进行链接。
+    <br>⫸ 如果只有单个`.o`文件的话，直接链接，不使用任何参数：`gcc -g -o main demo_use.o  libhello-static.o`
 
     ![](/.images/devops/build/gcc/lib/lib-static-01.png) ![](/.images/devops/build/gcc/lib/lib-static-02.png '02 :size=40%')
 
@@ -154,7 +156,7 @@
     ![](/.images/devops/build/gcc/lib/lib-shared-01.png)
 
     <!-- tabs:end -->
-    #### **[dynamic]**
+    #### **[MODULE]**
     **demo_dynamic.c**
     ```c
     /* demo_dynamic.c -- demonstrate dynamic loading and use of the "hello" routine */
