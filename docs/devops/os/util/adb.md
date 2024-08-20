@@ -3,14 +3,14 @@
     + ### PUSH
 
         > [?] push moive to android: 
-        <br>`adb push /Users/stevenobelia/Downloads/temporary-download/阳光电影dygod.org.八角笼中.2023.HD.1080P.国语中字.mp4/阳光电影dygod.org.八角笼中.2023.HD.1080P.国语中字.mp4  /sdcard/`
+        <br>`adb push /path/FILENAME.mp4  /sdcard/`
 
     + ### SYSTEMPROP(getprop)
 
         > [?] 通过[magisk设置系统属性](https://github.com/topjohnwu/Magisk/blob/master/docs/guides.md#the-system-folder)，然后根据[文章](https://xdaforums.com/t/how-to-make-adb-listen-to-tcpip-5555-after-reboot.1825359/#post-30032364)操作：`setprop service.adb.tcp.port 5555`:可以让手机中的adbd开放指定的tcp端口，方便连接调试。
 
         > [!CAUTION] `1).` <span style='color:blue'>一直开放tcp端口也有分险，需要注意。</span>
-        <br>`2).` 直接在`/system/build.prop`文件中编辑不生效。需要借助magisk模块中的`system.prop`。
+        <br>`2).` 直接在`/system/build.prop`文件中编辑不生效(如果对/system分区没有写权限的话)。需要借助 **magisk** 模块中的`system.prop`。
 
         ![](/.images/devops/os/util/adb-prop-01.png ':size=48%')
         ![](/.images/devops/os/util/adb-prop-02.png ':size=49%')
