@@ -2,7 +2,7 @@
 
     + ### System.properties()
 
-        > [?] 在`System`类中有 **initProperties(Properties props);** native 方法。在C代码[`GetJavaProperties(env);`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/native/java/lang/System.c#L172)中会获取到一些props。这个方法的实现在[java_props_md.c](https://github.com/openjdk/jdk/blob/master/src/java.base/unix/native/libjava/java_props_md.c#L363)中。在 536 行`setProxyProperties(&sprops);` 会进行系统代理的设置。继续调用到[java_props_maxosx.c](https://github.com/openjdk/jdk/blob/master/src/java.base/macosx/native/libjava/java_props_macosx.c#L421)中。主要会使用 macosx SDK 中的 [`SCDynamicStoreCopyProxies(_:)`](https://developer.apple.com/documentation/systemconfiguration/1517088-scdynamicstorecopyproxies)[【函数调用 C Demo】](https://github.com/12302-bak/practise-demo/blob/master/main.c#L14)， 获取当前系统中的网络代理设置。<span style='color: red'>需要注意的是与环境变量进行区分。</span>
+        > [?] 在`System`类中有 **initProperties(Properties props);** native 方法。在C代码[`GetJavaProperties(env);`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/native/java/lang/System.c#L172)中会获取到一些props。这个方法的实现在[java_props_md.c](https://github.com/openjdk/jdk/blob/master/src/java.base/unix/native/libjava/java_props_md.c#L363)中。在 536 行`setProxyProperties(&sprops);` 会进行系统代理的设置。继续调用到[java_props_maxosx.c](https://github.com/openjdk/jdk/blob/master/src/java.base/macosx/native/libjava/java_props_macosx.c#L421)中。主要会使用 macosx SDK 中的 [`SCDynamicStoreCopyProxies(_:)`](https://developer.apple.com/documentation/systemconfiguration/1517088-scdynamicstorecopyproxies)[【函数调用 C Demo】](https://github.com/12302-bak/practise-demo/blob/master/main.c#L14)， 获取当前系统中的网络代理设置。<span style='color: red'>需要注意与环境变量进行区分。</span>
 
     + ### Prop对unicode编码的处理
 
