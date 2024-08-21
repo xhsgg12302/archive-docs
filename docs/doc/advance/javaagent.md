@@ -1,6 +1,6 @@
 ## JavaAgent
 > [?] 通过实现agent类中的premain方法将自定义的类转换器注册到JVM中，从而实现类加载之前**对字节码进行处理**。本次实验中对类未进行处理，而是在加载类之前打印输出。
-<br>完整代码可[参考](https://github.com/12302-bak/idea-test-project/tree/learning/_6_un_JTW)
+<br>完整代码可[参考](https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_6_un_JTW)
 
 * ### 代码实现
 
@@ -75,5 +75,5 @@ public class TestMain {
 
 
 ## Reference
-* https://github.com/12302-bak/idea-test-project/tree/learning/_6_un_JTW
+* https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_6_un_JTW
 * https://mp.weixin.qq.com/s/wOtc4_GOEBymM6GwNW3tag

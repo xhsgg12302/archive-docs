@@ -463,5 +463,5 @@
 * https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states
 * https://www.zhihu.com/question/329746124
 *
-* https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_base/thread/_volatile
+* https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_0_base-learning/src/main/java/_base/thread/_volatile
 * https://drive.google.com/file/d/1r_DtdgyC9bHP-Y-poLb5fbQIttrWTkAa/view?usp=sharing

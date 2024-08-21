@@ -13,7 +13,7 @@
         <br><br>5). `ClassLoader`使用委托模式查找类或资源(文本，图像，配置文件，视频等)通过`getResource`，每一个`ClassLoader`都关联一个父加载器。当请求查找一个类或资源的时候。在它自己加载之前会先委托父加载器去加载。JVM内建的加载器叫作`bootstrap class loader`, 它自己没有父加载器，但可以作为换一个父加载器实例。
         <br><br>6). 通常，JVM虚拟机加载类从本地文件系统已平台相关的方式。例如：在UNIX系统中。JVM加载类通过定义的`CLASSPATH`环境变量。
         <br><br>7). 然而，一些类获取不是来源于文件，而是来自诸如网络的情况，或者被一个应用程序构造生成。`defineClass`转换一个字节数组到类的实例。可以使用`Class.newInstance`创建新定义的类的实例。
-        <br><br>8). 类加载器创建的对象的方法和构造函数可以引用其他类。为了确定引用的类，Java 虚拟机调用最初创建该类的类加载器的 loadClass 方法。[参考](https://stackoverflow.com/questions/61711187/what-does-the-methods-and-constructors-of-objects-created-by-a-class-loader-may) , [代码实现](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/load_reference)
+        <br><br>8). 类加载器创建的对象的方法和构造函数可以引用其他类。为了确定引用的类，Java 虚拟机调用最初创建该类的类加载器的 loadClass 方法。[参考](https://stackoverflow.com/questions/61711187/what-does-the-methods-and-constructors-of-objects-created-by-a-class-loader-may) , [代码实现](https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_0_base-learning/src/main/java/_jvm/classLoader/load_reference)
         <!-- div:right-panel-59 -->
         ```java
         /**
@@ -732,7 +732,7 @@
         
         <!-- panels:start -->
         <!-- div:left-panel-40 -->
-        > [?] <br>[测试代码](https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_jvm/classLoader/spi)
+        > [?] <br>[测试代码](https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_0_base-learning/src/main/java/_jvm/classLoader/spi)
         <br><br>1). 定义接口`ISpiTest`.
         <br><br>2). 接口`ISpiTest`实现类`SpiTestImpl`.
         <br><br>3). 按照规范在`META-INF/services/`目录下放置接口名`_jvm.classLoader.spi.service.ISpiTest`,内容为`_jvm.classLoader.spi.service.impl.SpiTestImpl`实现类的文件。

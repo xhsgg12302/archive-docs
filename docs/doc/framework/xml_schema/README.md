@@ -1700,5 +1700,5 @@
                 ```
 
 ## Reference
-* https://github.com/12302-bak/idea-test-project/tree/learning/_0_base-learning/src/main/java/_framework/xml_schema
+* https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_0_base-learning/src/main/java/_framework/xml_schema
 * https://www.bilibili.com/video/BV19P411S7mf/?vd_source=550a4dc4b2a914c0681a14307bbe8cbe
