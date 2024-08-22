@@ -144,6 +144,29 @@
 		<br>https://git-scm.com/docs/gitsubmodules
 		<br>https://git-scm.com/docs/git-submodule <span style='padding-left:2.5em'/>子模块操作命令
 
+		<!-- panels:start -->
+		<!-- div:left-panel-50 -->
+		> [?] **.gitmodules**
+		```shell
+		[submodule "helloworld"]
+			path = helloworld
+			url = https://github.com/xhsgg12302/helloworld.git
+		[submodule "demo"]
+			path = demo
+			url = https://github.com/xhsgg12302/uniscan.git
+		```
+		<!-- div:left-panel-50 -->
+		> [?] **.git/config**
+		```shell
+		[submodule "helloworld"]
+			active = true
+			url = https://github.com/xhsgg12302/helloworld.git
+		[submodule "demo"]
+			url = https://github.com/xhsgg12302/uniscan.git
+			active = true
+		```
+		<!-- panels:end -->
+
 	* ### 使用场景
 
 		> [?] **至少有以下两种使用场景**：
@@ -155,16 +178,31 @@
 
 	* ### 基本操作
 
-		> [!] 
-		**命令记录**
-		<br>`git help submodule`
-		<br>`git submodule add https://github.com/xhsgg12302/helloworld.git`
-		<br>`git submodule update [--init] [--recursive]`
-		<br>`git submodule update --remote`
-		<br>`git clone [--recurse-submodules[=<pathspec>] | --recursive[=<pathspec>] ] ` [参考](https://git-scm.com/docs/git-clone/2.32.0#Documentation/git-clone.txt---recurse-submodulesltpathspecgt)
-
 		```shell
-		hello bak
+		# https://git-scm.com/docs/git-submodule#Documentation/git-submodule.txt-init--ltpathgt82308203
+		# 根据暂存区中记录的子模块进行初始化，主要是在配置文件 '.git/config' 中添加一个模块记录。并不会在 pathspec 有内容生成或更新。
+		git submodule init demo
+
+		# 正好与上述init相反。需要注意的是：如果是新添加的模块，则在deinit的时候因为在父工程暂存区中有记录，需要加'-f'才可以取消init，不然会报错
+		git submodule deinit demo
+
+		# 新增一个子模块 （会自动初始化）
+		git submodule add https://github.com/xhsgg12302/helloworld.git [NAME]
+
+		# 更新一个子模块 （如果是克隆的时候没有使用递归选项，则子模块是一个空目录，需要update命令进行检出父工程index中提交）
+		# 		--init     		如果子模块没有初始化，进行初始化
+		# 		--recursive		递归执行它里面的子模块	
+		# 		--remote   		从远程拉取检出，没有的话就是从本地仓库检出
+		git submodule update helloworld
+
+		# 删除一个子模块 see:https://git-scm.com/docs/gitsubmodules#_forms
+		git rm <moduleName>
+		rm -rf '$GIT_DIR/modules/<name>'
+
+		# 克隆的时候通过递归克隆当前项目中的子模块 see: https://git-scm.com/docs/git-clone/2.32.0#Documentation/git-clone.txt---recurse-submodulesltpathspecgt
+		# 1. 如果没有指定 pathspec，则克隆所有子模块
+		# 2. recursive 是 recurse-submodules 的别名
+		git clone [--recurse-submodules[=<pathspec>] | --recursive[=<pathspec>]] https://github.com/12302-bak/shell-scripts.git
 		```
 
 ---
