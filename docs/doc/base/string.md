@@ -68,6 +68,8 @@
         String s3 = "ab";
         String s4 = s1 + s2;
         boolean flag = s3 == s4;
+
+        // 如果将 s1,s2定义之前加 final， 结果会变成 true。因为对于 final修饰的，JVM会自动将 s1,s2合并优化，不会使用append追加。
         ```
         ![](/.images/doc/base/string/string-intern-03.png ':size=99%')
         ##### **case3**
