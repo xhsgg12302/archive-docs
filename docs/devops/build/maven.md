@@ -161,8 +161,44 @@
         | alibaba  | https://developer.aliyun.com/mvn/guide                         |
         | tencent  | https://mirrors.cloud.tencent.com/help/maven.html              |
         | github   |                                                                |
-        | 云效旧版 | https://repomanage.rdc.aliyun.com/                             |
+        | 云效旧版 | https://repomanage.rdc.aliyun.com/ (停服通知：云效已发布新版，当前老版将于2024年4月停止续费、2024年10月30日停止服务。)|
         | 云效新版 | https://packages.aliyun.com/maven （有覆盖 release版本的设置） |
+
+    + ### 手动安装或部署
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        > [?] 安装本地 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html)
+        ```shell
+        mvn install:install-file \
+            -DgroupId=de.robv.android.xposed \
+            -DartifactId=api \
+            -Dversion=82 \
+            -Dfile=/Users/stevenobelia/Documents/project_android_test/xposed-hello/app-hook/lib/api-82.jar \
+            -Dpackaging=jar
+        # 
+        # placeholder
+        ```
+        <!-- div:right-panel-50 -->
+        > [?] 部署远程 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-remote.html)
+        ```shell
+        mvn deploy:deploy-file \
+            -DgroupId=de.robv.android.xposed \
+            -DartifactId=api \
+            -Dversion=82 \
+            -Dpackaging=jar \
+            -Dfile=/Users/stevenobelia/Documents/project_android_test/xposed-hello/app-hook/lib/api-82.jar \
+            -DrepositoryId=2119382-release-7qvnAQ \
+            -Durl=https://packages.aliyun.com/maven/repository/2119382-release-7qvnAQ
+        ```
+        <!-- panels:end -->
+        ---
+        [altDeploymentRepository: 参考链接](https://maven.apache.org/plugins/maven-deploy-plugin/deploy-mojo.html#altDeploymentRepository)
+        ```shell
+        mvn clean deploy \
+            -Dmaven.test.skip=true \
+            -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
+        ```
     
     + ### 项目中的log4j[CVE-2021-44228] 漏洞修复思路及复现
 
@@ -184,12 +220,6 @@
         扩展：    
             1, logj漏洞原理的简单介绍，及两种方式复现
             2, 实际中的log4j攻击现象（nginx日志）。
-        ```
-        
-    + ### deploy
-
-        ```shell
-        mvn clean deploy -Dmaven.test.skip=true -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
         ```
 
 * ## XML
