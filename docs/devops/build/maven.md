@@ -160,7 +160,7 @@
         | huawei   | https://mirrors.huaweicloud.com/home                           |
         | alibaba  | https://developer.aliyun.com/mvn/guide                         |
         | tencent  | https://mirrors.cloud.tencent.com/help/maven.html              |
-        | github   |                                                                |
+        | github   | https://maven.pkg.github.com/OWNER/REPOSITORY                  |
         | 云效旧版 | https://repomanage.rdc.aliyun.com/ (停服通知：云效已发布新版，当前老版将于2024年4月停止续费、2024年10月30日停止服务。)|
         | 云效新版 | https://packages.aliyun.com/maven （有覆盖 release版本的设置） |
 
@@ -168,7 +168,7 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
-        > [?] 安装本地 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html)
+        > [?] 单个jar包安装本地 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html)
         ```shell
         mvn install:install-file \
             -DgroupId=de.robv.android.xposed \
@@ -180,7 +180,7 @@
         # placeholder
         ```
         <!-- div:right-panel-50 -->
-        > [?] 部署远程 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-remote.html)
+        > [?] 单个jar包部署远程 [【参考】](https://maven.apache.org/guides/mini/guide-3rd-party-jars-remote.html) <span style='color:red'>（[部署到github](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)也一样）</span>
         ```shell
         mvn deploy:deploy-file \
             -DgroupId=de.robv.android.xposed \
@@ -191,6 +191,16 @@
             -DrepositoryId=2119382-release-7qvnAQ \
             -Durl=https://packages.aliyun.com/maven/repository/2119382-release-7qvnAQ
         ```
+        ```shell
+        mvn deploy:deploy-file \
+            -DgroupId=de.robv.android.xposed \
+            -DartifactId=api \
+            -Dversion=82 \
+            -Dpackaging=jar \
+            -Dfile=/Users/stevenobelia/Downloads/temporary-download/api-82.jar \
+            -DrepositoryId=github-maven-deploy \
+            -Durl=https://maven.pkg.github.com/xhsgg12302/knownledges
+        ```
         <!-- panels:end -->
         ---
         [altDeploymentRepository: 参考链接](https://maven.apache.org/plugins/maven-deploy-plugin/deploy-mojo.html#altDeploymentRepository)
@@ -199,6 +209,7 @@
             -Dmaven.test.skip=true \
             -DaltDeploymentRepository=rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2066950-snapshot-w6DSio/
         ```
+
     
     + ### 项目中的log4j[CVE-2021-44228] 漏洞修复思路及复现
 
