@@ -1,38 +1,33 @@
 * ## 基本命令
     + ### BASE
-        ```shell
-        # 提交镜像
-        docker commit -a "xhsgg12302@gmail.com" -m "with requirements.txt" 44f357ee68bc  eli/anaconda3:v1.0
-        # 标签镜像
-        docker tag bad7184c3c60  gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17-with-pip-deps
-        # 加载镜像
-        docker build -t me/venvs:v1.0 -f DK-venv .
-        docker save me/venvs:v1.0 -o ./venvs.tar        || docker save me/venvs:v1.0 > ./venvs.tar
-        docker load -i  /path/tmp/docker-build.tar
-        # 删除容器
-        docker ps -qa | xargs -n 1 docker rm -f
+        
+        > [?] 提交镜像
+        <br>`docker commit -a "xhsgg12302@gmail.com" -m "with requirements.txt" 44f357ee68bc  eli/anaconda3:v1.0`
+        <br>标签镜像
+        <br>`docker tag bad7184c3c60  gitlab.pixdaddy.com:5050/library/eclipse-temurin:17.0.2_8-jre-3.8.18-python-alpine3.17-with-pip-deps`
+        <br>加载镜像
+        <br>`docker build -t me/venvs:v1.0 -f DK-venv .`
+        <br>`docker save me/venvs:v1.0 -o ./venvs.tar` 、 `docker save me/venvs:v1.0 > ./venvs.tar`
+        <br>`docker load -i  /path/tmp/docker-build.tar`
+        <br>删除容器
+        <br>`docker ps -qa | xargs -n 1 docker rm -f`
+        <br><br>这将列出所有没有被任何标签或容器引用的镜像。这些镜像通常被称为悬空镜像，因为它们没有被命名或引用，而且也没有被垃圾回收机制删除。
+        <br>https://docs.docker.com/engine/reference/commandline/images/#filter
+        <br>`docker image ls -f "dangling=true"`
+        <br>删除所有没有被标记或容器引用的悬空镜像
+        <br>`docker image prune`
+        <br>查找标记为 NONE 的镜像。运行以下命令：
+        <br>`docker images | grep '<none>' | awk '{print $3}'`
+        <br>删除标记为 NONE 的镜像。使用以下命令删除这些镜像：
+        <br>`docker rmi $(docker images | grep '<none>' | awk '{print $3}')`
+        <br><br>启动时[去除基础镜像的entryponit](https://stackoverflow.com/questions/40122152/how-to-remove-entrypoint-from-parent-image-on-dockerfile) 或者在Dockerfile中 写入 ENTRYPOINT []
+        <br>`docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"`
+        <br><br>docker 不使用缓存构建镜像
+        <br>`docker build -t **:1.0 --no-cache -f Dockerfile . `
+        <br>docker 清理构建缓存
+        <br>`docker builder prune`
 
-        # 这将列出所有没有被任何标签或容器引用的镜像。这些镜像通常被称为悬空镜像，因为它们没有被命名或引用，而且也没有被垃圾回收机制删除。
-        # https://docs.docker.com/engine/reference/commandline/images/#filter
-        docker image ls -f "dangling=true"
-        # 删除所有没有被标记或容器引用的悬空镜像
-        docker image prune
-        # 查找标记为 NONE 的镜像。运行以下命令：
-        docker images | grep '<none>' | awk '{print $3}'
-        # 删除标记为 NONE 的镜像。使用以下命令删除这些镜像：
-        docker rmi $(docker images | grep '<none>' | awk '{print $3}')
-
-        # 启动时去除基础镜像的entryponit  
-        # https://stackoverflow.com/questions/40122152/how-to-remove-entrypoint-from-parent-image-on-dockerfile
-        # 或者在Dockerfile中 写入 ENTRYPOINT []  
-        docker run -d --entrypoint='' ff3b94479b5d /bin/sh -c "npm i; xvfb-run --server-args='-screen 0 1280x800x24 -ac -nolisten tcp -dpi 96 +extension RANDR' npm run dev"
-
-        # docker 不使用缓存构建镜像
-        docker build -t **:1.0 --no-cache -f Dockerfile . 
-        # docker 清理构建缓存
-        docker builder prune
-        ```
-    + ### MIRRORS
+    + ### DAEMON-CONFIG
         ```shell
         # /etc/docker/daemon.json
         {
