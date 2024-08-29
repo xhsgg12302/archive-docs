@@ -4,7 +4,7 @@
     > [?] [参考](https://unix.stackexchange.com/questions/167582/why-zsh-ends-a-line-with-a-highlighted-percent-symbol/)：在`~/.zshrc`配置文件中追加`export PROMPT_EOL_MARK=`控制结尾变量。
 
     ### macOS_14_Sonoma_关闭输入法图标提示
-    > [?] [参考](https://discussionschinese.apple.com/thread/255178136?sortBy=best)：终端输入`sudo defaults write /Library/Preferences/FeatureFlags/Domain/UIKit.plist redesigned_text_cursor -dict-add Enabled -bool YES `
+    > [?] ~[参考](https://discussionschinese.apple.com/thread/255178136?sortBy=best)：终端输入`sudo defaults write /Library/Preferences/FeatureFlags/Domain/UIKit.plist redesigned_text_cursor -dict-add Enabled -bool YES `~
 
     ### 快捷键记录
     
