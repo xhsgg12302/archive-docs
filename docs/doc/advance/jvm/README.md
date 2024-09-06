@@ -34,7 +34,7 @@
             > [?] 主要通过反射获取Class类中的Method`getConstantPool`,然后结合实际类获取常量池[`sun.reflect.ConstantPool`](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/reflect/ConstantPool.java)。[参考](https://stackoverflow.com/questions/33981540/getting-a-class-constant-pool-programmatically)
 
             <!-- panels:start -->
-            <!-- div:left-panel-50 -->
+            <!-- div:left-panel-45 -->
             ```java
             public class Bar {
                 private static final Method getConstantPool;
@@ -43,18 +43,14 @@
                     try {
                         getConstantPool = Class.class.getDeclaredMethod("getConstantPool");
                         getConstantPool.setAccessible(true);
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
+                    } catch (NoSuchMethodException e) { throw new RuntimeException(e); }
                 }
                 static void butts() {
                     try {
                         ConstantPool constantPool = (ConstantPool) getConstantPool.invoke(ConstantTest.class);
                         // ...
                         System.out.println();
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    }
+                    } catch (IllegalAccessException | InvocationTargetException e) { throw new RuntimeException(e); }
                 }
 
                 public static void main(String[] args) {
@@ -62,13 +58,13 @@
                 }
             }
             ```
-            <!-- div:right-panel-50 -->
-            > [!] 需要注意的是不知道为什么通过`constantPool.getStringAt(2)`获取字符串常量的时候会导致JVM crash，有时候是好使的。暂时不知道原因。
-            <br><br>错误信息如下：
-            <br>`Problematic frame:# V  [libjvm.dylib+0x1e732e]  Array<unsigned short>::index_of(unsigned short const&) const+0x4`
-
+            <!-- div:right-panel-55 -->
             ![](/.images/doc/advance/jvm/jvm-runtime-constant-pool-01.png ':size=100%')
             <!-- panels:end -->
+
+            > [!WARNING|style:flat] 需要注意的是不知道为什么通过`constantPool.getStringAt(2)`获取字符串常量的时候会导致JVM crash，有时候是好使的。暂时不知道原因。
+            <br><br>错误信息如下：
+            <br>`Problematic frame:# V  [libjvm.dylib+0x1e732e]  Array<unsigned short>::index_of(unsigned short const&) const+0x4`
 
         - #### 类文件常量池解析时机
 
