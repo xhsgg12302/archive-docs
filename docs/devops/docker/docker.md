@@ -38,6 +38,11 @@
                     "runtimeArgs": []
                 }
             },
+            "proxies": {
+                "http-proxy": "http://proxy.example.com:3128",
+                "https-proxy": "https://proxy.example.com:3129",
+                "no-proxy": "*.test.example.com,.example.org,127.0.0.0/8"
+            },
             "data-root": "/data/lib/docker",
             "registry-mirrors": [
                 "https://docker.mirrors.ustc.edu.cn",
@@ -398,7 +403,7 @@ https://zhuanlan.zhihu.com/p/628536643 </br>
 https://help.aliyun.com/document_detail/51853.html
 
 <!-- tabs:start -->
-#### **Ubuntu:20.4**
+#### **Ubuntu:20.4/22.04**
 ```shell
 # 卸载旧版
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -415,7 +420,7 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
 
 # Install Docker Engine
 sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 # sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 sudo systemctl start docker
