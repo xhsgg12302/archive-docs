@@ -44,7 +44,8 @@
 
 <!-- ![](/.images/other/misc/wechat-sticker.png ':size=50%') -->
 
-### 微信表情Emoji
+### Wechat-emoji
+<hr/>
 
 | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content | emoji | content |
 | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- | :-: | :- |
@@ -126,6 +127,6 @@
 /:<O>   怄火
 ```
 
-## Reference
+* ## Reference
 
     - https://blog.csdn.net/llhwin2010/article/details/12675761
