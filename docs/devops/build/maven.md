@@ -469,7 +469,11 @@
 
 * ## 工具链
 
-    > [?] 简单理解就是，使用工具链可以配置插件调用过程中需要使用到的工具比如JDK.在maven系统中。有一些默认的工具链感知插件。比如.compile,javadoc等。这个可以[参考官方](https://maven.apache.org/guides/mini/guide-using-toolchains.html)给出的图。
+    > [?] Maven ToolChains 对于项目的构建提供了一种 **指定JDK或者其他工具** 的方式(能力)，但是并不需要给每个 *插件* 或者每个 *pom.xml* (单独)配置。
+    <br>当 Maven ToolChains 用来指定 JDK 的时候，项目构建的指定版本 JDK 和运行 mvn 命令的那个无关。有点类似于 在IDE(IDEA) 中指定项目的构建JDK 而不是运行 IDEA 的openjdk一样。
+    <br><br>简单理解就是，使用工具链可以配置插件调用过程中需要使用到的工具比如 JDK 。在maven系统中，有一些默认的工具链感知插件。比如：compile,javadoc等。这个可以[参考官方](https://maven.apache.org/guides/mini/guide-using-toolchains.html)给出的图。
+
+    > [!CAUTION] 在`maven 3.3.1`的时候就可以通过 `--global-toolchains file`来指定要使用的工具链配置文件，但是建议放置在`~/.m2/`。
 
     + #### 先决条件
 
@@ -483,6 +487,8 @@
 
     + #### 参考配置
 
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
         ```xml
         <plugins>
             <plugin>
@@ -509,7 +515,7 @@
                     <toolchains>
                         <!-- 下面的配置存在于 toolchains.xml中 -->
                         <jdk>
-                            <version>21</version>
+                            <version>11</version>
                             <vendor>openjdk</vendor>
                         </jdk>
                     </toolchains>
@@ -517,6 +523,42 @@
             </plugin>
         </plugins>
         ```
+        <!-- div:right-panel-50 -->
+        ```xml
+        <!-- toolchains.xml -->
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" 
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="
+                        http://maven.apache.org/TOOLCHAINS/1.1.0 
+                        http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+
+            <toolchain>
+                <type>jdk</type>
+                <provides>
+                    <version>1.8</version>
+                    <vendor>sun</vendor>
+                </provides>
+                <configuration>
+                    <jdkHome>/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home</jdkHome>
+                </configuration>
+            </toolchain>
+
+            <toolchain>
+                <type>jdk</type>
+                <provides>
+                    <version>11</version>
+                    <vendor>openjdk</vendor>
+                </provides>
+                <configuration>
+                    <jdkHome>/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home</jdkHome>
+                </configuration>
+            </toolchain>
+
+        </toolchains>
+        ```
+        <!-- panels:end -->
 
 
 * ## 插件篇
