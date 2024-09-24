@@ -128,6 +128,9 @@
         > [?] 检查当前文件的编码：`:set encoding?`
         <br>检查 Vim 的默认编码：`:set fileencodings?`
         <br>设置文件编码：`:set encoding=utf-8`、`:set encoding=latin1`(**ISO 8859-1 编码通常被称为 latin1**)。
+        <br><br>vim 查看 **UTF-16** 文件 `file format ==> : Unicode text, UTF-16, little-endian text` [参考](https://unix.stackexchange.com/questions/608452/how-do-i-properly-convert-the-file-to-utf-16le-encoding-without-strange-characte)
+        <br><span style='padding-left: 1.8em'/>通过`vim -c 'e ++enc=utf-16le' /Users/stevenobelia/Downloads/temporary-download/百度mac个性短语导出2024_09_24`
+        <br><span style='padding-left: 1.8em'/>或者 通过`:e ++enc=utf-16le`进行设置
 
     - ### __colon__wq 和 __colon__x 的区别
 
