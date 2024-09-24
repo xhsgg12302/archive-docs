@@ -1,6 +1,7 @@
 * ## Intro(THREAD POOL)
 
-    > [!] 线程池解决了两个不同的问题:
+    > [!] [ThreadPoolExecutor.java](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/concurrent/ThreadPoolExecutor.java)
+    <br><br>线程池解决了两个不同的问题:
     <br>`1).` 在执行大量异步任务时，由于减少了每个任务的调用开销，它们通常提供改进的性能;
     <br>`2).` 在执行一组任务时，它们提供了一种绑定和管理资源(包括线程)的方法。每个ThreadPoolExecutor还维护一些基本统计信息，例如已完成任务的数量。
     <br><br>`核心和最大线程数`：

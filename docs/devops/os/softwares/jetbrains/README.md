@@ -29,7 +29,7 @@
     > [?] 1). 因为需要对比debug内容，尤其是字节数组，所以设置[`JetBrains Mono`](https://www.jetbrains.com/zh-cn/lp/mono/)等宽字体。
     <br>2). 设置debug面板[\[参考\]](https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000113064-How-to-change-debugger-font-size)，通过全局来控制或影响`Settings | Appearance & Behavior | Appearance | Use custom font`。Editor或者console面板可以通过`Settings | Editor | Font`，`Settings | Editor | Color Scheme | Console Font`单独设置.
 
-    ![](/.images/devops/os/softwares/idea-display-width-font-01.png ':size=70%')
+    ![](/.images/devops/os/softwares/idea-display-width-font-01.png ':size=100%')
 
     ### Idea不能读取系统环境变量
 
