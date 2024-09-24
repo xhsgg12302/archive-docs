@@ -59,6 +59,58 @@
 | <div class="small" style="background-position: 0 -560px;"/> | `/666`<br>`[666]`<br>` `  | <div class="small" style="background-position: -50px -560px;"/>    | `/让我看看`<br>`[让我看看]`<br>` ` | <div class="small" style="background-position: -100px -560px;"/>   | `/叹气`<br>`[叹气]`<br>` `  | <div class="small" style="background-position: -150px -560px;"/>     | `/苦涩`<br>`[苦涩]`<br>` `   | <div class="small" style="background-position: -200px -560px;"/>  | `/裂开`<br>`[裂开]`<br>` `  | <div class="small" style="background-position: -250px -560px;"/>   | `/嘴唇`<br>`[嘴唇]`<br>`/:showlove` | <div class="small" style="background-position: -300px -560px;"/>   | `/爱心`<br>`[爱心]`<br>`/:heart` | <div class="small" style="background-position: -350px -560px;"/>     | `/心碎`<br>`[心碎]`<br>`/:break` | <div class="small" style="background-position: -400px -560px;"/>     | `/拥抱`<br>`[拥抱]`<br>`/:hug` | <div class="small" style="background-position: -450px -560px;"/>     | `/强`<br>`[强]`<br>`/:strong` |
 | <div class="small" style="background-position: 0 -640px;"/> | `/弱`<br>`[弱]`<br>`/:weak`  | <div class="small" style="background-position: -50px -640px;"/>    | `/握手`<br>`[握手]`<br>`/:share` | <div class="small" style="background-position: -100px -640px;"/>   | `/胜利`<br>`[胜利]`<br>`/:v`  | <div class="small" style="background-position: -150px -640px;"/>     | `/抱拳`<br>`[抱拳]`<br>`/:@)`   | <div class="small" style="background-position: -200px -640px;"/>  | `/勾引`<br>`[勾引]`<br>`/:jj`  | <div class="small" style="background-position: -250px -640px;"/>   | `/拳头`<br>`[拳头]`<br>`/:@@` | <div class="small" style="background-position: -300px -640px;"/>   | `/OK`<br>`[OK]`<br>`/:ok` | <div class="small" style="background-position: -350px -640px;"/>     | `/合十`<br>`[合十]`<br>` ` | <div class="small" style="background-position: -400px -640px;"/>     | `/啤酒`<br>`[啤酒]`<br>`/:beer` | <div class="small" style="background-position: -450px -640px;"/>     | `/咖啡`<br>`[咖啡]`<br>`/:coffee` |
 
+### 缺失的部分表情
+<details><summary>文本代码段</summary>
+
+```shell
+/:,@f    奋斗
+/:cake    蛋糕
+/:gift    礼物
+/:rose    玫瑰
+/:kiss    献吻
+/:love    爱情
+/:lvu    爱你
+/::-O    哈欠
+/:no    NO
+/::L    流汗
+/::8    疯了
+/:pd    菜刀
+/:pig    猪头
+/:fade    凋谢
+/:li    闪电
+/:bome    炸弹
+/:kn    刀
+/:shit    便便
+/::+    酷
+/:turn    回头
+/:ladybug    瓢虫
+/:#-0    激动
+/:kotow    磕头
+/:@x    吓
+/:&-(    糗大了
+/:<@    左哼哼
+/:bad    差劲
+/:shake    发抖
+/:moon    月亮
+/::g    饥饿
+/:eat    吃饭
+/:sun    太阳
+/:hiphot    街舞
+/:footb    足球
+/:oo    乒乓
+/:basketb    篮球
+/:jump    跳跳
+/:circle    转圈
+/:skip    跳绳
+/:<&    左太极
+/:&>    右太极
+/:<L>    飞吻
+/:oY    投降
+/:<W>    西瓜
+/:<O>   怄火
+```
+</details>
+
 ### Baidu输入法个性短语导入
 <details><summary>微信表情快捷输入文本导入(注意文本编码【UTF-16】)</summary>
 
@@ -165,54 +217,6 @@ cafei=1,[咖啡]
 ```
 
 </details>
-
-```shell
-/:,@f    奋斗
-/:cake    蛋糕
-/:gift    礼物
-/:rose    玫瑰
-/:kiss    献吻
-/:love    爱情
-/:lvu    爱你
-/::-O    哈欠
-/:no    NO
-/::L    流汗
-/::8    疯了
-/:pd    菜刀
-/:pig    猪头
-/:fade    凋谢
-/:li    闪电
-/:bome    炸弹
-/:kn    刀
-/:shit    便便
-/::+    酷
-/:turn    回头
-/:ladybug    瓢虫
-/:#-0    激动
-/:kotow    磕头
-/:@x    吓
-/:&-(    糗大了
-/:<@    左哼哼
-/:bad    差劲
-/:shake    发抖
-/:moon    月亮
-/::g    饥饿
-/:eat    吃饭
-/:sun    太阳
-/:hiphot    街舞
-/:footb    足球
-/:oo    乒乓
-/:basketb    篮球
-/:jump    跳跳
-/:circle    转圈
-/:skip    跳绳
-/:<&    左太极
-/:&>    右太极
-/:<L>    飞吻
-/:oY    投降
-/:<W>    西瓜
-/:<O>   怄火
-```
 
 * ## Reference
 
