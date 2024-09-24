@@ -32,6 +32,9 @@ objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 ```
 
 ## 配置文件
+
+<details><summary>nginx.conf</summary>
+
 ```nginx
 #=======================================
 # EXAMPLE and officia documents at (http://nginx.org/en/docs/)
@@ -161,9 +164,8 @@ objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
 #user  nobody;
 worker_processes  1;
 
-
 events {
-    worker_connections  1024;
+	worker_connections  1024;
 }
 
 http {
@@ -337,12 +339,11 @@ http {
 		}
 	}
 
-
 	# HTTPS server
 
 	#=======================================
 	server {
-	    listen 443 ssl;
+		listen 443 ssl;
 		server_name www.example.com;
 		ssl_certificate 3_www.wtfu.site_bundle.crt;
 		ssl_certificate_key 3_www.wtfu.site.key;
@@ -368,27 +369,27 @@ http {
 		}
 
 		location = /docker.html {
-            # add_header Content-Type "application/pdf";
-            add_header Content-Disposition 'inline; filename="docker.html"';
+			# add_header Content-Type "application/pdf";
+			add_header Content-Disposition 'inline; filename="docker.html"';
 			# add_header Cache-Control "no-cache";
 			keepalive_timeout 0;
-            root html;
-        }
+			root html;
+		}
 
 		location ^~ /blog {
 			alias html/docs/;
 			index index.html;
-		    error_page 404  @notfounds;
+			error_page 404  @notfounds;
 			gzip_comp_level 8;
 		}
 
 		location ^~ /resume/ {
-            # add_header Content-Type "application/pdf";
-            add_header Content-Disposition 'inline; filename="wtfu.pdf"';
+			# add_header Content-Type "application/pdf";
+			add_header Content-Disposition 'inline; filename="wtfu.pdf"';
 			# add_header Cache-Control "no-cache";
 			keepalive_timeout 0;
-            root html;
-        }
+			root html;
+		}
 
 		# include ../html/include_robots;
 		# include ../html/include_ico;
@@ -424,6 +425,7 @@ http {
 	}
 }
 ```
+</details>
 
 ## 应用
 
