@@ -55,6 +55,128 @@
 
     + ### 类加载器
 
+    + ### MISC
+
+        - #### SynchronizedQueue\<T\>
+
+            > [!NOTE] 提供一个同步队列，使用数组实现，用insert,remove控制边界，可以循环使用。默认`size=128`。
+
+        - #### SynchronizedStack\<T\>
+        
+        - #### SharedExecutor
+
+            > [?] 在`server.xml`中配置的`<Executor>`标签，[引用](https://tomcat.apache.org/tomcat-8.5-doc/config/http.html#Common_Attributes) 中的 `executor`属性。
+            <br>A reference to the name in an Executor element. If this attribute is set, and the named executor exists, the connector will use the executor, and all the other thread attributes will be ignored. Note that if a shared executor is not specified for a connector then the connector will use a private, internal executor to provide the thread pool.
+            <br><br>解析赋值在`org.apache.catalina.startup.ConnectorCreateRule#begin`中。
+
+        - #### InternalExecutor
+
+            > [?] 内部线程池参数解读 ，参考 [文档的Connector标准实现](https://tomcat.apache.org/tomcat-8.5-doc/config/http.html#Standard_Implementation) 部分。
+            <br>`1).` `minSpareThreads（最小备用线程数）`: The minimum number of threads always kept running. This includes both active and idle threads. If not specified, the default of <span style='color: blue;text-decoration: underline;' >10</span> is used. If an executor is associated with this connector, this attribute is ignored as the connector will execute tasks using the executor rather than an internal thread pool. Note that if an executor is configured any value set for this attribute will be recorded correctly but it will be reported (e.g. via JMX) as -1 to make clear that it is not used. 
+            <br>`2).` `maxThreads`: The maximum number of request processing threads to be created by this Connector, which therefore determines the maximum number of simultaneous requests that can be handled. If not specified, this attribute is set to <span style='color: blue;text-decoration: underline;' >200</span>. If an executor is associated with this connector, this attribute is ignored as the connector will execute tasks using the executor rather than an internal thread pool. Note that if an executor is configured any value set for this attribute will be recorded correctly but it will be reported (e.g. via JMX) as -1 to make clear that it is not used.
+
+            > [!] 外部控制值的配置：`<Connector port="8080" protocol="HTTP/1.1" executor="tomcatThreadPool123"  minSpareThreads="12"`
+            <br> 大致原理就是通过自省的`IntrospectionUtils`工具进行赋值: `Connector#setProperty() --> AbstractProtocol#setMinSpareThreads() --> endpoint#setMinSpareThreads()`;
+
+            ```java
+            public void createExecutor() {
+                internalExecutor = true;
+                TaskQueue taskqueue = new TaskQueue();
+                TaskThreadFactory tf = new TaskThreadFactory(getName() + "-exec-", daemon, getThreadPriority());
+                executor = new ThreadPoolExecutor(getMinSpareThreads(), getMaxThreads(), 60, TimeUnit.SECONDS,taskqueue, tf);
+                taskqueue.setParent( (ThreadPoolExecutor) executor);
+            }
+
+            public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+                super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, new RejectHandler());
+                prestartAllCoreThreads();
+            }
+            ```
+
+            <!-- panels:start -->
+            <!-- div:left-panel-50 -->
+            ```java
+            // 最小备用线程数
+            private int minSpareThreads = 10;
+            public void setMinSpareThreads(int minSpareThreads) {
+                this.minSpareThreads = minSpareThreads;
+                Executor executor = this.executor;
+                if (internalExecutor && executor instanceof java.util.concurrent.ThreadPoolExecutor) {
+                    // The internal executor should always be an instance of
+                    // j.u.c.ThreadPoolExecutor but it may be null if the endpoint is
+                    // not running.
+                    // This check also avoids various threading issues.
+                    ((java.util.concurrent.ThreadPoolExecutor) executor).setCorePoolSize(minSpareThreads);
+                }
+            }
+            public int getMinSpareThreads() {
+                return Math.min(getMinSpareThreadsInternal(), getMaxThreads());
+            }
+            private int getMinSpareThreadsInternal() {
+                if (internalExecutor) {
+                    return minSpareThreads;
+                } else {
+                    return -1;
+                }
+            }
+            ```
+            <!-- div:right-panel-50 -->
+            ```java
+            /**
+             * 
+             * Maximum amount of worker threads.
+             */
+            private int maxThreads = 200;
+            public void setMaxThreads(int maxThreads) {
+                this.maxThreads = maxThreads;
+                Executor executor = this.executor;
+                if (internalExecutor && executor instanceof java.util.concurrent.ThreadPoolExecutor) {
+                    // The internal executor should always be an instance of
+                    // j.u.c.ThreadPoolExecutor but it may be null if the endpoint is
+                    // not running.
+                    // This check also avoids various threading issues.
+                    ((java.util.concurrent.ThreadPoolExecutor) executor).setMaximumPoolSize(maxThreads);
+                }
+            }
+            public int getMaxThreads() {
+                if (internalExecutor) {
+                    return maxThreads;
+                } else {
+                    return -1;
+                }
+            }
+            ```
+            <!-- panels:end -->
+
+        - #### TaskQueue_任务队列
+
+            ```java
+            @Override
+            public boolean offer(Runnable o) {
+            //we can't do any checks
+                if (parent==null) return super.offer(o);
+                //we are maxed out on threads, simply queue the object
+                if (parent.getPoolSize() == parent.getMaximumPoolSize()) return super.offer(o);
+                //we have idle threads, just add it to the queue
+                if (parent.getSubmittedCount()<=(parent.getPoolSize())) return super.offer(o);
+                //if we have less threads than maximum force creation of a new thread
+                if (parent.getPoolSize()<parent.getMaximumPoolSize()) return false;
+                //if we reached here, we need to add it to the queue
+                return super.offer(o);
+            }
+            ```
+        - #### getHandler()
+
+            ```java
+            public AbstractHttp11Protocol(AbstractEndpoint<S> endpoint) {
+                super(endpoint);
+                setConnectionTimeout(Constants.DEFAULT_CONNECTION_TIMEOUT);
+                ConnectionHandler<S> cHandler = new ConnectionHandler<>(this);
+                setHandler(cHandler);
+                getEndpoint().setHandler(cHandler);
+            }
+            ```
+
 * ## Reference
 
     + https://github.com/apache/tomcat/tree/8.5.35

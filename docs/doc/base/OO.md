@@ -44,6 +44,44 @@
 
 ## 多态
 
+* ## 语法
+
+    + ### 修饰符
+
+        > [?] 修饰符分为`访问修饰符`、`非访问修饰符`。修饰符用来定义类、方法或者变量，通常放在语句的最前端。
+
+        - #### 访问修饰符
+
+            |    | 当前类 | 同一包 | 子类中 | 其他地方 |
+            | -- | :-:    | :-:    | :-:   | :-: |
+            | `public`    | ✅ | ✅ | ✅ | ✅ |
+            | `protected` | ✅ | ✅ | ✅ | ❌ | 
+            | `default`   | ✅ | ✅ | ❌ | ❌ |
+            | `private`   | ✅ | ❌ | ❌ | ❌ | 
+
+            * ##### protected详解
+
+                > [?] 简单介绍：`protected` 表示 `同包 + 继承`。
+                <br><span style='padding-left: 2.9em'/>继承可以理解为将 protected 方法的可见性传递到子类中。比如 case02 中 `son2.f()、this.f()`可以访问。
+                <br><br>`a).` 在同包中
+                <br><span style='padding-left: 2.9em'/>访问方法`f()`的类与方法`f()`在同一个包中。
+                <br><span style='padding-left: 2.9em'/>例如 **case01#Test00#son2.f()** 其中 son2.f() 方法继承自 Father1，定义在 p0 中。
+                <br><span style='padding-left: 2.9em'/>例如 **case01#Test01#son1.f()** 访问的方法的类 Test01 与重写的方法 f() 都在 p1 包中。
+                <br><span style='padding-left: 2.9em'/>例如 **case03#Father#test01()** Son1 中的 f() 在 同包 p0 中，而 Son2 中的方法 f() 在 p2 中
+                <br><br>`b).` 在子类中
+                <br><span style='padding-left: 2.9em'/>只能访问自己继承或重写的方法`this|super.f()`，<span style='color:blue'>不能访问父类实例或其他后代实例的方法`new Father1().f() 、 new OtherSon().f()`。</span>
+                <br><span style='padding-left: 2.9em'/>例如 **case02#Son2** 只能访问自己 Son2实例 中的 f() 方法(可能是继承或者重写而来)，而不能访问父类实例或者其他子类实例中的方法。
+                <br><br>参考：[Java protected 关键字详解](https://blog.csdn.net/justloveyou_/article/details/61672133)
+
+                <!-- tabs:start -->
+                ###### **case01**
+                ![](/.images/doc/base/oo/modifier/modifier-protected-01.png ':size=99%')
+                ###### **case02**
+                ![](/.images/doc/base/oo/modifier/modifier-protected-02.png ':size=99%')
+                ###### **case03**
+                ![](/.images/doc/base/oo/modifier/modifier-protected-03.png ':size=99%')
+                <!-- tabs:end -->
+
 ## Reference
 * https://github.com/openjdk/jdk/blob/jdk8-b120/hotspot/src/share/vm/oops/markOop.hpp
 * https://github.com/openjdk/jol
