@@ -274,8 +274,10 @@
         ```
         <!-- panels:end -->
 
-        > [?] `isInterrupted()`返回标志。`interrupt()`设置中断标志。
-        <br>`interrupted()` 表示返回标志，如果为true,清除。
+        > [?] `interrupt()`设置中断标志
+        <br>`native isInterrupted(boolean clean)`:
+        <br><span style='padding-left:2.7em'/>`false -> isInterrupted()` 返回标志，不清除。
+        <br><span style='padding-left:2.7em'/>`true  -> interrupted()`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;返回标志，并清除。
 
         <details><summary>代码示例</summary>
 

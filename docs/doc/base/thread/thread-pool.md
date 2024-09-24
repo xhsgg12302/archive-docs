@@ -13,7 +13,7 @@
     <br>`d).` 其他情况(队列满了且达到最大线程数)，则拒绝执行。
     <br><br>对于队列的选择，一般有三种情况：
     <br>`SynchronousQueue`：这个阻塞队列的特性是，每插入一个元素，必须消费之后才可以继续插入。而且可以支持公平和非公平选择，用于对等待的生产者和消费者线程进行排序。所以使用这种队列，如果在生产速度大于消费速度，则通过queue.offer()方法放不进去，只能创建新线程进行处理了。所以线程数可能无限增长。
-    <br>![](/.images/doc/base/thread/thread-pool/tp-queue-01.png ':size=70%')
+    <br>![](/.images/doc/base/thread/thread-pool/tp-queue-01.png ':size=90%')
     <br>`LinkedBlockingQueue`：偏无界队列（`Integer.MAX_VALUE`）
     <br>`ArrayBlockingQueue`：有边界
     <br><br>钩子方法：`beforeExecute(Thread, Runnable) `、`afterExecute(Runnable, Throwable)`
@@ -59,12 +59,76 @@
          * These depend on the bit layout and on workerCount being never negative.
          */
 
-        private static boolean runStateLessThan(int c, int s) { return c < s; }
+        private static boolean runStateLessThan(int c, int s) { return c < s; } // 运行状态小于s。例如 如果 s = STOP, 则 c 处于 RUNNING、SHUTDOWN 状态
 
-        private static boolean runStateAtLeast(int c, int s) { return c >= s; }
+        private static boolean runStateAtLeast(int c, int s) { return c >= s; } // 运行状态 >=s。例如 如果 s = STOP, 则 c 处于 STOP、TIDYING、TERMINATED 状态
 
-        private static boolean isRunning(int c) { return c < SHUTDOWN; }
+        private static boolean isRunning(int c) { return c < SHUTDOWN; }        // 是否运行中。 只有运行状态是负数，所以只需要判断小于 SHUTDOWN（0）即可
         ```
+
+    + ### 方法
+
+        - #### execute
+
+            > [?] 提交任务
+
+            ```java
+            public void execute(Runnable command) {
+                if (command == null)
+                    throw new NullPointerException();
+                /*
+                 * Proceed in 3 steps:
+                 *
+                 * 1. If fewer than corePoolSize threads are running, try to
+                 * start a new thread with the given command as its first
+                 * task.  The call to addWorker atomically checks runState and
+                 * workerCount, and so prevents false alarms that would add
+                 * threads when it shouldn't, by returning false.
+                 *
+                 * 2. If a task can be successfully queued, then we still need
+                 * to double-check whether we should have added a thread
+                 * (because existing ones died since last checking) or that
+                 * the pool shut down since entry into this method. So we
+                 * recheck state and if necessary roll back the enqueuing if
+                 * stopped, or start a new thread if there are none.
+                 *
+                 * 3. If we cannot queue task, then we try to add a new
+                 * thread.  If it fails, we know we are shut down or saturated
+                 * and so reject the task.
+                 */
+                int c = ctl.get();  // 获取线程池的控制状态
+                if (workerCountOf(c) < corePoolSize) {              // 判断运行的线程数是否小于核心线程
+                    if (addWorker(command, true))                       // 增加 worker 去处理任务
+                        return;
+                    c = ctl.get();
+                }
+                if (isRunning(c) && workQueue.offer(command)) {     // 将任务追加到队列
+                    int recheck = ctl.get();                            // 再次获取状态
+                    if (! isRunning(recheck) && remove(command))        // 如果线程池停止了，将任务从队列中移除
+                        reject(command);                                    // 触发拒绝任务处理
+                    else if (workerCountOf(recheck) == 0)               // 如果由于一些原因(进入TIDYING状态且移除失败)，没有工作线程了。[运行状态下 workerCountOf() 大概率不会为 0]
+                        addWorker(null, false);                             // 则增加一个线程去处理队列中的任务。
+                }
+                else if (!addWorker(command, false))                // 扩大非核心线程
+                    reject(command);                                    // 失败的话触发拒绝任务处理
+            }
+            ```
+    + ### 状态转换
+
+        ```java
+        private void advanceRunState(int targetState) {
+            for (;;) {
+                int c = ctl.get();
+                // 如果小于当前状态，没必要设置。比如当前为TIDYING，要设置 SHUTDOWN 就没必要
+                // 否则将 工作线程数 + 目标状态 封装为一个新的 ctl 并赋值
+                if (runStateAtLeast(c, targetState) ||                              
+                    ctl.compareAndSet(c, ctlOf(targetState, workerCountOf(c))))
+                    break;
+            }
+        }
+        ```
+        ![](/.images/doc/base/thread/thread-pool/tp-status-01.png ':size=80%')
+
     + ### 定义
     + ### 创建
     + ### 种类
@@ -72,3 +136,4 @@
 * ## Reference
 
     + https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/concurrent/ThreadPoolExecutor.java
+    + https://drive.google.com/file/d/1IvKzyPDZEnyhSu0Q2GfylXu07EPpjV91/view?usp=sharing
