@@ -83,16 +83,23 @@
 
         > [?] 使用 **openssl** 自签证书给 burpsuite 代理使用，并且制作 android10 系统证书，捕获手机流量(手机抓包)。
         <br>解决 burpsuite--> android (NET::ERR_CERT_VALIDITY_TOO_LONG)
+        <br><br>证书摘要:
+        <br>![](/.images/devops/os/util/openssl-req-01.png ':size=60%')
+
+        > [!CAUTION] 需要注意使用的`openssl.cnf`配置文件，最终使用了`/usr/local/etc/openssl@3/openssl.cnf`。不知道是版本不对，还是修改过里面的东西，导致出现如下问题：
+        <br>burpsuite 端 ： **Received fatal alert: decrypt_error**
+        <br>curl 端 ：**SSL routines__colon__CRYPTO_internal:block type is not 01**、**SSL routines__colon__CONNECT_CR_KEY_EXCH:bad signature**
 
         ```shell
         mkdir certificates && cd certificatessudo 
         apt-get install openssl
         cp /usr/lib/ssl/openssl.cnf ./
 
+        # pwd: cp /usr/local/etc/openssl@3/openssl.cnf ./
         # pwd: ~/Desktop/_scratch/ca/certificates
 
         setopt +o nomatch && rm -rf *.0 ca.der server.key server.key.der server.key.pkcs8.der && setopt -o nomatch && \
-        openssl req -x509 -days 359 -nodes -newkey rsa:2048 -outform der -keyout server.key -out ca.der -extensions v3_ca -config openssl.update.cnf -batch && \
+        openssl req -x509 -days 730 -nodes -newkey rsa:2048 -outform der -keyout server.key -out ca.der -extensions v3_ca -config openssl.update.cnf -batch && \
         openssl rsa -in server.key -inform pem -out server.key.der -outform der && \
         openssl pkcs8 -topk8 -in server.key.der -inform der -out server.key.pkcs8.der -outform der -nocrypt
 
