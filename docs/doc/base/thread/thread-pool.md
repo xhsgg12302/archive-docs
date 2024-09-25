@@ -105,7 +105,7 @@
                 }
                 if (isRunning(c) && workQueue.offer(command)) {     // 将任务追加到队列
                     int recheck = ctl.get();                            // 再次获取状态
-                    if (!isRunning(recheck) && remove(command))        // 如果线程池停止了，将任务从队列中移除
+                    if (!isRunning(recheck) && remove(command))         // 如果线程池停止了，将任务从队列中移除
                         reject(command);                                    // 触发拒绝任务处理
                     else if (workerCountOf(recheck) == 0)               // 如果由于一些原因(进入TIDYING状态且移除失败)，没有工作线程了。[运行状态下 workerCountOf() 大概率不会为 0]
                         addWorker(null, false);                             // 则增加一个线程去处理队列中的任务。
@@ -164,10 +164,10 @@
 
                         for (;;) {
                             int wc = workerCountOf(c);
-                            if (wc >= CAPACITY ||                               // 工作线程数大于最大值
-                                wc >= (core ? corePoolSize : maximumPoolSize))  // 工作线程数大于(core, 核心线程数)，(非core，最大线程数)
+                            if (wc >= CAPACITY ||                                   // 工作线程数大于最大值
+                                wc >= (core ? corePoolSize : maximumPoolSize))      // 工作线程数大于(core, 核心线程数)，(非core，最大线程数)
                                 return false;
-                            if (compareAndIncrementWorkerCount(c))              // 确保 workerCount + 1，后退出循环
+                            if (compareAndIncrementWorkerCount(c))                  // 确保 workerCount + 1，后退出循环
                                 break retry;
                             c = ctl.get();  // Re-read ctl
                             if (runStateOf(c) != rs)
@@ -191,54 +191,59 @@
                                 // shut down before lock acquired.
                                 int rs = runStateOf(ctl.get());
 
-                                if (rs < SHUTDOWN ||                                    // RUNNING
-                                    (rs == SHUTDOWN && firstTask == null)) {            // SHUTDOWN 增加线程处理队列任务
+                                if (rs < SHUTDOWN ||                                // RUNNING
+                                    (rs == SHUTDOWN && firstTask == null)) {        // SHUTDOWN 增加线程处理队列任务
                                     if (t.isAlive()) // precheck that t is startable
                                         throw new IllegalThreadStateException();
-                                    workers.add(w);                                     // 增加到 workers 集合
+                                    workers.add(w);                                 // 增加到 workers 集合
                                     int s = workers.size();
-                                    if (s > largestPoolSize)                            // 记录巅峰值
+                                    if (s > largestPoolSize)                        // 记录巅峰值
                                         largestPoolSize = s;
-                                    workerAdded = true;                                 // workerAdded = true
+                                    workerAdded = true;                             // workerAdded = true
                                 }
                             } finally {
                                 mainLock.unlock();
                             }
-                            if (workerAdded) {                                          // 根据 workerAdded 判断是否需要启动线程，并设置 workerStarted = true
+                            if (workerAdded) {                                      // 根据 workerAdded 判断是否需要启动线程，并设置 workerStarted = true
                                 t.start();
                                 workerStarted = true;
                             }
                         }
                     } finally {
                         if (!workerStarted)
-                            addWorkerFailed(w);                                         // 没有启动的话，回滚。（移出队列，并且 workerCount - 1）
+                            addWorkerFailed(w);                                     // 没有启动的话，回滚。（移出队列，并且 workerCount - 1）
                     }
                     return workerStarted;
                 }
 
                 final void runWorker(Worker w) {
-                    Thread wt = Thread.currentThread();
-                    Runnable task = w.firstTask;
+                    Thread wt = Thread.currentThread();                             // 获取当前 worker 线程
+                    Runnable task = w.firstTask;                                    // 获取当前 worker 第一个任务
                     w.firstTask = null;
                     w.unlock(); // allow interrupts
                     boolean completedAbruptly = true;
                     try {
-                        while (task != null || (task = getTask()) != null) {
+                        while (task != null || (task = getTask()) != null) {        // 如果第一个任务 != null 或者阻塞从队列中获取任务 != null
                             w.lock();
                             // If pool is stopping, ensure thread is interrupted;
                             // if not, ensure thread is not interrupted.  This
                             // requires a recheck in second case to deal with
                             // shutdownNow race while clearing interrupt
-                            if ((runStateAtLeast(ctl.get(), STOP) ||
-                                (Thread.interrupted() &&
+                            // 如果 Thread.interrupted() 返回 true 了，有可能是第一次状态检测完后 shutdownNow() 的竞争调用设置线程中断标志了。所以再次检测线程池状态
+
+                            // ( runStateAtLeast(ctl.get(), STOP) || ( Thread.interrupted() && runStateAtLeast(ctl.get(), STOP)) ) && !wt.isInterrupted()
+                            // 1. 检测状态 = (STOP、TIDYING、TERMINATED)                                                        并且 线程没有中断，进行中断操作
+                            // 2. 检测状态 = (RUNNING、SHUTDOWN、 )  并且 线程中断 并且 检测状态 = (STOP、TIDYING、TERMINATED、 )    并且 线程没有中断，进行中断操作
+                            if ((runStateAtLeast(ctl.get(), STOP) ||                // 线程池状态是否为 STOP TIDYING TERMINATED
+                                (Thread.interrupted() &&                            // 判断是否有中断标志。（如果上述条件[线程状态]不满足的话就会执行，而这个方法不管返回是否为 true，都会进行清除中断标志的。）
                                 runStateAtLeast(ctl.get(), STOP))) &&
                                 !wt.isInterrupted())
-                                wt.interrupt();
+                                wt.interrupt();                                     // 设置中断标志，让[当前线程的一些方法(sleep,wait,join)的调用]或者[当前线程去调用一些可以发生中断异常的方法(queue.take())] 触发中断异常，进入到 finally 中进行结尾处理。
                             try {
-                                beforeExecute(wt, task);
+                                beforeExecute(wt, task);                            // 钩子方法 beforeExecute
                                 Throwable thrown = null;
                                 try {
-                                    task.run();
+                                    task.run();                                     // 正真执行任务
                                 } catch (RuntimeException x) {
                                     thrown = x; throw x;
                                 } catch (Error x) {
@@ -246,7 +251,7 @@
                                 } catch (Throwable x) {
                                     thrown = x; throw new Error(x);
                                 } finally {
-                                    afterExecute(task, thrown);
+                                    afterExecute(task, thrown);                     // 钩子方法 afterExecute
                                 }
                             } finally {
                                 task = null;
