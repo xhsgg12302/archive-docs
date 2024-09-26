@@ -21,6 +21,11 @@
             <br>程序附带的共享配置`/Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/squirrel.yaml`
             <br>用户自定义(覆写)目录`~/Library/Rime/`
 
+        - #### reference
+
+            * [RIME v0.16.1 小狼毫輸入法（支援Win, macOS, Linux）](https://briian.com/9216/)
+            * https://github.com/ssnhd/rime
+
     + ### 工具
 
         - [主題設計助手](https://github.com/rime/squirrel/wiki#歡迎來到鼠鬚管-wiki)
@@ -30,10 +35,11 @@
     > [!CAUTION] 在计算机科学和编程中，`grave` 通常指的是“重音符”或“倒尖号”，在键盘上通常位于数字 1 键的左边，形状像一个倾斜的撇号，有时也被称为反引号 `` ` ``。 --- 来自阿里通义
 
 * ## Reference
-    + https://rime.im/release/squirrel/
+    + https://rime.im
     + 
     + wiki
     + https://github.com/rime/home/wiki
     + https://github.com/rime/squirrel/wiki
     + 
     + [有哪些好用且开源的输入法？](https://www.zhihu.com/question/274093588)
+    + [一位匠人的中州韵——专访Rime输入法作者佛振（图灵访谈）](https://m.ituring.com.cn/article/118072)
