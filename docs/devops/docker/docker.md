@@ -182,7 +182,7 @@
 
         * #### 流程
             
-            - 构建Dockerfile	
+            - ##### a).构建Dockerfile	
                 ```docker
                 # Dockerfile
                 FROM busybox
@@ -214,11 +214,11 @@
                 # echo "$@"  ==>  sh
                 exec "$@"
                 ```
-            - build镜像 
+            - ##### b).build镜像 
                 + `$ docker build -f .\Dockerfile -t busybox-with-scrt:8.x  [--network host .] . ` 
                 + `$ docker build -f Dockerfile -t wechat-chatgpt-base:v1.0 --network host --build-arg "HTTP_PROXY=http://192.168.164.191:7890" --build-arg "HTTPS_PROXY=http://192.168.164.191:7890" . `
                 + `$ docker run -it -e http_proxy=192.168.164.191:7890 -e https_proxy=192.168.164.191:7890 demo:v1.0`
-            - 推送镜像
+            - ##### c).推送镜像
                 ```bash
                 $ docker login --username=5127*****@qq.com registry.cn-hangzhou.aliyuncs.com
                 $ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
@@ -227,27 +227,28 @@
 
                 > [!CAUTION|style:flat] 如果推送成功在刷新网页看不到推送的镜像的话，有可能是地区选择有问题。
             
-            - 映射容器中的文件到宿主机的方式
-                <!-- tabs:start -->
-                #### **自动移动**
-                ```bash
-                # 有entrypoint.sh加持
-                $ docker run -v C:\Users\neddn\Desktop\package:/data --rm -it [imageId]
-                ```
+        * #### 移动容器文件到宿主机
 
-                #### **手动移动**
-                ```bash
-                # docker pull registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-pdf-books:1.0.0
-                $ docker run -v ~/Desktop/books:/data --rm --name books -[d]it 5f1c5a7b06e9
-                $ mv books/* /data/
-                ```
-                <!-- tabs:end -->
+            <!-- tabs:start -->
+            #### **自动移动**
+            ```bash
+            # 有entrypoint.sh加持
+            $ docker run -v C:\Users\neddn\Desktop\package:/data --rm -it [imageId]
+            ```
+
+            #### **手动移动**
+            ```bash
+            # docker pull registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-pdf-books:1.0.0
+            $ docker run -v ~/Desktop/books:/data --rm --name books -[d]it 5f1c5a7b06e9
+            $ mv books/* /data/
+            ```
+            <!-- tabs:end -->
 
     3. ### 项目打包
         * #### 简要说明
         > [?] 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
 
-        * #### 方式一：(把依赖组件(redis,zk,mysql)编排，一次性构建)
+        * #### 方式1: (把依赖组件(redis,zk,mysql)编排，一次性构建)
             - 基于依赖镜像构建，比如：
                 ```docker
                 # ---- Dependencies ----
@@ -364,7 +365,7 @@
                     # 查看容器运行log：
                     $ docker-compose logs [service-name]
                     ```
-        * #### 方式2：（分开单独打包）
+        * #### 方式2: (分开单独打包）
             1. 创建docker网络
                 ```shell
                 # 创建网络

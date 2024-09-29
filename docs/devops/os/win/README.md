@@ -1,6 +1,28 @@
 * ## Intro(windows)
 
-    + ### window激活
+    + ### windows禁止更新
+
+        - #### 1.服务管理
+
+            > [!CAUTION]`1).` 组合键 Win + R 输入 services.msc 回车 打开服务管理列表，找到 Windows Update，打开后启动类型选择 禁用。
+            <br><span style='padding-left:2.7em'/>![](/.images/devops/os/windows/windows-update-03.png ':size=80%')
+
+        - #### 2.组策略配置
+
+            > [!CAUTION] <span style='color:blue'> 需要注意：(方式2(组策略配置) 执行完后会自动新建 方式3(注册表编辑) 的效果)</span>
+            <br>`2).` 组合键 Win + R 输入 gpedit.msc 回车 打开组策略编辑器：计算机配置 > 管理模板 > Windows组件 > Windows 更新 > 管理最终用户体验，双击进入。
+            <br><span style='padding-left:2.7em'/>进入后选择 配置自动更新，右键编辑属性，在弹出的配置窗口中选择 已禁用。
+            <br><span style='padding-left:2.7em'/>![](/.images/devops/os/windows/windows-update-01.png ':size=80%')
+
+        - #### 3.注册表编辑
+
+            >[!CAUTION]<br>`3).` 组合键 Win + R 输入 regedit 回车 打开注册表编辑器：打开路径`HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows`。
+            <br><span style='padding-left:2.7em'/>右键单击 Windows 文件夹并从子菜单中选择 新建 > 密钥，新密钥命名为 WindowsUpdate。
+            <br><span style='padding-left:2.7em'/>右键单击 WindowsUpdate，然后从子菜单中选择 新建 > 密钥，新的密钥文件夹命名为 AU。
+            <br><span style='padding-left:2.7em'/>右键单击 AU，然后从菜单中选择新建 > DWORD（32位值）。新的DWORD键命名为 NoAutoUpdate，双击它，然后将其数值数据更改为 1。
+            <br><span style='padding-left:2.7em'/>![](/.images/devops/os/windows/windows-update-02.png ':size=60%')
+
+    + ### windows激活
 
         > [!NOTE|label:window各种版本激活]
         <br>1). 首先，查看系统的激活状态：点击桌面左下角的“Windows”按钮，从扩展面板中依次点击“设置”-“更新和安全”，并切换到“激活”选项卡，在此就可以查看到当前系统的激活状态。
