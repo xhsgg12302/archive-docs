@@ -25,9 +25,13 @@
         <br><br>docker 不使用缓存构建镜像
         <br>`docker build -t **:1.0 --no-cache -f Dockerfile . `
         <br>docker 清理构建缓存
-        <br>`docker builder prune`
+        <br>`docker builder prune`、或者更深层次的`docker system prune -a`
+        <br>
 
     + ### DAEMON-CONFIG
+
+        [DAEMON 配置官方文档](https://docs.docker.com/reference/cli/dockerd/)
+        
         ```shell
         # /etc/docker/daemon.json
         {
@@ -52,8 +56,11 @@
             ]
         }
         ```
+        
     + ### CREDENTIAL
+
         [凭证官方文档](https://docs.docker.com/engine/reference/commandline/login/#credential-helper-protocol)
+
         ```shell
         # /etc/docker/config.json
         {
@@ -97,16 +104,78 @@
             * https://docs.docker.com/docker-hub/api/latest/#tag/repositories
             * https://github.com/docker/hub-feedback/issues/1925
 
+    + ### Dockerfile
+
+        > [!TIP] [Dockerfile 参考](https://docs.docker.com/reference/dockerfile/) <span style='padding-left:5em'/> [.dockerignore](https://docs.docker.com/build/concepts/context/#dockerignore-files)
+        <br><br>制作镜像的时候可以删除没用的文件，或者通过`.dockerignore`进行排除，不然体积比较大，不便传输。
+        <br><span style='color: red'>* 使用 rm 删除的时候可以先进行确认</span>
+        <br>删除target、build、out: `find ./ -type d -a \( -name 'target' -o -name 'build' -o -name 'out' \) -exec rm -rf {} \;`
+        <br>删除 log、class 文件: `find ./ -type f -a \( -name '*.log' -o -name '*.class' \) -exec rm -f {} \;`
+        <br>删除 log 目录: `find ./ -type d -a -name 'log' -exec rm -rf {} \;`
+        <br>删除非 git 中的所有 logs: `find ./ -type d -a ! -path '*.git*' -a -name 'logs' -exec rm -rf {} \;`
+        <br><br>~删除 target/*.war:~ `find ./ -type f  -a -name '*.war' -a -path '*target*' -exec rm -f {} \;`
+
+        > [!CAUTION] macOS 构建的时候出现错误：`no space left on device`。 [参考解决办法](https://stackoverflow.com/questions/37645879/how-can-i-fix-docker-mac-no-space-left-on-device-error)
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        **Dockerfile**
+        ```docker
+        FROM busybox:1.34.1
+        LABEL maintainer = xhsgg12302@126.com
+        ENV DATADIR /12302/some
+        RUN mkdir -p $DATADIR
+
+        ADD some $DATADIR
+        VOLUME $DATADIR
+        COPY Dockerfile /
+        CMD /bin/sh
+        ```
+        <!-- div:right-panel-50 -->
+        **.dockerignore**
+        ```shell
+        # hello
+
+        app/deep-live-cam
+        app/docs
+        envs
+
+        # Miniconda3-latest-Linux-x86_64.sh
+        Miniconda3-py310_23.9.0-0-Linux-x86_64.sh
+        *.tar
+        ```
+        <!-- panels:end -->
 
 - ## 使用样例
+
     1. ### 常用镜像
-    ```shell
-    # https://hub.docker.com/r/ealen/echo-server
-    # redis:6.2.7, redis:6.2.8
-    # zookeeper:3.6.3, zookeeper:3.8.2[❌]
-    # mysql:5.6.49, mysql:5.7.26
-    ealen/echo-server
-    ```
+
+        ```shell
+        # redis:6.2.7, redis:6.2.8
+        # zookeeper:3.6.3, zookeeper:3.8.2[❌]
+        # mysql:5.6.49, mysql:5.7.26
+
+        # https://hub.docker.com/r/ealen/echo-server
+        ealen/echo-server
+
+        ➜  Desktop docker images
+        REPOSITORY          TAG                  IMAGE ID            CREATED             SIZE
+        python              3.10.12-alpine3.17   e64c3f105cd5        15 months ago       49.7MB
+        redis               6.2.8                7c133222c17b        20 months ago       113MB
+        busybox             1.34.1               beae173ccac6        2 years ago         1.24MB
+        zookeeper           3.6.3                3e9dd32cd767        2 years ago         277MB
+        ubuntu              20.04                ba6acccedd29        2 years ago         72.8MB
+        mysql               5.6.49               4f36ba851740        3 years ago         302MB
+        mysql               5.7.26               e9c354083de7        5 years ago         373MB
+        ```
+
+        #### 三方镜像平台(多个防止丢失）
+        | name | site | prefix |
+        | -- | -- | -- |
+        | aliyun | https://cr.console.aliyun.com/cn-hangzhou/instance/dashboard | `registry.cn-hangzhou.aliyuncs.com` |
+        | huawei | https://console.huaweicloud.com/swr/?region=cn-north-4#/swr/dashboard | `swr.cn-north-4.myhuaweicloud.com` |
+        | 163yun | https://c.163yun.com/dashboard#/ccr/list | ... |
+
     2. ### 存储安装包
         * #### 简要说明
         > [?] 将一些日常工作中用到的软件或者破解工具以及流程做个记录，利用公共仓库进行存储，使用的时候直接docker拉取镜像运行，然后挂载容器内文件到本地，直接进行安装。
@@ -155,6 +224,8 @@
                 $ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
                 $ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-scrt:[镜像版本号]
                 ```
+
+                > [!CAUTION|style:flat] 如果推送成功在刷新网页看不到推送的镜像的话，有可能是地区选择有问题。
             
             - 映射容器中的文件到宿主机的方式
                 <!-- tabs:start -->
