@@ -7,7 +7,7 @@
 
     + ### 下载安装
 
-        > [?] [下载页面](https://rime.im/download/)，[macOS 鼠须管 1.0.2 pkg 安装包](https://github.com/rime/squirrel/releases/download/1.0.2/Squirrel-1.0.2.pkg)
+        > [?] [下载页面](https://rime.im/download/)，[macOS 鼠须管 1.0.2 pkg 安装包](https://github.com/rime/squirrel/releases/download/1.0.2/Squirrel-1.0.2.pkg)(属于将引擎中州韵代码作为 git 子模块，编译成静态库文件供鼠须管使用)
         <br><br> [macOS 编译指南](https://github.com/rime/squirrel/blob/master/INSTALL.md)
         <br>[鼠鬚管 Wiki](https://github.com/rime/squirrel/wiki)
         <br><br>![](/.images/other/misc/squirrel/squirrel-intro-01.png ':size=60%')
@@ -17,14 +17,27 @@
         - #### 配置文件位置
 
             > [!WARNING] 应运程序的安装位置: `/Library/Input\ Methods/Squirrel.app/Contents`
-            <br>程序附带的共享配置: `/Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/squirrel.yaml`
+            <br>程序附带的共享配置: `/Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/`
             <br>用户自定义覆写目录: `~/Library/Rime/`
             <br><br>YAML 配置文件的升级语法 [参考](https://github.com/rime/home/wiki/Configuration#rime-配置文件)
             
+        - #### 外观-Squirrel(鼠须管)
+
+            > [!TIP|label:可参考样例]
+            [样例01](https://github.com/rime/squirrel/blob/master/data/squirrel.yaml) <span style='padding-left:1em'>[样例02](https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/squirrel.custom.yaml) <span style='padding-left:1em'>[样例03](https://github.com/ssnhd/rime/blob/master/配置文件/squirrel.custom.yaml)
+
+            **图片引用自 [官方的示例图](https://github.com/rime/home/wiki/CustomizationGuide#一例定製小狼毫配色方案)，小狼毫和鼠须管外观配置基本一致。如需设置，则可以参考 [主題設計助手](https://github.com/rime/squirrel/wiki#歡迎來到鼠鬚管-wiki) 或者 [润笔 - Rime 设置小助手](https://pdog18.github.io/rime-soak/#/theme)**
+
+            ![](/.images/other/misc/squirrel/squirrel-config-02.png ':size=60%')
+
+        - #### 引擎-Librime(中州韵)
+
             **根据配置文档自己画的配置关系图如下：**
             ![](/.images/other/misc/squirrel/squirrel-config-01.png ':size=100%')
 
             > [!CAUTION] 因为官方不建议修改的 Shared 文件的原因，所以有些属性就得通过 **custom** 文件进行覆盖或者补丁。
+
+        - #### 自定义及解释
 
             > [?] 可以将输入法展示区块分为三部分：inline(目标区)，preedit(编辑区)[可消失]，candidate(候选区)[不消失]
             <br>`inline_preedit__`：编辑区与目标区行内显示（简单理解为`编辑区`覆盖目标区）
@@ -63,10 +76,6 @@
             * [RIME v0.16.1 小狼毫輸入法（支援Win, macOS, Linux）](https://briian.com/9216/)
             * https://github.com/ssnhd/rime
 
-    + ### 工具
-
-        - [主題設計助手](https://github.com/rime/squirrel/wiki#歡迎來到鼠鬚管-wiki)
-    
     + ### Rime引擎编译与调试
 
         > [?] 由于需要查看 yaml 文件生成后到底是什么样的，以及配置了为什么没有生效等问题。所以将源代码拉取下来，进行分析，结合日志打印出的信息以及 AIGC 等问答，最后修改 librime 输入法引擎部分代码，实现测试，验证等效果。
