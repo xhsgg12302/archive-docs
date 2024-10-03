@@ -76,7 +76,8 @@
 
             > [?] 修改 [caret](https://en.wikipedia.org/wiki/Caret)(插入记号)：符号`‸`，此处的符号引用自 [UI Improvements / 10](https://github.com/rime/squirrel/pull/848)。
             <br>~查看 librime 引擎中相关代码，发现在 [此处](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/tools/rime_api_console.cc#L46) 使用了`|`模拟了插入记号，所以感觉应该是在每个客户端(squirrel|weasel)中去自自己实现的。然后转到 squirrel，在 [此处 SquirrelInputController.swift](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L530) 发现相关代码，其中 caretPos 就是指定了位置，但是并没有看出来是怎么使用的，比如是直接将插入符号追加到编辑区 还是 在后续调用中根据位置直接设置的。swift 代码不太好看，无从下手了，所以没有解决。在此处仅做个记录。~:stuck_out_tongue_closed_eyes:
-            <br><br>更新上述错误表述：后面查看代码的时候发现在 librime 引擎处有 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38)，而且在下面一行处有用户可配置的选项`soft_cursor`，大概熟悉代码后发现这只是一个开关(false|true)，用来控制是否显示插入符号的开关，通过 debug 验证后发现可行。于是添加如右边配置，在本地进行测试，发现在 Squirrel 端并不生效。于是查看 squirrel 端代码，发现有 [这样的判断](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L440-L443)，进而对`soft_cursor`进行了覆写，所以没生效。但是根据它的判断条件也可以进行验证，一般对于浏览器，都是进行强制内联(inline)的。所以在浏览器地址栏输入就不会出现插入符号了。
+            <br><br>更新上述错误表述：后面查看代码的时候发现在 librime 引擎处有 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38)，而且在下面一行处有用户可配置的选项`soft_cursor`，大概熟悉代码后发现这只是一个开关(false|true)，用来控制是否显示插入符号的开关，通过 debug 验证后发现可行。于是添加如下图括起来的类似配置，在本地进行测试，发现在 Squirrel 端并不生效。于是查看 squirrel 端代码，发现有 [这样的判断](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L440-L443)，进而对`soft_cursor`进行了覆写，所以没生效。但是根据它的判断条件也可以进行验证，一般对于浏览器，都是进行强制内联(inline)的。所以在浏览器地址栏输入就不会出现插入符号了。
+            <br>![](/.images/other/misc/squirrel/squirrel-config-05.png ':size=83%')
             <br><br>接着，为了实现修改插入记号的初始想法，就必须修改引擎代码然后重新编译出动态链接库，替换 squirrel 自己编译出来的。步骤如下：
             <br>`1).`: 修改 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38) 中 38 行代码为：`static const string kCaretSymbol("\xe2\x86\x9e");`，`\xe2\x86\x9e`就是你想替换的任何 UTF-8 符号的十六进制编码。比如我此处的就是`↞`。
             <br>`2).`: 此处使用 clion + camke 的方式编译出动态链接库`/path/librime/cmake-build-release/lib/librime.1.11.2.dylib`
@@ -84,7 +85,7 @@
             <br>`4).`: 备份 squirrel 自己编译出来的：`sudo mv /path/librime.1.dylib librime.1.dylib.bak`
             <br>`5).`: 使用刚才编译出的进行替换：`sudo cp /path/librime/cmake-build-release/lib/librime.1.11.2.dylib librime.1.dylib`
             <br>`6).`: 重启输入法进行验证：`/Library/Input\ Methods/Squirrel.app/Contents/MacOS/Squirrel --quit`，过一会自己就启动了。
-            <br><br><span style='color:blue'>如果需要此次编译出来的动态链接库，[点击下载](/.images/other/misc/squirrel/librime.1.11.2.dylib)。</span>
+            <br><br><span style='color:blue'>如果需要此次编译出来的动态链接库，[点击下载](https://github.com/xhsgg12302/knownledges/raw/f99570a76c657c8a61297277d4260e7e913a5780/.images/other/misc/squirrel/librime.1.11.2.dylib)。</span>
             <br><span style='color:blue;padding-left:2.7em'>需要注意的是：</span>
             <br><span style='padding-left:2.7em'>`a).`: 这次编译出来的 Release 版本大小为`3.4M`，原来的为`7.0M`，不知道什么区别，仅供测试。
             <br><span style='padding-left:2.7em'>`b).`: 浏览器中编辑框中最后的那个竖线`|`是闪动的光标，正好闪动的时候截的图。
