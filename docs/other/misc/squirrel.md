@@ -7,7 +7,7 @@
 
     + ### 下载安装
 
-        > [?] [下载页面](https://rime.im/download/)，[macOS 鼠须管 1.0.2 pkg 安装包](https://github.com/rime/squirrel/releases/download/1.0.2/Squirrel-1.0.2.pkg)(属于将引擎中州韵代码作为 git 子模块，编译成静态库文件供鼠须管使用)
+        > [?] [下载页面](https://rime.im/download/)，[macOS 鼠须管 1.0.2 pkg 安装包](https://github.com/rime/squirrel/releases/download/1.0.2/Squirrel-1.0.2.pkg)(属于将引擎中州韵代码作为 git 子模块，编译成动态链接库供鼠须管使用)
         <br><br> [macOS 编译指南](https://github.com/rime/squirrel/blob/master/INSTALL.md)
         <br>[鼠鬚管 Wiki](https://github.com/rime/squirrel/wiki)
         <br><br>![](/.images/other/misc/squirrel/squirrel-intro-01.png ':size=60%')
@@ -19,7 +19,8 @@
             > [!WARNING] 应运程序的安装位置: `/Library/Input\ Methods/Squirrel.app/Contents`
             <br>程序附带的共享配置: `/Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/`
             <br>用户自定义覆写目录: `~/Library/Rime/`
-            <br><br>YAML 配置文件的升级语法 [参考](https://github.com/rime/home/wiki/Configuration#rime-配置文件)
+            <br><br>配置文件目录及文件分布参考 [(RimeWithSchemata / Rime 中的數據文件分佈及作用)](https://github.com/rime/home/wiki/RimeWithSchemata#rime-中的數據文件分佈及作用)
+            <br>配置文件的 YAML 升级语法参考 [(Configuration / Rime 配置文件)](https://github.com/rime/home/wiki/Configuration#rime-配置文件)
             <br>对于定制选项可参考 [(CustomizationGuide / 定製指南)](https://github.com/rime/home/wiki/CustomizationGuide#定製指南)
             
         - #### 外观-Squirrel(鼠须管)
@@ -33,13 +34,14 @@
 
         - #### 引擎-Librime(中州韵)
 
-            > [!TIP|label:可参考样例]
-            [01-RimeWithSchemata](https://github.com/rime/home/wiki/RimeWithSchemata) <span style='padding-left:1em'>[02-雪齋的文檔](https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md) <span style='padding-left:1em'>[03-CustomizationGuide](https://github.com/rime/home/wiki/CustomizationGuide#定製指南)
+            > [!TIP|label:文档和样例]
+            `1).`: 配置文档：[01-RimeWithSchemata](https://github.com/rime/home/wiki/RimeWithSchemata) <span style='padding-left:1em'>[02-雪齋的文檔](https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md) <span style='padding-left:1em'>[03-CustomizationGuide](https://github.com/rime/home/wiki/CustomizationGuide#定製指南)
+            <br>`2).`: 参考样例：[01-rime-luna-pinyin](https://github.com/rime/rime-luna-pinyin/blob/master/luna_pinyin.schema.yaml) <span style='padding-left:1em'>[02-rime-prelude](https://github.com/rime/rime-prelude/blob/master/default.yaml) <span style='padding-left:1em'>[03-綜合演練 / hello](https://github.com/lotem/rimeime/blob/master/doc/tutorial/hello_7/hello.schema.yaml)
 
             **根据配置文档自己画的配置关系图如下：**
             ![](/.images/other/misc/squirrel/squirrel-config-01.png ':size=100%')
 
-            > [!CAUTION] 因为官方不建议修改的 Shared 文件的原因，所以有些属性就得通过 **custom** 文件进行覆盖或者补丁。
+            > [!CAUTION] 因为官方不建议修改的 **Shared** 文件的原因，所以有些属性就得通过 **custom** 文件进行覆盖或者补丁。
 
         - #### 自定义及解释
 
@@ -50,6 +52,10 @@
             <br><br>![](/.images/other/misc/squirrel/squirrel-layout-01.png ':size=80%')
             
             > [?] 修改拼写分隔符: `luna_pinyin.custom.yaml`。由原来的`delimiter: " '"` 到 `delimiter: "'"`
+            <br>`speller/delimiter`：引用（RimeWithSchemata / 【三】最高武藝）中的注释：**隔音符號用「'」；第一位的空白用來自動插入到音節邊界處**。
+            <br><span style='padding-left:2.7em'/>翻译过来就是可以手动通过第二位对拼音进行分割，比如`西安`这个的拼音`xi'an`，就可以手动打`'`，其余自动分割的用第一个符号。
+            <br><span style='padding-left:2.7em'/>改完后`delimiter: "'"`的一二位因为一样，所以使用一个就可以了。
+            <br><br>![](/.images/other/misc/squirrel/squirrel-config-06.png ':size=80%')
 
             <!-- panels:start -->
             <!-- div:left-panel-50 -->
@@ -82,10 +88,10 @@
             <br>`1).`: 修改 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38) 中 38 行代码为：`static const string kCaretSymbol("\xe2\x86\x9e");`，`\xe2\x86\x9e`就是你想替换的任何 UTF-8 符号的十六进制编码。比如我此处的就是`↞`。
             <br>`2).`: 此处使用 clion + camke 的方式编译出动态链接库`/path/librime/cmake-build-release/lib/librime.1.11.2.dylib`
             <br>`3).`: 进入 squirrel 输入法目录：`cd /Library/Input Methods/Squirrel.app/Contents/Frameworks`
-            <br>`4).`: 备份 squirrel 自己编译出来的：`sudo mv /path/librime.1.dylib librime.1.dylib.bak`
+            <br>`4).`: 备份 squirrel 自己编译出来的：`sudo mv librime.1.dylib librime.1.dylib.bak`
             <br>`5).`: 使用刚才编译出的进行替换：`sudo cp /path/librime/cmake-build-release/lib/librime.1.11.2.dylib librime.1.dylib`
             <br>`6).`: 重启输入法进行验证：`/Library/Input\ Methods/Squirrel.app/Contents/MacOS/Squirrel --quit`，过一会自己就启动了。
-            <br><br><span style='color:blue'>如果需要此次编译出来的动态链接库，[点击下载](https://github.com/xhsgg12302/knownledges/raw/f99570a76c657c8a61297277d4260e7e913a5780/.images/other/misc/squirrel/librime.1.11.2.dylib)。</span>
+            <br><br><span style='color:blue'>如果需要此次编译出来 macOS 端的动态链接库`librime.1.11.2.dylib`，[点击下载](https://github.com/xhsgg12302/knownledges/raw/f99570a76c657c8a61297277d4260e7e913a5780/.images/other/misc/squirrel/librime.1.11.2.dylib)。</span>
             <br><span style='color:blue;padding-left:2.7em'>需要注意的是：</span>
             <br><span style='padding-left:2.7em'>`a).`: 这次编译出来的 Release 版本大小为`3.4M`，原来的为`7.0M`，不知道什么区别，仅供测试。
             <br><span style='padding-left:2.7em'>`b).`: 浏览器中编辑框中最后的那个竖线`|`是闪动的光标，正好闪动的时候截的图。
