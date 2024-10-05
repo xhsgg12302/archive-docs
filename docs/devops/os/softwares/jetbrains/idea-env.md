@@ -19,6 +19,13 @@
 
         ![](/.images/devops/os/softwares/idea-config-serial-01.png ':size=70%')
 
+    - ### 通用配色
+
+        > [?] File -> Settings -> Editor -> Color Scheme -> General : 
+        <br><span style='padding-left:2.7em'/> 变量颜色：`Code / Identifier under caret`:`{bg: C931E0, esm: 5B786A}`，**write** :`{bg: 8A6A0D, esm: BA6387}`
+
+        ![](/.images/devops/os/softwares/idea-config-color-01.png ':size=70%')
+
     - ### 快捷键冲突
 
         > [?] idea代码块注释<span style='color:blue'>[⇧⌘/]</span>和系统快捷键冲突
