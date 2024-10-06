@@ -86,7 +86,7 @@
         ```
         <!-- panels:end -->
 
-        #### 修改CARET
+        #### 修改插入记号(CARET)
 
         > [?] 修改 [caret](https://en.wikipedia.org/wiki/Caret)(插入记号)：符号`‸`，此处的符号引用自 [UI Improvements / 10](https://github.com/rime/squirrel/pull/848)。
         <br>~查看 librime 引擎中相关代码，发现在 [此处](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/tools/rime_api_console.cc#L46) 使用了`|`模拟了插入记号，所以感觉应该是在每个客户端(squirrel|weasel)中去自自己实现的。然后转到 squirrel，在 [此处 SquirrelInputController.swift](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L530) 发现相关代码，其中 caretPos 就是指定了位置，但是并没有看出来是怎么使用的，比如是直接将插入符号追加到编辑区 还是 在后续调用中根据位置直接设置的。swift 代码不太好看，无从下手了，所以没有解决。在此处仅做个记录。~:stuck_out_tongue_closed_eyes:
@@ -206,11 +206,154 @@
         ```
         <!-- panels:end -->
 
-        - #### reference
+        #### 微信表情快捷输入
 
-            * https://github.com/rime/home/wiki/Configuration#rime-配置文件
-            * [RIME v0.16.1 小狼毫輸入法（支援Win, macOS, Linux）](https://briian.com/9216/)
-            * https://github.com/ssnhd/rime
+        > [?] 翻找表情比较麻烦，还不知道什么意思，所以利用输入法配置一下。
+        <br>采用自定义符号的形式，[参考:Rime 自定義短語文件樣例](https://gist.github.com/lotem/5440677)
+        <br><br>具体操作如下：
+        <br>`1).`: 因为默认配置里面已经写好相关引用了，所以只需要在用户目录下新建`custom_phrase.txt`文件，将微信表情相关的符号写入到里面就可以了。符号定义如下：
+        <br>如果是百度输入法，则可以 [参考:baidu输入法个性短语导入](./sticker.md#baidu输入法个性短语导入)
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-13.gif)
+
+        <details><summary>微信表情自定义符号</summary>
+
+        ```shell
+        # Rime table
+        # coding: utf-8
+        #@/db_name  custom_phrase.txt
+        #@/db_type	tabledb
+        #
+        # 用於【朙月拼音】系列輸入方案
+        # 【小狼毫】0.9.21 以上
+        #
+        # 請將該文件以UTF-8編碼保存爲
+        # Rime用戶文件夾/custom_phrase.txt
+        #
+        # 碼表各字段以製表符（Tab）分隔
+        # 順序爲：文字、編碼、權重（決定重碼的次序、可選）
+        #
+        # 雖然文本碼表編輯較爲方便，但不適合導入大量條目
+        #
+        # no comment
+
+        中州韻輸入法引擎	rime	3
+        Rime Input Method Engine	rime	2
+        http://code.google.com/p/rimeime/	rime	1
+        xhsgg12302@126.com 	email
+
+        # [微信分组]
+        [微笑]	weixiao	10
+        [撇嘴]	piezui	10
+        [色]	se	10
+        [发呆]	fadai	10
+        [得意]	deyi	10
+        [流泪]	liulei	10
+        [害羞]	haixiu	10
+        [闭嘴]	bizui	10
+        [睡]	shui	10
+        [大哭]	daku	10
+
+        [尴尬]	ganga	10
+        [发怒]	fanu	10
+        [调皮]	tiaopi	10
+        [呲牙]	ciya	10
+        [惊讶]	jingya	10
+        [难过]	nanguo	10
+        [囧]	jiong	10
+        [抓狂]	zhuakuang	10
+        [吐]	tu	10
+        [偷笑]	touxiao	10
+
+        [愉快]	yukuai	10
+        [白眼]	baiyan	10
+        [傲慢]	aoman	10
+        [困]	kun	10
+        [惊恐]	jingkong	10
+        [憨笑]	hanxiao	10
+        [悠闲]	youxian	10
+        [咒骂]	zhouma	10
+        [疑问]	yiwen	10
+        [嘘]	xu	10
+
+        [晕]	yun	10
+        [衰]	shuai	10
+        [骷髅]	kulou	10
+        [敲打]	qiaoda	10
+        [再见]	zaijian	10
+        [擦汗]	cahan	10
+        [抠鼻]	koubi	10
+        [鼓掌]	guzhang	10
+        [坏笑]	huaixiao	10
+        [右哼哼]	youhengheng	10
+
+        [鄙视]	bishi	10
+        [委屈]	weiqu	10
+        [快哭了]	kuaikule	10
+        [阴险]	yinxian	10
+        [亲亲]	qinqin	10
+        [可怜]	kelian	10
+        [笑脸]	xiaolian	10
+        [生病]	shengbing	10
+        [脸红]	lianhong	10
+        [破涕为笑]	potiweixiao	10
+
+        [恐惧]	kongju	10
+        [失望]	shiwang	10
+        [无语]	wuyu	10
+        [嘿哈]	heiha	10
+        [捂脸]	wulian	10
+        [奸笑]	jianxiao	10
+        [机智]	jizhi	10
+        [皱眉]	zhoumei	10
+        [耶]	ye	10
+        [吃瓜]	chigua	10
+
+        [加油]	jiayou	10
+        [汗]	han	10
+        [天啊]	tiana	10
+        [Emm]	emm	10
+        [社会社会]	shehuishehui	10
+        [旺柴]	wangchai	10
+        [好的]	haode	10
+        [打脸]	dalian	10
+        [哇]	wa	10
+        [翻白眼]	fanbaiyan	10
+
+        [666]	liu	10
+        [让我看看]	rangwokankan	10
+        [叹气]	tanqi	10
+        [苦涩]	kuse	10
+        [裂开]	liekai	10
+        [嘴唇]	zuichun	10
+        [爱心]	aixin	10
+        [心碎]	xinsui	10
+        [拥抱]	yongbao	10
+        [强]	qiang	10
+
+        [弱]	ruo	10
+        [握手]	woshou	10
+        [胜利]	shengli	10
+        [抱拳]	baoquan	10
+        [勾引]	gouyin	10
+        [拳头]	quantou	10
+        [OK]	ok	10
+        [合十]	heshi	10
+        [啤酒]	pijiu	10
+        [咖啡]	cafei	10
+        ```
+        </details>
+
+        #### 配置符号直接上屏(GRAVE)
+
+        > [?] 因为写 markdown 较多的缘故，所以经常用到`` ` ``反引号，用来注释重要的内容，中英切换比较费事，所以想不管中英模式，敲`` ` ``直接上屏。
+        <br>如果直接通过补丁的方式覆盖的话， 对于加了`commit`的值会报错`copy on write failed; incompatible node type: commit` [参考/issues/504](https://github.com/rime/home/issues/504)， 所以得直接复制一份共享目录下面的 **symbols.yaml** 文件到用户目录，并改名为 **symbols_updated.yaml**。 采用迂回的方式对`luna_pinyin.schema.yaml`中的 **punctuator** 直接覆盖。这样既绕过了 commit 的问题，也不用修改原来的 symbols.yaml 文件。
+        <br><br>具体操作如下：
+        <br>`1).`: 修改 **symbols_updated.yaml** 中的 **half_shape** 如下图第一个片段。
+        <br><span style='padding-left:2.7em'> 正常来说应该已经生效了，但是配置文件中还有其他影响的部分，比如 反查前缀等。所以还需要进行 2，3两步。
+        <br>`2).`: 补丁覆写：`reverse_lookup/prefix: ")"` ，目前不知道这个反查是什么东西，影响不大。
+        <br>`3).`: 补丁覆写：`recognizer/patterns/reverse_lookup: "R:[a-z]*'?$"`。
+        <br>`4).`: 重新部署查看效果。(gif中第一次输入后出现两个`` ` ``，是 clion 的自动补全效果，后面就正常了)
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-12.gif) ![](/.images/other/misc/squirrel/squirrel-config-11.png ':size=38%') 
 
     + ### Rime引擎
 
@@ -240,10 +383,12 @@
 
 * ## Reference
     + https://rime.im
+    + https://github.com/ssnhd/rime
     + 
     + wiki
     + https://github.com/rime/home/wiki
     + https://github.com/rime/squirrel/wiki
     + 
     + [有哪些好用且开源的输入法？](https://www.zhihu.com/question/274093588)
+    + [RIME v0.16.1 小狼毫輸入法（支援Win， macOS， Linux）](https://briian.com/9216/)
     + [一位匠人的中州韵——专访Rime输入法作者佛振（图灵访谈）](https://m.ituring.com.cn/article/118072)
