@@ -130,7 +130,7 @@
         <br>`4).`: 导入命令：`cat /path/网络流行新词【官方推荐】.txt >> sougou_pinyin_network.dict.yaml`
         <br>`5).`: 将原来`luna_pinyin.schema.yaml`中定义的`translator/dictionary: luna_pinyin` 通过打补丁的方式替换，这样明月拼音相关方案中的词典都会替换。
         <br><span style='padding-left:2.9em'>补丁方法：在`luna_pinyin.custom.yaml`添加内容补丁：`translator/dictionary: luna_pinyin_compact`
-        <br><span style='padding-left:2.9em'>卸载词库也很简单，只需要将补丁行`translator/dictionary: luna_pinyin_compact`注释即可。
+        <br><span style='padding-left:2.9em'>卸载词库也很简单，只需要将补丁行`translator/dictionary: luna_pinyin_compact`注释即可，这样原来的就会起作用。
         <br><span style='color:blue'>词库去重部分暂时没处理。另外还有 [这样: issues/214](https://github.com/rime/weasel/issues/214) 的问题</span>
         <br><br>![](/.images/other/misc/squirrel/squirrel-config-09.gif)  ![](/.images/other/misc/squirrel/squirrel-config-10.gif)
 
