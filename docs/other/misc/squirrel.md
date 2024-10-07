@@ -206,6 +206,61 @@
         ```
         <!-- panels:end -->
 
+        #### 中英混输
+
+        <!-- panels:start -->
+        <!-- div:left-panel-66 -->
+        > [?] 要想在中文模式下输入英文单词，有一种办法就是将输入的编码 通过自定义的 table 类型的**英文翻译器**进行转换，只需要进行相关的配置就行。
+        <br><br>具体操作如下：
+        <br>`1).`: 先生成字典配置`en_dict.dict.yaml`如右所示，网上下载这两个码表[`en.dict.yaml`](https://github.com/iDvel/rime-ice/blob/4fbf48903860e3940ca5aa8eab3185881943c18f/en_dicts/en.dict.yaml)(主表)、[`en_ext.dict.yaml`](https://github.com/iDvel/rime-ice/blob/4fbf48903860e3940ca5aa8eab3185881943c18f/en_dicts/en_ext.dict.yaml)(扩展表)。
+        <br><span style='padding-left:2.9em'>重命名`en.dict.yaml` ==> `en_primary.dict.yaml`
+        <br>`2).`: 配置自定义文件`luna_pinyin.custom.yaml`，新增英文翻译器（table_translator@english），主要配置如右。
+        <br><span style='padding-left:2.9em'>还有一个默认的主翻译器，稍后要进行调频，所以一起配置了。
+        <br>`3).`: 进行调频，其实就是给两个翻译器配置中的`initial_quality`进行赋值，参数可以 [参考:优化 Rime 英文输入体验/权重设定](https://dvel.me/posts/make-rime-en-better/#权重设定)
+        <br>`4).`: 重新部署，如果没问题，日志没报错，那就是没问题了，直接输入体验就行。
+        <br><span style='padding-left:2.9em'>但是我的日志报错:`Error loading table for dictionary 'en_dict'.`
+        <br>`5).`: 解决方式就是暂时将我们的`en_dict`配置给主翻译器，让生成 **\*.bin** 词典数据后，再换回来。
+        <br><span style='padding-left:2.7em'>`5.1).`互换右边第 4 和 17 行。
+        <br><span style='padding-left:2.7em'>`5.2).`重新部署一次，让生成 bin 文件，如果成功的话会在用户目录下 build 文件夹生成 **en_dict.\***等文件。
+        <br><span style='padding-left:2.7em'>`5.3).`互换右边第 17 和 4 行。
+        <br><span style='padding-left:2.7em'>`5.4).`再次重新部署就没问题了。
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-14.gif)
+        <!-- div:right-panel-33 -->
+        ```yaml
+        # en_dict.dict.yaml
+
+        # Rime dictionary (encoding: utf-8)
+
+        ---
+        name: en_dict
+        version: "2024.10.06"
+        sort: by_weight
+        use_preset_vocabulary: true
+        import_tables: [ en_primary, en_ext ]
+        ...
+        ```
+        ```yaml
+        patch:
+            engine/translators/@before 2/: table_translator@english
+            english:
+                dictionary: en_dict
+                # spelling_hints: 9
+                # max_phrase_length: 4
+                #enable_completion: false
+                #enable_sentence: false
+                #initial_quality: -0.5
+                enable_sentence: false
+                enable_user_dict: false
+                initial_quality: 1.1
+                comment_format:
+                    - xform/~(.*)/\[$1\]/
+
+            translator:
+                dictionary: luna_pinyin_compact
+                initial_quality: 1.2
+        ```
+        <!-- panels:end -->
+
         #### 微信表情快捷输入
 
         > [?] 翻找表情比较麻烦，还不知道什么意思，所以利用输入法配置一下。
@@ -349,11 +404,18 @@
         <br>如果直接通过补丁的方式覆盖的话， 对于加了`commit`的值会报错`copy on write failed; incompatible node type: commit` [参考/issues/504](https://github.com/rime/home/issues/504)， 所以得直接复制一份共享目录下面的 **symbols.yaml** 文件到用户目录，并改名为 **symbols_updated.yaml**。 采用迂回的方式对`luna_pinyin.schema.yaml`中的 **punctuator** 直接覆盖。这样既绕过了 commit 的问题，也不用修改原来的 symbols.yaml 文件。
         <br><br>具体操作如下：
         <br>`1).`: 修改 **symbols_updated.yaml** 中的 **half_shape** 如下图第一个片段。
-        <br><span style='padding-left:2.7em'> 正常来说应该已经生效了，但是配置文件中还有其他影响的部分，比如 反查前缀等。所以还需要进行 2，3两步。
+        <br><span style='padding-left:2.9em'>正常来说应该已经生效了，但是配置文件中还有其他影响的部分，比如 反查前缀等。所以还需要进行 2，3两步。
         <br>`2).`: 补丁覆写：`reverse_lookup/prefix: ")"` ，目前不知道这个反查是什么东西，影响不大。
         <br>`3).`: 补丁覆写：`recognizer/patterns/reverse_lookup: "R:[a-z]*'?$"`。
         <br>`4).`: 重新部署查看效果。(gif中第一次输入后出现两个`` ` ``，是 clion 的自动补全效果，后面就正常了)
         <br><br>![](/.images/other/misc/squirrel/squirrel-config-12.gif) ![](/.images/other/misc/squirrel/squirrel-config-11.png ':size=38%') 
+
+        #### 配置回车直接上屏
+
+        > [?] 默认的回车操作是上屏 `编辑区域`的内容，源码可以 [参考: editor.cc#L189-L218](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/gear/editor.cc#L189-L218)，相关配置解释可以 [参考 Rime_description.md#八其它/第5个](https://github.com/LEOYoon-Tsaw/Rime_collections/blob/9bda87def6724bb4fa8199a6a4ae7fa964695bef/Rime_description.md#八其它)
+        <br>使回车和空格一样的操作按照如下配置就行。
+        <br><br>具体操作如下：
+        <br>`1).`: 在`luna_pinyin.custom.yaml`中加入补丁：`editor/bindings/Return: confirm`。
 
     + ### Rime引擎
 
@@ -376,10 +438,10 @@
 
             ![](/.images/other/misc/squirrel/squirrel-core-01.gif)
 
-* ## Other
+    + ### 其他
 
-    > [!CAUTION] `1).`: 在计算机科学和编程中，`grave` 通常指的是“重音符”或“倒尖号”，在键盘上通常位于数字 1 键的左边，形状像一个倾斜的撇号，有时也被称为反引号 `` ` ``。 --- 来自阿里通义
-    <br>`2).`: `space`理解为空格，这个算是基本常识了、但是`backspace`一度懵逼，后来一查，发现是`退格键`。:stuck_out_tongue_closed_eyes:
+        > [!CAUTION] `1).`: 在计算机科学和编程中，`grave` 通常指的是“重音符”或“倒尖号”，在键盘上通常位于数字 1 键的左边，形状像一个倾斜的撇号，有时也被称为反引号 `` ` ``。 --- 来自阿里通义
+        <br>`2).`: `space`理解为空格，这个算是基本常识了、但是`backspace`一度懵逼，后来一查，发现是`退格键`。:stuck_out_tongue_closed_eyes:
 
 * ## Reference
     + https://rime.im
