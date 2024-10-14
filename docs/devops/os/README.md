@@ -21,7 +21,7 @@ hello os
 		* cat /proc/cpuinfo | grep "cpu cores" |uniq 查看CPU核心数
 
 	
-		> [!CAUTION] <span style='color: blue'>Macosx 查看文件实际占用字节：</span>
+		> [!CAUTION] <span style='color: blue'>macOS 查看文件实际占用字节：</span>
 		<br><br>`stat -f%z record_format_demo.frm`
 		<br>`wc -c record_format_demo.frm`
 
@@ -40,3 +40,5 @@ hello os
 		> [?] 一般来说，操作系统会将一个文件分为两部分`文件属性`、`文件内容`并存放在不通的区块。
 		<br><br>区块：
 		<br>`super block`：记录整个文件系统的信息，包括`block`与`inode`的总量，已经使用的,中a 方楠
+
+		* https://note.youdao.com/web/#/file/recent/note/9B8C7926FB434E0B950F0B333AD6EC70/?search=%E5%88%86%E5%8C%BA
