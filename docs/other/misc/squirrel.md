@@ -117,6 +117,7 @@
         <br><span style='padding-left:2.9em'>其他插件类似，但是`hchunhui/librime-lua`，这个插件的 **[CMakeLists.txt](https://github.com/hchunhui/librime-lua/blob/fa6563cf7b40f3bfbf09e856420bff8de6820558/CMakeLists.txt#L5)** 第五行有点问题，我本地是有 lua-5.4.6 的，但是它没检测到，将`lua54` 改成`lua5.4`即可通过重建 cmake 工程。
         <br>`3).`: 将 clion 切换到 **Release** profile， 重新 build 即可重新生成 `cmake-build-release/lib/librime.1.11.2.dylib`。
         <br>`4).`: 如上 [修改CARET](#修改caret) 的操作，复制替换重启一气呵成。效果如下右 gif。
+        <br><br><span style='color:blue'>如果需要此次编译出来 macOS 端的动态链接库`2ed-librime.1.11.2.dylib`，[点击下载](https://github.com/xhsgg12302/knownledges/blob/8e9b70a396b311a9f4efd411bb1e6b74226b6cfb/.images/other/misc/squirrel/2ed-librime.1.11.2.dylib)。</span>
         <br><br>![](/.images/other/misc/squirrel/squirrel-config-07.gif)  ![](/.images/other/misc/squirrel/squirrel-config-08.gif)
 
         #### 添加词库
