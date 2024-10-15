@@ -281,7 +281,7 @@
             
             <!-- div:left-panel-50 -->
             ```shell
-            # 查看 (Block Group 1)super block
+            # 查看 (Block Group 0)super block
             # 
             ➜  data git:(master) ✗ xxd -u -g1 -s `echo '1024 * 1' | bc` -l `echo '264' | bc` fs10m
             00000400: 00 0A 00 00 00 28 00 00 00 02 00 00 5B 26 00 00  .....(......[&..
@@ -304,7 +304,7 @@
             ```
             <!-- div:right-panel-50 -->
             ```shell
-            # 查看 (Block Group 0)super block
+            # 查看 (Block Group 1)super block
             # 
             ➜  data git:(master) ✗ xxd -u -g1 -s `echo '1024 * 8193' | bc` -l `echo '264' | bc` fs10m
             00800400: 00 0A 00 00 00 28 00 00 00 02 00 00 5B 26 00 00  .....(......[&..
