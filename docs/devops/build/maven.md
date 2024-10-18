@@ -475,17 +475,17 @@
 
     > [!CAUTION] 在`maven 3.3.1`的时候就可以通过 `--global-toolchains file`来指定要使用的工具链配置文件，但是建议放置在`~/.m2/`。
 
-    + #### 先决条件
+    + ### 先决条件
 
         1. 在pom中配置`maven-toolchains-plugin`插件。
         2. 存在`toolchains.xml`配置文件用来供toolchains插件匹配。
 
-    + #### 注意事项
+    + ### 注意事项
 
         1. toolchain goal默认绑定生命周期为`validate`. default阶段为首。
         2. source和target需要JDK支持。且source小于target。可以[参考](https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html)
 
-    + #### 参考配置
+    + ### 参考配置
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
@@ -560,6 +560,56 @@
         ```
         <!-- panels:end -->
 
+* ## 扩展篇
+
+    + ### 定义
+
+        > [?] 扩展的定义 [参考](https://maven.apache.org/extensions/index.html)，根据官方的介绍：大概可以知道：maven 的核心是插件。大多数工作由插件来完成，对于**扩展**来说,提供了一种钩子机制，用来操纵 maven 生命周期。
+        <br>说白了，就是在 maven 构建完构建图之后，也就是已经获取到了当前需要执行的项目信息，我们可以对里面对象[MavenSession]进行修改，比如修改插件的版本号，或者添加自定义的系统属性等等。
+        <br>和插件的区别可以 [参考这个](https://stackoverflow.com/questions/43284028/in-maven-what-is-the-difference-between-an-extension-and-a-plugin)
+    
+    + ### 使用
+        
+        > [?] 根据 [文档](https://maven.apache.org/guides/mini/guide-using-extensions.html) 可知，有了两种类型的扩展:
+        <br>`Core Extension`: 对所有项目生效，使用方式如下：
+        <br><span style='padding-left:2.8em'/>Registered via extension jar in `${maven.home}/lib/ext`
+        <br><span style='padding-left:2.8em'/>Registered via CLI argument `mvn -Dmaven.ext.class.path=extension.jar`，比如 [fixed-version-maven-extension](#fixed-version-maven-extension)
+        <br><span style='padding-left:2.8em'/>Registered via `.mvn/extensions.xml` file
+        <br><br>`Build Extension`: 对当前项目生效，配置参考官方文档就行。比如 [os-maven-plugin](#os-maven-plugin)
+
+    + ### 样例
+
+        - #### os-maven-plugin
+
+            > [!NOTE] 官方 [Github](https://github.com/trustin/os-maven-plugin)
+            <br>千万不要被名字所欺骗，这个东西可以当作插件，也可以是扩展，因为里面既有 [**DetectMojo**](https://github.com/trustin/os-maven-plugin/blob/os-maven-plugin-1.7.0/src/main/java/kr/motd/maven/os/DetectMojo.java) ，也有继承了`AbstractMavenLifecycleParticipant`的 [**DetectExtension**](https://github.com/trustin/os-maven-plugin/blob/os-maven-plugin-1.7.0/src/main/java/kr/motd/maven/os/DetectExtension.java) 作为一个组件出现在了 maven 容器里面。
+            <br>至于命名中为什么有 plugin ，就无从得知了，猜测：刚开始是以插件为主，后面将出现的扩展形式写到一起了。总之，大佬的心思很难猜，至于为什么说大佬，是因为思密达曾领导(主导)过 **Netty** 开发，而且我也是通过这个东西第一次认识或者接触到扩展。
+            <br><br>这个扩展/插件的目的在于提供一些更具体，规范化的系统属性，并且添加到 System.properites()里面。这样在其他需要用到具体属性的时候，就可以提供了。比如${os.detected.classifier}。
+            <br><br>使用一般都是以扩展的形式。当然也可以用作插件来调用`detect` goal，来查看当前系统的一些信息。比如：`mvn kr.motd.maven:os-maven-plugin:1.7.0:detect`
+            <br><br>![](/.images/devops/build/maven-ext-os-01.png ':size=100%')
+
+            ```xml
+            <project>
+                <build>
+                    <extensions>
+                        <extension>
+                            <groupId>kr.motd.maven</groupId>
+                            <artifactId>os-maven-plugin</artifactId>
+                            <version>1.7.0</version>
+                        </extension>
+                    </extensions>
+                </build>
+            </project>
+            ```
+
+        - #### fixed-version-maven-extension
+
+            > [!NOTE] 参考 [文档](https://maven.apache.org/examples/maven-3-lifecycle-extensions.html) 编写的，可以在这儿找到 [源码](https://github.com/12302-haohuo/haohuo-component/tree/ef59d9f345206e81097873d13be6e0072128d5a5/hh-cpt-maven-extension) 
+            <br><br>背景：当时在配置 settings.xml 中激活的全局属性的时候，使用到了一个叫`altReleaseDeploymentRepository`和`altSnapshotDeploymentRepository`的可配置属性。但是发现这两个属性在官网中标注在 2.8 及之后的 maven-deploy-plugin 版本中才会使用。所以需要将项目中的这个插件版本升级到 2.8 或之后。但是这样的话，只针对当前项目好使，如果说换了其他项目，要用这两个属性，还得在项目中进行插件升级配置。当然，用高版本的 maven 的话，不用配置也行。因为随着 maven 版本升级，附带的生命周期中使用到的插件版本也会升级。比如 `maven-3.9.0`就使用了 **maven-deploy-plugin:3.0.0**。[参考 default-bindings.xml](https://github.com/apache/maven/blob/maven-3.9.0/maven-core/src/main/resources/META-INF/plexus/default-bindings.xml)
+            <br><br>作用：在 maven 版本低于 3.9.0 的时候也可以使用到背景中所述的那两个属性，主要原理就是通过扩展修改项目中使用到的插件定义中的版本号，比如将`maven-deploy-plugin:2.7`修改为`maven-deploy-plugin:3.0.0`
+            <br><br>使用：采用客户端参数的方式`export MAVEN_OPTS="$MAVEN_OPTS -Dmaven.ext.class.path=/Users/stevenobelia/Documents/project_idea_test/haohuo-component/hh-cpt-maven-extension/fixed-version-maven-extension/target/fixed-version-maven-extension-1.0.1.jar"`
+
+            ![](/.images/devops/build/maven-ext-fixed-01.gif)
 
 * ## 插件篇
 
@@ -1395,6 +1445,27 @@
         </plugin>
         ```
 
+* ## 源码篇
+
+    > [!NOTE] 因为需要了解项目构建过程中 maven 对 settings.xml 中 Server/password 标签中的加解密过程，又或者了解扩展（extension）工作的时机与作用，等等各种需要调试源码的情况，就必须搭建调试环境。总而言之，就是下载源码，使用IDE加载，设置 maven 调试相关环境变量后就可以启动调试了。
+
+    + ### 准备
+
+        > [?] 获取源码有两种方式：下面两种方式代码完全一致。
+        <br>`1).`: 在 github 拉取(包含所有版本)：https://github.com/apache/maven.git ，完事后 checkout 某个版本，比如我使用[maven-3.3.9]。
+        <br>`2).`: 直接从官网下载某个单一版本 [apache-maven-3.3.9-src.*](https://archive.apache.org/dist/maven/maven-3/3.3.9/source/)
+
+    + ### 编译与调试
+
+        > [?] 查看 mvn 可执行文件，发现是一个 shell 脚本，在文件末尾有 [这样的代码段](https://github.com/apache/maven/blob/maven-3.3.9/apache-maven/src/bin/mvn#L238-L244)。
+        <br>所以我们可以通过 **MAVEN_OPTS** 或者 **MAVEN_DEBUG_OPTS** 这两个环境变量修改给 jvm 添加调试参数：如下
+        <br>`export MAVEN_DEBUG_OPTS='-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005,suspend=y'`
+        <br>可以参考 [IDEA debug 配置](/docs/doc/advance/debug.md#mode)，此处使用 **listen模式**。
+        <br>mvn 命令作为 client，idea 的配置作为服务端（用来控制断点，接收 jvm 运行状态）。只有服务端启动后，打开 socket，mvn命令执行的 jvm 连接成功后才可以继续执行代码。
+        <br><br>IDEA 端配置如下：
+        <br>![](/.images/devops/build/maven-debug-01.png ':size=80%')
+
+        ![](/.images/devops/build/maven-debug-02.gif)
 
 ## Reference
 * https://xxgblog.com/2015/10/23/wagon-maven-plugin/
