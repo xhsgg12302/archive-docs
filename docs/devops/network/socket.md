@@ -40,6 +40,8 @@
         > [?] `2).` 默认`Socket`内部使用的 impl 为`SocksSocketImpl`,也就是`PlainSocketImpl`子类。根据 [RFC 1928](https://www.rfc-editor.org/rfc/rfc1928) SOCKS(V4 & V5) socket实现。也就是具有socks代理功能的 Socket。
         <br><span style='padding-left:2.7em'/>主要体现在 [**java.net.SocksSocketImpl#connect**](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/net/SocksSocketImpl.java#L327) 方法上。先是通过`DefaultProxySelector`获取当前系统代理，没有代理直接连接，
         <br><span style='padding-left:2.7em'/>发现代理 [参考](/docs/doc/base/misc/properties.md#systemproperties) 实例后，判断socks版本，v4时候进入 **connectV4** 方法, 不是的话，继续V5 的鉴权。完成后在刚才的TCP连接上继续发送数据。比如：http报文。
+        <br><br><span style='padding-left:2.7em;color:red'>也可以通过`System.setProperty("socksProxyHost","");`设置系统属性直接连接，不管有当前系统有没有代理环境。</span>
+        <br><span style='padding-left:2.7em;color:red'>另外一个需要注意的属性是`java.net.useSystemProxies`，如果设置为true，且代理工具设置过系统代理的话，上述设置系统属性的方法会失效。</span>
 
 * ## Reference
 
