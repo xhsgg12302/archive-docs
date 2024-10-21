@@ -27,7 +27,10 @@ public class BinarySearch {
         int midKey = arr[mid];
 
         if(key > midKey){ return binarySearch(arr, mid + 1, right, key); }
-        if(key < midKey){ return binarySearch(arr, left, mid, key); }
+
+        // right = mid - 1 才对，不然会发生 StackOverflowError, 比如： Assert.assertEquals("", binarySearch(arr, 0, arr.length - 1, 2), -1);
+        // if(key < midKey){ return binarySearch(arr, left, mid, key); }
+        if(key < midKey){ return binarySearch(arr, left, mid - 1, key); }
         return mid;
     }
 
