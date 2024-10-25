@@ -601,6 +601,26 @@
 	<br>例如，上面的命令设置了 50 MB `(52428800 = 50 * 1024 * 1024)`的缓冲区大小。
 	<br>![](/.images/devops/git/git-push-01.png ':size=47%') ![](/.images/devops/git/git-push-02.png ':size=46%')
 
++ ## GIT仓库瘦身
+
+	> [?] 使用的工具是 [**bfg-repo-cleaner**](https://rtyley.github.io/bfg-repo-cleaner/)，可以参考官方 usage，example 等，下载连接在官网右侧，是一个jar包。
+	<br><br>使用步骤：
+	<br>`1). `: 克隆原仓库镜像：`git clone --mirror https://github.com/xhsgg12302/knownledges.git`
+	<br>`2). `: 依照给出的样例结合自己的需求进行删除文件：比如文件夹：`java -jar ../bfg-1.14.0.jar --delete-folders .images`、文件：`java -jar ../bfg-1.14.0.jar --delete-files _sidebar.md`
+	<br>`3). `: 陆续删除之后执行命令进行清理压缩等操作：`git reflog expire --expire=now --all && git gc --prune=now --aggressive`
+	<br>`4). `: 推送到远程：`git push`
+	<br>`5). `: 可以使用命令查看当前仓库中的状态：`git count-objects -vH`
+	<br><br>实操背景：
+	<br>原来的仓库 **knownledges** 里面使用的是 docsify 文档工具来记录的，有一些问题：并非静态文件(通过js实时渲染)，文档，图片资源跟框架本身在一起管理，如果说需要更换框架的话，比校费事儿的是怎么保留文档本身的历史提交记录和修改，另外想使用 git submodule 功能一次性将 markdown 文档和 images 资源文件分开管理，好处就是资源文件的提交记录不用参杂在 markdown 里面，因为提交记录对于二进制大文件来说并没有什么作用，我们只需要最终版的，所以也方便直接覆盖。
+	<br><br>实际操作：
+	<br>将原来的 **knownledges** 备份成三个仓库 **archive**，**archive-docs**，**archive-asserts**。
+	<br>**archive** 用来整理文档框架比如(docsify, hugo ,...) 可以有多个分支，使用 submodule 的方式整合另外两个（docs,asserts）仓库。
+	<br><span style='padding-left:2.7em'/>使用 **bfg** 删除`.images`、`docs`文件夹，保留对 docsify 框架相关的文件修改，比如 index.html 修改记录会存在。
+	<br>**archive-docs** 用来保存实际的书写 markdown 文档。记录干净，纯文本，仓库体积小。
+	<br><span style='padding-left:2.7em'/>使用 **bfg** 可以删除除`docs`文件夹之外的所有文件夹和文件。<span style='color:blue'>这个我们是需要保留 docs 文件夹中的所有文件提交记录的。也是最重要的</span>
+	<br>**archive-asserts** 用来保存文档中用的二进制资源文件，比如图片，gif，视频之类的。只要文件，提交记录无所谓，仓库体积较大，方便随时覆盖。
+	<br><span style='padding-left:2.7em'/>使用 **bfg** 删除所有文件：`java -jar ../bfg-1.14.0.jar --delete-files '*'`，这个不会删除当前仓库引用的物理文件的。一般会删除提交记录和原来已经过时，没用的文件。
+
 + ## Reference
 	* https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
 	* https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
