@@ -208,6 +208,9 @@
 ---
 
 + ## GIT基本操作
+
+	> [!NOTE]获取第一次提交记录：`git log --reverse --format='%H' | head -n 1`
+
 	* ### learngitbranching常用命令
 
 		> [?] [help,levels,level move1, objective,undo,reset,show solution, show goal,hide goal]
