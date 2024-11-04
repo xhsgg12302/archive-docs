@@ -1,5 +1,4 @@
-
-+ ## 插件
+* ## 插件
 
     | column1      | column2                        | column3                   |
     | ------------ | ------------------------------ | ------------------------- |
@@ -9,7 +8,7 @@
     | Codota       | Material Theme UI              | SequenceDiagram           |
     | StickyScroll |                                |                           |
 
-+ ## 配置
+* ## 配置
 
     - ### 生成serialVersionUID
 
@@ -38,7 +37,7 @@
 
         ![](/.images/devops/os/softwares/idea-search-anywhere-01.png ':size=49%') ![](/.images/devops/os/softwares/idea-search-anywhere-02.png ':size=49%')
 
-+ ## 其他
+* ## 其他
 
     - ### 使用idea 插件反编译整个jar到文件夹
 

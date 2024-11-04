@@ -1,4 +1,4 @@
-+ ## 凭据管理
+* ## 凭据管理
 
 	* ### 1.基本操作
 
@@ -135,7 +135,7 @@
 
 ---
 
-+ ## 子模块
+* ## 子模块
 
 	* ### 基本概念
 
@@ -209,7 +209,7 @@
 
 ---
 
-+ ## GIT基本操作
+* ## GIT基本操作
 
 	> [!NOTE] 获取第一次提交记录：`git log --reverse --format='%H' | head -n 1`
 	<br>获取文件的首次提交时间：`git log --reverse --format="%ad" --date=short -- index.html | head -n 1`
@@ -573,19 +573,19 @@
 		![](/.images/devops/git/remote-pull-01.gif)
 		![](/.images/devops/git/remote-pull-02.gif)
 
-+ ## GIT仓库迁移
+* ## GIT仓库迁移
 	> [?] 1、git clone --bare https://github.com/xhsgg12302/helloworld.git
 	<br>2、cd helloworld.git
 	<br>3、git push --mirror https://github.com/new.git
 
-+ ## GIT管理项目
+* ## GIT管理项目
 	> [?] `1).` 在github创建仓库 *https://github.com/user/repo.git*
 	<br>`2).` 本地项目`git init`
 	<br>`3).` 追踪本地资源`git add README.md`
 	<br>`4).` 设置远程信息`git remote add origin https://github.com/user/repo.git`
 	<br>`5).` 推送本地提交`git push -u origin main`
 
-+ ## GIT忽略文件提交
+* ## GIT忽略文件提交
 	```shell
 	# 多人开发时,会出现明明在gitignore中忽略了.idea文件夹,但是提交时仍旧会出现.idea内文件变动的情况
 	# 原因
@@ -597,7 +597,7 @@
 	# 同理，取消其他文件追踪也一样。
 	```
 
-+ ## GIT推送缓冲区
+* ## GIT推送缓冲区
 
 	> [?] 在推送数据时会使用一个称为“对象数据库”（object database）的概念来存储对象。在推送过程中，Git 会将这些对象通过网络传输到远程仓库。
 	<br>对于缓冲区大小的配置，Git 本身并没有直接的设置选项。但是，你可以通过一些间接的方式来影响推送过程中的数据传输效率，比如使用压缩算法来减小数据量。
@@ -606,7 +606,7 @@
 	<br>例如，上面的命令设置了 50 MB `(52428800 = 50 * 1024 * 1024)`的缓冲区大小。
 	<br>![](/.images/devops/git/git-push-01.png ':size=47%') ![](/.images/devops/git/git-push-02.png ':size=46%')
 
-+ ## GIT仓库瘦身
+* ## GIT仓库瘦身
 
 	> [?] 使用的工具是 [**bfg-repo-cleaner**](https://rtyley.github.io/bfg-repo-cleaner/)，可以参考官方 usage，example 等，下载连接在官网右侧，是一个jar包。
 	<br><br>使用步骤：
@@ -626,7 +626,7 @@
 	<br>**archive-asserts** 用来保存文档中用的二进制资源文件，比如图片，gif，视频之类的。只要文件，提交记录无所谓，仓库体积较大，方便随时覆盖。
 	<br><span style='padding-left:2.7em'/>使用 **bfg** 删除所有文件：`java -jar ../bfg-1.14.0.jar --delete-files '*'`，这个不会删除当前仓库引用的物理文件的。一般会删除提交记录和原来已经过时，没用的文件。
 
-+ ## Reference
-	* https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
-	* https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
-	* https://learngitbranching.js.org/?locale=zh_CN
+* ## Reference
+	+ https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage
+	+ https://stackoverflow.com/questions/9550437/how-to-make-git-ignore-idea-files-created-by-rubymine
+	+ https://learngitbranching.js.org/?locale=zh_CN
