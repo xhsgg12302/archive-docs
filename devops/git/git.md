@@ -194,6 +194,8 @@
 		# 		--recursive		递归执行它里面的子模块	
 		# 		--remote   		从远程拉取检出，没有的话就是从本地仓库检出
 		git submodule update helloworld
+		# 更新子模块的 url
+		git submodule set-url .images https://github.com/xhsgg12302/archive-assets.git
 
 		# 删除一个子模块 see:https://git-scm.com/docs/gitsubmodules#_forms
 		git rm <moduleName>
