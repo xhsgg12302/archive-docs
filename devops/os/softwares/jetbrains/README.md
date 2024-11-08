@@ -3,6 +3,9 @@
     ### Jetbrains系列禁用macOS触控栏
     > [?] 由于在 debug 的过程中需要用到 Fn 系列功能，所以不要让软件自定义 touch bar 相关内容。解决办法（局部软件级别）：Help -> Editor Custom VM Options -> `-Dide.mac.touchbar.use=false`，[参考 youtrack|Disable-touchbar-support](https://youtrack.jetbrains.com/issue/IJPL-53320/Disable-touchbar-support)。
     <br>当然还有另外一种方式，全局系统级别的禁用：系统设置 -> 键盘 -> 触控栏设置 -> 触控栏显示切换到其他即可。
+    <br><br>上述局部方式好像啥也不显示了，要想显示 `Show F1, F2, etc. keys on the Touch Bar`， [参考 Show F1, F2, etc](https://www.jetbrains.com/help/idea/touch-bar-support.html)
+
+    ![](/.images/devops/os/softwares/jetbrains-show-fn-01.png ':size=100%')
 
     ### WebStorm文件内容不能预览(打不开文件)
     
