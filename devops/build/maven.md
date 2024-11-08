@@ -571,11 +571,11 @@
     + ### 使用
         
         > [?] 根据 [文档](https://maven.apache.org/guides/mini/guide-using-extensions.html) 可知，有了两种类型的扩展:
-        <br>`Core Extension`: 对所有项目生效，使用方式如下：
+        <br>`Core Extension`: 对执行的项目(可能是多模块)总是生效，使用方式如下：
         <br><span style='padding-left:2.8em'/>Registered via extension jar in `${maven.home}/lib/ext`
         <br><span style='padding-left:2.8em'/>Registered via CLI argument `mvn -Dmaven.ext.class.path=extension.jar`，比如 [fixed-version-maven-extension](#fixed-version-maven-extension)
-        <br><span style='padding-left:2.8em'/>Registered via `.mvn/extensions.xml` file
-        <br><br>`Build Extension`: 对当前项目生效，配置参考官方文档就行。比如 [os-maven-plugin](#os-maven-plugin)
+        <br><span style='padding-left:2.8em'/>Registered via `.mvn/extensions.xml` file 。 [[.mvn 目录解释]](https://maven.apache.org/configure.html#mvn-directory)
+        <br><br>`Build Extension`: 对定义了这个扩展的模块(可能是从父继承的)生效，配置参考官方文档就行。比如 [os-maven-plugin](#os-maven-plugin)
 
     + ### 样例
 
@@ -605,7 +605,7 @@
         - #### fixed-version-maven-extension
 
             > [!NOTE] 参考 [文档](https://maven.apache.org/examples/maven-3-lifecycle-extensions.html) 编写的，可以在这儿找到 [源码](https://github.com/12302-haohuo/haohuo-component/tree/ef59d9f345206e81097873d13be6e0072128d5a5/hh-cpt-maven-extension) 
-            <br><br>背景：当时在配置 settings.xml 中激活的全局属性的时候，使用到了一个叫`altReleaseDeploymentRepository`和`altSnapshotDeploymentRepository`的可配置属性。但是发现这两个属性在官网中标注在 2.8 及之后的 maven-deploy-plugin 版本中才会使用。所以需要将项目中的这个插件版本升级到 2.8 或之后。但是这样的话，只针对当前项目好使，如果说换了其他项目，要用这两个属性，还得在项目中进行插件升级配置。当然，用高版本的 maven 的话，不用配置也行。因为随着 maven 版本升级，附带的生命周期中使用到的插件版本也会升级。比如 `maven-3.9.0`就使用了 **maven-deploy-plugin:3.0.0**。[参考 default-bindings.xml](https://github.com/apache/maven/blob/maven-3.9.0/maven-core/src/main/resources/META-INF/plexus/default-bindings.xml)
+            <br><br>背景：当时在配置 settings.xml 中激活的全局属性的时候，使用到了一个叫`altReleaseDeploymentRepository`和`altSnapshotDeploymentRepository`的可配置属性。但是发现这两个属性在官网中[标注](https://maven.apache.org/plugins/maven-deploy-plugin/deploy-mojo.html)在 2.8 及之后的 maven-deploy-plugin 版本中才会使用。所以需要将项目中的这个插件版本升级到 2.8 或之后。但是这样的话，只针对当前项目好使，如果说换了其他项目，要用这两个属性，还得在项目中进行插件升级配置。当然，用高版本的 maven 的话，不用配置也行。因为随着 maven 版本升级，附带的生命周期中使用到的插件版本也会升级。比如 `maven-3.9.0`就使用了 **maven-deploy-plugin:3.0.0**。[参考 default-bindings.xml](https://github.com/apache/maven/blob/maven-3.9.0/maven-core/src/main/resources/META-INF/plexus/default-bindings.xml)
             <br><br>作用：在 maven 版本低于 3.9.0 的时候也可以使用到背景中所述的那两个属性，主要原理就是通过扩展修改项目中使用到的插件定义中的版本号，比如将`maven-deploy-plugin:2.7`修改为`maven-deploy-plugin:3.0.0`
             <br><br>使用：采用客户端参数的方式`export MAVEN_OPTS="$MAVEN_OPTS -Dmaven.ext.class.path=/Users/stevenobelia/Documents/project_idea_test/haohuo-component/hh-cpt-maven-extension/fixed-version-maven-extension/target/fixed-version-maven-extension-1.0.1.jar"`
 
