@@ -1,5 +1,9 @@
 * ## Intro(Jetbrains)
 
+    ### Jetbrains系列禁用macOS触控栏
+    > [?] 由于在 debug 的过程中需要用到 Fn 系列功能，所以不要让软件自定义 touch bar 相关内容。解决办法（局部软件级别）：Help -> Editor Custom VM Options -> `-Dide.mac.touchbar.use=false`，[参考 youtrack|Disable-touchbar-support](https://youtrack.jetbrains.com/issue/IJPL-53320/Disable-touchbar-support)。
+    <br>当然还有另外一种方式，全局系统级别的禁用：系统设置 -> 键盘 -> 触控栏设置 -> 触控栏显示切换到其他即可。
+
     ### WebStorm文件内容不能预览(打不开文件)
     
     > [?] 可能原因是新版本使用了老版本的插件，不兼容造成的原因。解决办法：`删除对应版本WebStorm中的plugins目录`。[参考](https://intellij-support.jetbrains.com/hc/en-us/community/posts/360010609860-Intellij-cannot-view-any-file-content) 删除了额外的插件 [目录](https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs)
