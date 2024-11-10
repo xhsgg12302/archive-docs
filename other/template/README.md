@@ -1,3 +1,7 @@
+---
+layout: review
+---
+
 <!-- [toc] -->
 <!-- varibale -->
 [12302]:http://mvn.wtfu.site
@@ -157,9 +161,9 @@
         <!-- div:title-panel -->
         ##### Using PooledExecutor
         <!-- div:left-panel-100 -->
-        1. __A tunable worker thread pool__
-        2. __Main method execute(Runnable r)__
-        3. __Controls for:__
+        5. __A tunable worker thread pool__
+        6. __Main method execute(Runnable r)__
+        7. __Controls for:__
             * The kind of task queue (any Channel)
             * Maximum number of threads
             * Minimum number of threads

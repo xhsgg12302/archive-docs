@@ -33,7 +33,7 @@ public class BinarySearch {
         if(key < midKey){ return binarySearch(arr, left, mid - 1, key); }
         return mid;
     }
-
+}
 ```
 <!-- tabs:end -->
 
