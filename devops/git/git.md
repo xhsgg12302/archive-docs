@@ -196,6 +196,12 @@
 		git submodule update helloworld
 		# 更新子模块的 url
 		git submodule set-url .images https://github.com/xhsgg12302/archive-assets.git
+		
+		# 执行 git submodule update --remote 默认情况下会将模块的远程 HEAD 指定的提交节点 hash 值。
+		# 可以通过指定 submodule.<name>.branch 来改变这种行为，比如让追踪子模块 master
+		# 有一个特殊的值 `.` 表示追踪子模块的分支名和当前项目的分支名一样。
+		# 配置方式在 `.gitmodules` 和 `.git/config` 均可，但是后者优先级更高。
+		git submodule update --remote
 
 		# 删除一个子模块 see:https://git-scm.com/docs/gitsubmodules#_forms
 		git rm <moduleName>
