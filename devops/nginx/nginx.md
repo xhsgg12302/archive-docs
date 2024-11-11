@@ -1,16 +1,16 @@
 * ## 简介
 
-	1. #### 介绍
+	1. ### 介绍
 
 		> [?] Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务,支持FastCGI,SSL,Virtual Host,URL Rewrite,Gzip等功能。
 
-	2. #### 功能
+	2. ### 功能
 		* 反向代理
 		* 负载均衡
 		* 静态服务器
 		* 邮箱服务器
 
-	3. #### 负载均衡方式
+	3. ### 负载均衡方式
 		|name | explain | feature|
 		|-    | - | - |  
 		| 轮询  	| 默认方式 		| |
@@ -429,7 +429,8 @@ http {
 
 ## 应用
 
-1. #### 使用http smart 协议搭建git 服务器
+1. ### 使用http smart 协议搭建git 服务器
+
 	+  安装fastcgi(fcgiwrap)
 
 		* mac `brew install fcgiwrap`
@@ -510,7 +511,7 @@ http {
 
 
 ## 工具
-1. #### 使用 acme.sh 自动化管理 ssl/tsl证书
+1. ### 使用 acme.sh 自动化管理 ssl/tsl证书
 	```shell
 	# 安装 acme.sh (https://github.com/acmesh-official/acme.sh)
 	curl https://get.acme.sh | sh -s email=xhsgg12302@126.com
