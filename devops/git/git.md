@@ -197,6 +197,7 @@
 		# 更新子模块的 url
 		git submodule set-url .images https://github.com/xhsgg12302/archive-assets.git
 		
+		# 下述貌似不可解决远程更新后直接指向指定分支，比如master，有待学习
 		# 执行 git submodule update --remote 默认情况下会将模块的远程 HEAD 指定的提交节点 hash 值。
 		# 可以通过指定 submodule.<name>.branch 来改变这种行为，比如让追踪子模块 master
 		# 有一个特殊的值 `.` 表示追踪子模块的分支名和当前项目的分支名一样。
