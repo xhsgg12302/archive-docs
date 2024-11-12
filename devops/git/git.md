@@ -217,10 +217,12 @@
 
 * ## GIT基本操作
 
-	> [!NOTE] 获取第一次提交记录：`git log --reverse --format='%H' | head -n 1`
-	<br>获取文件的首次提交时间：`git log --reverse --format="%ad" --date=short -- index.html | head -n 1`
-	<br>获取文件的最新更新时间：`git log --format="%ad" --date=short -- index.html | head -n 1`
+	> [!NOTE] ~获取第一次提交记录~：`git log --reverse --format='%H' | head -n 1`
+	<br>~获取文件的首次提交时间~：`git log --reverse --format="%ad" --date=short -- index.html | head -n 1`
+	<br>~获取文件的最新更新时间~：`git log --format="%ad" --date=short -- index.html | head -n 1`
 	<br>指定時間進行提交：`git commit -S -m 'update something' --date="2023-03-15 10:24:06"`
+	<br><br>获取文件首次创建的时间：`git log --follow --diff-filter=A -- devops/git/git.md`
+	<br>获取文件最新的更新时间：`git log --follow --diff-filter=M -- devops/build/gcc/library.md | head -n 1`
 
 	* ### learngitbranching常用命令
 
