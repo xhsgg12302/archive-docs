@@ -1,7 +1,7 @@
 ## 压缩包安装
 
 <!-- tabs:start -->
-####  ** Centos7 **
+####  **Centos7**
 - 准备
 ```shell
 # 下载MySQL5.6.49
@@ -58,12 +58,12 @@ $ FLUSH PRIVILEGES;
 [2] bin/mysqld 通过 bin/mysqld --help --verbose 可以查看启动配置参数。其中my.cnf配置文件的查找过程就在输出中可以看见。
 ```
 
-####  ** Ubuntu **
+####  **Ubuntu**
 ```shell
 # omitted
 ```
 
-####  ** Docker **
+####  **Docker**
 1. 配置环境
     ```shell
     # 启动数据卷

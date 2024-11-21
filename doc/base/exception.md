@@ -2,7 +2,7 @@
 
 ### example
 <!-- tabs:start -->
-#### ** 1 **
+#### **1**
 ```java
 // finally语句在return语句执行之后return返回之前执行的
 public int exp1(){
@@ -30,7 +30,7 @@ b>25, b = 100
 100
 ```
 
-#### ** 2 **
+#### **2**
 ```java
 // finally块中的return语句会覆盖try块中的return返回
 public int exp2() {
@@ -57,7 +57,7 @@ b>25, b = 100
 200
 ```
 
-#### ** 3 **
+#### **3**
 ```java
 // 如果finally语句中没有return语句覆盖返回值，那么原来的返回值可能因为finally里的修改而改变也可能不变
 public int exp3() {
@@ -106,7 +106,7 @@ output:
 FINALLY
 ```
 
-#### ** 4 **
+#### **4**
 ```java
 // try块里的return语句在异常的情况下不会被执行(参考中的例子有错误)
 public int exp4() {
@@ -136,7 +136,7 @@ b>25, b = 35
 204
 ```
 
-#### ** 5 **
+#### **5**
 ```java
 // 当发生异常后，catch中的return执行情况与未发生异常时try中return的执行情况完全一样
 public int exp5() {
@@ -166,7 +166,7 @@ b>25, b = 35
 35
 ```
 
-#### ** 6 **
+#### **6**
 ```java
 // catch中的return先计算然后传值到finally中最后finally直接返回，也符合情况1。
 public int exp6() {

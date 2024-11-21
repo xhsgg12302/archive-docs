@@ -6,7 +6,7 @@
 ### implement
 <!-- tabs:start -->
 
-#### ** JAVA **
+#### **JAVA**
 ```java
 import java.util.Arrays;
 
@@ -37,7 +37,7 @@ public class SelectionSort{
 }
 ```
 
-#### ** C **
+#### **C**
 ```c
 ```
 <!-- tabs:end -->

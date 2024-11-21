@@ -1,6 +1,6 @@
 ## example
 <!-- tabs:start -->
-#### ** C library **
+#### **C library**
 ##### 1. 导入需要的依赖包
 ```xml
 <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
@@ -49,7 +49,7 @@ $ java -cp .:jna-5.13.0.jar HelloWorld
 ![](/.images/doc/advance/native/jna-origin-01.png)
 
 
-#### ** C dynamic Library **
+#### **C dynamic Library**
 ##### 1. 编写HelloJNA.java
 ```java
 import com.sun.jna.Library;
@@ -95,11 +95,11 @@ int add(int a, int b){
 ##### 4. 记录
 ![](/.images/doc/advance/native/jna-library-01.png)
 
-#### ** C++ dynamic library **
+#### **C++ dynamic library**
 ##### Reference
 * https://dreammind.hatenadiary.org/entry/20091225/1261690796
 
-#### ** hikvision **
+#### **hikvision**
 ##### Reference
 * https://github.com/12302-anft/hikvision-api/blob/master/src/main/java/com/anft/framework/common/HikvisionAPI.java
 

@@ -169,7 +169,7 @@
 * 代码片段
 
     <!-- tabs:start -->
-    #### ** Sync#nonfairTryAcquire **
+    #### **Sync#nonfairTryAcquire**
     ```java
     final boolean nonfairTryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
@@ -191,7 +191,7 @@
         }
     ```
 
-    #### ** AbstractQueuedSynchronizer#addWaiter **
+    #### **AbstractQueuedSynchronizer#addWaiter**
     ```java
     private Node addWaiter(Node mode) {
         Node node = new Node(Thread.currentThread(), mode);
@@ -225,7 +225,7 @@
     }
     ```
 
-    #### ** AbstractQueuedSynchronizer#acquireQueued **
+    #### **AbstractQueuedSynchronizer#acquireQueued**
     ```java
     final boolean acquireQueued(final Node node, int arg) {
         boolean failed = true;
@@ -255,7 +255,7 @@
     }
     ```
 
-    #### ** AbstractQueuedSynchronizer#selfInterrupt **
+    #### **AbstractQueuedSynchronizer#selfInterrupt**
     ```java
     /**
      * Convenience method to interrupt current thread.
@@ -265,7 +265,7 @@
     }
     ```
 
-    #### ** FairSync#tryAcquire **
+    #### **FairSync#tryAcquire**
     ```java
     protected final boolean tryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
@@ -294,7 +294,7 @@
     ![](/.images/doc/base/concurrent/unlock.png ':size=60%')
 
     <!-- tabs:start -->
-    #### ** AbstractQueuedSynchronizer#release **
+    #### **AbstractQueuedSynchronizer#release**
     ```java
     public final boolean release(int arg) {
         if (tryRelease(arg)) {
@@ -333,7 +333,7 @@
             LockSupport.unpark(s.thread);
     }
     ```
-    #### ** Sync#tryRelease **
+    #### **Sync#tryRelease**
     ```java
     protected final boolean tryRelease(int releases) {
             int c = getState() - releases;

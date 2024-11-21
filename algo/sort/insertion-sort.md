@@ -6,7 +6,7 @@
 ### implement
 <!-- tabs:start -->
 
-#### ** JAVA **
+#### **JAVA**
 ```java
 import java.util.Arrays;
 
@@ -32,11 +32,11 @@ public class InsertionSort{
 }
 ```
 
-#### ** C **
+#### **C**
 ```c
 ```
 
-#### ** Python **
+#### **Python**
 ```python
 def insertionSort(arr):
     for i in range(len(arr)):

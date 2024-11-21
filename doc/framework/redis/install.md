@@ -3,7 +3,7 @@
     + ## 压缩包安装
 
         <!-- tabs:start -->
-        - ####  ** Docker **
+        - ####  **Docker**
         1. 配置环境
 
         ```shell
@@ -26,8 +26,8 @@
             - #### Reference
                 * https://hub.docker.com/_/redis
 
-        - ####  ** Centos7 **
-        - ####  ** Ubuntu **
+        - ####  **Centos7**
+        - ####  **Ubuntu**
 
 
     <!-- tabs:end -->

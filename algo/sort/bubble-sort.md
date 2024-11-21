@@ -6,7 +6,7 @@
 ### implement
 <!-- tabs:start -->
 
-#### ** JAVA **
+#### **JAVA**
 ```java
 import java.util.Arrays;
 
@@ -34,7 +34,7 @@ public class BubbleSort{
 }
 ```
 
-#### ** C **
+#### **C**
 ```c
 
 ```
