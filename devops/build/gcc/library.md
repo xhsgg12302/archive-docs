@@ -32,7 +32,7 @@
     ```
 
     <!-- tabs:start -->
-    #### **[STATIC、SHARED] **
+    #### **[STATIC、SHARED]**
     **demo_use.c**
     ```c
     /* demo_use.c -- demonstrate direct use of the "hello" routine */
@@ -90,7 +90,7 @@
     <br><br>**ar** 归档工具的作用就是将多个`.o`文件压缩到一个`.a`文件中(包括一些额外的元信息)。方便使用 **-l** 对`.a`、`.o`文件进行链接。
     <br>⫸ 如果只有单个`.o`文件的话，直接链接，不使用任何参数：`gcc -g -o main demo_use.o  libhello-static.o`
 
-    ![](/.images/devops/build/gcc/lib/lib-static-01.png) ![](/.images/devops/build/gcc/lib/lib-static-02.png '02 :size=40%')
+    ![](/.images/devops/build/gcc/lib/lib-static-01.png '01 :size=59%') ![](/.images/devops/build/gcc/lib/lib-static-02.png '02 :size=40%')
 
     #### **[SHARED]**
     ```shell

@@ -10,7 +10,7 @@
     |列出所有由launchd管理的进程 | `launchctl list` |
     |加载 | `launchctl load ~/Library/LaunchAgents/docs.wtfu.site.plist`|
     |卸载 | `launchctl unload ~/Library/LaunchAgents/docs.wtfu.site.plist`|
-    |启动 | `launchctl start dos.wtfu.site`|
+    |启动 (luanchctl start `<Label>`)| `launchctl start dos.wtfu.site`|
     |关闭 | `launchctl stop dos.wtfu.site`|
 
     - ### plist
@@ -73,6 +73,50 @@
                 <string>/tmp/frpc.wtfu.site.log</string>
                 <key>StandardErrorPath</key>
                 <string>/tmp/frpc.wtfu.site.err</string>
+            </dict>
+        </plist>
+        ```
+
+        #### **jetbrains.vmoptions.plist**
+        path: `~/Library/LaunchAgents/jetbrains.vmoptions.plist`
+        ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+            <dict>
+                <key>Label</key>
+                <string>jetbrains.vmoptions</string>
+                <key>ProgramArguments</key>
+                <array>
+                    <string>sh</string>
+                    <string>-c</string>
+                    <string>
+                    launchctl setenv "IDEA_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/idea.vmoptions"
+                    launchctl setenv "CLION_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/clion.vmoptions"
+                    launchctl setenv "PHPSTORM_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/phpstorm.vmoptions"
+                    launchctl setenv "GOLAND_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/goland.vmoptions"
+                    launchctl setenv "PYCHARM_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/pycharm.vmoptions"
+                    launchctl setenv "WEBSTORM_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/webstorm.vmoptions"
+                    launchctl setenv "WEBIDE_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/webide.vmoptions"
+                    launchctl setenv "RIDER_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/rider.vmoptions"
+                    launchctl setenv "DATAGRIP_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/datagrip.vmoptions"
+                    launchctl setenv "RUBYMINE_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/rubymine.vmoptions"
+                    launchctl setenv "DATASPELL_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/dataspell.vmoptions"
+                    launchctl setenv "AQUA_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/aqua.vmoptions"
+                    launchctl setenv "RUSTROVER_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/rustrover.vmoptions"
+                    launchctl setenv "GATEWAY_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/gateway.vmoptions"
+                    launchctl setenv "JETBRAINS_CLIENT_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/jetbrains_client.vmoptions"
+                    launchctl setenv "JETBRAINSCLIENT_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/jetbrainsclient.vmoptions"
+                    launchctl setenv "STUDIO_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/studio.vmoptions"
+                    launchctl setenv "DEVECOSTUDIO_VM_OPTIONS" "/Users/stevenobelia/Downloads/install-package/jetbra/vmoptions/devecostudio.vmoptions"
+                    </string>
+                </array>
+                <key>RunAtLoad</key>
+                <true/>
+                <key>StandardOutPath</key>
+                <string>/tmp/jetbrains.vmoptions.log</string>
+                <key>StandardErrorPath</key>
+                <string>/tmp/jetbrains.vmoptions.err</string>
             </dict>
         </plist>
         ```

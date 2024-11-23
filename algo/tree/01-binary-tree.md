@@ -79,93 +79,96 @@
 * ## Implement
 
     - ### Node
-    ```java
-    class Node {
-        public int value;
-        public Node left,right;
 
-        public Node(int value) { this.value = value;}
+        ```java
+        class Node {
+            public int value;
+            public Node left,right;
 
-        public Node(int value, Node left, Node right) {
-            this.value = value;
-            this.left = left;
-            this.right = right;
+            public Node(int value) { this.value = value;}
+
+            public Node(int value, Node left, Node right) {
+                this.value = value;
+                this.left = left;
+                this.right = right;
+            }
         }
-    }
-    ```
+        ```
 
     - ### 遍历
-    <!-- tabs:start -->
-    #### **java**
-    ```java
-    // 前序遍历
-    public static void recursionPreOrderTraversal(Node tree){
-        if(tree!= null){
-            System.out.print(tree.value + ",");
-            recursionPreOrderTraversal(tree.left);
-            recursionPreOrderTraversal(tree.right);
+
+        <!-- tabs:start -->
+        #### **java**
+        ```java
+        // 前序遍历
+        public static void recursionPreOrderTraversal(Node tree){
+            if(tree!= null){
+                System.out.print(tree.value + ",");
+                recursionPreOrderTraversal(tree.left);
+                recursionPreOrderTraversal(tree.right);
+            }
         }
-    }
-    // 中序遍历
-    public static void recursionInOrderTraversal(Node tree){
-        if(tree!= null){
-            recursionInOrderTraversal(tree.left);
-            System.out.print(tree.value + ",");
-            recursionInOrderTraversal(tree.right);
+        // 中序遍历
+        public static void recursionInOrderTraversal(Node tree){
+            if(tree!= null){
+                recursionInOrderTraversal(tree.left);
+                System.out.print(tree.value + ",");
+                recursionInOrderTraversal(tree.right);
+            }
         }
-    }
-    // 后序遍历
-    public static void recursionPostOrderTraversal(Node tree){
-        if(tree!= null){
-            recursionPostOrderTraversal(tree.left);
-            recursionPostOrderTraversal(tree.right);
-            System.out.print(tree.value + ",");
+        // 后序遍历
+        public static void recursionPostOrderTraversal(Node tree){
+            if(tree!= null){
+                recursionPostOrderTraversal(tree.left);
+                recursionPostOrderTraversal(tree.right);
+                System.out.print(tree.value + ",");
+            }
         }
-    }
-    ```
-    <!-- tabs:end -->
+        ```
+        <!-- tabs:end -->
 
     - ### 后序和中序构建
-    <!-- tabs:start -->
-    #### **java**
-    ```java
-    public class BuildBinaryTree {
 
-        private  Map<Integer,Integer> inMap = new HashMap<>();
-        private int index_root = 0;
-        private int [] postOrder = null;
-        
-        public void init(int[] inOrder,int[] postOrder){
-            for (int i = 0; i < inOrder.length; i++) {
-                inMap.put(inOrder[i],i);
+        <!-- tabs:start -->
+        #### **java**
+        ```java
+        public class BuildBinaryTree {
+
+            private  Map<Integer,Integer> inMap = new HashMap<>();
+            private int index_root = 0;
+            private int [] postOrder = null;
+            
+            public void init(int[] inOrder,int[] postOrder){
+                for (int i = 0; i < inOrder.length; i++) {
+                    inMap.put(inOrder[i],i);
+                }
+                this.postOrder = postOrder;
+                index_root = postOrder.length - 1;
             }
-            this.postOrder = postOrder;
-            index_root = postOrder.length - 1;
+
+            public Node build(int index_left,int index_right){
+                if(index_left > index_right) return null;
+
+                int root_value = postOrder[index_root--];
+                Node root = new Node(root_value);
+                int _left = inMap.get(root_value);
+                root.right = build(_left + 1,index_right);
+
+                root.left = build(index_left,_left - 1);
+                return root;
+            }
+
+            @Test
+            public void test(){
+                int[] postOrder = {9,15,7,20,3};
+                int[] inOrder = {9,3,15,20,7};
+
+                init(inOrder,postOrder);
+                Node root = build(0,inOrder.length - 1);
+            }
         }
-
-        public Node build(int index_left,int index_right){
-            if(index_left > index_right) return null;
-
-            int root_value = postOrder[index_root--];
-            Node root = new Node(root_value);
-            int _left = inMap.get(root_value);
-            root.right = build(_left + 1,index_right);
-
-            root.left = build(index_left,_left - 1);
-            return root;
-        }
-
-        @Test
-        public void test(){
-            int[] postOrder = {9,15,7,20,3};
-            int[] inOrder = {9,3,15,20,7};
-
-            init(inOrder,postOrder);
-            Node root = build(0,inOrder.length - 1);
-        }
-    }
-    ```
-    <!-- tabs:end -->
+        ```
+        <!-- tabs:end -->
     
 
 ## Reference
