@@ -1,3 +1,7 @@
+---
+weight: 70
+---
+
 > [!] hello k8s
 
 ```shell

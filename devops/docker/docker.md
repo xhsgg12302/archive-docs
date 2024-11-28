@@ -1,6 +1,10 @@
+---
+weight: 50
+---
+
 * ## 基本命令
     + ### BASE
-        
+
         > [?] 提交镜像
         <br>`docker commit -a "xhsgg12302@gmail.com" -m "with requirements.txt" 44f357ee68bc  eli/anaconda3:v1.0`
         <br>标签镜像
