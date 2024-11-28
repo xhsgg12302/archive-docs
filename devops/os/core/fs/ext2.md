@@ -280,7 +280,7 @@
             <br><br><span style='color:blue'>所以除了这两个块组的自身属性外，可以认为是完全复制。</span>
             
             <!-- div:left-panel-50 -->
-            ```shell
+            ```shell {7,9}
             # 查看 (Block Group 0)super block
             # 
             ➜  data git:(master) ✗ xxd -u -g1 -s `echo '1024 * 1' | bc` -l `echo '264' | bc` fs10m
@@ -303,7 +303,7 @@
             00000500: 0C 00 00 00 00 00 00 00                          ........
             ```
             <!-- div:right-panel-50 -->
-            ```shell
+            ```shell {7,9}
             # 查看 (Block Group 1)super block
             # 
             ➜  data git:(master) ✗ xxd -u -g1 -s `echo '1024 * 8193' | bc` -l `echo '264' | bc` fs10m
