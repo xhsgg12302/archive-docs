@@ -153,16 +153,16 @@
 
     + ### maven私服及免费的maven仓库
 
-        | name     | url                                                            |
-        | -------- | -------------------------------------------------------------- |
-        | 自己搭建 | http://mvn.wtfu.site/nexus                                     |
-        | 163      | http://mirrors.163.com/.help/maven.html                        |
-        | huawei   | https://mirrors.huaweicloud.com/home                           |
+        | name     | url                                                            | browse |
+        | -------- | -------------------------------------------------------------- | ------ |
+        | 自己搭建\|central | http://mvn.wtfu.site/nexus                             | https://repo.maven.apache.org/maven2/, https://repo1.maven.org/maven2/, [[DIFF]](https://stackoverflow.com/questions/36155159/difference-between-http-repo-maven-apache-org-maven2-vs-http-repo1-maven-or),[HTTP/s](https://central.sonatype.org/news/20190405_http_deprecation_notice/)|
+        | 163      | http://mirrors.163.com/.help/maven.html                        | 
+        | huawei   | [index](https://mirrors.huaweicloud.com/mirrorDetail/5ea0025f2ab89b484a4dd5ce)  | https://mirrors.huaweicloud.com/repository/maven/ |
         | alibaba  | https://developer.aliyun.com/mvn/guide                         |
         | tencent  | https://mirrors.cloud.tencent.com/help/maven.html              |
         | github   | https://maven.pkg.github.com/OWNER/REPOSITORY                  |
-        | 云效旧版 | https://repomanage.rdc.aliyun.com/ (停服通知：云效已发布新版，当前老版将于2024年4月停止续费、2024年10月30日停止服务。)|
-        | 云效新版 | https://packages.aliyun.com/maven （有覆盖 release版本的设置） |
+        | 云效旧版 | https://repomanage.rdc.aliyun.com/ (停服通知：云效已发布新版，<br>当前老版将于2024年4月停止续费、2024年10月30日停止服务。)|
+        | 云效新版 | https://packages.aliyun.com/maven <br>(有覆盖 release版本的设置) |
 
     + ### 手动安装或部署
 
@@ -1371,9 +1371,9 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.haohuo.framework</groupId>
+                        <groupId>site.wtfu.framework</groupId>
                         <artifactId>gencode-maven-plugin</artifactId>
-                        <version>1.4.3</version>
+                        <version>1.4.5</version>
                         <!-- 
                             # 查看支持的goal
                             mvn gencode:help [-Ddetail -Dgoal=xxx]
@@ -1384,17 +1384,15 @@
                             <info>false</info>
                             <swagger2>true</swagger2>
                             <output>${basedir}/src/main/java</output>
-                            <username>username</username>
-                            <password>{jXe28vG2lYEHY+7IlnlBVT0Mb3WSP+XUcKT1mlJrDHY=}</password>
+                            <username>root</username>
+                            <password>******</password>
                             <url><![CDATA[
-                            jdbc:mysql://aliyuncs.com:3306/frame-dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+                            jdbc:mysql://wtfu.site:13307/myemployees?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
                                     ]]></url>
-                            <companySuffix>com.msb</companySuffix>
-                            <moduleName>frame.admin</moduleName>
                             <contains>entity, mapper, service, impl, xml</contains>
                             <entityPkgName>domain</entityPkgName>
-
-                            <tables>youzan_trade_record,</tables>
+                            <dateType>TIME_PACK</dateType>
+                            <tables>employees,</tables>
 
                             <settings>/Users/mac/software/apache-maven-3.3.9/conf/settings.xml</settings>
                             <accessKey>***</accessKey>

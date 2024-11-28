@@ -67,12 +67,12 @@ $ FLUSH PRIVILEGES;
 1. 配置环境
     ```shell
     # 启动数据卷
-    $ docker run -dit --rm --name mysql-data registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.0.0
+    $ docker run -dit --rm --name mysql-data registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.2.0
 
     # 挂载数据卷并启动 
     #       [因为数据卷中的数据是经过密码保存的，所以此处需要有密码认证。如果不挂载数据卷的情况，可以使用`-e MYSQL_ALLOW_EMPTY_PASSWORD=yes`来空密码连接]
-    $ docker run -d -p 3336:3336 -e MYSQL_ROOT_PASSWORD='*******' --name mysql-5.6.49 \
-        --volumes-from mysql-data  mysql:5.6.49  --datadir=/mysql-data/mysql  --character-set-server=utf8mb4  --collation-server=utf8mb4_unicode_ci  --port=3336
+    $ docker run -d -p 13306:3306 -e MYSQL_ROOT_PASSWORD='*******' --name mysql-5.6.49 \
+        --volumes-from mysql-data  mysql:5.6.49  --datadir=/mysql-data/mysql  --character-set-server=utf8mb4  --collation-server=utf8mb4_unicode_ci  --port=3306
     ```
 
 2. 测试

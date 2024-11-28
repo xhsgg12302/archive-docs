@@ -47,6 +47,37 @@
         </plist>
         ```
 
+        #### **tech.wtfu.site**
+        path: `~/Library/LaunchAgents/tech.wtfu.site.plist`
+        ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+            <dict>
+                <key>Label</key>
+                <string>tech.wtfu.site</string>
+                <key>ProgramArguments</key>
+                <array>
+                    <string>sh</string>
+                    <string>-c</string>
+                    <string>cd ~/Desktop/archive/archive-hugo &amp;&amp; rm -rf public &amp;&amp; hugo server -D </string>
+                </array>
+                <key>RunAtLoad</key>
+                <true/>
+                <key>EnvironmentVariables</key>
+                <dict>
+                    <key>PATH</key>
+                    <string>~/.go/bin:/bin:/usr/local/bin</string>
+                    <!-- <string>/usr/local/bin:/usr/local/opt/node@18/bin</string> -->
+                </dict>
+                <key>StandardOutPath</key>
+                <string>/tmp/tech.wtfu.site.log</string>
+                <key>StandardErrorPath</key>
+                <string>/tmp/tech.wtfu.site.err</string>
+            </dict>
+        </plist>
+        ```
+
         #### **frp.wtfu.site**
         path: `~/Library/LaunchAgents/frp.wtfu.site.plist`
         ```xml
