@@ -790,7 +790,7 @@ weight: 20
         <!-- div:left-panel-50 -->
         > [?] 初始化`ServiceLoader`
 
-        ```java
+        ```java {11}
         // 调用
         ServiceLoader<ISpiTest> serviceLoader = ServiceLoader.load(ISpiTest.class);
         Iterator<ISpiTest> iterator = serviceLoader.iterator();
