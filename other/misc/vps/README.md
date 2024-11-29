@@ -2,6 +2,10 @@
 
     + ### 购买
 
+        [ECS 入口](https://ecs.console.aliyun.com/)
+
+        ![](/.images/other/misc/vps/vps-config-preview-01.png ':size=100% :align=center')
+
     + ### 配置远程登录
 
         > [?] `1).` Ali `重置密码` ，使用 ssh 登录:`47.94.20.118` 主机：`i-2zeeuol1151zswgxvpf5`
@@ -28,7 +32,7 @@
         <br><br>删除用户
         <br>`sudo userdel -r 新用户名`
 
-    + ### 安装JDK
+    + ### 安装 JDK
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
@@ -45,6 +49,14 @@
         OpenJDK 64-Bit Server VM (build 25.422-b05, mixed mode)
         ```
         <!-- panels:end -->
+
+    + ### 安装 Mysql
+
+        > [?] [参考：mysql docker 安装](/doc/framework/mysql/install/#docker) 
+        <br>使用 docker 的方式处理就行，安装命令如下：
+        <br>`1).` 加载数据：`docker run -dit --restart=always --name mysql-data registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.2.0`
+        <br>`2).` 运行服务：`docker run -d -p ****:3306 -e MYSQL_ROOT_PASSWORD='****' --name mysql-5.6.49 --volumes-from mysql-data  mysql:5.6.49  --datadir=/mysql-data/mysql  --character-set-server=utf8mb4  --collation-server=utf8mb4_unicode_ci`
+        <br>`3).` 内部测试：`docker run -it --rm --network=host -e LANG="C.UTF-8" mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P **** -p`
 
     + ### 安装 Tomcat
 
