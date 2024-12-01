@@ -164,9 +164,10 @@
         https://idea.javatiku.cn/ </br>
         https://www.jb51.net/article/201533.htm </br>
         http://jrebel-license.jiweichengzhu.com/ </br>
-        https://jrebel.com.cn/#/
+        https://jrebel.com.cn/#/ <br>
+        https://www.jpy.wang/page/jrebel.html
 
-        + 历史记录
+        + #### 历史记录
 
             - [ ] http://idea.javatiku.cn/460bbf73-1d7d-4b5e-a537-43ea8b23f502
             - [ ] https://jrebel.com.cn/65827c00-5e65-4c1e-a358-1f6f2f96880e (0wetmj@outlook.com)
@@ -174,6 +175,7 @@
             - [ ] https://jrebel.speedcow.top/e74fd726-f540-4dda-77fa-df484c286d3b
             - [ ] http://42.193.18.168:8088/4e7defb7-09ad-45da-bf9c-11eda2ab0f6a (879271507@qq.com) (https://www.jpy.wang/page/jrebel.html)
             - [x] https://jrebel.haitim.cn/05b4a954-84f2-48ae-8cc2-02dc09a7468e
+            - [ ] http://42.193.18.168:8088/8c9dca0b-19e6-4a7a-894e-0299d0fd9f5a (971122716@qq.com) (https://www.jpy.wang/page/jrebel.html) (兼容 2023.4.0 +)
 
 * ## References
 
