@@ -11,11 +11,75 @@
 
     + ### 编码过程
 
-        > [!NOTE] `1).` 先将 32 位左移一位，用来保留正负标志位在最低有效位(LSB)
+        > [!NOTE] `1).` 先对值 v(32bit) 左移一位，用来保留正负标志位在最低有效位(LSB)。
+        <br>`2).` 再将值 v(32bit) 的高有效位(MSB)，从左至右，撤出一长串 0 或 1，对于正数来说，就是 32 个 0， 对于负数来说就是 32 个 1。
+        <br>`3).` 最后将上述两个值进行异或，得到 zigzag 编码的结果。
+        <br><br><span style='color:red'>需要注意的是：</span>
+        <br>`a).` 对于正数来说，左移相当于将 v 乘 2 了。因为后面的被异或的值全是 32 个 0，结合异或特性2，就是没有任何作用，所以只是单纯的 *2 了。对于负数说来，那就得慢慢说了。
+        <br>`b).` 负数之所以会被压缩正是因为将负值多余的 1 与 32 个 1 进行异或后变成了可压缩的 0。
+        <br>`c).` 编码后的值最地位保留的是符号位，正零负一。根据这个标志位才可以还原(解码)当前编码对应的实际值。
+        <br>`d).` 解码过程逆向操作就行。
 
     + ### 举例演示
+
+        ![](/.images/corner/encoding/zigzag/zigzag-demo-sample-01.png ':size=100%')
+
+        - #### 取值表格
+
+            | Original |  Encoded Binary |  Encoded Decimal |  Decoded | delimiter | Original |  Encoded Binary |  Encoded Decimal |  Decoded |
+            | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+            |-10 | 00000000000000000000000000010011 |               19 |      -10 | | 0 | 00000000000000000000000000000000 |                0 |        0 |
+            | -9 | 00000000000000000000000000010001 |               17 |       -9 | | 1 | 00000000000000000000000000000010 |                2 |        1 |
+            | -8 | 00000000000000000000000000001111 |               15 |       -8 | | 2 | 00000000000000000000000000000100 |                4 |        2 |
+            | -7 | 00000000000000000000000000001101 |               13 |       -7 | | 3 | 00000000000000000000000000000110 |                6 |        3 |
+            | -6 | 00000000000000000000000000001011 |               11 |       -6 | | 4 | 00000000000000000000000000001000 |                8 |        4 |
+            | -5 | 00000000000000000000000000001001 |                9 |       -5 | | 5 | 00000000000000000000000000001010 |               10 |        5 |
+            | -4 | 00000000000000000000000000000111 |                7 |       -4 | | 6 | 00000000000000000000000000001100 |               12 |        6 |
+            | -3 | 00000000000000000000000000000101 |                5 |       -3 | | 7 | 00000000000000000000000000001110 |               14 |        7 |
+            | -2 | 00000000000000000000000000000011 |                3 |       -2 | | 8 | 00000000000000000000000000010000 |               16 |        8 |
+            | -1 | 00000000000000000000000000000001 |                1 |       -1 | | 9 | 00000000000000000000000000010010 |               18 |        9 |
+
+        - #### python工具编解码
+
+            ![](/.images/corner/encoding/zigzag/zigzag-demo-sample-02.png ':size=100%')
+
     + ### 编码实现
+
+        > [?] 参考 [ZigZag encoding/decoding explained](https://gist.github.com/mfuerstenau/ba870a29e16536fdbaba)
+        <br>protobuf 中使用的逻辑基本一致，但是里面包含了 varint 编码逻辑，[32bit 编码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L146-L148)，[32bit 解码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L199-L205)。不太好测，方便起见，直接使用 python 的如下实现：
+
+        ```python {6-8}
+        def zigzag_encode(i):
+            # 对应编码过程中的 2 和 1。
+            return (i >> 31) ^ (i << 1)
+
+        def zigzag_decode(i):
+            # 这个稍微有点不太一样，一个一个来。
+            # 首先是后面的 -(i & 1) ，就是取当前编码的最低位，正零负一，对应的值也为 0 或者 1。-(0) 当 0 就行，也就是编码过程中的那一长传 0。 -(1) 就是编码过程中的那一长串 1。
+            # 前面半部份 (i >> 1)，正常逆向的时候都会理解成将当前编码值先与长串0 或 1 异或后再右移还原。但是此处是先移位然后异或的。之所以这样可以，是跟异或的值有关系，要么全是0，要么全是1。其实完全可以写成 return (i ^ -(i & 1)) >> 1
+            return (i >> 1) ^ -(i & 1)
+
+        def print_zigzag_results():
+            # 打印表头
+            print(f"{'Original':>8} | {'Encoded Binary':>16} | {'Encoded Decimal':>16} | {'Decoded':>8}")
+            print("-" * 65)
+
+            for i in range(-10, 11):  # 从 -10 到 10 的范围
+                encoded = zigzag_encode(i)
+                decoded = zigzag_decode(encoded)
+
+                # 将编码后的值转换为二进制字符串（去掉 '0b' 前缀），并填充到至少32位
+                encoded_binary = format(encoded, '032b')
+
+                # 打印结果，包括编码后的十进制值
+                print(f"{i:>8} | {encoded_binary:>16} | {encoded:>16} | {decoded:>8}")
+
+        if __name__ == '__main__':
+            print_zigzag_results()
+        ```
 
 * ## Reference
 
     + [ZigZag encoding/decoding explained](https://gist.github.com/mfuerstenau/ba870a29e16536fdbaba)
+    + 
+    + https://drive.google.com/file/d/1Oh0UvpIs7oKTB8MDbeC9EtesVjf9j0hP/view?usp=sharing
