@@ -8,7 +8,7 @@
 
         > [!NOTE] 将一个 int 型的数据二进制表示，从后至前，依次取 7 位，与 varint 特性 msb 占 1 位组成一个字节，直到无效字节(也就是前面全是零)，然后将这些字节按照小端字节序排列。形成一个新的数字，这个过程中会丢弃浪费字节，达到压缩的目的。
         <br><br><span style='color:red'>varint msb 最高有效位为 1 表示后面都得字节属于当前值，为 0 表示当前字节是最后一部分。用来区分 varint 值边界。</span>
-        <br><br><span style='color:red'>对于负数来说，编码过程并没有什么区别，只是因为负数最高位一直为 1，所以不存在浪费，也就是 vaint 对于负数压缩无效，字节不减反增。原本 -2 可以使用 8 个字节表示，但最终用使用了 10 个字节。所以在 ProtoBuf 中一般只处理 无符号 64bit 值，签名如：`func EncodeVarint(v uint64) []byte {}`。所以我们此处传入的 -2 其实是当一个无符号正值处理的，负数的 varint 编码没有意义，我们应当避免对于负值进行 varint 编码。</span>
+        <br><br><span style='color:red'>对于负数来说，编码过程并没有什么区别，只是因为负数最高位一直为 1，所以不存在浪费，也就是 vaint 对于负数压缩无效，字节不减反增。原本 -2 可以使用 8 个字节表示，但最终用使用了 10 个字节。所以在 ProtoBuf 中一般只处理 无符号 64bit 值，签名如：`func EncodeVarint(v uint64) []byte {}`。所以我们此处传入的 -2 其实是当一个无符号正值处理的，负数的 varint 编码没有意义，我们应当避免直接对负值进行 varint 编码。</span><span style='color:blue'>而是先进行 [zigzag 编码](./zigzag.md) 映射后在进行 varint处理。</span>
 
     + ### 举例演示
 
