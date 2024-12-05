@@ -11,13 +11,13 @@
 
     + ### 编码过程
 
-        > [!NOTE] `1).` 先对值 v(32bit) 左移一位，用来保留正负标志位在最低有效位(LSB)。
+        > [!NOTE|label:过程] `1).` 先对值 v(32bit) 左移一位，用来在最低有效位(LSB)保留正负标志位。
         <br>`2).` 再将值 v(32bit) 的高有效位(MSB)，从左至右，撤出一长串 0 或 1，对于正数来说，就是 32 个 0， 对于负数来说就是 32 个 1。
         <br>`3).` 最后将上述两个值进行异或，得到 zigzag 编码的结果。
         <br><br><span style='color:red'>需要注意的是：</span>
         <br>`a).` 对于正数来说，左移相当于将 v 乘 2 了。因为后面的被异或的值全是 32 个 0，结合异或特性2，就是没有任何作用，所以只是单纯的 *2 了。对于负数说来，那就得慢慢说了。
         <br>`b).` 负数之所以会被压缩正是因为将负值多余的 1 与 32 个 1 进行异或后变成了可压缩的 0。
-        <br>`c).` 编码后的值最地位保留的是符号位，正零负一。根据这个标志位才可以还原(解码)当前编码对应的实际值。
+        <br>`c).` 编码后的值最低位保留的是符号位，正零负一。根据这个标志位才可以还原(解码)当前编码对应的实际值。
         <br>`d).` 解码过程逆向操作就行。
 
     + ### 举例演示
@@ -26,7 +26,7 @@
 
         - #### 取值表格
 
-            | Original |  Encoded Binary |  Encoded Decimal |  Decoded | delimiter | Original |  Encoded Binary |  Encoded Decimal |  Decoded |
+            | 原始值 |  Bin(编码值) |  Dex(编码值) |  Dex(解码值) | delimiter | 原始值 |  Bin(编码值) |  Dex(编码值) |  Dex(解码值) |
             | -- | -- | -- | -- | -- | -- | -- | -- | -- |
             |-10 | 00000000000000000000000000010011 |               19 |      -10 | | 0 | 00000000000000000000000000000000 |                0 |        0 |
             | -9 | 00000000000000000000000000010001 |               17 |       -9 | | 1 | 00000000000000000000000000000010 |                2 |        1 |
@@ -46,9 +46,9 @@
     + ### 编码实现
 
         > [?] 参考 [ZigZag encoding/decoding explained](https://gist.github.com/mfuerstenau/ba870a29e16536fdbaba)
-        <br>protobuf 中使用的逻辑基本一致，但是里面包含了 varint 编码逻辑，[32bit 编码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L146-L148)，[32bit 解码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L199-L205)。不太好测，方便起见，直接使用 python 的如下实现：
+        <br>protobuf 中使用的逻辑基本一致，但是里面包含了 varint 编码逻辑。如：[32bit 编码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L146-L148)，[32bit 解码](https://github.com/golang/protobuf/blob/75de7c059e36b64f01d0dd234ff2fff404ec3374/proto/buffer.go#L199-L205)。不太好测，方便起见，直接使用 python 的如下实现：
 
-        ```python {6-8}
+        ```python {6-9}
         def zigzag_encode(i):
             # 对应编码过程中的 2 和 1。
             return (i >> 31) ^ (i << 1)
@@ -56,7 +56,8 @@
         def zigzag_decode(i):
             # 这个稍微有点不太一样，一个一个来。
             # 首先是后面的 -(i & 1) ，就是取当前编码的最低位，正零负一，对应的值也为 0 或者 1。-(0) 当 0 就行，也就是编码过程中的那一长传 0。 -(1) 就是编码过程中的那一长串 1。
-            # 前面半部份 (i >> 1)，正常逆向的时候都会理解成将当前编码值先与长串0 或 1 异或后再右移还原。但是此处是先移位然后异或的。之所以这样可以，是跟异或的值有关系，要么全是0，要么全是1。其实完全可以写成 return (i ^ -(i & 1)) >> 1
+            # 前面半部份 (i >> 1)，正常逆向的时候都会理解成将当前编码值先与长串0 或 1 异或后再右移还原。但是此处是先移位然后异或的。之所以这样可以，是跟异或的值有关系，要么全是0，要么全是1。
+            #    其实完全可以写成 return (i ^ -(i & 1)) >> 1
             return (i >> 1) ^ -(i & 1)
 
         def print_zigzag_results():
