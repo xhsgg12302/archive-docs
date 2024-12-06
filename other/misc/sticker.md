@@ -4,11 +4,11 @@
         height: 694px;
         font-size: 0;
         text-indent: -999em;
-        background: url('.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
+        background: url('/.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
     }
 
     .small {
-        background: url('.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
+        background: url('/.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
         vertical-align: middle;
         height: 53px !important;
         width: 53px;
