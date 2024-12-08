@@ -13,6 +13,27 @@
     |启动 (luanchctl start `<Label>`)| `launchctl start dos.wtfu.site`|
     |关闭 | `launchctl stop dos.wtfu.site`|
 
+    - ### restart
+
+        > [?] 摘自 [How to start/stop/restart launchd services from the command line?](https://serverfault.com/questions/194832/how-to-start-stop-restart-launchd-services-from-the-command-line)
+        <br>Just in case if you are looking for launchctl reload, you can define shell function in your ~/.bashrc/.zshrc as I did:
+        <br>Command execution looks like -> `lctl reload <your-plist-name>.plist`
+
+        ```shell
+        function lctl {
+            COMMAND=$1
+            PLIST_FILE=$2
+            if [ "$COMMAND" = "reload" ] && [ -n "$PLIST_FILE" ]
+            then
+                echo "reloading ${PLIST_FILE}.."
+                launchctl unload ${PLIST_FILE}
+                launchctl load ${PLIST_FILE}
+            else
+                echo "either command not specified or plist file is not defined"
+            fi
+        }
+        ```
+
     - ### plist
 
         <!-- tabs:start -->
