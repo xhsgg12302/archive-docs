@@ -1,5 +1,6 @@
 ---
-layout: review
+# layout: review
+tags: [template, demo]
 ---
 
 <!-- [toc] -->
