@@ -62,7 +62,7 @@ GBK 字符集只是在收录字符范围上对 GB2312 字符集作了扩充，�
 'L' -> 01001100（十六进制：0x4C）
 '啊' -> 111001011001010110001010（十六进制：0xE5958A）
 
-小贴士：其实准确的说，utf8只是Unicode字符集的一种编码方案，Unicode字符集可以采用utf8、utf16、utf32这几种编码方案，utf8使用1～4个字节编码一个字符，utf16使用2个或4个字节编码一个字符，utf32使用4个字节编码一个字符。更详细的Unicode和其编码方案的知识不是本书的重点，大家上网查查哈～
+> [!] 小贴士：其实准确的说，utf8只是Unicode字符集的一种编码方案，Unicode字符集可以采用utf8、utf16、utf32这几种编码方案，utf8使用1～4个字节编码一个字符，utf16使用2个或4个字节编码一个字符，utf32使用4个字节编码一个字符。更详细的Unicode和其编码方案的知识不是本书的重点，大家上网查查哈～
 
 MySQL中并不区分字符集和编码方案的概念，所以后边唠叨的时候把utf8、utf16、utf32都当作一种字符集对待。
 
@@ -89,7 +89,7 @@ like_or_where: {
     LIKE 'pattern'
   | WHERE expr
 }
-其中 CHARACTER SET 和 CHARSET 是同义词，用任意一个都可以。其中的 Default collation 列表示这种字符集中一种默认的 比较规则 。大家注意返回结果中的最后一列 Maxlen ，它代表该种字符集表示一个字符最多需要几个字节。
+# 其中 CHARACTER SET 和 CHARSET 是同义词，用任意一个都可以。其中的 Default collation 列表示这种字符集中一种默认的 比较规则 。大家注意返回结果中的最后一列 Maxlen ，它代表该种字符集表示一个字符最多需要几个字节。
 ```
 1. `show charset;`
 2. `show charset like '%utf%';`
@@ -107,7 +107,6 @@ like_or_where: {
     LIKE 'pattern'
   | WHERE expr
 }
-# 其中 CHARACTER SET 和 CHARSET 是同义词，用任意一个都可以。其中的 Default collation 列表示这种字符集中一种默认的 比较规则 。大家注意返回结果中的最后一列 Maxlen ，它代表该种字符集表示一个字符最多需要几个字节。
 ```
 这些比较规则的命名还挺有规律的，具体规律如下：
 * 比较规则名称以与其关联的字符集的名称开头。如上图的查询结果的比较规则名称都是以 utf8 开头的。
@@ -281,7 +280,7 @@ ALTER TABLE t MODIFY col VARCHAR(10);
 我们知道从客户端发往服务器的请求本质上就是一个字符串，服务器向客户端返回的结果本质上也是一个字符串，而字符串其实是使用某种字符集编码的二进制数据。这个字符串可不是使用一种字符集的编码方式一条道走到黑的，从发送请求到返回结果这个过程中伴随着多次字符集的转换，在这个过程中会用到3个系统变量，我们先把它们写出来看一下：
 
 | name | explain |
-- | -
+| -- | -- |
 | character_set_client      | 服务器解码请求时使用的字符集 |
 | character_set_connection  | 服务器处理请求时会把请求字符串从 character_set_client 转为 character_set_connection |
 | character_set_results     | 服务器向客户端返回数据时使用的字符集 |
@@ -352,7 +351,7 @@ default-character-set=utf8
 
 ## 比较规则的应用
 结束了字符集的漫游，我们把视角再次聚焦到 比较规则 ， 比较规则 的作用通常体现比较字符串大小的表达式以及对某个字符串列进行排序中，所以有时候也称为 排序规则 。比方说表 t 的列 col 使用的字符集是 gbk ，使用的比较规则是 gbk_chinese_ci ，我们向里边插入几条记录：
-如果输入不了中文，参考 [mysql安装](/docs/doc/framework/mysql/install.md?id=源码安装)
+如果输入不了中文，参考 [mysql安装](/docs/doc/framework/mysql/install.md#压缩包安装)
 ```sql
 # 创建表t
 CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET utf8 COLLATE utf8_general_ci;

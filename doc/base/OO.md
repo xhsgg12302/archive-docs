@@ -1,3 +1,7 @@
+---
+title: OBJECT ORIENTED
+weight: 10
+---
 * ## 对象结构
 
     ![](/.images/doc/base/object-header-01.png ':size=60%')
