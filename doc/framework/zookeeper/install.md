@@ -3,7 +3,7 @@
     + ## 压缩包安装
 
         <!-- tabs:start -->
-        - ####  **Docker**
+        ####  **Docker**
         1. 配置环境
 
         ```shell
@@ -23,14 +23,12 @@
         
         ![](/.images/doc/framework/redis/redis-install-dcoker-01.png ':size=100%')
 
-            - #### Reference
-                * https://hub.docker.com/_/zookeeper
+        - ##### Reference
+            * https://hub.docker.com/_/zookeeper
 
-        - ####  **Centos7**
-        - ####  **Ubuntu**
-
-
-    <!-- tabs:end -->
+        ####  **Centos7**
+        ####  **Ubuntu**
+        <!-- tabs:end -->
 
     ## 修改密码的几种方式
 
