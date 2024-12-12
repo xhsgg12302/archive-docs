@@ -43,15 +43,15 @@ tags: [template, demo]
 
         /**
          *
-         * Copyright <a href="https://wtfu.site">...</a> Inc. All Rights Reserved.
+         * Copyright <a href="<mark>https://wtfu.site</mark>">...</a> Inc. All Rights Reserved.
          *
          * @date 2021/11/28
          *                          @since 1.0
-         *                          @author 12302
+         *                          <mark class="clever">@author 12302</mark>
          *
          */
-        public class HelloWorld {
-            public static void main(String[] args){
+        public class <mark class="gray">HelloWorld {</mark>
+            public static void <mark class="box red">main(String[] args){</mark>
                 String temp = "hello";
                 temp += "world";
                 System.out.println(temp);
