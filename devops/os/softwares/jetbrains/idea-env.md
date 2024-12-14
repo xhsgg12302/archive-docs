@@ -66,8 +66,11 @@
 
         > [?] https://jb-server.211678.top/, https://riid7yr8pux.feishu.cn/docx/TxGhdiMg1oDVbexEuUKcQG7nnYe
         <br>https://jetbra.in/s
-        <br>https://3.jetbra.in/  
+        <br>https://3.jetbra.in/
+        <br>http://idea.coderyj.com/
         <br>下载相印的jar包，根据vmoptions文件夹配置，然后放入激活码。激活配置目录  在 application 下 content, clion.vmoptions
+
+        > [!ATTENTION|style:flat] 注意，上述方式不仅可以激活 IDE，插件也没问题，比如`ANSI Highlighter Premium`，`SequenceDiagram`等，真他娘厉害。
 
         <br><span style="font-size: 2em;color: red">激活码记录：</span>
         <!-- tabs:start -->

@@ -45,16 +45,17 @@ tags: [template, demo]
          *
          * Copyright <a href="<mark>https://wtfu.site</mark>">...</a> Inc. All Rights Reserved.
          *
-         * @date 2021/11/28
+         * @date <mark class="under green">2021/11/28</mark>
          *                          @since 1.0
          *                          <mark class="clever">@author 12302</mark>
          *
          */
-        public class <mark class="gray">HelloWorld {</mark>
+        public class <mark class="leaf">HelloWorld {</mark>
             public static void <mark class="box red">main(String[] args){</mark>
                 String temp = "hello";
                 temp += "world";
-                System.out.println(temp);
+                <mark class="under blue">System.out.println(temp);</mark>
+                System.out.println();
             }
         }
         ```

@@ -81,7 +81,21 @@
             </mapper>
             ```
 
-        4. #### 使用代码获取数据
+        4. #### 数据准备
+
+            ```sql
+            DROP TABLE IF EXISTS `student`;
+            CREATE TABLE `student` (
+            `name` varchar(20) NOT NULL DEFAULT '',
+            `email` varchar(30) NOT NULL DEFAULT '',
+            `age` int(11) NOT NULL DEFAULT '0',
+            `is_young` tinyint(1) NOT NULL DEFAULT '1'
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+            INSERT INTO `student` (`name`, `email`, `age`, `is_young`) VALUES ('王','wang@wtfu.site',28,0),('eli_w','eli@wtfu.site',12,1),('neena','Neena@example.com',23,0),('Lex','Lex@wtfu.site',18,0),('Alexander','Alexander@126.com',19,1),('Bruce','Bruce@wtfu.site',20,1),('Valli','Valli@wtfu.site',30,1);
+            ```
+
+        5. #### 使用代码获取数据
 
             ```java
             @Test
