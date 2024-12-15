@@ -23,7 +23,6 @@
             | -2 | | | $11111110\space 11111111\space 11111111\space 11111111\space 11111111\space 11111111\space 11111111\space 11111111\space 11111111\space 00000001$ |
             | 123456 | | | $11000000\space11000100\space00000111$ |
 
-
         - #### ProtoBuf内置编解码
 
             ![](/.images/corner/encoding/varint/varint-demo-sample-02.png ':size=80%')
