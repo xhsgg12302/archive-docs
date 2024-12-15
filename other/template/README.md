@@ -29,19 +29,19 @@ tags: [template, demo]
             <br><span style="padding-left:1em">`01 00 00 f9 03 ...... 0b 00 02 01 00`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
-                    <br><span style="padding-left:1em">`01`：Message type，(ClientHello)；</span>
-                    <br><span style="padding-left:1em">`00 00 f9`：Handshake message data length，(249)；</span>
-                    <br><span style="padding-left:1em">`03 03`：Version，(TLS 1.2 [0x0303])；</span>
-                    <br><span style="padding-left:1em">`3a 67 f5 2b 44 ...... 58 28 b3 18 b4`：Random；
+                    <br><span style="padding-left:2em">`01`：Message type，(ClientHello)；</span>
+                    <br><span style="padding-left:2em">`00 00 f9`：Handshake message data length，(249)；</span>
+                    <br><span style="padding-left:2em">`03 03`：Version，(TLS 1.2 [0x0303])；</span>
+                    <br><span style="padding-left:2em">`3a 67 f5 2b 44 ...... 58 28 b3 18 b4`：Random；
                         <input type="checkbox" class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`3a 67 f5 2b`：GMT Unix Time，十进制值为 979891499；[在线转换](https://unixtime.org/) 为我们时区的值: **Fri Jan 19 2001 16:04:59 GMT+0800 (中国标准时间)** </span>
                             <br><span style="padding-left:3em">`44 11 e2 49 8e 32 6e 79 d2 ac 45 98 e8 1b 1c 74 94 3d 0d 2c 22 be 71 58 28 b3 18 b4`：Random Bytes；</span>
                         </span>
                     </span>
-                    <br><span style="padding-left:1em">`20`：Session ID length，(32)；</span>
-                    <br><span style="padding-left:1em">`83 ce 5a f0 a0 a9 a0 a8 1e b2 b5 42 fc 2d db 66 03 2a c0 60 4b 4e 04 e1 c4 1b 12 b2 5f d5 f1 a1`：Session ID；</span>
-                    <br><span style="padding-left:1em">`00 1e`：Cipher Suites Length，(30)；</span>
-                    <br><span style="padding-left:1em">`13 03 13 01 cc a9 c0 2b c0 23 c0 09 cc a8 c0 2f c0 27 c0 13 cc aa 00 9e 00 67 00 33 00 ff`：Cipher Suites，(两个字节为一组，总共 15 个)；
+                    <br><span style="padding-left:2em">`20`：Session ID length，(32)；</span>
+                    <br><span style="padding-left:2em">`83 ce 5a f0 a0 a9 a0 a8 1e b2 b5 42 fc 2d db 66 03 2a c0 60 4b 4e 04 e1 c4 1b 12 b2 5f d5 f1 a1`：Session ID；</span>
+                    <br><span style="padding-left:2em">`00 1e`：Cipher Suites Length，(30)；</span>
+                    <br><span style="padding-left:2em">`13 03 13 01 cc a9 c0 2b c0 23 c0 09 cc a8 c0 2f c0 27 c0 13 cc aa 00 9e 00 67 00 33 00 ff`：Cipher Suites，(两个字节为一组，总共 15 个)；
                         <input type="checkbox" class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`13 03`：Cipher Suite: TLS_CHACHA20_POLY1305_SHA256 (0x1303)</span>
                             <br><span style="padding-left:3em">`13 01`：Cipher Suite: TLS_AES_128_GCM_SHA256 (0x1301)</span>
@@ -60,33 +60,33 @@ tags: [template, demo]
                             <br><span style="padding-left:3em">`00 ff`：Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)</span>
                         </span>
                     </span>
-                    <br><span style="padding-left:1em">`01`：Compression Methods Length，(1)；</span>
-                    <br><span style="padding-left:1em">`00`：Compression Methods，(Compression Method: null (0))；</span>
-                    <br><span style="padding-left:1em">`00 92`：Extensions Length，(146)；</span>
-                    <br><span style="padding-left:1em">`00 17 00 00 00 ...... 0b 00 02 01 00`：Extensions；
+                    <br><span style="padding-left:2em">`01`：Compression Methods Length，(1)；</span>
+                    <br><span style="padding-left:2em">`00`：Compression Methods，(Compression Method: null (0))；</span>
+                    <br><span style="padding-left:2em">`00 92`：Extensions Length，(146)；</span>
+                    <br><span style="padding-left:2em">`00 17 00 00 00 ...... 0b 00 02 01 00`：Extensions；
                         <input type="checkbox" class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`00 17 00 00`：[Type: extended_master_secret (23) Length: 0] </span>
                             <br><span style="padding-left:3em">`00 16 00 00`：[Type: encrypt_then_mac (22) Length: 0] </span>
                             <br><span style="padding-left:3em">`00 2b 00 05 04 03 04 03 03`：[Type: supported_versions (43) Length: 5 Supported Versions length: 4，TLS 1.3 (0x0304)，TLS 1.2 (0x0303)] </span>
                             <br><span style="padding-left:3em">`00 0a 00 10 00 0e 00 1d 00 1e 00 17 00 18 01 00 01 01 01 02`：[Type: supported_groups (10) Length: 16]
                                 <input type="checkbox" class="span toggle"><span class='content'>
-                                    <br><span style="padding-left:1em">`00 0a`：[Type: supported_groups (10)] </span>
-                                    <br><span style="padding-left:1em">`00 10`：[Length: 16] </span>
-                                    <br><span style="padding-left:1em">`00 0e`：[Supported Groups List Length: 14] </span>
-                                    <br><span style="padding-left:1em">`00 1d`：[Supported Group: x25519 (0x001d)] </span>
-                                    <br><span style="padding-left:1em">`00 1e`：[Supported Group: x448 (0x001e)] </span>
-                                    <br><span style="padding-left:1em">`00 17`：[Supported Group: secp256r1 (0x0017)] </span>
-                                    <br><span style="padding-left:1em">`00 18`：[Supported Group: secp384r1 (0x0018)] </span>
-                                    <br><span style="padding-left:1em">`01 00`：[Supported Group: ffdhe2048 (0x0100)] </span>
-                                    <br><span style="padding-left:1em">`01 01`：[Supported Group: ffdhe3072 (0x0101)] </span>
-                                    <br><span style="padding-left:1em">`01 02`：[Supported Group: ffdhe4096 (0x0102)] </span>
+                                    <br><span style="padding-left:4em">`00 0a`：[Type: supported_groups (10)] </span>
+                                    <br><span style="padding-left:4em">`00 10`：[Length: 16] </span>
+                                    <br><span style="padding-left:4em">`00 0e`：[Supported Groups List Length: 14] </span>
+                                    <br><span style="padding-left:4em">`00 1d`：[Supported Group: x25519 (0x001d)] </span>
+                                    <br><span style="padding-left:4em">`00 1e`：[Supported Group: x448 (0x001e)] </span>
+                                    <br><span style="padding-left:4em">`00 17`：[Supported Group: secp256r1 (0x0017)] </span>
+                                    <br><span style="padding-left:4em">`00 18`：[Supported Group: secp384r1 (0x0018)] </span>
+                                    <br><span style="padding-left:4em">`01 00`：[Supported Group: ffdhe2048 (0x0100)] </span>
+                                    <br><span style="padding-left:4em">`01 01`：[Supported Group: ffdhe3072 (0x0101)] </span>
+                                    <br><span style="padding-left:4em">`01 02`：[Supported Group: ffdhe4096 (0x0102)] </span>
                                 </span>
                             </span>
                             <br><span style="padding-left:3em">`00 33 00 26 00 24 00 1d 00 20 54 38 8f 34 90 97 4d ab 70 78 09 dd 48 2c 2d 70 bd f6 82 ea c1 7d 2d 29 31 3b 3d 64 27 69 93 22`：[Type: key_share (51) Length: 38]
                                 <input type="checkbox" class="span toggle"><span class='content'>
-                                    <br><span style="padding-left:1em">`00 33`：[Type: key_share (51)] </span>
-                                    <br><span style="padding-left:1em">`00 26`：[Length: 38] </span>
-                                    <br><span style="padding-left:1em">`00 24`：[Client Key Share Length: 36] </span>
+                                    <br><span style="padding-left:4em">`00 33`：[Type: key_share (51)] </span>
+                                    <br><span style="padding-left:4em">`00 26`：[Length: 38] </span>
+                                    <br><span style="padding-left:4em">`00 24`：[Client Key Share Length: 36] </span>
                                     <br><span style="padding-left:5em">`00 1d`：[Group: x25519 (29)] </span>
                                     <br><span style="padding-left:5em">`00 20`：[Key Exchange Length: 32] </span>
                                     <br><span style="padding-left:5em">`54 38 8f 34 90 97 4d ab 70 78 09 dd 48 2c 2d 70 bd f6 82 ea c1 7d 2d 29 31 3b 3d 64 27 69 93 22`：[Key Exchange] </span>
@@ -95,9 +95,9 @@ tags: [template, demo]
                             <br><span style="padding-left:3em">`00 05 00 05 01 00 00 00 00`：[Type: status_request (5) Length: 5 Certificate Status Type: OCSP (1) Responder ID list Length: 0 Request Extensions Length: 0 ] </span>
                             <br><span style="padding-left:3em">`00 0d 00 30 00 2e 08 07 08 08 04 03 05 03 06 03 08 04 08 05 08 06 08 09 08 0a 08 0b 04 01 05 01 06 01 04 02 05 02 06 02 03 03 03 01 03 02 02 03 02 01 02 02`：[Type: signature_algorithms (13) Length: 48]
                                 <input type="checkbox" class="span toggle"><span class='content'>
-                                    <br><span style="padding-left:1em">`00 0d`：[Type: signature_algorithms (13)] </span>
-                                    <br><span style="padding-left:1em">`00 30`：[Length: 48] </span>
-                                    <br><span style="padding-left:1em">`00 2e`：[Signature Hash Algorithms Length: 46]
+                                    <br><span style="padding-left:4em">`00 0d`：[Type: signature_algorithms (13)] </span>
+                                    <br><span style="padding-left:4em">`00 30`：[Length: 48] </span>
+                                    <br><span style="padding-left:4em">`00 2e`：[Signature Hash Algorithms Length: 46]
                                         <input type="checkbox" class="span toggle"><span class='content'>
                                             <br><span style="padding-left:5em">`08 07`：[Signature Algorithm: ed25519 (0x0807)] </span>
                                             <br><span style="padding-left:5em">`08 08`：[Signature Algorithm: ed448 (0x0808)] </span>

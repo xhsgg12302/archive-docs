@@ -198,7 +198,7 @@
             <br><span style="padding-left:1em">`03 01`：Legacy version，(TLS 1.0)；
             <br><span style="padding-left:1em">`00 fd`：Length，(253)；
             <br><span style="padding-left:1em">`01 00 00 f9 03 ...... 0b 00 02 01 00`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
-                <input type="checkbox" class="span toggle"><span class='content'>
+                <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`01`：Message type，(ClientHello)；</span>
                     <br><span style="padding-left:2em">`00 00 f9`：Handshake message data length，(249)；</span>
