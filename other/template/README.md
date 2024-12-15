@@ -192,8 +192,8 @@ tags: [template, demo]
 
         - #### 5). 锚点链接
 
-            页外链接[mysql安装](/docs/doc/framework/mysql/install?id=源码安装)
-            <br>页内锚点[05-emoji表示](#_05-emoji表示)
+            页外链接[mysql安装](/doc/framework/mysql/install.md#源码安装)
+            <br>页内锚点[05-emoji表示](#05-emoji表示)
 
         ---
 
@@ -312,7 +312,7 @@ tags: [template, demo]
 
         [github支持，没有空格](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
         <br>[latex 符号支持](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
-        <br>[应用示例](/docs/algo/tree/03-01-AVL-tree.md)
+        <br>[应用示例](/algo/tree/03-01-AVL-tree.md)
 
         行内的公式${\color{red}E=mc^2}$行内的公式，行内的${\color{green}log_2N}$公式，行内的${\color{purple}(\sqrt{3x-1}+(1+x)^2)}$公式，行内的${\color{blue}\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))}$公式
         
@@ -444,8 +444,8 @@ tags: [template, demo]
         | - | - |
         | markdown  | https://mdrender.github.io/?https://github.com/xhsgg12302/knownledges/blob/master/docs/doc/advance/jvm/tools/jvisualvm.md |
 
-        [样例1](../doc/advance/jvm/tools/hsdb.md#reference) 
-        [样例2](../doc/advance/jvm/tools/jvisualvm.md#reference) 
+        [样例1](/doc/advance/jvm/tools/hsdb.md#reference) 
+        [样例2](/doc/advance/jvm/tools/jvisualvm.md#reference) 
 
     + ### 14-控制p标签宽高以及代码块大小
 

@@ -35,11 +35,11 @@
         <br><span style='padding-left:2.7em'/>先是创建 FileDescriptor fd, 然后调用到子类实现`PlainSocketImpl`的`native`方法 **socketCreate(boolean isServer)** 。
         <br><span style='padding-left:5em'/>native 对应的 [C代码](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/solaris/native/java/net/PlainSocketImpl.c#L181)，主要是获取当前对象的描述符对象。
         <br><span style='padding-left:5em'/>然后使用 **JVM_Socket** 方法调用到 [C++代码(hotspot JVM实现)](https://github.com/openjdk/jdk/blob/jdk8-b120/hotspot/src/share/vm/prims/jvm.cpp#L3678) 使用系统调用创建一个socket，返回文件描述符，给第一步创建的 fd 对象里面的 int 属性 fd 赋值，完成创建。
-        <br><br><span style='padding-left:5em'/>⭕ 整个过程和[ FileInputStream 构造器初始化 **initIDs** ](/docs/doc/base/IO/README.md#构造器初始化解读)大同小异。
+        <br><br><span style='padding-left:5em'/>⭕ 整个过程和[ FileInputStream 构造器初始化 **initIDs** ](/doc/base/IO/README.md#构造器初始化解读)大同小异。
 
         > [?] `2).` 默认`Socket`内部使用的 impl 为`SocksSocketImpl`,也就是`PlainSocketImpl`子类。根据 [RFC 1928](https://www.rfc-editor.org/rfc/rfc1928) SOCKS(V4 & V5) socket实现。也就是具有socks代理功能的 Socket。
         <br><span style='padding-left:2.7em'/>主要体现在 [**java.net.SocksSocketImpl#connect**](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/net/SocksSocketImpl.java#L327) 方法上。先是通过`DefaultProxySelector`获取当前系统代理，没有代理直接连接，
-        <br><span style='padding-left:2.7em'/>发现代理 [参考](/docs/doc/base/misc/properties.md#systemproperties) 实例后，判断socks版本，v4时候进入 **connectV4** 方法, 不是的话，继续V5 的鉴权。完成后在刚才的TCP连接上继续发送数据。比如：http报文。
+        <br><span style='padding-left:2.7em'/>发现代理 [参考](/doc/base/misc/properties.md#systemproperties) 实例后，判断socks版本，v4时候进入 **connectV4** 方法, 不是的话，继续V5 的鉴权。完成后在刚才的TCP连接上继续发送数据。比如：http报文。
         <br><br><span style='padding-left:2.7em;color:red'>也可以通过`System.setProperty("socksProxyHost","");`设置系统属性直接连接，不管有当前系统有没有代理环境。</span>
         <br><span style='padding-left:2.7em;color:red'>另外一个需要注意的属性是`java.net.useSystemProxies`，如果设置为true，且代理工具设置过系统代理的话，上述设置系统属性的方法会失效。</span>
 

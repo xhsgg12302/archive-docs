@@ -222,6 +222,7 @@
                 <br><br>使用复制算法（仅对新生代）
                 <br>只有在多CPU的情况下，效率才会比Serial高。
                 <br>可以通过`-XX:ParallelGCThreads`来控制GC线程数的多少。需要结合具体的CPU个数
+
             + ##### Parallel Scavenge
 
                 > [?] Parallel Scavenge收集器也是一个多线程收集器，也是使用复制算法，但它的对象分配规则和回收策略都与ParNew收集器有所不同，它是以吞吐量最大化（即GC时间占总运行时间最小）为目标的收集器实现，它允许较长时间的STW换取总吞吐量最大化。
@@ -248,8 +249,6 @@
                 <br>会带来碎片化问题，碎片过多很容易触发Full GC。
                 <br><br>1、初始标记（CMS initial mark）2、并发标记（CMS concurrent mark）3、重新标记（CMS remark）4、并发清除（CMS concurrent sweep）
 
-        
-
 * ## 扩展
 
     + ### JVM部分参数
@@ -270,7 +269,7 @@
         
     + ### 新生代到老年代的标准
 
-        1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。【[参考|docs](/docs/doc/base/OO?id=对象头)】
+        1. -XX:MaxTenuringThreshlod设置的默认对象年龄【15】，因为对象年龄用4bit 位表示，最大1111(15)。【[参考|docs](/doc/base/OO.md#对象头)】
         2. 动态对象年龄判断：误区：~如果在survivor空间中相同年龄所有对象大小的总和大于survivor空间的一半，大于等于该年龄的可以直接进入老年代~ 。而是`survivor区域中年龄从1-N对象大小总和大于 -XX:TargetSurvivorRatio[:50%]，则将 >= N年龄的对象晋升`。[误区解释](https://segmentfault.com/a/1190000039805691 'https://my.oschina.net/xpbob/blog/2221709' )
         3. 大对象直接进入老年代：-XX:PretenureSizeThreshold。超过这个值的对象直接放在老年代。
         4. 空间分配担保机制：[参考](https://blog.csdn.net/qq_40662405/article/details/114783644)

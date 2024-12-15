@@ -13,12 +13,12 @@
         <br><span style='padding-left:2.7em'/>使用 hostname 查看，或者`cat /etc/hostname`.
         <br><span style='padding-left:2.7em'/>使用`sudo hostnamectl set-hostname hostname`进行更改。
         <br><br>`3).` 配置ssh登录
-        <br><span style='padding-left:2.3em'/>`3.1)` 上传ssh公匙，[参考](/docs/devops/network/ssh.md#ssh-copy-id使用) `ssh-copy-id -i iname remote`.
+        <br><span style='padding-left:2.3em'/>`3.1)` 上传ssh公匙，[参考](/devops/network/ssh.md#ssh-copy-id使用) `ssh-copy-id -i iname remote`.
         <br><span style='padding-left:2.3em'/>`3.2)` 配置sshd后台进程：`vim /etc/ssh/sshd_config` [FILE](https://github.com/12302-bak/configure-files/blob/master/conf/_home/.ssh/_etc_ssh/sshd_config)
         <br><span style='padding-left:2.3em'/>`3.3)` 控制台配置安全组，开放 ssh 登录端口。
         <br><span style='padding-left:2.3em'/>`3.4)` 打开密码登录`PasswordAuthentication yes`，但是阻止 **root** 使用密码登录: `PermitRootLogin prohibit-password`，其他用户依然可以使用密码登录。
         <br><span style='padding-left:2.3em'/>`3.5)` ~配置源和安全组~
-        <br><br>`4).` 安装 **docker** [参考 tab[Ubuntu:20.4/22.04]](/docs/devops/docker/docker.md#安装 )
+        <br><br>`4).` 安装 **docker** [参考 tab[Ubuntu:20.4/22.04]](/devops/docker/docker.md#安装 )
 
     + ### 新建用户
 
@@ -52,7 +52,7 @@
 
     + ### 安装 Mysql
 
-        > [?] [参考：mysql docker 安装](/doc/framework/mysql/install/#docker) 
+        > [?] [参考：mysql docker 安装](/doc/framework/mysql/install.md#docker) 
         <br>使用 docker 的方式处理就行，安装命令如下：
         <br>`1).` 加载数据：`docker run -dit --restart=always --name mysql-data registry.cn-hangzhou.aliyuncs.com/eli_w/busybox-with-mysql-datadir:1.2.0`
         <br>`2).` 运行服务：`docker run -d -p ****:3306 -e MYSQL_ROOT_PASSWORD='****' --name mysql-5.6.49 --volumes-from mysql-data  mysql:5.6.49  --datadir=/mysql-data/mysql  --character-set-server=utf8mb4  --collation-server=utf8mb4_unicode_ci`
@@ -96,7 +96,7 @@
         <br><span style='padding-left:2.7em'/>`vim src/http/ngx_http_header_filter_module.c` # 49-50
         <br><span style='padding-left:2.7em'/>`./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --with-openssl=/data/openssl-1.0.2u --with-debug [--without-http_fastcgi_module]`
         <br><br>Nginx 运行配置：[nginx.conf 参考](https://github.com/12302-bak/configure-files/blob/master/conf/_other/nginx/conf/nginx.conf)
-        <br><br>证书自动化部署 [参考](/docs/devops/nginx/nginx.md#使用-acmesh-自动化管理-ssltsl证书) 、 [tencent NGINX SSL 配置参考](https://cloud.tencent.com/document/product/400/4143)
+        <br><br>证书自动化部署 [参考](/devops/nginx/nginx.md#使用-acmesh-自动化管理-ssltsl证书) 、 [tencent NGINX SSL 配置参考](https://cloud.tencent.com/document/product/400/4143)
 
         > [!CAUTION|style:flat|label:注意备案以及云服务商阻断策略]  Ali 443需要备案，不然就是莫名的访问不通，被服务商检测到后发送rst，然后 nginx 也以为客户端中断了。
         <br> 可以使用如下命令测试 `curl -v -k -H 'Host:wtfu.site' https://127.0.0.1`，测试网站的https配置是否正确，或者起作用。

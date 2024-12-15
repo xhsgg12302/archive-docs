@@ -249,11 +249,15 @@ weight: 50
             <!-- tabs:end -->
 
     3. ### 项目打包
+
         * #### 简要说明
-        > [?] 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
+        
+            > [?] 将原来的项目通过docker build 打包成一个镜像，如果需要查看API，或者说项目功能的话就不用直接打开IDEA查看了。
 
         * #### 方式1: (把依赖组件(redis,zk,mysql)编排，一次性构建)
+
             - 基于依赖镜像构建，比如：
+
                 ```docker
                 # ---- Dependencies ----
                 FROM node:12-alpine AS dependencies
@@ -272,7 +276,9 @@ weight: 50
                 EXPOSE 80
                 CMD [ "nginx", "-g", "daemon off;" ]
                 ```
+            
             - 基于docker compose 进行编排
+
                 * docker-compose.yml
                     ```yaml
                     version: "3.7"
@@ -351,7 +357,9 @@ weight: 50
                     networks:
                         demo-net: 
                     ```
+                
                 * 基本命令
+                
                     ```shell
                     # 指定文件在后台启动
                     $ docker-compose -f docker-compose.yml up -d [--build/是否重新构建]           
@@ -369,8 +377,10 @@ weight: 50
                     # 查看容器运行log：
                     $ docker-compose logs [service-name]
                     ```
+        
         * #### 方式2: (分开单独打包）
             1. 创建docker网络
+
                 ```shell
                 # 创建网络
                 $ docker network create demo-net
@@ -382,10 +392,12 @@ weight: 50
                 # 删除指定网络
                 $ docker network rm demo-net
                 ```
+
             2. 单独启动redis `$ docker run -d -p 6379:6370 --name rds6379 --network demo-net [--network-alias redis] redis:6.2.7`
             3. 单独启动zookeeper `$ docker run -d -p 2181:2181 --name zk2181 --network demo-net [--network-alias zookeeper] zookeeper:3.6.3 `
             4. 使用centos加入网络环境ping检测网络环境是否正常 `$ docker run -it --name test-centos --net demo-net centos`
             5. 构建springboot镜像
+
                 ```shell
                 # 修改配置文件中主机名，包括Redis，MySQL，zookeeper等
             
@@ -397,6 +409,7 @@ weight: 50
                 $ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/eli_w/service:[镜像版本号]
                 $ docker push registry.cn-hangzhou.aliyuncs.com/eli_w/service:[镜像版本号]
                 ```
+
             6. 启动镜像启动镜像并检查是否正常 `$ docker run -d -p 9017:9017 --name insurance-center --net demo-net insurance-center:5.0.1`
 
     4. ### 数据卷容器(MYSQL)
@@ -406,16 +419,17 @@ weight: 50
         * #### 流程
             1. 获取 MySQL datadir目录中的数据
              
-            > [?] 第一种可以直接获取到存储数据的mysql`${datadir}`目录。</br>
-            第二种是根据文件进行导入的，如下： 
-            ```shell
-            # offical site: https://hub.docker.com/_/mysql
-            # 启动对应版本的mysql空实例
-            docker run -d -p 3336:3336 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysql-instance mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336
-            # 链接实例，导入数据，生成数据目录
-            # 从容器中导出数据
-            docker cp d6b8e9a751e7:/mysql-data ./mysql-data
-            ```
+                > [?] 第一种可以直接获取到存储数据的mysql`${datadir}`目录。</br>
+                第二种是根据文件进行导入的，如下： 
+                ```shell
+                # offical site: https://hub.docker.com/_/mysql
+                # 启动对应版本的mysql空实例
+                docker run -d -p 3336:3336 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysql-instance mysql:5.6.49 --datadir=/mysql-data/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3336
+                # 链接实例，导入数据，生成数据目录
+                # 从容器中导出数据
+                docker cp d6b8e9a751e7:/mysql-data ./mysql-data
+                ```
+            
             2. 构建Dockerfile
                 ```docker
                 # Dockerfile
@@ -450,11 +464,11 @@ weight: 50
                 ```
             6. 使用docker内部`mysql客户端`进行测试
              
-            > [?] `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
+                > [?] `docker run -it --rm --network=host mysql:5.6.49 mysql  -h 127.0.0.1 -u root -P 3336`
 
         #### 具体使用
 
-        * [mysql install docker](/docs/doc/framework/mysql/install.md#压缩包安装)
+        * [mysql install docker](/doc/framework/mysql/install.md#压缩包安装)
         
     5. ### 搭建chatgpt
         > [!] 通过token调用openai或别的厂商的API的typescript的前端项目，并非部署模型直接生成。

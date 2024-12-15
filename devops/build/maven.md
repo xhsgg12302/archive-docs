@@ -1458,7 +1458,7 @@
         > [?] 查看 mvn 可执行文件，发现是一个 shell 脚本，在文件末尾有 [这样的代码段](https://github.com/apache/maven/blob/maven-3.3.9/apache-maven/src/bin/mvn#L238-L244)。
         <br>所以我们可以通过 **MAVEN_OPTS** 或者 **MAVEN_DEBUG_OPTS** 这两个环境变量修改给 jvm 添加调试参数：如下
         <br>`export MAVEN_DEBUG_OPTS='-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005,suspend=y'`
-        <br>可以参考 [IDEA debug 配置](/docs/doc/advance/debug.md#mode)，此处使用 **listen模式**。
+        <br>可以参考 [IDEA debug 配置](/doc/advance/debug.md#mode)，此处使用 **listen模式**。
         <br>mvn 命令作为 client，idea 的配置作为服务端（用来控制断点，接收 jvm 运行状态）。只有服务端启动后，打开 socket，mvn命令执行的 jvm 连接成功后才可以继续执行代码。
         <br><br>IDEA 端配置如下：
         <br>![](/.images/devops/build/maven-debug-01.png ':size=80%')

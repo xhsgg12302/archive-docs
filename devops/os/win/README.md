@@ -124,7 +124,7 @@
             * https://v0v.bid/
             * 
             * [【win10专业版激活】【win8安装密匙】](https://note.youdao.com/s/LGyAI7ir)
-            * [DOC| 镜像下载](/docs/devops/os/mac/parallels-desktop.md#windows镜像)
+            * [DOC| 镜像下载](/devops/os/mac/parallels-desktop.md#windows镜像)
         
 
 * ## Reference
