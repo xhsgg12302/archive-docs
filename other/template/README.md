@@ -152,13 +152,16 @@ tags: [template, demo]
 
         - #### 3). 代码块
 
-            ```java {5,14-15} [data-file:HelloWorld.java,data-cc:400px]
+            <!-- panels:start -->
+            <!-- div:left-panel-78 -->
+            ```java {5,14-15,24} [data-file:site.wtfu.framework.HelloWorld.java,data-cc:420px]
             package site.wtfu.framework;
 
             /**
              *
              * Copyright <a href="<mark>https://wtfu.site</mark>">...</a> Inc. All Rights Reserved.
-             *
+             * 
+             * Super long line ...                                                                                              column column column column
              * @date <mark class="under green">2021/11/28</mark>
              *                          @since 1.0
              *                          <mark class="clever">@author 12302</mark>
@@ -185,8 +188,8 @@ tags: [template, demo]
             // hidden line
             // hidden line
             // hidden line
-            // hidden line
             ```
+            <!-- panels:end -->
         
         ---
         
