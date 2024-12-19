@@ -21,7 +21,7 @@ tags: [template, demo]
 
         - #### 2).段落中的块元素展开折叠
 
-            > [!] 截选自 [tls-ssl: Handshake protocol 实例分析](/devops/network/tls-ssl.md#handshake-protocol-实例分析)，点击末尾的<span style='font-size:120%;font-weight: bold;'>◐</span>查看效果
+            > [!] 截选自 [tls-ssl: HP-ClientHello-实例分析](/devops/network/tls-ssl/README.md#hp-clienthello-实例分析)，点击末尾的<span style='font-size:120%;font-weight: bold;'>◐</span>查看效果
             <br><br>**TLS record**：
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 01`：Legacy version，(TLS 1.0)；
