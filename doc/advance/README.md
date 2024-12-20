@@ -294,8 +294,6 @@ weight: 20
 
             ![](/.images/doc/advance/advance/class-dynamic-proxy-jdk.png ':size=80%')
             
-            <details open><summary>代码示例</summary>
-
             ```java
             @Test
             public void test(){
@@ -315,11 +313,8 @@ weight: 20
                 proxy.sayHello("exec: hello world");
             }        
             ```
-            </details>
         
-            <details><summary>生成的代理类</summary>
-
-            ```java
+            ```java [data-file:生成的代理类,data-cc:400px]
             package com.sun.proxy;
 
             import _base.proxy.jdk_dynamic.Person;
@@ -417,8 +412,6 @@ weight: 20
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. class _base.proxy.cglib_dynamic.StudentNoIntfs\$\$EnhancerByCGLIB\$\$81f8e23d
             <br>repo: [cglib-dynamic](https://github.com/12302-bak/idea-test-project/tree/master/_0_base-learning/src/main/java/_base/proxy/cglib_dynamic)
 
-            <details open><summary>代码示例</summary>
-
             ```java
             @Test
             public void test(){
@@ -441,11 +434,8 @@ weight: 20
                 proxy.sayHello("exec: hello cglib");
             }        
             ```
-            </details>
         
-            <details><summary>生成的代理类</summary>
-
-            ```java
+            ```java [data-file:生成的代理类,data-cc:400px]
             package _base.proxy.cglib_dynamic;
 
             import java.lang.reflect.Method;
@@ -714,11 +704,7 @@ weight: 20
                     CGLIB$STATICHOOK1();
                 }
             }
-
             ```
-            </details>
-
-
 
 * ## 反射
 
@@ -1044,6 +1030,80 @@ weight: 20
 * ## 注解
 
 * ## 语法糖
+
+    + ### Double colon operator(::)
+
+        > [?] 双引号，也叫 **方法引用操作符** (method reference operator)，写法如下：
+        <br>`ClassName::methName`，`instanceRef::methName`。
+        <br><br>区别：
+        <br>`1).` 对于实例方法来说，如果使用`ClassName::methName`，则必须传递实例对象为第一个泛型参数，如果使用`instanceRef::methName`，不需要实例参数，对于泛型来说只有返回值就行。
+        <br><span style='padding-left:2.7em'>如`person::getAddress`，因为已经绑定对象实例了，也不需要参数，**可以理解为引用的是某个实例的方法**。
+        <br><span style='padding-left:2.7em'>如`Person::getAddress`，并没有绑定实例，也就是不知道哪个对象。所以需要传递第一个泛型参数，**可以理解为实例化对象才能调用此方法**。
+        <br><br>`2).` 对于类方法来说，使用`ClassName::methName`就可以，因为不需要任何实例，如果有参数和返回会值，补全泛型就行。如果非要使用`instanceRef::methName`，
+        <br><span style='padding-left:2.7em'>如：`person::getAddressStatic`，则会编译错误。虽然在普通语法中，使用实例调用静态方法没问题，但是此处语法糖不允许。
+
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        ```java
+        public class Person {
+
+            private String address;
+
+            <mark class='under green'>public String getAddress() { return address;}</mark>
+             
+             
+             
+            <mark class='under red'>public static String getAddressStatic(){ return null;}</mark>
+        }
+        ```
+        <!-- div:right-panel-60 -->
+        ```java
+        public static void main(String[] args) {
+
+            Person person = new Person();
+            // 以下两个方法都是调用的左边第五行。
+            <mark class='under green'>Supplier<String> supplier = person::getAddress;</mark>
+            <mark class='under green'>Function<Person, String> function = Person::getAddress; //String apply = function.apply(person); </mark>
+             
+
+            <mark class='under red'>Supplier<String> supplierSta = Person::getAddressStatic;</mark>
+        }
+        ```
+        <!-- panels:end -->
+
+        > [!ATTENTION|label:一些常见的双冒号] `Supplier<Person> person = Person::new;`
+        <br>`int[][] array = Arrays.stream(new int[2][2]).filter(it -> it[0] != 0 && it[1] != 0).toArray(int[][]::new);`
+        <br>`Consumer<String> consumer = System.out::println;`
+        <br>`BiFunction<String,String,Integer> compareTo = String::compareTo;`
+
+        - #### 多个方法引用结合样例
+
+            ```java {7}
+            public static  void main(String[] args) {
+                // 定义一个字符串
+                String s1 = "123";
+                change(s1, str -> Integer.parseInt(str) + 10, i -> i + "");
+            }
+            public static void change(String s, Function<String, Integer> fun1, Function<Integer, String> fun2) {
+                String ss = fun1.andThen(fun2).apply(s);
+                System.out.println(ss);
+            }
+            ```
+            ```java [data-file:java.util.function.Function.java]
+            @FunctionalInterface
+            public interface Function<T, R> {
+                R apply(T t);
+
+                default <V> Function<T, V> andThen(Function<? super R, ? extends V> after) {
+                    Objects.requireNonNull(after);
+                    return (T t) -> after.apply(apply(t));
+                }
+            }
+            ```
+
+        - #### Reference
+            * https://cr.openjdk.org/%7Ebriangoetz/lambda/lambda-state-final.html
+            * https://github.com/12302-bak/idea-test-project/blob/master/_0_base-learning/src/main/java/_base/lambda/functionalInterface/function/Test.java
 
 * ## 新特性
 

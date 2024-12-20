@@ -330,6 +330,8 @@ tags: [template, demo]
         [github支持，没有空格](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
         <br>[latex 符号支持](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
         <br>[应用示例](/algo/tree/03-01-AVL-tree.md)
+        > [!] dollar`$`符号逃逸：
+        <br>**class net.sf.cglib.proxy.Enhancer\$EnhancerKey\$\$KeyFactoryByCGLIB\$\$7fb24d72**
 
         行内的公式${\color{red}E=mc^2}$行内的公式，行内的${\color{green}log_2N}$公式，行内的${\color{purple}(\sqrt{3x-1}+(1+x)^2)}$公式，行内的${\color{blue}\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))}$公式
         
