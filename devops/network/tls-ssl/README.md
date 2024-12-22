@@ -81,7 +81,7 @@
         </tbody>
     </table>
 
-    <!-- div:left-panel-20 -->
+    <!-- div:left-panel-25 -->
     `Content type` 如下表：
 
     | Hex| Dec| Type |
@@ -92,7 +92,7 @@
     | 0x17 | 23 | [Application](#application-protocol) |
     | 0x18 | 24 | Heartbeat |
 
-    <!-- div:right-panel-30 -->
+    <!-- div:right-panel-35 -->
     `Legacy version` 表如下：
     
     | Major version | Minor version | version type |
