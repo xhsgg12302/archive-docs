@@ -1,73 +1,87 @@
 * ## Intro(TLS/SSL)
-    
-    图片引用自：[7: TLS record format ](https://www.researchgate.net/figure/TLS-record-format_fig7_321347130)
 
-    ![](/.images/devops/network/tls-ssl/tls-record-format-01.png ':size=50%')
+    > [?] placeholder
 
 * ## TLS-RECORD(协议规范)
 
     > [?] 参考 [wiki: TLS_record](https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_record)
     <br><br>实例分析用到的 [已经记录过的数据](./tls-record-console-output.md)，一个是来自 [bctls-debug-jdk15to18](https://github.com/bcgit/bc-java/tree/1.78.1) 结合 [idea bug(Evaluate and log)](https://www.jetbrains.com/help/idea/using-breakpoints.html#log) 输出，另外一个是 wireshark 
 
-    <br> TLS_record 通用格式如下表：
+    <!-- panels:start -->
+    <!-- div:left-panel-50 -->
+    > [?] TLS-Record 基本结构
 
-    <table class="wikitable" style="width:95%;text-align:center">
-    <caption>TLS record format, general </caption>
-    <tbody>
-        <tr>
-        <th scope="col">Offset </th>
-        <th scope="col" style="width:22%">Byte+0 </th>
-        <th scope="col" style="width:22%">Byte+1 </th>
-        <th scope="col" style="width:22%">Byte+2 </th>
-        <th scope="col" style="width:22%">Byte+3 </th>
-        </tr>
-        <tr>
-        <th scope="row">Byte <br>0 </th>
-        <td style="background:#dfd">Content type </td>
-        <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
-        </tr>
-        <tr>
-        <th scope="row" rowspan="2">Bytes <br>1–4 </th>
-        <td colspan="2" style="background:#fdd">Legacy version </td>
-        <td colspan="2" style="background:#fdd">Length </td>
-        </tr>
-        <tr style="background:#fdd">
-        <td>
-            <i>(Major)</i>
-        </td>
-        <td>
-            <i>(Minor)</i>
-        </td>
-        <td>
-            <i>(bits 15–8)</i>
-        </td>
-        <td>
-            <i>(bits 7–0)</i>
-        </td>
-        </tr>
-        <tr>
-        <th scope="row">Bytes <br>5–( <i>m</i>−1) </th>
-        <td colspan="4">Protocol message(s) </td>
-        </tr>
-        <tr>
-        <th scope="row">Bytes <br>
-            <i>m</i>–( <i>p</i>−1)
-        </th>
-        <td colspan="4" style="background:#fbb">
-            <a href="https://en.wikipedia.org/wiki/Message_authentication_code" title="Message authentication code">MAC</a> (optional)
-        </td>
-        </tr>
-        <tr>
-        <th scope="row">Bytes <br>
-            <i>p</i>–( <i>q</i>−1)
-        </th>
-        <td colspan="4" style="background:#fbb">Padding (block ciphers only) </td>
-        </tr>
-    </tbody>
-    </table>
+    图片引用自：[7: TLS record format ](https://www.researchgate.net/figure/TLS-record-format_fig7_321347130)
+
+    ![](/.images/devops/network/tls-ssl/tls-record-format-01.png ':size=100%')
+    <!-- div:right-panel-50 -->
+    > [?] 建立会话基本流程
+
+    ![](/.images/devops/network/tls-ssl/tls-full-handshake-01.png ':size=100%')
+    <!-- panels:end -->
 
     <!-- panels:start -->
-    <!-- div:left-panel-30 -->
+    <hr>
+
+    <!-- div:left-panel-40 -->
+    **TLS_record 通用格式如下表**：
+
+    <table class="wikitable" style="width:95%;text-align:center">
+        <caption>TLS record format, general </caption>
+        <tbody>
+            <tr>
+            <th scope="col">Offset </th>
+            <th scope="col" style="width:22%">Byte+0 </th>
+            <th scope="col" style="width:22%">Byte+1 </th>
+            <th scope="col" style="width:22%">Byte+2 </th>
+            <th scope="col" style="width:22%">Byte+3 </th>
+            </tr>
+            <tr>
+            <th scope="row">Byte <br>0 </th>
+            <td style="background:#dfd">Content type </td>
+            <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+            </tr>
+            <tr>
+            <th scope="row" rowspan="2">Bytes <br>1–4 </th>
+            <td colspan="2" style="background:#fdd">Legacy version </td>
+            <td colspan="2" style="background:#fdd">Length </td>
+            </tr>
+            <tr style="background:#fdd">
+            <td>
+                <i>(Major)</i>
+            </td>
+            <td>
+                <i>(Minor)</i>
+            </td>
+            <td>
+                <i>(bits 15–8)</i>
+            </td>
+            <td>
+                <i>(bits 7–0)</i>
+            </td>
+            </tr>
+            <tr>
+            <th scope="row">Bytes <br>5–( <i>m</i>−1) </th>
+            <td colspan="4">Protocol message(s) </td>
+            </tr>
+            <tr>
+            <th scope="row">Bytes <br>
+                <i>m</i>–( <i>p</i>−1)
+            </th>
+            <td colspan="4" style="background:#fbb">
+                <a href="https://en.wikipedia.org/wiki/Message_authentication_code" target="_blank" rel="noopener" title="Message authentication code">MAC</a> (optional)
+            </td>
+            </tr>
+            <tr>
+            <th scope="row">Bytes <br>
+                <i>p</i>–( <i>q</i>−1)
+            </th>
+            <td colspan="4" style="background:#fbb">Padding (block ciphers only) </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- div:left-panel-20 -->
     `Content type` 如下表：
 
     | Hex| Dec| Type |
@@ -78,16 +92,18 @@
     | 0x17 | 23 | [Application](#application-protocol) |
     | 0x18 | 24 | Heartbeat |
 
-    <!-- div:right-panel-50 -->
+    <!-- div:right-panel-30 -->
     `Legacy version` 表如下：
     
     | Major version | Minor version | version type |
     | - | - | - |
-    | 3 | 0 | SSL 3.0 |
-    | 3 | 1 | TLS 1.0 |
-    | 3 | 2 | TLS 1.1 |
-    | 3 | 3 | TLS 1.2 |
-    | 3 | 4 | TLS 1.3 |
+    |   |   | ~SSL 1.0~ Unpublished |
+    |   |   | [SSL 2.0 / rfc6176 ](https://www.rfc-editor.org/rfc/rfc6176.html) |
+    | 3 | 0 | [SSL 3.0 / rfc7568 ](https://www.rfc-editor.org/rfc/rfc7568.html) |
+    | 3 | 1 | [TLS 1.0 / rfc2246 ](https://www.rfc-editor.org/rfc/rfc2246.html) |
+    | 3 | 2 | [TLS 1.1 / rfc4346 ](https://www.rfc-editor.org/rfc/rfc4346.html) |
+    | 3 | 3 | [TLS 1.2 / rfc5246 ](https://www.rfc-editor.org/rfc/rfc5246.html) |
+    | 3 | 4 | [TLS 1.3 / rfc8446 ](https://www.rfc-editor.org/rfc/rfc8446.html) |
     <!-- panels:end -->
 
     `Length` ：表示 **protocol message(s)**，**MAC** 和 **padding** 的长度，不超过 2<sup>14</sup> 个字节(ob100000000000000 = 16384 = 16KB)。
@@ -100,6 +116,8 @@
 
         > [!TIP] 在建立TLS会话期间交换的大多数消息都基于此记录，除非发生错误或警告，并且需要通过 [Alert 协议](#alert-protocol) 记录发出信号，或者会话的加密方式被其他记录修改（比如：[ChangeCipherSpec 协议](#changecipherspec-protocol)）。
 
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
         <table class="wikitable" style="width:95%;text-align:center">
         <caption>TLS record format for handshake protocol </caption>
         <tbody>
@@ -179,6 +197,7 @@
         </tbody>
         </table>
 
+        <!-- div:right-panel-50 -->
         `Message type`：如下表
 
         | code | description                        | delimiter | code | description        |
@@ -191,6 +210,7 @@
         | 11   | Certificate                        |           | 20   | Finished           |
 
         `Length`：这个使用 3 个字节表示握手数据的长度，不包括 header。<span style='color:red'>注意：多个握手包可以包括在一个记录中。</span>
+        <!-- panels:end -->
 
         - #### HP-ClientHello 实例分析
 
@@ -198,7 +218,7 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 01`：Legacy version，(TLS 1.0)；
             <br><span style="padding-left:1em">`00 fd`：Length，(253)；
-            <br><span style="padding-left:1em">`01 00 00 f9 03 ...... 0b 00 02 01 00`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`01 00 00 f9 03 ...... 0b 00 02 01 00`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`01`：Message type，(ClientHello)；</span>
@@ -330,7 +350,7 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 59`：Length，(89)；
-            <br><span style="padding-left:1em">`02 00 00 55 03 ...... 01 00 00 0b 00`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`02 00 00 55 03 ...... 01 00 00 0b 00`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`02`：Message type，(ServerHello)；</span>
@@ -366,7 +386,7 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`0b 77`：Length，(2935)；
-            <br><span style="padding-left:1em">`0b 00 0b 73 00 ...... 78 90 6e bf f7`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`0b 00 0b 73 00 ...... 78 90 6e bf f7`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`0b`：Message type，(Certificate)；</span>
@@ -578,7 +598,7 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 93`：Length，(147)；
-            <br><span style="padding-left:1em">`0c 00 00 8f 03 ...... 91 bf 6b 44 11`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`0c 00 00 8f 03 ...... 91 bf 6b 44 11`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`0c`：Message type，(ServerKeyExchange)；</span>
@@ -616,7 +636,7 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 04`：Length，(4)；
-            <br><span style="padding-left:1em">`0e 00 00 00`：Protocol message(s)，因为类型 **16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`0e 00 00 00`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`0e`：Message type，(ServerHelloDone)；</span>
@@ -628,9 +648,752 @@
             <mark class='under red'>16 03 03 00 04</mark> 0e 00 00 00
             ```
 
-    + ### Alert protocol
+        - #### HP-ClientKeyExchange 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 46`：Length，(70)；
+            <br><span style="padding-left:1em">`10 00 00 42 41 ...... 7a db 03 4b db`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
+                <input type="checkbox" checked class="span toggle"><span class='content'>
+                    <br><br><span style="padding-left:1em">Handshake protocol：</span>
+                    <br><span style="padding-left:2em">`10`：Message type，(ClientKeyExchange)；</span>
+                    <br><span style="padding-left:2em">`00 00 42`：Handshake message data length，(66)；</span>
+                    <br><span style="padding-left:2em">`41 04 bb 8a 9f ...... 7a db 03 4b db`：EC Diffie-Hellman Client Params；
+                        <input type="checkbox" checked class="span toggle"><span class='content'>
+                            <br><span style="padding-left:3em">`41`：Pubkey Length: (65)；</span>
+                            <br><span style="padding-left:3em">`04 bb 8a 9f 88 ...... 7a db 03 4b db`：Pubkey；</span>
+                        </span>
+                    </span>
+                </span>
+            </span>
+
+            ```markup
+            <mark class='under red'>16 03 03 00 46</mark> 10 00 00 42 <mark class='box green'>41</mark> <mark class='under dodgerblue'>04 bb 8a 9f 88 82 
+            df 83 95 ec 48 a0 a0 d6 89 57 73 da 8f 11 de 3c 
+            06 77 1d e9 a9 75 80 a1 aa 4b 38 da e4 22 18 38 
+            be 32 6a 91 47 03 71 51 72 83 df be c5 7f 85 da 
+            c8 44 40 0c 2f 8a 7a db 03 4b db</mark>
+            ```
+
+        - #### HP-EncryptedMsg-Client 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 28`：Length，(40)；
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... 98 30 48 0d 91`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup
+            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 00 12 aa cc 
+            d7 92 f7 d5 c1 0f fc 7f 8e 7f 3c 17 33 01 d1 a7 
+            8e 71 a3 63 24 d2 83 5b 98 30 48 0d 91</mark>
+            ```
+
+        - #### HP-EncryptedMsg-Server 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 28`：Length，(40)；
+            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... e4 2b e0 96 fc`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup
+            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 42 1f 4a 38 
+            51 22 d5 b2 8f 99 61 fa fc 1c 53 0c 45 e2 5b b4 
+            51 5d 7b e1 98 d1 4a 0e e4 2b e0 96 fc</mark>
+            ```
+
     + ### ChangeCipherSpec protocol
+
+        > [?] 参考: [rfc5246: Change Cipher Spec Protocol](https://www.rfc-editor.org/rfc/rfc5246.html#page-27)，[ChangeCipherSpec Protocol in SSL](https://www.slashroot.in/changecipherspec-protocol-ssl)
+        <br>**ChangeCipherSpec** 消息在 SSL 中用于指示通信从未加密变为加密，从现在开始将使用协商的密钥和密码套件进行当前通信。
+        <br>该消息由服务器和客户端发送，以通知对方"让我们开始使用我们刚刚协商的内容"。该消息仅有一个字节。
+        <br>密钥交换和证书验证完成后，客户端立即向服务器发送此更改密码规范消息。服务器在收到密钥交换消息后，也会发回更改密码规范消息。
+        <br><br>扩展资料：
+        <br><span style='padding-left:2.7em'>[Why is change cipher spec an independent protocol content type and not part of Handshake Messages?](https://security.stackexchange.com/questions/24755/why-is-change-cipher-spec-an-independent-protocol-content-type-and-not-part-of-h)
+        <br><span style='padding-left:2.7em'>[TLS中ChangeCipherSpec为什么是个单独的协议类型](https://suntus.github.io/2020/03/14/TLS中ChangeCipherSpec为什么是个单独的协议类型/)
+
+        > [!ATTENTION] 如果服务器支持恢复旧的 SSL 会话（通过服务器 hello 消息中的“会话 ID”指示），并且客户端希望恢复旧的会话，则客户端会在“hello 消息”之后立即发送此更改密码规范消息。
+
+        <table class="wikitable" style="width:95%;text-align:center">
+            <caption>TLS record format for ChangeCipherSpec protocol </caption>
+            <tbody>
+                <tr>
+                <th scope="col">Offset </th>
+                <th scope="col" style="width:22%">Byte+0 </th>
+                <th scope="col" style="width:22%">Byte+1 </th>
+                <th scope="col" style="width:22%">Byte+2 </th>
+                <th scope="col" style="width:22%">Byte+3 </th>
+                </tr>
+                <tr>
+                <th scope="row">Byte <br>0 </th>
+                <td style="background:#dfd">20 </td>
+                <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+                </tr>
+                <tr>
+                <th scope="row" rowspan="2">Bytes <br>1–4 </th>
+                <td colspan="2" style="background:#fdd">Legacy version </td>
+                <td colspan="2" style="background:#fdd">Length </td>
+                </tr>
+                <tr style="background:#fdd">
+                <td>
+                    <i>(Major)</i>
+                </td>
+                <td>
+                    <i>(Minor)</i>
+                </td>
+                <td>0 </td>
+                <td>1 </td>
+                </tr>
+                <tr>
+                <th>Byte <br>5 </th>
+                <td>CCS protocol type </td>
+                <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+                </tr>
+            </tbody>
+        </table>
+
+        `CCS protocol type`: Currently only 1.
+
+        - #### CCS 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`14`：Content Type: Change Cipher Spec (20);
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 01`：Length，(1)；
+            <br><span style="padding-left:1em">`01`：Protocol message(s)，因为类型 **0x14** 是一个状态改变包，所以按照`ChangeCipherSpec`协议进一步解析。
+                <input type="checkbox" checked class="span toggle"><span class='content'>
+                    <br><br><span style="padding-left:1em">ChangeCipherSpec protocol：</span>
+                    <br><span style="padding-left:2em">`01`：Change Cipher Spec Message；</span>
+                </span>
+            </span>
+
+            ```markup
+            <mark class='under red'>14 03 03 00 01</mark> 01
+            ```
+
     + ### Application protocol
+
+        > [?] placeholder
+
+        <table class="wikitable" style="width:95%;text-align:center">
+            <caption>TLS record format for application protocol </caption>
+            <tbody>
+                <tr>
+                <th scope="col">Offset </th>
+                <th scope="col" style="width:22%">Byte+0 </th>
+                <th scope="col" style="width:22%">Byte+1 </th>
+                <th scope="col" style="width:22%">Byte+2 </th>
+                <th scope="col" style="width:22%">Byte+3 </th>
+                </tr>
+                <tr>
+                <th scope="row">Byte <br>0 </th>
+                <td style="background:#dfd">23 </td>
+                <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+                </tr>
+                <tr>
+                <th scope="row" rowspan="2">Bytes <br>1–4 </th>
+                <td colspan="2" style="background:#fdd">Legacy version </td>
+                <td colspan="2" style="background:#fdd">Length </td>
+                </tr>
+                <tr style="background:#fdd">
+                <td>
+                    <i>(Major)</i>
+                </td>
+                <td>
+                    <i>(Minor)</i>
+                </td>
+                <td>
+                    <i>(bits 15–8)</i>
+                </td>
+                <td>
+                    <i>(bits 7–0)</i>
+                </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>5–( <i>m</i>−1) </th>
+                <td colspan="4">Application data </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>
+                    <i>m</i>–( <i>p</i>−1)
+                </th>
+                <td colspan="4" style="background:#fbb">
+                    <a href="https://en.wikipedia.org/wiki/Message_authentication_code" target="_blank" rel="noopener" title="Message authentication code">MAC</a> (optional)
+                </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>
+                    <i>p</i>–( <i>q</i>−1)
+                </th>
+                <td colspan="4" style="background:#fbb">Padding (block ciphers only) </td>
+                </tr>
+            </tbody>
+        </table>
+
+        `Length`: Length of application data (excluding the protocol header and including the MAC and padding trailers)
+
+        `MAC`: 32 bytes for the SHA-256-based HMAC, 20 bytes for the SHA-1-based HMAC, 16 bytes for the MD5-based HMAC.
+
+        `Padding`: Variable length; last byte contains the padding length.
+
+        - #### AP-EncryptedMsg-Client 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`17`：Content Type: Application Data，应用层数据 (23)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 fa`：Length，(250)；
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... 1f c0 ea ff 0b 9d`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup
+            <mark class='under red'>17 03 03 00 fa</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 01 0c 1f ff 
+            af 02 be 77 01 49 50 e2 88 4a 1d 19 e6 7a b1 4b 
+            03 ef cc 75 79 6a 59 f0 29 84 a8 28 13 20 e2 4a 
+            18 2f 54 9d 22 08 a2 02 d8 a0 49 c9 c0 1f 29 1e 
+            0e bb e6 b2 f2 48 92 39 a1 87 9f 56 6a f6 6d ea 
+            45 b7 89 92 34 e1 80 b9 7d 41 00 cd ad 65 57 3c 
+            5f a5 6a 3a a6 e8 d4 e6 f7 dc 3f e3 15 b6 51 3e 
+            97 8a 6a 8f c8 2a b8 e8 ab f3 a7 d4 31 17 8f e5 
+            4b 0c 9e 0f 70 90 b1 de 28 94 5f c3 f1 ac 8b 34 
+            96 db 03 05 73 29 2c 2b 6e df 40 b5 52 9c 71 31 
+            da 59 8b 3d 46 77 c8 13 6e 7e 21 41 57 d0 92 f2 
+            9c 5b a5 43 a3 11 96 9c c5 1d a3 a7 ef aa af b5 
+            89 e1 7d 20 77 04 60 32 7e 8f 61 bc 30 9d 8b 5b 
+            c7 97 d6 27 25 96 d1 c7 69 67 e0 8c 77 ff d5 57 
+            3d 72 37 99 cd f2 48 8a f2 ec a3 e2 ea 0f 08 6d 
+            0f e9 9f a7 6d 63 ab 3a 35 1f c0 ea ff 0b 9d</mark>
+            ```
+
+        - #### AP-EncryptedMsg-Server 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`17`：Content Type: Application Data，应用层数据 (23)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`0a 04`：Length，(2564)；
+            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... 86 9f 9e 98 e2`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup [data-cc:400px]
+            <mark class='under red'>17 03 03 0a 04</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 43 45 db 32 
+            e4 d2 bc 62 47 f7 17 bd ce ae 1c e3 d2 03 50 ef 
+            72 43 07 56 93 9d e9 a2 3a 83 d9 ef d9 0f f0 04 
+            03 c9 95 b4 b2 4e d6 5b c7 31 d2 a3 70 97 ff d3 
+            96 42 9d 6a 2d be 8c 63 50 52 4c 1d 4d 2d b3 73 
+            b5 8e 4d f4 55 1b 6a 47 8c c5 da 19 7f 3c a4 fd 
+            0c b8 ab 8f 7d 63 f8 99 b7 5d 6b 46 78 c3 0b 74 
+            c1 e1 c5 28 c4 2e ac c3 63 d4 a4 a7 a8 b6 b0 29 
+            01 d8 79 9e c4 1e f6 2a 41 15 3b 78 d1 e9 17 1e 
+            cd 7a 33 bf db 01 88 88 39 40 50 33 0a 37 11 f6 
+            4c 65 a8 55 5e 93 2d 73 ce d0 d7 f7 94 23 78 8d 
+            3a c4 f3 07 ef 8a 91 e7 c1 4a 36 c9 bb f2 c7 d9 
+            1f 80 19 6f 85 ff 45 bd 95 75 78 65 c3 46 33 d8 
+            bc 11 24 b8 4a d6 04 6e 59 79 01 28 45 62 2c aa 
+            54 06 1c ac e4 75 50 c7 25 21 26 8a f1 d3 71 1c 
+            7a 6b b4 08 aa 55 05 d5 be 70 b5 4b 7d 31 83 40 
+            51 29 07 66 0e 49 88 fe 5c 06 b4 39 ed 6c 16 f3 
+            0f 92 27 ca 9f 75 ff 0b 51 b6 53 cd ac 2a 3e dd 
+            68 d1 56 78 66 ff c1 58 6a 51 68 2c 67 cf 19 31 
+            15 fc 2a 33 e8 bb f0 e0 98 27 32 08 b5 30 5e d0 
+            63 ba e3 da 01 7f da 0c 16 1e 2e 8c f1 0c 6e 6d 
+            cf 1d 9d 0c e2 35 3e 6b 80 8d ca 28 25 29 d5 6d 
+            76 ce 94 7c ac 8c 81 df 4f f1 39 8e 17 be b3 46 
+            ca 17 d4 57 ce 2a 7b 5e 4e 2f 36 c5 95 af 48 ba 
+            f6 33 8b 1a 32 4d 74 ea 45 c5 ca 44 bd d7 35 14 
+            f8 f5 b3 60 0b f2 c7 7b 78 a4 46 e7 5f 58 be 13 
+            2a 36 e2 32 ea 4e 74 9f a1 fa 38 b9 93 8b 6b 16 
+            ea d2 8d 2a 2b 59 86 2e 85 c4 b9 82 3c e1 1a d2 
+            d4 de e7 fb 26 27 b0 a9 9e 5e aa 59 6e b2 ce 61 
+            1b 15 c5 31 f2 ec 0e 28 2e d4 3f d8 41 d2 4e e6 
+            b5 78 67 a7 bf d3 25 0e b7 0a 96 d8 28 ee fd 93 
+            c9 21 d0 c0 71 18 92 a2 df d3 ec 4f b6 e8 2a bd 
+            d8 cc 9a 18 c3 f5 5d 96 a2 01 49 dd cc 1f c3 20 
+            14 8a eb d1 fa c0 2e 1b 99 3c e1 99 c7 e1 71 45 
+            81 17 5e 7a 68 90 fc 41 a2 b9 71 1d c7 98 ed 6e 
+            17 2d ab f4 c1 33 8e d0 72 7c 55 69 90 5a bf d5 
+            b2 03 75 53 5f 2d f3 b7 89 80 cc f8 33 13 cc d7 
+            6c 2b e4 b7 eb 7f 51 df 9a 68 35 a3 6a 5c a1 c0 
+            f3 55 61 8d f4 6b 98 50 5e 84 a5 58 23 fd 06 5c 
+            fa 6d a5 ee d1 c7 9a d0 c6 a9 40 5e 69 d3 ba a7 
+            ab 9b eb 5d 81 f0 e4 59 67 ff d0 87 89 7b e5 7d 
+            7b cf 68 84 bb 1c 90 9f ac ea c1 16 16 f2 70 14 
+            24 63 6f ed ba 35 85 d6 4e 2a 65 7d f0 d0 bc 99 
+            0a f7 eb 36 53 d6 ee 26 d8 22 76 45 5f 51 09 80 
+            f3 2d 9d 06 71 bd b0 3d a4 d4 75 ec ca 45 f0 af 
+            53 64 b3 03 42 85 88 51 14 d7 06 e3 8f 17 3e 4c 
+            83 0c 39 8b ae cd 2d 7d 14 97 4f 02 9f 2b 22 47 
+            43 d0 5e 93 2a f0 11 39 f1 28 44 a4 77 3a 1f 3e 
+            fa d5 54 b5 49 a8 dc f0 d8 d8 4b 47 d7 47 b8 e4 
+            f1 fc d5 73 b6 8d be a5 52 ef 6e 8d 38 03 90 fe 
+            4b 73 5d a5 10 2c 93 ce f4 ab 5b 1d 96 32 0e c1 
+            7b b3 a5 ad 0b aa 4f 31 74 3b f6 35 c2 59 65 37 
+            1b f7 db 9c bb 82 09 e7 86 66 b6 e6 8a 50 ab 1e 
+            60 f2 fa 51 d8 cb 81 06 73 81 e0 25 e9 66 90 48 
+            ef 78 9c a4 9b 21 78 e9 81 34 f0 eb 57 3d f8 75 
+            72 fc 9e 03 ff bc 0b 48 3a 8b 6b ca fd 79 24 cc 
+            c4 94 45 3b 07 f8 43 7e ae 38 32 b2 2b d2 ce f5 
+            ab 67 b2 21 34 ed 17 92 35 ed 0b 71 8d 88 a4 42 
+            bb 2a 42 a2 cb 2e 70 91 5c 28 70 e4 0c 5d 90 3b
+            06 62 6a 0f 11 2a ce 35 41 67 cb dc 1a 35 e5 7c 
+            1e e0 f5 ea c8 23 f1 ab 9d 5e fa 51 53 56 c7 4e 
+            3a a3 32 c3 43 a9 9d 5c 3a 50 41 c9 70 16 02 69 
+            d2 0e 6d c6 ad fa d7 f1 0d 83 70 f4 ac 3c 19 c7 
+            f4 10 0d f6 af a0 98 26 02 dc bb b8 12 9e 53 91 
+            19 e7 be 73 fc b5 15 44 ef 68 2c fb 4e 7b b9 8c 
+            a0 ec 00 5c a3 68 9d bc 10 59 ab 58 20 2f 5e 14 
+            4b 8a 61 d3 cc 64 b2 b3 d2 b1 55 99 44 8c 1e a0 
+            cf b7 1c 81 07 2f ba a1 76 b1 75 39 c8 41 cf 4f 
+            08 ed 7e 2b b9 7b 2a d7 98 9e 7f c4 08 34 58 0a 
+            44 1d 8e 06 fa dd e7 58 22 2e ce 4d 78 0a 65 2d 
+            e5 41 5e be d1 d2 d5 34 67 86 53 e8 94 ec 8e 5e 
+            e5 ee de d2 88 17 8e 0a f7 2e 7c 05 fe a2 60 ae 
+            f4 cd 65 bf c0 de ff dc df b9 c0 33 26 ee 24 a9 
+            39 58 3f 9d 2e af 5e a4 e2 ba 14 6b 33 3c fa 5a 
+            89 ee 5e 0d 1d 87 bf 93 4b 85 0e 10 fc 31 8b 74 
+            8d 1f 17 51 7d d0 da 6a dc df c9 61 77 05 af 67 
+            b7 29 7f 4d 31 00 7a 7b 2d 7e fd 5b eb 2b 72 cc 
+            ba e4 fe 50 8b 90 e3 5e ed 79 9b d0 70 f1 ad 5e 
+            da 96 63 15 83 53 e3 7c 07 45 08 ae 61 4d 1a 51 
+            fe 0e 97 2c ac 75 84 5b cd d0 5c e9 34 d9 4f c1 
+            92 35 d0 34 a2 cc a1 4f 42 78 18 c1 88 2b 1d 98 
+            22 62 d9 c1 b0 ab 38 32 03 69 ea af 29 07 5b 61 
+            f0 89 81 95 63 4f 18 3f dc 2e 40 ae 98 a0 d7 74 
+            02 6a 72 fa 90 86 b9 82 15 a0 71 4e 2e fc 98 b4 
+            c3 0e 60 2b 03 c3 bb 97 96 71 35 2e 63 17 78 9f 
+            48 7d b7 35 ce e2 90 2a 20 45 10 69 57 99 f9 cc 
+            3c 6a 3a 05 12 af 5b 78 ba e0 1f 4f 37 6a 52 27 
+            45 b3 62 04 34 1d c4 54 bb af d8 4d 1e 49 2c 17 
+            f2 87 df 4d 8f 00 7d 73 59 83 40 4f 21 f3 30 c3 
+            5c a9 9c 5f 2e 9f d2 03 3d db 23 6d 7c 59 04 59 
+            5c b6 7e 44 e7 61 0f 3a d6 2d aa eb c4 ed 8c 35 
+            c2 60 97 92 e4 9e 0d 63 d3 e4 b7 3c c8 a8 44 ca 
+            f4 87 01 e4 37 42 ba 88 14 4c 41 12 6c 5f 85 54 
+            7b 42 5f 2b 10 e2 25 cc bf 23 c7 da cd 88 cb bb 
+            a1 f8 f7 08 ae d0 eb 72 9d 88 ef 5c 8f 40 d0 1c 
+            23 92 2f 7c 22 33 e1 fa 6d 68 e6 70 aa dd 8f 82 
+            2a 5e c4 92 f6 df 05 db 45 9e e0 29 0b c0 23 97 
+            14 df 7f 2d f9 54 63 09 7d 24 55 62 6a c2 95 21 
+            4c 22 bf 0f c1 e6 18 57 87 f5 41 ba 6b a1 31 aa 
+            2f 4f e8 1c 27 57 a4 ce 8a 26 d7 71 a1 68 39 cf 
+            18 5e e8 8f 76 dd 53 c6 46 bb ab 0d b4 4c 16 c8 
+            ea b2 87 d6 40 f3 1d d0 c0 08 58 35 c9 fb 7d 66 
+            ee 8c 2f d8 f6 89 77 68 78 1c 93 43 99 aa 6f ef 
+            2e e7 a6 72 5a fc 4b f4 ba b8 3b c4 07 e2 1e c1 
+            3f 4e 90 3c 93 c7 cb cc 1b 2c 24 f6 a3 75 e4 6b 
+            d4 98 64 e7 d3 56 ca 76 d8 0a 8c 92 75 68 3b 6c 
+            e5 80 04 1d 01 6f 67 94 7c 28 7f 88 1d 54 7c fc 
+            bf 14 6e 0f e1 11 a6 4f 95 f1 ed c0 39 dd 3f 1d 
+            29 2c 0a bf 75 65 30 1b e7 a8 7c cf 8b 21 71 64 
+            cf 74 30 52 1a df 56 b9 38 52 8d 0c c7 1e 64 6d 
+            9f bb e3 0e f3 c6 94 6b 3f 89 7a ea 3f 60 3e 4f 
+            97 da ef 33 1e b0 bf 24 7b c8 a0 4a 16 51 e8 40 
+            6f 47 4c b3 53 99 d6 d4 46 26 bf e3 cf 3a 1a e6 
+            2f ed 88 7b 9f 15 01 ce 2f d6 cc d2 ef bb ff a0 
+            22 10 94 bf 34 c6 3f a5 ef 95 72 4d b8 ce cf df 
+            1e f4 58 46 16 af e7 3b 7c 66 bb 01 0c af db ab 
+            4d 3e bf 72 9e cb 40 eb 42 19 1f 8a 59 94 f2 3b 
+            9b a8 95 8e 82 2f e7 7c 11 a9 21 ce a3 0e 7f cf 
+            23 1b fa e0 6a 9d c1 b3 c3 29 d7 32 ca 27 e6 1c 
+            d3 3c a5 a3 4b 9a 5c 0f fe 53 7c 1d 46 f1 0e d1 
+            34 50 81 23 f4 e6 74 7d ab 0e 65 37 9b f0 82 bc 
+            1c d0 b9 2c 31 33 d1 8d 05 76 0c 35 b6 af 96 01 
+            73 01 ab bf ef b4 39 16 bb 9f d1 7d 02 97 f8 63 
+            20 c6 46 f7 da 4e 54 d8 a8 6e 7d 82 88 d5 10 20 
+            28 ea 33 79 b4 e1 04 f3 f8 b4 bc 10 f6 0b 70 a8 
+            29 19 8e e5 49 a7 40 60 0f 13 5f 0f f8 7f 3d 10 
+            27 fc 60 e3 2d 27 94 ac 79 6e 59 22 b4 a0 21 55 
+            4b 6b ff 44 67 2f 59 45 de a9 71 7d b3 10 d9 e4 
+            bd 6f c7 bf 30 49 d3 9e e7 95 f5 2f 86 9b ad c0 
+            e2 bc 46 46 6e a4 f7 86 dc d5 cb 68 fd c8 63 11 
+            38 55 2f f9 58 d4 85 e8 82 dc b1 a5 a5 53 18 64 
+            5d 2e d8 4b 4a e2 1c ed 35 5e aa dd 09 0a b6 17 
+            c3 84 61 d5 b9 bc cd ba 28 a4 ca 8c 38 09 eb 61 
+            1d da b5 bf c6 3e d1 14 a9 54 68 d3 90 3f 08 ed 
+            4f 71 0a c5 c0 50 ce 53 a6 21 e3 d9 8d 91 b3 60 
+            0b cb 33 6c 57 4b 90 9d 06 a7 cd 6f 2a 55 29 21 
+            e5 10 5e ea c4 6d 6c e9 22 1b 87 1d 06 6f 73 7f 
+            0d 95 f0 e9 a0 61 0b cf 58 ca 28 f2 8c b2 46 21 
+            ee a2 5c 4a 54 da cf 72 8d 0f 6a 7f cd af 3a 96 
+            4f c0 bd 7a 08 6f 05 d7 80 da b8 d7 0b 72 f4 e3 
+            ba 8b 18 15 ef 82 1f 60 f4 29 c0 b7 31 67 1f fb 
+            d2 c4 2a 1c 04 69 ec ab 5e a8 47 41 14 9e ce e8 
+            80 f3 5a d3 cb f3 74 84 ec 17 53 78 4d e5 f7 24 
+            91 08 6b 53 fe 4d db 19 f4 0b a5 87 34 31 6f 1d 
+            0f 65 3f d8 c7 3e 91 02 77 dd 2d db d6 3a c7 81 
+            cd 14 33 da dd 59 1d 98 f1 ca 8d 93 4d be 55 40 
+            a0 3d c6 10 67 c6 37 26 44 9f d9 87 a9 8a 74 4a 
+            d3 2d e0 ec 29 1c 13 9e 9e ec 4a 47 39 d5 9d 46 
+            2c c3 2d 64 d8 4a 61 ed 89 d8 46 6c 9c 13 ce 5b 
+            ad 80 4d e4 ac 3f 67 87 24 ce 67 4c 5c 23 a8 10 
+            8e fb c6 80 5e 4b 69 27 49 6e da 27 49 61 77 31 
+            81 98 4e 7f 58 ef 58 11 bb f5 77 f5 44 6a 95 4d 
+            ca bd 99 c3 b4 5b 35 98 a8 2a 58 08 24 ea 6e a6 
+            b4 13 77 a1 67 e9 76 7c 8a 99 2b 0d 7d b8 f1 f9 
+            6c b9 ce a4 8d df 54 ab 59 ae a7 24 5e 9a f9 54 
+            e6 b6 03 08 3c b1 bc 00 23 71 c7 5f 27 e7 ab 52 
+            7f 76 68 ae 9e 93 28 67 df cf f4 42 5f 51 f4 ae 
+            85 3e 5b be 84 68 b1 c5 0f 07 e9 ba be e2 d3 41 
+            bc 78 f1 d5 c8 de 35 52 96 e5 1a e0 84 89 a6 83 
+            a4 6f 54 82 c4 39 f0 03 a8 6d e5 89 b8 b7 61 73 
+            cf 49 72 b4                                         // dismiss 86 9f 9e 98 e2
+            </mark>
+            ```
+
+    + ### Alert protocol
+
+        > [?] placeholder
+
+        <table class="wikitable" style="width:95%;text-align:center">
+            <caption>TLS record format for alert protocol </caption>
+            <tbody>
+                <tr>
+                <th scope="col">Offset </th>
+                <th scope="col" style="width:22%">Byte+0 </th>
+                <th scope="col" style="width:22%">Byte+1 </th>
+                <th scope="col" style="width:22%">Byte+2 </th>
+                <th scope="col" style="width:22%">Byte+3 </th>
+                </tr>
+                <tr>
+                <th scope="row">Byte <br>0 </th>
+                <td style="background:#dfd">21 </td>
+                <td colspan="3data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+                </tr>
+                <tr>
+                <th scope="row" rowspan="2">Bytes <br>1–4 </th>
+                <td colspan="2" style="background:#fdd">Legacy version </td>
+                <td colspan="2" style="background:#fdd">Length </td>
+                </tr>
+                <tr style="background:#fdd">
+                <td>
+                    <i>(Major)</i>
+                </td>
+                <td>
+                    <i>(Minor)</i>
+                </td>
+                <td>0 </td>
+                <td>2 </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>5–6 </th>
+                <td>Level </td>
+                <td>Description </td>
+                <td colspan="2data-sort-value=&quot;&quot;" style="background: var(--background-color-interactive, #ececec); color: var(--color-base, inherit); vertical-align: middle; text-align: center;" class="table-na">— </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>
+                    <i>7</i>–( <i>p</i>−1)
+                </th>
+                <td colspan="4" style="background:#fbb">
+                    <a href="https://en.wikipedia.org/wiki/Message_authentication_code" target="_blank" rel="noopener" title="Message authentication code">MAC</a> (optional)
+                </td>
+                </tr>
+                <tr>
+                <th>Bytes <br>
+                    <i>p</i>–( <i>q</i>−1)
+                </th>
+                <td colspan="4" style="background:#fbb">Padding (block ciphers only) </td>
+                </tr>
+            </tbody>
+        </table>
+
+        `Level`: This field identifies the level of alert. If the level is fatal, the sender should close the session immediately. Otherwise, the recipient may decide to terminate the session itself, by sending its own fatal alert and closing the session itself immediately after sending it. The use of Alert records is optional, however if it is missing before the session closure, the session may be resumed automatically (with its handshakes).
+        Normal closure of a session after termination of the transported application should preferably be alerted with at least the Close notify Alert type (with a simple warning level) to prevent such automatic resume of a new session. Signalling explicitly the normal closure of a secure session before effectively closing its transport layer is useful to prevent or detect attacks (like attempts to truncate the securely transported data, if it intrinsically does not have a predetermined length or duration that the recipient of the secured data may expect).
+
+        <table class="wikitable" style="width:90%">
+            <caption>Alert level types </caption>
+            <tbody>
+                <tr>
+                <th scope="col">Code </th>
+                <th scope="col">Level type </th>
+                <th scope="col">Connection state </th>
+                </tr>
+                <tr>
+                <th scope="row">1 </th>
+                <td style="background:yellow;text-align:center">
+                    <b>warning</b>
+                </td>
+                <td>connection or security may be unstable. </td>
+                </tr>
+                <tr>
+                <th scope="row">2 </th>
+                <td style="background:red;text-align:center">
+                    <b>fatal</b>
+                </td>
+                <td>connection or security may be compromised, or an unrecoverable error has occurred. </td>
+                </tr>
+            </tbody>
+        </table>
+
+        `Description`: This field identifies which type of alert is being sent.
+
+        <table class="wikitable" style="width:90%">
+            <caption>Alert description types </caption>
+            <tbody>
+            <tr>
+                <th scope="col">Code </th>
+                <th scope="col">Description </th>
+                <th scope="col">Level types </th>
+                <th scope="col">Note </th>
+                <th scope="col">Delimiter </th>
+                <th scope="col">Code </th>
+                <th scope="col">Description </th>
+                <th scope="col">Level types </th>
+                <th scope="col">Note </th>
+            </tr>
+            <tr>
+                <th scope="row">0 </th>
+                <td>Close notify </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">51 </th>
+                <td>Decrypt error </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">10 </th>
+                <td>Unexpected message </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">60 </th>
+                <td>Export restriction </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only, reserved </td>
+            </tr>
+            <tr>
+                <th scope="row">20 </th>
+                <td>Bad record MAC </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>Possibly a bad SSL implementation, or payload has been tampered with e.g. FTP firewall rule on <a href="https://en.wikipedia.org/wiki/FTPS" target="_blank" rel="noopener" title="FTPS">FTPS</a> server. </td>
+                <td>-</td>
+                <th scope="row">70 </th>
+                <td>Protocol version </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">21 </th>
+                <td>Decryption failed </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only, reserved </td>
+                <td>-</td>
+                <th scope="row">71 </th>
+                <td>Insufficient security </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">22 </th>
+                <td>Record overflow </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+                <td>-</td>
+                <th scope="row">80 </th>
+                <td>Internal error </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">30 </th>
+                <td>Decompression failure </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">86 </th>
+                <td>Inappropriate fallback </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">40 </th>
+                <td>Handshake failure </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">90 </th>
+                <td>User canceled </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">41 </th>
+                <td>No certificate </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td>SSL 3.0 only, reserved </td>
+                <td>-</td>
+                <th scope="row">100 </th>
+                <td>No renegotiation </td>
+                <td style="background:yellow;text-align:center">
+                <b>warning</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">42 </th>
+                <td>Bad certificate </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">110 </th>
+                <td>Unsupported extension </td>
+                <td style="background:yellow;text-align:center">
+                <b>warning</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">43 </th>
+                <td>Unsupported certificate </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td>e.g. certificate has only server authentication usage enabled and is presented as a client certificate </td>
+                <td>-</td>
+                <th scope="row">111 </th>
+                <td>Certificate unobtainable </td>
+                <td style="background:yellow;text-align:center">
+                <b>warning</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">44 </th>
+                <td>Certificate revoked </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">112 </th>
+                <td>Unrecognized name </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td>TLS only; client's <a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank" rel="noopener" title="Server Name Indication">Server Name Indicator</a> specified a <a href="https://en.wikipedia.org/wiki/Hostname" target="_blank" rel="noopener" title="Hostname">hostname</a> not supported by the server </td>
+            </tr>
+            <tr>
+                <th scope="row">45 </th>
+                <td>Certificate expired </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td>Check server certificate expire also check no certificate in the chain presented has expired </td>
+                <td>-</td>
+                <th scope="row">113 </th>
+                <td>Bad certificate status response </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">46 </th>
+                <td>Certificate unknown </td>
+                <td style="background:orange;text-align:center">
+                <b>warning</b>/ <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">114 </th>
+                <td>Bad certificate hash value </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">47 </th>
+                <td>Illegal parameter </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td></td>
+                <td>-</td>
+                <th scope="row">115 </th>
+                <td>Unknown <a href="https://en.wikipedia.org/wiki/Pre-shared_key" target="_blank" rel="noopener" title="Pre-shared key">PSK</a> identity (used in <a href="https://en.wikipedia.org/wiki/TLS-PSK" target="_blank" rel="noopener" title="TLS-PSK">TLS-PSK</a> and <a href="https://en.wikipedia.org/wiki/TLS-SRP" target="_blank" rel="noopener" title="TLS-SRP">TLS-SRP</a>) </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+            </tr>
+            <tr>
+                <th scope="row">48 </th>
+                <td>Unknown CA ( <a href="https://en.wikipedia.org/wiki/Certificate_authority" target="_blank" rel="noopener" title="Certificate authority">Certificate authority</a>) </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+                <td>-</td>
+                <th scope="row">116 </th>
+                <td>Certificate required </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS version 1.3 only </td>
+            </tr>
+            <tr>
+                <th scope="row">49 </th>
+                <td>Access denied </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only – e.g. no client certificate has been presented (TLS: Blank certificate message or SSLv3: No Certificate alert), but server is configured to require one. </td>
+                <td>-</td>
+                <th scope="row">120 or 255 </th>
+                <td>No application protocol </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS version 1.3 only </td>
+            </tr>
+            <tr>
+                <th scope="row">50 </th>
+                <td>Decode error </td>
+                <td style="background:red;text-align:center">
+                <b>fatal</b>
+                </td>
+                <td>TLS only </td>
+                <td>-</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
 
 * ## Reference
     + https://www.rfc-editor.org/rfc/rfc5246.html

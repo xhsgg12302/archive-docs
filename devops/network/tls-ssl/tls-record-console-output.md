@@ -243,11 +243,13 @@ void
 d7 92 f7 d5 c1 0f fc 7f 8e 7f 3c 17 33 01 d1 a7 
 8e 71 a3 63 24 d2 83 5b 98 30 48 0d 91</mark>
 void
-<mark class='under green'>14</mark>
+<mark class='under green'>14                                                  // dismiss 03 03 00 01 01
+</mark>
 void
 <mark class='under green'>16 03 03 00 28 3e b7 b5 ea dd e0 9e 42 1f 4a 38 
 51 22 d5 b2 8f 99 61 fa fc 1c 53 0c 45 e2 5b b4 
-51 5d 7b e1 98 d1 4a 0e</mark>
+51 5d 7b e1 98 d1 4a 0e                             // dismiss e4 2b e0 96 fc
+</mark>
 void
 <mark class='under red'>17 03 03 00 fa 00 00 00 00 00 00 00 01 0c 1f ff 
 af 02 be 77 01 49 50 e2 88 4a 1d 19 e6 7a b1 4b 
@@ -427,7 +429,8 @@ e6 b6 03 08 3c b1 bc 00 23 71 c7 5f 27 e7 ab 52
 85 3e 5b be 84 68 b1 c5 0f 07 e9 ba be e2 d3 41 
 bc 78 f1 d5 c8 de 35 52 96 e5 1a e0 84 89 a6 83 
 a4 6f 54 82 c4 39 f0 03 a8 6d e5 89 b8 b7 61 73 
-cf 49 72 b4</mark>
+cf 49 72 b4                                         // dismiss 86 9f 9e 98 e2
+</mark>
 HTTP/1.1 200 OK
 Server: X_12302.eli
 Date: Sat, 14 Dec 2024 01:39:56 GMT
