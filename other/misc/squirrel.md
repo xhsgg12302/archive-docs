@@ -72,13 +72,14 @@
         <br> 大意了，原来预置的`key_bindings.yaml`里买就有相关快捷键的定义，但是自己手贱，又重新在`default.custom.yaml`里面重新定义了，并且没有绑定相关键位，发现不生效，以为原来的预置的键位没有绑定上去。其实应该是在 custom 文件里面进行追加或者修改的，不是直接定义<span style='color: blue'>(会覆盖)</span>。
         <br><br>例如：右边`default.custom.yaml`代码中**追加**和**修改**示例。
         <!-- div:right-panel-50 -->
-        ```yaml
-        # default.custom.yaml
+        ```yaml [data-file:default.custom.yaml]
+        # encoding: utf-8
+
         patch:
             # append
             key_binder/+:
                 bindings/+:
-                - { when: has_menu, accept: at, send: 'm' }
+                    - { when: has_menu, accept: at, send: 'm' }
             
             # update
             key_binder/bindings/@0:
@@ -96,7 +97,7 @@
         <br>`1).`: 修改 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38) 中 38 行代码为：`static const string kCaretSymbol("\xe2\x86\x9e");`，`\xe2\x86\x9e`就是你想替换的任何 UTF-8 符号的十六进制编码。比如我此处的就是`↞`。
         <br>`2).`: 此处使用 clion + camke 的方式编译出动态链接库`/path/librime/cmake-build-release/lib/librime.1.11.2.dylib`
         <br>`3).`: 进入 squirrel 输入法目录：`cd /Library/Input Methods/Squirrel.app/Contents/Frameworks`
-        <br>`4).`: 备份 squirrel 自己编译出来的：`sudo mv librime.1.dylib librime.1.dylib.bak`
+        <br>`4).`: 备份 squirrel 自带(或它附带编译出来)的：`sudo mv librime.1.dylib librime.1.dylib.bak`
         <br>`5).`: 使用刚才编译出的进行替换：`sudo cp /path/librime/cmake-build-release/lib/librime.1.11.2.dylib librime.1.dylib`
         <br>`6).`: 重启输入法进行验证：`/Library/Input\ Methods/Squirrel.app/Contents/MacOS/Squirrel --quit`，过一会自己就启动了。
         <br><br><span style='color:blue'>如果需要此次编译出来 macOS 端的动态链接库`librime.1.11.2.dylib`，[点击下载](https://github.com/xhsgg12302/knownledges/raw/f99570a76c657c8a61297277d4260e7e913a5780/.images/other/misc/squirrel/librime.1.11.2.dylib)。</span>
@@ -418,6 +419,25 @@
         <br>使回车和空格一样的操作按照如下配置就行。
         <br><br>具体操作如下：
         <br>`1).`: 在`luna_pinyin.custom.yaml`中加入补丁：`editor/bindings/Return: confirm`。
+
+        #### 取消CTRL触发中西文切换
+
+        > [?] 平常使用 vim 的时候进行模式切换、退出会用到`ctrl + [`。因为刚开始的错误配置，很容易触发 **中西文切换**，所以用下方补丁调整一下。
+
+        ```yaml {9} [data-file:default.custom.yaml]
+        # encoding: utf-8
+
+        patch:
+            ascii_composer:
+                good_old_caps_lock: true
+                switch_key:
+                    Shift_L: commit_code
+                    Shift_R: commit_code
+                    Control_L: noop         # 调整之前为 commit_code
+                    Control_R: noop
+                    Caps_Lock: noop
+                    Eisu_toggle: noop
+        ```
 
     + ### Rime引擎
 

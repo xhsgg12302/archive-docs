@@ -1034,14 +1034,16 @@
             85 3e 5b be 84 68 b1 c5 0f 07 e9 ba be e2 d3 41 
             bc 78 f1 d5 c8 de 35 52 96 e5 1a e0 84 89 a6 83 
             a4 6f 54 82 c4 39 f0 03 a8 6d e5 89 b8 b7 61 73 
-            cf 49 72 b4                                         // dismiss 86 9f 9e 98 e2
+            cf 49 72 b4 86 9f 9e 98 e2
             </mark>
             ```
 
     + ### Alert protocol
 
-        > [?] placeholder
+        > [?] 这种记录应该不会被发送在正常握手和数据交换的时候。然而，这种消息是可以在握手的任何时间发送的，直到会话结束。如果用于发送致命信号，则当前会话会在发送完这个 record 后立即关闭，所以这个记录也会携带关闭的原因。如果警告级别被标记为警告，远程可以关闭这次会话，在它认为对于自身需要不太可靠的情况下。这一端发送之前，另外一方也可以发送它的相关信号。
 
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
         <table class="wikitable" style="width:95%;text-align:center">
             <caption>TLS record format for alert protocol </caption>
             <tbody>
@@ -1095,8 +1097,9 @@
             </tbody>
         </table>
 
-        `Level`: This field identifies the level of alert. If the level is fatal, the sender should close the session immediately. Otherwise, the recipient may decide to terminate the session itself, by sending its own fatal alert and closing the session itself immediately after sending it. The use of Alert records is optional, however if it is missing before the session closure, the session may be resumed automatically (with its handshakes).
-        Normal closure of a session after termination of the transported application should preferably be alerted with at least the Close notify Alert type (with a simple warning level) to prevent such automatic resume of a new session. Signalling explicitly the normal closure of a secure session before effectively closing its transport layer is useful to prevent or detect attacks (like attempts to truncate the securely transported data, if it intrinsically does not have a predetermined length or duration that the recipient of the secured data may expect).
+        <!-- div:right-panel-50 -->
+        `Level`: 该字段标识警报级别. 如果级别是致命的，发送方应该立即关闭会话. 否则，接收方可以决定自身终止会话，发送自己的致命警报并在发送后立即关闭会话。Alert记录的使用是可选的，但是如果在会话关闭之前缺少Alert记录，会话可能会自动恢复（通过握手）。
+        <br>在传输的应用程序终止后，会话的正常关闭最好至少使用Close notify Alert类型（带有简单的警告级别）发出警报，以防止这种新会话的自动恢复。在有效关闭安全会话的传输层之前显式地发出正常关闭的信号，对于防止或检测攻击是有用的（例如，如果安全传输的数据本质上没有安全数据接收者可能期望的预定长度或持续时间，则试图截断安全传输的数据）。
 
         <table class="wikitable" style="width:90%">
             <caption>Alert level types </caption>
@@ -1123,277 +1126,34 @@
             </tbody>
         </table>
 
-        `Description`: This field identifies which type of alert is being sent.
+        `Description`: 该字段标识正在发送的警报类型。[具体描述参考 wiki:Alert description types](https://en.wikipedia.org/wiki/Transport_Layer_Security#Alert_protocol)
+        <!-- panels:end -->
 
-        <table class="wikitable" style="width:90%">
-            <caption>Alert description types </caption>
-            <tbody>
-            <tr>
-                <th scope="col">Code </th>
-                <th scope="col">Description </th>
-                <th scope="col">Level types </th>
-                <th scope="col">Note </th>
-                <th scope="col">Delimiter </th>
-                <th scope="col">Code </th>
-                <th scope="col">Description </th>
-                <th scope="col">Level types </th>
-                <th scope="col">Note </th>
-            </tr>
-            <tr>
-                <th scope="row">0 </th>
-                <td>Close notify </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">51 </th>
-                <td>Decrypt error </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">10 </th>
-                <td>Unexpected message </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">60 </th>
-                <td>Export restriction </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only, reserved </td>
-            </tr>
-            <tr>
-                <th scope="row">20 </th>
-                <td>Bad record MAC </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>Possibly a bad SSL implementation, or payload has been tampered with e.g. FTP firewall rule on <a href="https://en.wikipedia.org/wiki/FTPS" target="_blank" rel="noopener" title="FTPS">FTPS</a> server. </td>
-                <td>-</td>
-                <th scope="row">70 </th>
-                <td>Protocol version </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">21 </th>
-                <td>Decryption failed </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only, reserved </td>
-                <td>-</td>
-                <th scope="row">71 </th>
-                <td>Insufficient security </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">22 </th>
-                <td>Record overflow </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-                <td>-</td>
-                <th scope="row">80 </th>
-                <td>Internal error </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">30 </th>
-                <td>Decompression failure </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">86 </th>
-                <td>Inappropriate fallback </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">40 </th>
-                <td>Handshake failure </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">90 </th>
-                <td>User canceled </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">41 </th>
-                <td>No certificate </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td>SSL 3.0 only, reserved </td>
-                <td>-</td>
-                <th scope="row">100 </th>
-                <td>No renegotiation </td>
-                <td style="background:yellow;text-align:center">
-                <b>warning</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">42 </th>
-                <td>Bad certificate </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">110 </th>
-                <td>Unsupported extension </td>
-                <td style="background:yellow;text-align:center">
-                <b>warning</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">43 </th>
-                <td>Unsupported certificate </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td>e.g. certificate has only server authentication usage enabled and is presented as a client certificate </td>
-                <td>-</td>
-                <th scope="row">111 </th>
-                <td>Certificate unobtainable </td>
-                <td style="background:yellow;text-align:center">
-                <b>warning</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">44 </th>
-                <td>Certificate revoked </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">112 </th>
-                <td>Unrecognized name </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td>TLS only; client's <a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank" rel="noopener" title="Server Name Indication">Server Name Indicator</a> specified a <a href="https://en.wikipedia.org/wiki/Hostname" target="_blank" rel="noopener" title="Hostname">hostname</a> not supported by the server </td>
-            </tr>
-            <tr>
-                <th scope="row">45 </th>
-                <td>Certificate expired </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td>Check server certificate expire also check no certificate in the chain presented has expired </td>
-                <td>-</td>
-                <th scope="row">113 </th>
-                <td>Bad certificate status response </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">46 </th>
-                <td>Certificate unknown </td>
-                <td style="background:orange;text-align:center">
-                <b>warning</b>/ <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">114 </th>
-                <td>Bad certificate hash value </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">47 </th>
-                <td>Illegal parameter </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td></td>
-                <td>-</td>
-                <th scope="row">115 </th>
-                <td>Unknown <a href="https://en.wikipedia.org/wiki/Pre-shared_key" target="_blank" rel="noopener" title="Pre-shared key">PSK</a> identity (used in <a href="https://en.wikipedia.org/wiki/TLS-PSK" target="_blank" rel="noopener" title="TLS-PSK">TLS-PSK</a> and <a href="https://en.wikipedia.org/wiki/TLS-SRP" target="_blank" rel="noopener" title="TLS-SRP">TLS-SRP</a>) </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-            </tr>
-            <tr>
-                <th scope="row">48 </th>
-                <td>Unknown CA ( <a href="https://en.wikipedia.org/wiki/Certificate_authority" target="_blank" rel="noopener" title="Certificate authority">Certificate authority</a>) </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-                <td>-</td>
-                <th scope="row">116 </th>
-                <td>Certificate required </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS version 1.3 only </td>
-            </tr>
-            <tr>
-                <th scope="row">49 </th>
-                <td>Access denied </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only – e.g. no client certificate has been presented (TLS: Blank certificate message or SSLv3: No Certificate alert), but server is configured to require one. </td>
-                <td>-</td>
-                <th scope="row">120 or 255 </th>
-                <td>No application protocol </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS version 1.3 only </td>
-            </tr>
-            <tr>
-                <th scope="row">50 </th>
-                <td>Decode error </td>
-                <td style="background:red;text-align:center">
-                <b>fatal</b>
-                </td>
-                <td>TLS only </td>
-                <td>-</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+        - #### Alert-EncryptedMsg-Server 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`15`：Content Type: Alert (21)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 1a`：Length，(26)；
+            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... 48 4b c8 e5 77`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup
+            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 44 af d9 1c 
+            df 98 72 4e 8e 15 5a fa 67 13 48 4b c8 e5 77</mark>
+            ```
+
+        - #### Alert-EncryptedMsg-Client 实例分析
+
+            > [?] **TLS record**：
+            <br><span style="padding-left:1em">`15`：Content Type: Alert (21)；
+            <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
+            <br><span style="padding-left:1em">`00 1a`：Length，(26)；
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... f3 1f 41 b1 29`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+
+            ```markup
+            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 02 80 d7 0f 
+            d3 8c c6 0d 7e d5 44 34 5c bc f3 1f 41 b1 29</mark>
+            ```
 
 * ## Reference
     + https://www.rfc-editor.org/rfc/rfc5246.html
