@@ -136,8 +136,8 @@ tags: [template, demo]
     
         - #### 1). 普通文本
 
-            title: "post blog title"
-            date: 2020-05-23
+            title: "post blog title" date: 2020-05-23
+            <br>**文本片段（Text Fragment）**，用于引用文档中内容高亮。定义参考 [MDN Web Docs](https://developer.mozilla.org/zh-CN/docs/Web/URI/Fragment/Text_fragments)，样例参考 [Advance:jdbc](/doc/advance/#jdbc) 中对`Autoloading of JDBC drivers`的引用内容。<span style='color:red'>限制:得在新标签页打开</span>
 
         ---
 

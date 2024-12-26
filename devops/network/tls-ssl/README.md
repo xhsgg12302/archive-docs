@@ -1164,3 +1164,14 @@
     + 
     + TLS/SSL 测试报告
     + https://www.ssllabs.com/ssltest/analyze.html?d=tech.wtfu.site&latest
+    + 
+    + TLS-HP-finished decrypt
+    + https://osqa-ask.wireshark.org/questions/57384/tls-finished-packet-renamed-encrypted-handshake-message/
+    + https://crypto.stackexchange.com/questions/34754/what-does-the-tls-1-2-client-finished-message-contain
+    + 
+    + **SSLKEYLOGFIEL**
+    + https://curl.se/libcurl/c/libcurl-env.html#:~:text=SSLKEYLOGFILE
+    + https://wiki.wireshark.org/TLS#using-the-pre-master-secret
+    + 
+    + **SSLKEYLOGFIEL format**
+    + https://www.ietf.org/archive/id/draft-thomson-tls-keylogfile-00.html

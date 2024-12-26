@@ -1,4 +1,5 @@
 ---
+title: "/"
 cascade:
     tags: ["sence", "demo", "article"]
 ---
