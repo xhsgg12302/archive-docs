@@ -5,7 +5,9 @@
 * ## TLS-RECORD(协议规范)
 
     > [?] 参考 [wiki: TLS_record](https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_record)
-    <br><br>实例分析用到的 [已经记录过的数据](./tls-record-console-output.md)，一个是来自 [bctls-debug-jdk15to18](https://github.com/bcgit/bc-java/tree/1.78.1) 结合 [idea bug(Evaluate and log)](https://www.jetbrains.com/help/idea/using-breakpoints.html#log) 输出，另外一个是 wireshark 
+    <br><br>实例分析用到的 [已经记录过的数据](./tls-record-console-output.2ed.md)，一个是来自 [bctls-debug-jdk15to18](https://github.com/bcgit/bc-java/tree/1.78.1) 结合 [idea bug(Evaluate and log)](https://www.jetbrains.com/help/idea/using-breakpoints.html#log) 输出，另外一个是 wireshark 
+
+    > [!ATTENTION|style:flat] 第一次整理好相关东西后，发现当时没有记录解密相关的东西，然后不得不重新进行第二版。所以下面实例分析中用到的数据是第二个版本。
 
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
@@ -224,14 +226,14 @@
                     <br><span style="padding-left:2em">`01`：Message type，(ClientHello)；</span>
                     <br><span style="padding-left:2em">`00 00 f9`：Handshake message data length，(249)；</span>
                     <br><span style="padding-left:2em">`03 03`：Version，(TLS 1.2 [0x0303])；</span>
-                    <br><span style="padding-left:2em">`3a 67 f5 2b 44 ...... 58 28 b3 18 b4`：Random；
+                    <br><span style="padding-left:2em">`e3 e5 0a 0c c0 ...... 05 34 d6 4b c0`：Random；
                         <input type="checkbox" class="span toggle"><span class='content'>
-                            <br><span style="padding-left:3em">`3a 67 f5 2b`：GMT Unix Time，十进制值为 979891499；[在线转换](https://unixtime.org/) 为我们时区的值: **Fri Jan 19 2001 16:04:59 GMT+0800 (中国标准时间)** </span>
-                            <br><span style="padding-left:3em">`44 11 e2 49 8e 32 6e 79 d2 ac 45 98 e8 1b 1c 74 94 3d 0d 2c 22 be 71 58 28 b3 18 b4`：Random Bytes；</span>
+                            <br><span style="padding-left:3em">`e3 e5 0a 0c`：GMT Unix Time，十进制值为 3823438348；[在线转换](https://unixtime.org/) 为我们时区的值: **Wed Feb 28 2091 02:12:28 GMT+0800 (中国标准时间)** </span>
+                            <br><span style="padding-left:3em">`c0 f1 f7 49 4c 14 89 45 9c 28 05 39 fa b4 e9 ce 08 77 f0 94 1f 44 4e 05 34 d6 4b c0`：Random Bytes；</span>
                         </span>
                     </span>
                     <br><span style="padding-left:2em">`20`：Session ID length，(32)；</span>
-                    <br><span style="padding-left:2em">`83 ce 5a f0 a0 a9 a0 a8 1e b2 b5 42 fc 2d db 66 03 2a c0 60 4b 4e 04 e1 c4 1b 12 b2 5f d5 f1 a1`：Session ID；</span>
+                    <br><span style="padding-left:2em">`e0 76 16 70 7f ac e1 53 5f 39 77 f3 98 b3 ff 2a 19 b6 76 08 3e 23 15 d2 10 78 c5 a8 c1 2a 65 3a`：Session ID；</span>
                     <br><span style="padding-left:2em">`00 1e`：Cipher Suites Length，(30)；</span>
                     <br><span style="padding-left:2em">`13 03 13 01 cc a9 c0 2b c0 23 c0 09 cc a8 c0 2f c0 27 c0 13 cc aa 00 9e 00 67 00 33 00 ff`：Cipher Suites，(两个字节为一组，总共 15 个)；
                         <input type="checkbox" class="span toggle"><span class='content'>
@@ -274,14 +276,14 @@
                                     <br><span style="padding-left:4em">`01 02`：[Supported Group: ffdhe4096 (0x0102)] </span>
                                 </span>
                             </span>
-                            <br><span style="padding-left:3em">`00 33 00 26 00 24 00 1d 00 20 54 38 8f 34 90 97 4d ab 70 78 09 dd 48 2c 2d 70 bd f6 82 ea c1 7d 2d 29 31 3b 3d 64 27 69 93 22`：[Type: key_share (51) Length: 38]
+                            <br><span style="padding-left:3em">`00 33 00 26 00 24 00 1d 00 20 20 87 73 67 9a 1e 19 0a 9c 9e 04 b8 1d 49 60 6f a1 2e 6c 12 f0 f6 19 03 24 99 0c 77 11 ec 04 60`：[Type: key_share (51) Length: 38]
                                 <input type="checkbox" class="span toggle"><span class='content'>
                                     <br><span style="padding-left:4em">`00 33`：[Type: key_share (51)] </span>
                                     <br><span style="padding-left:4em">`00 26`：[Length: 38] </span>
                                     <br><span style="padding-left:4em">`00 24`：[Client Key Share Length: 36] </span>
                                     <br><span style="padding-left:5em">`00 1d`：[Group: x25519 (29)] </span>
                                     <br><span style="padding-left:5em">`00 20`：[Key Exchange Length: 32] </span>
-                                    <br><span style="padding-left:5em">`54 38 8f 34 90 97 4d ab 70 78 09 dd 48 2c 2d 70 bd f6 82 ea c1 7d 2d 29 31 3b 3d 64 27 69 93 22`：[Key Exchange] </span>
+                                    <br><span style="padding-left:5em">`20 87 73 67 9a 1e 19 0a 9c 9e 04 b8 1d 49 60 6f a1 2e 6c 12 f0 f6 19 03 24 99 0c 77 11 ec 04 60`：[Key Exchange] </span>
                                 </span>
                             </span>
                             <br><span style="padding-left:3em">`00 05 00 05 01 00 00 00 00`：[Type: status_request (5) Length: 5 Certificate Status Type: OCSP (1) Responder ID list Length: 0 Request Extensions Length: 0 ] </span>
@@ -325,22 +327,22 @@
             </span>
 
             ```markup
-            <mark class='under red'>16 03 01 00 fd</mark> <mark class='box green'>01 00 00 f9</mark> 03 03 <mark class='under  blue'>3a 67 f5 2b 44
-            11 e2 49 8e 32 6e 79 d2 ac 45 98 e8 1b 1c 74 94
-            3d 0d 2c 22 be 71 58 28 b3 18 b4</mark> 20 <mark class='under deeppink'>83 ce 5a f0
-            a0 a9 a0 a8 1e b2 b5 42 fc 2d db 66 03 2a c0 60
-            4b 4e 04 e1 c4 1b 12 b2 5f d5 f1 a1</mark> 00 1e <mark class='under chartreuse'>13 03
-            13 01 cc a9 c0 2b c0 23 c0 09 cc a8 c0 2f c0 27
+            <mark class='under red'>16 03 01 00 fd</mark> <mark class='box green'>01 00 00 f9</mark> 03 03 <mark class='under blue'>e3 e5 0a 0c c0 
+            f1 f7 49 4c 14 89 45 9c 28 05 39 fa b4 e9 ce 08 
+            77 f0 94 1f 44 4e 05 34 d6 4b c0</mark> 20 <mark class='under deeppink'>e0 76 16 70 
+            7f ac e1 53 5f 39 77 f3 98 b3 ff 2a 19 b6 76 08 
+            3e 23 15 d2 10 78 c5 a8 c1 2a 65 3a</mark> 00 1e <mark class='under chartreuse'>13 03 
+            13 01 cc a9 c0 2b c0 23 c0 09 cc a8 c0 2f c0 27 
             c0 13 cc aa 00 9e 00 67 00 33 00 ff</mark> 01 00 <mark class='box red'>00 92</mark>
-            <mark class='under dodgerblue'>00 17 00 00</mark> <mark class='under chocolate'>00 16 00 00</mark> <mark class='under dodgerblue'>00 2b 00 05 04 03 04 03
-            03</mark> <mark class='under chocolate'>00 0a 00 10 00 0e 00 1d 00 1e 00 17 00 18 01
-            00 01 01 01 02</mark> <mark class='under dodgerblue'>00 33 00 26 00 24 00 1d 00 20 54
-            38 8f 34 90 97 4d ab 70 78 09 dd 48 2c 2d 70 bd
-            f6 82 ea c1 7d 2d 29 31 3b 3d 64 27 69 93 22</mark> <mark class='under chocolate'>00
-            05 00 05 01 00 00 00 00</mark> <mark class='under dodgerblue'>00 0d 00 30 00 2e 08 07
-            08 08 04 03 05 03 06 03 08 04 08 05 08 06 08 09
-            08 0a 08 0b 04 01 05 01 06 01 04 02 05 02 06 02
-            03 03 03 01 03 02 02 03 02 01 02 02</mark> <mark class='under chocolate'>00 0b 00 02
+            <mark class='under dodgerblue'>00 17 00 00</mark> <mark class='under chocolate'>00 16 00 00</mark> <mark class='under dodgerblue'>00 2b 00 05 04 03 04 03 
+            03</mark> <mark class='under chocolate'>00 0a 00 10 00 0e 00 1d 00 1e 00 17 00 18 01 
+            00 01 01 01 02</mark> <mark class='under dodgerblue'>00 33 00 26 00 24 00 1d 00 20 20 
+            87 73 67 9a 1e 19 0a 9c 9e 04 b8 1d 49 60 6f a1 
+            2e 6c 12 f0 f6 19 03 24 99 0c 77 11 ec 04 60</mark> <mark class='under chocolate'>00 
+            05 00 05 01 00 00 00 00</mark> <mark class='under dodgerblue'>00 0d 00 30 00 2e 08 07 
+            08 08 04 03 05 03 06 03 08 04 08 05 08 06 08 09 
+            08 0a 08 0b 04 01 05 01 06 01 04 02 05 02 06 02 
+            03 03 03 01 03 02 02 03 02 01 02 02</mark> <mark class='under chocolate'>00 0b 00 02 
             01 00</mark>
             ```
 
@@ -350,20 +352,20 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 59`：Length，(89)；
-            <br><span style="padding-left:1em">`02 00 00 55 03 ...... 01 00 00 0b 00`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`02 00 00 55 03 ...... 04 03 00 01 02`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`02`：Message type，(ServerHello)；</span>
                     <br><span style="padding-left:2em">`00 00 55`：Handshake message data length，(85)；</span>
                     <br><span style="padding-left:2em">`03 03`：Version，(TLS 1.2 [0x0303])；</span>
-                    <br><span style="padding-left:2em">`4e 4f 97 03 39 ...... 46 9c 16 8e 5b`：Random；
+                    <br><span style="padding-left:2em">`52 f6 1e a4 6d ...... 8f 28 5b e9 fe`：Random；
                         <input type="checkbox" checked class="span toggle"><span class='content'>
-                            <br><span style="padding-left:3em">`4e 4f 97 03`：GMT Unix Time，十进制值为 1313838851； [在线转换](https://unixtime.org) 为我们时区的值: **Sat Aug 20 2011 19:14:11 GMT+0800 (中国标准时间)**；</span>
-                            <br><span style="padding-left:3em">`39 fa 55 3b 42 5e 31 90 f8 25 8c 26 e2 a6 bc 43 00 4b 12 9d b7 d6 5d 46 9c 16 8e 5b`：Random Bytes；</span>
+                            <br><span style="padding-left:3em">`52 f6 1e a4`：GMT Unix Time，十进制值为 1391861412； [在线转换](https://unixtime.org) 为我们时区的值: **Sat Feb 08 2014 20:10:12 GMT+0800 (中国标准时间)**；</span>
+                            <br><span style="padding-left:3em">`6d 79 2e 2b 1b 94 70 d7 eb 21 5d 42 ed 4b a3 44 88 45 f2 b8 c1 4b 63 8f 28 5b e9 fe`：Random Bytes；</span>
                         </span>
                     </span>
                     <br><span style="padding-left:2em">`20`：Session ID length，(32)；</span>
-                    <br><span style="padding-left:2em">`d7 83 e1 70 ff 7f 85 69 c7 d7 cf 65 fd 35 c2 95 c8 ec 81 dd 79 0b e2 b5 f1 54 54 dd 9e c5 a9 29`：Session ID；</span>
+                    <br><span style="padding-left:2em">`0a 0e a0 a9 e9 88 4d 2d 07 c1 54 db 76 d3 9c e0 97 48 eb af 7e 54 ee 51 d1 bb 61 39 7a 80 53 d0`：Session ID；</span>
                     <br><span style="padding-left:2em">`c0 2b`：Cipher Suite: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 (0xc02b)；</span>
                     <br><span style="padding-left:2em">`00`：Compression Method: null (0)；</span>
                     <br><span style="padding-left:2em">`00 0d`：Extensions Length，(13)；</span>
@@ -372,11 +374,11 @@
             </span>
 
             ```markup
-            <mark class='under red'>16 03 03 00 59</mark> 02 00 00 55 03 03 <mark class='under blue'>4e 4f 97 03 39
-            fa 55 3b 42 5e 31 90 f8 25 8c 26 e2 a6 bc 43 00
-            4b 12 9d b7 d6 5d 46 9c 16 8e 5b</mark> 20 <mark class='under deeppink'>d7 83 e1 70
-            ff 7f 85 69 c7 d7 cf 65 fd 35 c2 95 c8 ec 81 dd
-            79 0b e2 b5 f1 54 54 dd 9e c5 a9 29</mark> <mark class='under chartreuse'>c0 2b</mark> 00 <mark class='box red'>00
+            <mark class='under red'>16 03 03 00 59</mark> 02 00 00 55 03 03 <mark class='under blue'>52 f6 1e a4 6d 
+            79 2e 2b 1b 94 70 d7 eb 21 5d 42 ed 4b a3 44 88 
+            45 f2 b8 c1 4b 63 8f 28 5b e9 fe</mark> 20 <mark class='under deeppink'>0a 0e a0 a9 
+            e9 88 4d 2d 07 c1 54 db 76 d3 9c e0 97 48 eb af 
+            7e 54 ee 51 d1 bb 61 39 7a 80 53 d0</mark> <mark class='under chartreuse'>c0 2b</mark> 00 <mark class='box red'>00
             0d</mark> <mark class='under dodgerblue'>ff 01 00 01 00 00 0b 00 04 03 00 01 02</mark>
             ```
 
@@ -395,7 +397,7 @@
                     <br><span style="padding-left:2em">`00 04 07 30 82 ...... 78 90 6e bf f7`：Certificates；
                         <input type="checkbox" checked class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`00 04 07`：Certificate Length: (1031)；</span>
-                            <br><span style="padding-left:3em">`30 82 04 03 30 ...... f1 2f ea db 51`：Certificate；</span>
+                            <br><span style="padding-left:3em">`30 82 04 03 30 ...... 65 83 a4 09 68`：Certificate；</span>
                             <br><span style="padding-left:3em">`00 03 89`：Certificate Length: (905)；</span>
                             <br><span style="padding-left:3em">`30 82 03 85 30 ...... 14 a1 a5 95 ab`：Certificate；</span>
                             <br><span style="padding-left:3em">`00 03 d7`：Certificate Length: (983)；</span>
@@ -407,15 +409,15 @@
 
             ```markup [data-cc:350px]
             <mark class='under red'>16 03 03 0b 77</mark> 0b 00 0b 73 <mark class='box blue'>00 0b 70</mark> <mark class='box green'>00 04 07</mark> <mark class='under dodgerblue'>30 
-            82 04 03 30 82 03 89 a0 03 02 01 02 02 10 0b a5 
-            7a 98 3f e4 c3 ae 18 ac 59 b0 b1 04 32 7f 30 0a 
+            82 04 03 30 82 03 88 a0 03 02 01 02 02 10 4f c9 
+            72 15 bf 60 1b 22 25 62 0a 35 37 a8 57 73 30 0a 
             06 08 2a 86 48 ce 3d 04 03 03 30 4b 31 0b 30 09 
             06 03 55 04 06 13 02 41 54 31 10 30 0e 06 03 55 
             04 0a 13 07 5a 65 72 6f 53 53 4c 31 2a 30 28 06 
             03 55 04 03 13 21 5a 65 72 6f 53 53 4c 20 45 43 
             43 20 44 6f 6d 61 69 6e 20 53 65 63 75 72 65 20 
-            53 69 74 65 20 43 41 30 1e 17 0d 32 34 30 39 32 
-            32 30 30 30 30 30 30 5a 17 0d 32 34 31 32 32 31 
+            53 69 74 65 20 43 41 30 1e 17 0d 32 34 31 32 32 
+            32 30 30 30 30 30 30 5a 17 0d 32 35 30 33 32 32 
             32 33 35 39 35 39 5a 30 14 31 12 30 10 06 03 55 
             04 03 13 09 77 74 66 75 2e 73 69 74 65 30 59 30 
             13 06 07 2a 86 48 ce 3d 02 01 06 08 2a 86 48 ce 
@@ -423,7 +425,7 @@
             a1 b2 29 2f 8c 31 06 2a 7f 03 7f e0 cd be 38 9b 
             c3 85 02 0e 08 13 fb 14 31 8c 52 9c 12 31 76 dd 
             be bf 92 7a 7d 66 66 79 df 2e 90 18 2b 58 62 67 
-            51 57 82 5a 6c eb 11 56 a3 82 02 84 30 82 02 80 
+            51 57 82 5a 6c eb 11 56 a3 82 02 83 30 82 02 7f 
             30 1f 06 03 55 1d 23 04 18 30 16 80 14 0f 6b e6 
             4b ce 39 47 ae f6 7e 90 1e 79 f0 30 91 92 c8 5f 
             a3 30 1d 06 03 55 1d 0e 04 16 04 14 ee f5 a9 f7 
@@ -445,33 +447,33 @@
             43 41 2e 63 72 74 30 2b 06 08 2b 06 01 05 05 07 
             30 01 86 1f 68 74 74 70 3a 2f 2f 7a 65 72 6f 73 
             73 6c 2e 6f 63 73 70 2e 73 65 63 74 69 67 6f 2e 
-            63 6f 6d 30 82 01 04 06 0a 2b 06 01 04 01 d6 79 
-            02 04 02 04 81 f5 04 81 f2 00 f0 00 75 00 76 ff 
-            88 3f 0a b6 fb 95 51 c2 61 cc f5 87 ba 34 b4 a4 
-            cd bb 29 dc 68 42 0a 9f e6 67 4c 5a 3a 74 00 00 
-            01 92 18 a0 0e eb 00 00 04 03 00 46 30 44 02 20 
-            60 ae ca 02 8d ce 11 be 52 af 5b 76 88 a0 a8 63 
-            2b d2 1c 27 24 8d ca e8 72 d0 88 8f 65 c9 b2 c9 
-            02 20 78 e3 ab fa b7 02 6e df 83 8f 91 5f 0b 9f 
-            a4 95 1d bd 4b 60 1a 5f 1c 21 52 04 b3 75 38 53 
-            5d 38 00 77 00 da b6 bf 6b 3f b5 b6 22 9f 9b c2 
-            bb 5c 6b e8 70 91 71 6c bb 51 84 85 34 bd a4 3d 
-            30 48 d7 fb ab 00 00 01 92 18 a0 0e f4 00 00 04 
-            03 00 48 30 46 02 21 00 df a0 af be 8b 27 a0 0a 
-            fc a5 de 4a 88 4f c0 f8 7b e4 c2 79 b5 a2 3d f5 
-            fb 18 02 fd 23 f6 ef 92 02 21 00 af 1f 6b 00 2e 
-            57 96 46 f7 9e 16 bb de fc 9c 4c c5 2b b8 dd 22 
-            af 6e 70 32 b5 13 75 cb 75 00 c8 30 23 06 03 55 
-            1d 11 04 1c 30 1a 82 09 77 74 66 75 2e 73 69 74 
-            65 82 0d 77 77 77 2e 77 74 66 75 2e 73 69 74 65 
-            30 0a 06 08 2a 86 48 ce 3d 04 03 03 03 68 00 30 
-            65 02 30 05 e3 a7 f8 33 0f 4e b1 62 4c 83 bb 21 
-            27 9f 1e b6 8c d4 3a 05 68 28 4e e2 21 68 ed 05 
-            dc 7c 00 75 c2 b6 10 97 a0 21 83 d3 02 89 34 d4 
-            6e 61 31 02 31 00 92 6e 16 04 c0 1e 20 f5 99 17 
-            72 b6 33 eb e7 5f 32 46 03 68 6c 6f 05 5a 90 3a 
-            82 89 90 98 05 00 8c 64 6c ae 68 5c d1 77 8d 74 
-            e1 f1 2f ea db 51</mark> <mark class='box green'>00 03 89</mark> <mark class='under chocolate'>30 82 03 85 30 82 03 
+            63 6f 6d 30 82 01 05 06 0a 2b 06 01 04 01 d6 79 
+            02 04 02 04 81 f6 04 81 f3 00 f1 00 77 00 cf 11 
+            56 ee d5 2e 7c af f3 87 5b d9 69 2e 9b e9 1a 71 
+            67 4a b0 17 ec ac 01 d2 5b 77 ce cc 3b 08 00 00 
+            01 93 ec be 8a c5 00 00 04 03 00 48 30 46 02 21 
+            00 ba 14 89 4c d4 a6 bf d5 8e 18 3b 10 63 54 35 
+            3e 16 3a f1 b0 1d e3 49 20 a0 7f 36 e0 44 30 e7 
+            e1 02 21 00 a8 dc 88 b6 51 32 6b 67 1e 60 d9 3a 
+            8b 2e f1 f9 1c f1 ff 18 8d c5 3f f7 9b cc 4b d4 
+            28 db 5c 13 00 76 00 cc fb 0f 6a 85 71 09 65 fe 
+            95 9b 53 ce e9 b2 7c 22 e9 85 5c 0d 97 8d b6 a9 
+            7e 54 c0 fe 4c 0d b0 00 00 01 93 ec be 8a 8f 00 
+            00 04 03 00 47 30 45 02 20 1b ff 93 39 6b c9 87 
+            b7 00 d6 45 63 66 92 b3 60 a0 4f 85 86 d5 1a 7a 
+            4d 4d 40 30 d8 9e 7a 21 df 02 21 00 fa b6 ae 47 
+            eb 9f c3 a7 f7 e1 87 3c 28 aa a3 47 88 81 af 36 
+            ff 1d 16 3e f1 3a 6c 5f 90 cb e3 e1 30 21 06 03 
+            55 1d 11 04 1a 30 18 82 09 77 74 66 75 2e 73 69 
+            74 65 82 0b 2a 2e 77 74 66 75 2e 73 69 74 65 30 
+            0a 06 08 2a 86 48 ce 3d 04 03 03 03 69 00 30 66 
+            02 31 00 f9 31 c9 8c 2e 6b f5 ca d4 ad dd 19 87 
+            27 1f d8 bd 32 ea 6c 99 6c 2e d6 c7 87 1c 02 f1 
+            33 40 68 3a 1a 03 cd 65 10 ae 68 63 85 2e 30 80 
+            22 da 47 02 31 00 b6 93 15 5e 96 75 ce 12 4e c0 
+            c7 14 79 2b 0a 63 ed 00 42 3a a3 82 0a 68 29 d2 
+            90 2a a8 59 c7 56 df 33 53 6f 59 0e 30 ec a0 81 
+            42 65 83 a4 09 68</mark> <mark class='box green'>00 03 89</mark> <mark class='under chocolate'>30 82 03 85 30 82 03 
             0c a0 03 02 01 02 02 10 23 b7 6d e3 c1 bb 2b 1a 
             51 96 1e 08 ea b7 64 e8 30 0a 06 08 2a 86 48 ce 
             3d 04 03 03 30 81 88 31 0b 30 09 06 03 55 04 06 
@@ -489,9 +491,9 @@
             30 0e 06 03 55 04 0a 13 07 5a 65 72 6f 53 53 4c 
             31 2a 30 28 06 03 55 04 03 13 21 5a 65 72 6f 53 
             53 4c 20 45 43 43 20 44 6f 6d 61 69 6e 20 53 65 
-            63 75 72 65 20 53 <mark class='box blue'>69</mark> 74 65 20 43 41 30 76 30 10
+            63 75 72 65 20 53 69 74 65 20 43 41 30 76 30 10 
             06 07 2a 86 48 ce 3d 02 01 06 05 2b 81 04 00 22 
-            03 62 00 04 36 41 61 17 2b 53 25 ed aa ca 94 e4
+            03 62 00 04 36 41 61 17 2b 53 25 ed aa ca 94 e4 
             d6 da 48 57 ef 50 ba 84 64 82 d7 bb 05 1b d6 1f 
             06 24 f6 a5 33 9d 8c e7 f1 0b 55 68 63 82 30 10 
             5f 8d 65 ec aa a8 af 97 ca b5 86 ce 30 01 89 74 
@@ -578,7 +580,7 @@
             0e 9c 75 5b 2c 15 e2 29 40 6d ee ff 72 db db ab 
             90 1f 8c 95 f2 8a 3d 08 72 42 89 50 07 e2 39 15 
             6c 01 87 d9 16 1a f5 c0 75 2b c5 e6 56 11 07 df 
-            d8 98 bc 7c 9f 19 39 df 8b ca <mark class='box blue'>00</mark> 64 73 bc 46 10 
+            d8 98 bc 7c 9f 19 39 df 8b ca 00 64 73 bc 46 10 
             9b 93 23 8d be 16 c3 2e 08 82 9c 86 33 74 76 3b 
             28 4c 8d 03 42 85 b3 e2 b2 23 42 d5 1f 7a 75 6a 
             1a d1 7c aa 67 21 c4 33 3a 39 6d 53 c9 a2 ed 62 
@@ -589,7 +591,7 @@
             28 ef 4a 8b 44 31 26 04 37 8d 89 74 36 2e ef a5 
             22 0f 83 74 49 92 c7 f7 10 c2 0c 29 fb b7 bd ba 
             7f e3 5f d5 9f f2 a9 f4 74 d5 b8 e1 b3 b0 81 e4 
-            e1 a5 63 a3 cc ea 04 78 90 6e bf f7</mark>
+            e1 a5 63 a3 cc ea 04 78 90 6e bf f7
             ```
 
         - #### HP-ServerKeyExchange 实例分析
@@ -597,37 +599,37 @@
             > [?] **TLS record**：
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
-            <br><span style="padding-left:1em">`00 93`：Length，(147)；
-            <br><span style="padding-left:1em">`0c 00 00 8f 03 ...... 91 bf 6b 44 11`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`00 94`：Length，(148)；
+            <br><span style="padding-left:1em">`0c 00 00 8f 03 ...... d4 97 74 87 44`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`0c`：Message type，(ServerKeyExchange)；</span>
-                    <br><span style="padding-left:2em">`00 00 8f`：Handshake message data length，(143)；</span>
-                    <br><span style="padding-left:2em">`03 00 17 41 04 ...... 91 bf 6b 44 11`：EC Diffie-Hellman Server Params；
+                    <br><span style="padding-left:2em">`00 00 90`：Handshake message data length，(144)；</span>
+                    <br><span style="padding-left:2em">`03 00 17 41 04 ...... d4 97 74 87 44`：EC Diffie-Hellman Server Params；
                         <input type="checkbox" checked class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`03`：Curve Type: named_curve (0x03)；</span>
                             <br><span style="padding-left:3em">`00 17`：Named Curve: secp256r1 (0x0017)；</span>
                             <br><span style="padding-left:3em">`41`：Pubkey Length: 65；</span>
-                            <br><span style="padding-left:3em">`04 b2 9d da 3c ...... c9 77 a8 33 7b`：Pubkey；</span>
+                            <br><span style="padding-left:3em">`04 cf 1f 1d 3c ...... a3 9d 7e c1 a4`：Pubkey；</span>
                             <br><span style="padding-left:3em">`06 03`：Signature Algorithm: ecdsa_secp521r1_sha512 (0x0603)；</span>
-                            <br><span style="padding-left:3em">`00 46`：Signature Length: 70；</span>
-                            <br><span style="padding-left:3em">`30 44 02 20 4d ...... 91 bf 6b 44 11`：Signature；</span>
+                            <br><span style="padding-left:3em">`00 47`：Signature Length: 71；</span>
+                            <br><span style="padding-left:3em">`30 45 02 21 00 ...... d4 97 74 87 44`：Signature；</span>
                         </span>
                     </span>
                 </span>
             </span>
 
             ```markup
-            <mark class='under red'>16 03 03 00 93</mark> 0c 00 00 8f <mark class='box green'>03 00 17 41</mark> <mark class='under dodgerblue'>04 b2 9d 
-            da 3c 48 fc b4 1b f2 d5 2a 8e e1 fe 50 c3 e0 7a 
-            1a 25 9f f0 de fe 12 8d b5 24 2f f3 ac 79 7a e7 
-            db 1a 7d 55 79 41 c1 f4 31 75 5d d8 64 8c c1 38 
-            0c 6e a8 91 2e c1 c2 98 4a c9 77 a8 33 7b</mark> 06 03 
-            00 46 <mark class='under chocolate'>30 44 02 20 4d 72 54 2a 6c 0f 82 02 c9 3e 
-            cf a0 df 0f f4 36 ac d7 52 73 68 31 02 8c bd c1 
-            48 69 20 5d 4b 2e 02 20 6c 70 35 34 b2 b3 79 66 
-            4e f0 19 14 46 76 43 5b 6c e4 60 ff 6d 80 d6 ed 
-            f2 fb 74 91 bf 6b 44 11</mark>
+            <mark class='under red'>16 03 03 00 94</mark> 0c 00 00 90 <mark class='box green'>03 00 17 41</mark> <mark class='under dodgerblue'>04 cf 1f 
+            1d 3c 13 27 b0 bf d5 0d f9 55 9e b2 c2 e5 f7 ad 
+            ed db db 34 03 37 6e d2 e9 b1 ae 93 a0 b1 33 87 
+            5d 9b 90 d9 71 ee df ea 19 d3 b9 da 74 bf 60 f3 
+            39 4c 37 5d dc 75 82 68 fe a3 9d 7e c1 a4</mark> 06 03 
+            00 47 <mark class='under chocolate'>30 45 02 21 00 de ed 7f a8 fd 3c d8 e0 d5 
+            f2 e0 cf 22 eb a8 48 c6 a8 11 4a 65 30 7a 9e c6 
+            8d fa 22 a2 a5 b0 e5 02 20 11 2d 77 5a 4b 27 a0 
+            b6 0a 00 c0 e0 f5 ca 53 ba 57 66 40 76 79 26 c3 
+            40 c0 fc 46 d4 97 74 87 44</mark>
             ```
 
         - #### HP-ServerHelloDone 实例分析
@@ -654,26 +656,26 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 46`：Length，(70)；
-            <br><span style="padding-left:1em">`10 00 00 42 41 ...... 7a db 03 4b db`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
+            <br><span style="padding-left:1em">`10 00 00 42 41 ...... 40 ab 94 b1 ef`：Protocol message(s)，因为类型 **0x16** 是一个握手包，所以按照握手包协议进一步解析。
                 <input type="checkbox" checked class="span toggle"><span class='content'>
                     <br><br><span style="padding-left:1em">Handshake protocol：</span>
                     <br><span style="padding-left:2em">`10`：Message type，(ClientKeyExchange)；</span>
                     <br><span style="padding-left:2em">`00 00 42`：Handshake message data length，(66)；</span>
-                    <br><span style="padding-left:2em">`41 04 bb 8a 9f ...... 7a db 03 4b db`：EC Diffie-Hellman Client Params；
+                    <br><span style="padding-left:2em">`41 04 8e 74 54 ...... 40 ab 94 b1 ef`：EC Diffie-Hellman Client Params；
                         <input type="checkbox" checked class="span toggle"><span class='content'>
                             <br><span style="padding-left:3em">`41`：Pubkey Length: (65)；</span>
-                            <br><span style="padding-left:3em">`04 bb 8a 9f 88 ...... 7a db 03 4b db`：Pubkey；</span>
+                            <br><span style="padding-left:3em">`04 8e 74 54 c4 ...... 40 ab 94 b1 ef`：Pubkey；</span>
                         </span>
                     </span>
                 </span>
             </span>
 
             ```markup
-            <mark class='under red'>16 03 03 00 46</mark> 10 00 00 42 <mark class='box green'>41</mark> <mark class='under dodgerblue'>04 bb 8a 9f 88 82 
-            df 83 95 ec 48 a0 a0 d6 89 57 73 da 8f 11 de 3c 
-            06 77 1d e9 a9 75 80 a1 aa 4b 38 da e4 22 18 38 
-            be 32 6a 91 47 03 71 51 72 83 df be c5 7f 85 da 
-            c8 44 40 0c 2f 8a 7a db 03 4b db</mark>
+            <mark class='under red'>16 03 03 00 46</mark> 10 00 00 42 <mark class='box green'>41</mark> <mark class='under dodgerblue'>04 8e 74 54 c4 02 
+            9d a0 63 1d 72 d2 ee 25 74 2d 59 82 6f 1b 85 51 
+            65 38 c8 e7 4a 3e af 4c bc fa 83 cc c5 6c f5 c2 
+            93 1a 51 34 ac 2e 60 13 0d 17 23 35 d7 2e c2 01 
+            2e 1e a5 47 f5 60 40 ab 94 b1 ef</mark>
             ```
 
         - #### HP-EncryptedMsg-Client 实例分析
@@ -682,12 +684,12 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 28`：Length，(40)；
-            <br><span style="padding-left:1em">`00 00 00 00 00 ...... 98 30 48 0d 91`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... 6e 4e 12 56 8e`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup
-            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 00 12 aa cc 
-            d7 92 f7 d5 c1 0f fc 7f 8e 7f 3c 17 33 01 d1 a7 
-            8e 71 a3 63 24 d2 83 5b 98 30 48 0d 91</mark>
+            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 00 04 c1 4c 
+            a1 7a c3 ed ad 20 45 0a 2c 32 08 b2 db 6c 79 76 
+            d8 5b 3d ae 76 ff 1e 28 6e 4e 12 56 8e</mark>
             ```
 
         - #### HP-EncryptedMsg-Server 实例分析
@@ -696,12 +698,12 @@
             <br><span style="padding-left:1em">`16`：Content type，(表示握手包)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 28`：Length，(40)；
-            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... e4 2b e0 96 fc`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`84 ef 8c ec 32 ...... 80 58 e6 6d a4`：Protocol message(s)，因为类型 **0x16** 是一个握手包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup
-            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 42 1f 4a 38 
-            51 22 d5 b2 8f 99 61 fa fc 1c 53 0c 45 e2 5b b4 
-            51 5d 7b e1 98 d1 4a 0e e4 2b e0 96 fc</mark>
+            <mark class='under red'>16 03 03 00 28</mark> <mark class='under dodgerblue'>84 ef 8c ec 32 b4 9f d9 a5 e6 04 
+            70 54 90 69 44 14 84 ce ad d3 03 e0 eb 66 36 3e 
+            01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>
             ```
 
     + ### ChangeCipherSpec protocol
@@ -844,25 +846,25 @@
             <br><span style="padding-left:1em">`17`：Content Type: Application Data，应用层数据 (23)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 fa`：Length，(250)；
-            <br><span style="padding-left:1em">`00 00 00 00 00 ...... 1f c0 ea ff 0b 9d`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... ab 32 d2 0d 12`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup
-            <mark class='under red'>17 03 03 00 fa</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 01 0c 1f ff 
-            af 02 be 77 01 49 50 e2 88 4a 1d 19 e6 7a b1 4b 
-            03 ef cc 75 79 6a 59 f0 29 84 a8 28 13 20 e2 4a 
-            18 2f 54 9d 22 08 a2 02 d8 a0 49 c9 c0 1f 29 1e 
-            0e bb e6 b2 f2 48 92 39 a1 87 9f 56 6a f6 6d ea 
-            45 b7 89 92 34 e1 80 b9 7d 41 00 cd ad 65 57 3c 
-            5f a5 6a 3a a6 e8 d4 e6 f7 dc 3f e3 15 b6 51 3e 
-            97 8a 6a 8f c8 2a b8 e8 ab f3 a7 d4 31 17 8f e5 
-            4b 0c 9e 0f 70 90 b1 de 28 94 5f c3 f1 ac 8b 34 
-            96 db 03 05 73 29 2c 2b 6e df 40 b5 52 9c 71 31 
-            da 59 8b 3d 46 77 c8 13 6e 7e 21 41 57 d0 92 f2 
-            9c 5b a5 43 a3 11 96 9c c5 1d a3 a7 ef aa af b5 
-            89 e1 7d 20 77 04 60 32 7e 8f 61 bc 30 9d 8b 5b 
-            c7 97 d6 27 25 96 d1 c7 69 67 e0 8c 77 ff d5 57 
-            3d 72 37 99 cd f2 48 8a f2 ec a3 e2 ea 0f 08 6d 
-            0f e9 9f a7 6d 63 ab 3a 35 1f c0 ea ff 0b 9d</mark>
+            <mark class='under red'>17 03 03 00 fa</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 01 5b 2e c7 
+            61 b1 bb 92 38 2c a9 d0 7e 65 2b 6f 7a 95 71 5d 
+            28 bf f2 0a 14 d7 12 17 15 8f e5 ea 39 e9 aa 22 
+            f4 47 b8 26 48 9b e8 4e 41 1f 16 3b e4 03 c5 b6 
+            0b 9e 4d 9b a8 22 25 55 65 30 b7 52 a1 a3 d4 45 
+            5b 66 87 ae 9d 7d c6 c2 2c c4 d1 a1 a1 06 ee 46 
+            89 42 cd 52 27 9e 8b ca 57 d7 b7 74 38 5e cb 79 
+            cc af 89 31 06 b9 f4 c6 37 dd d2 bd ba 52 e1 32 
+            a5 2e c1 5f 64 42 97 f7 f2 f2 62 3e 04 e8 ed 69 
+            e0 a2 23 1e 9a 7d 5b dc 0b 4f b9 fa 46 19 90 9e 
+            05 eb 93 c7 57 b6 ee 50 bb 87 ba e7 bb 1f dc 27 
+            b0 68 ff 50 9f fd 51 78 39 97 72 f1 c8 ce b7 78 
+            c7 fa 51 d7 04 d7 98 cb 4d f2 1f 80 5c 0c a1 62 
+            a9 b0 95 a4 7a 27 b1 0f 20 ab 34 30 6c 2a f4 be 
+            53 14 d0 e7 b0 4c 6a bb 89 89 41 d3 db 59 06 ca 
+            2a 37 ca 46 de 19 08 e9 14 a9 ab 32 d2 0d 12</mark>
             ```
 
         - #### AP-EncryptedMsg-Server 实例分析
@@ -871,171 +873,170 @@
             <br><span style="padding-left:1em">`17`：Content Type: Application Data，应用层数据 (23)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`0a 04`：Length，(2564)；
-            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... 86 9f 9e 98 e2`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`84 ef 8c ec 32 ...... 05 98 5c f7 39`：Protocol message(s)，因为类型 **0x17** 是一个应用层数据包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup [data-cc:400px]
-            <mark class='under red'>17 03 03 0a 04</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 43 45 db 32 
-            e4 d2 bc 62 47 f7 17 bd ce ae 1c e3 d2 03 50 ef 
-            72 43 07 56 93 9d e9 a2 3a 83 d9 ef d9 0f f0 04 
-            03 c9 95 b4 b2 4e d6 5b c7 31 d2 a3 70 97 ff d3 
-            96 42 9d 6a 2d be 8c 63 50 52 4c 1d 4d 2d b3 73 
-            b5 8e 4d f4 55 1b 6a 47 8c c5 da 19 7f 3c a4 fd 
-            0c b8 ab 8f 7d 63 f8 99 b7 5d 6b 46 78 c3 0b 74 
-            c1 e1 c5 28 c4 2e ac c3 63 d4 a4 a7 a8 b6 b0 29 
-            01 d8 79 9e c4 1e f6 2a 41 15 3b 78 d1 e9 17 1e 
-            cd 7a 33 bf db 01 88 88 39 40 50 33 0a 37 11 f6 
-            4c 65 a8 55 5e 93 2d 73 ce d0 d7 f7 94 23 78 8d 
-            3a c4 f3 07 ef 8a 91 e7 c1 4a 36 c9 bb f2 c7 d9 
-            1f 80 19 6f 85 ff 45 bd 95 75 78 65 c3 46 33 d8 
-            bc 11 24 b8 4a d6 04 6e 59 79 01 28 45 62 2c aa 
-            54 06 1c ac e4 75 50 c7 25 21 26 8a f1 d3 71 1c 
-            7a 6b b4 08 aa 55 05 d5 be 70 b5 4b 7d 31 83 40 
-            51 29 07 66 0e 49 88 fe 5c 06 b4 39 ed 6c 16 f3 
-            0f 92 27 ca 9f 75 ff 0b 51 b6 53 cd ac 2a 3e dd 
-            68 d1 56 78 66 ff c1 58 6a 51 68 2c 67 cf 19 31 
-            15 fc 2a 33 e8 bb f0 e0 98 27 32 08 b5 30 5e d0 
-            63 ba e3 da 01 7f da 0c 16 1e 2e 8c f1 0c 6e 6d 
-            cf 1d 9d 0c e2 35 3e 6b 80 8d ca 28 25 29 d5 6d 
-            76 ce 94 7c ac 8c 81 df 4f f1 39 8e 17 be b3 46 
-            ca 17 d4 57 ce 2a 7b 5e 4e 2f 36 c5 95 af 48 ba 
-            f6 33 8b 1a 32 4d 74 ea 45 c5 ca 44 bd d7 35 14 
-            f8 f5 b3 60 0b f2 c7 7b 78 a4 46 e7 5f 58 be 13 
-            2a 36 e2 32 ea 4e 74 9f a1 fa 38 b9 93 8b 6b 16 
-            ea d2 8d 2a 2b 59 86 2e 85 c4 b9 82 3c e1 1a d2 
-            d4 de e7 fb 26 27 b0 a9 9e 5e aa 59 6e b2 ce 61 
-            1b 15 c5 31 f2 ec 0e 28 2e d4 3f d8 41 d2 4e e6 
-            b5 78 67 a7 bf d3 25 0e b7 0a 96 d8 28 ee fd 93 
-            c9 21 d0 c0 71 18 92 a2 df d3 ec 4f b6 e8 2a bd 
-            d8 cc 9a 18 c3 f5 5d 96 a2 01 49 dd cc 1f c3 20 
-            14 8a eb d1 fa c0 2e 1b 99 3c e1 99 c7 e1 71 45 
-            81 17 5e 7a 68 90 fc 41 a2 b9 71 1d c7 98 ed 6e 
-            17 2d ab f4 c1 33 8e d0 72 7c 55 69 90 5a bf d5 
-            b2 03 75 53 5f 2d f3 b7 89 80 cc f8 33 13 cc d7 
-            6c 2b e4 b7 eb 7f 51 df 9a 68 35 a3 6a 5c a1 c0 
-            f3 55 61 8d f4 6b 98 50 5e 84 a5 58 23 fd 06 5c 
-            fa 6d a5 ee d1 c7 9a d0 c6 a9 40 5e 69 d3 ba a7 
-            ab 9b eb 5d 81 f0 e4 59 67 ff d0 87 89 7b e5 7d 
-            7b cf 68 84 bb 1c 90 9f ac ea c1 16 16 f2 70 14 
-            24 63 6f ed ba 35 85 d6 4e 2a 65 7d f0 d0 bc 99 
-            0a f7 eb 36 53 d6 ee 26 d8 22 76 45 5f 51 09 80 
-            f3 2d 9d 06 71 bd b0 3d a4 d4 75 ec ca 45 f0 af 
-            53 64 b3 03 42 85 88 51 14 d7 06 e3 8f 17 3e 4c 
-            83 0c 39 8b ae cd 2d 7d 14 97 4f 02 9f 2b 22 47 
-            43 d0 5e 93 2a f0 11 39 f1 28 44 a4 77 3a 1f 3e 
-            fa d5 54 b5 49 a8 dc f0 d8 d8 4b 47 d7 47 b8 e4 
-            f1 fc d5 73 b6 8d be a5 52 ef 6e 8d 38 03 90 fe 
-            4b 73 5d a5 10 2c 93 ce f4 ab 5b 1d 96 32 0e c1 
-            7b b3 a5 ad 0b aa 4f 31 74 3b f6 35 c2 59 65 37 
-            1b f7 db 9c bb 82 09 e7 86 66 b6 e6 8a 50 ab 1e 
-            60 f2 fa 51 d8 cb 81 06 73 81 e0 25 e9 66 90 48 
-            ef 78 9c a4 9b 21 78 e9 81 34 f0 eb 57 3d f8 75 
-            72 fc 9e 03 ff bc 0b 48 3a 8b 6b ca fd 79 24 cc 
-            c4 94 45 3b 07 f8 43 7e ae 38 32 b2 2b d2 ce f5 
-            ab 67 b2 21 34 ed 17 92 35 ed 0b 71 8d 88 a4 42 
-            bb 2a 42 a2 cb 2e 70 91 5c 28 70 e4 0c 5d 90 3b
-            06 62 6a 0f 11 2a ce 35 41 67 cb dc 1a 35 e5 7c 
-            1e e0 f5 ea c8 23 f1 ab 9d 5e fa 51 53 56 c7 4e 
-            3a a3 32 c3 43 a9 9d 5c 3a 50 41 c9 70 16 02 69 
-            d2 0e 6d c6 ad fa d7 f1 0d 83 70 f4 ac 3c 19 c7 
-            f4 10 0d f6 af a0 98 26 02 dc bb b8 12 9e 53 91 
-            19 e7 be 73 fc b5 15 44 ef 68 2c fb 4e 7b b9 8c 
-            a0 ec 00 5c a3 68 9d bc 10 59 ab 58 20 2f 5e 14 
-            4b 8a 61 d3 cc 64 b2 b3 d2 b1 55 99 44 8c 1e a0 
-            cf b7 1c 81 07 2f ba a1 76 b1 75 39 c8 41 cf 4f 
-            08 ed 7e 2b b9 7b 2a d7 98 9e 7f c4 08 34 58 0a 
-            44 1d 8e 06 fa dd e7 58 22 2e ce 4d 78 0a 65 2d 
-            e5 41 5e be d1 d2 d5 34 67 86 53 e8 94 ec 8e 5e 
-            e5 ee de d2 88 17 8e 0a f7 2e 7c 05 fe a2 60 ae 
-            f4 cd 65 bf c0 de ff dc df b9 c0 33 26 ee 24 a9 
-            39 58 3f 9d 2e af 5e a4 e2 ba 14 6b 33 3c fa 5a 
-            89 ee 5e 0d 1d 87 bf 93 4b 85 0e 10 fc 31 8b 74 
-            8d 1f 17 51 7d d0 da 6a dc df c9 61 77 05 af 67 
-            b7 29 7f 4d 31 00 7a 7b 2d 7e fd 5b eb 2b 72 cc 
-            ba e4 fe 50 8b 90 e3 5e ed 79 9b d0 70 f1 ad 5e 
-            da 96 63 15 83 53 e3 7c 07 45 08 ae 61 4d 1a 51 
-            fe 0e 97 2c ac 75 84 5b cd d0 5c e9 34 d9 4f c1 
-            92 35 d0 34 a2 cc a1 4f 42 78 18 c1 88 2b 1d 98 
-            22 62 d9 c1 b0 ab 38 32 03 69 ea af 29 07 5b 61 
-            f0 89 81 95 63 4f 18 3f dc 2e 40 ae 98 a0 d7 74 
-            02 6a 72 fa 90 86 b9 82 15 a0 71 4e 2e fc 98 b4 
-            c3 0e 60 2b 03 c3 bb 97 96 71 35 2e 63 17 78 9f 
-            48 7d b7 35 ce e2 90 2a 20 45 10 69 57 99 f9 cc 
-            3c 6a 3a 05 12 af 5b 78 ba e0 1f 4f 37 6a 52 27 
-            45 b3 62 04 34 1d c4 54 bb af d8 4d 1e 49 2c 17 
-            f2 87 df 4d 8f 00 7d 73 59 83 40 4f 21 f3 30 c3 
-            5c a9 9c 5f 2e 9f d2 03 3d db 23 6d 7c 59 04 59 
-            5c b6 7e 44 e7 61 0f 3a d6 2d aa eb c4 ed 8c 35 
-            c2 60 97 92 e4 9e 0d 63 d3 e4 b7 3c c8 a8 44 ca 
-            f4 87 01 e4 37 42 ba 88 14 4c 41 12 6c 5f 85 54 
-            7b 42 5f 2b 10 e2 25 cc bf 23 c7 da cd 88 cb bb 
-            a1 f8 f7 08 ae d0 eb 72 9d 88 ef 5c 8f 40 d0 1c 
-            23 92 2f 7c 22 33 e1 fa 6d 68 e6 70 aa dd 8f 82 
-            2a 5e c4 92 f6 df 05 db 45 9e e0 29 0b c0 23 97 
-            14 df 7f 2d f9 54 63 09 7d 24 55 62 6a c2 95 21 
-            4c 22 bf 0f c1 e6 18 57 87 f5 41 ba 6b a1 31 aa 
-            2f 4f e8 1c 27 57 a4 ce 8a 26 d7 71 a1 68 39 cf 
-            18 5e e8 8f 76 dd 53 c6 46 bb ab 0d b4 4c 16 c8 
-            ea b2 87 d6 40 f3 1d d0 c0 08 58 35 c9 fb 7d 66 
-            ee 8c 2f d8 f6 89 77 68 78 1c 93 43 99 aa 6f ef 
-            2e e7 a6 72 5a fc 4b f4 ba b8 3b c4 07 e2 1e c1 
-            3f 4e 90 3c 93 c7 cb cc 1b 2c 24 f6 a3 75 e4 6b 
-            d4 98 64 e7 d3 56 ca 76 d8 0a 8c 92 75 68 3b 6c 
-            e5 80 04 1d 01 6f 67 94 7c 28 7f 88 1d 54 7c fc 
-            bf 14 6e 0f e1 11 a6 4f 95 f1 ed c0 39 dd 3f 1d 
-            29 2c 0a bf 75 65 30 1b e7 a8 7c cf 8b 21 71 64 
-            cf 74 30 52 1a df 56 b9 38 52 8d 0c c7 1e 64 6d 
-            9f bb e3 0e f3 c6 94 6b 3f 89 7a ea 3f 60 3e 4f 
-            97 da ef 33 1e b0 bf 24 7b c8 a0 4a 16 51 e8 40 
-            6f 47 4c b3 53 99 d6 d4 46 26 bf e3 cf 3a 1a e6 
-            2f ed 88 7b 9f 15 01 ce 2f d6 cc d2 ef bb ff a0 
-            22 10 94 bf 34 c6 3f a5 ef 95 72 4d b8 ce cf df 
-            1e f4 58 46 16 af e7 3b 7c 66 bb 01 0c af db ab 
-            4d 3e bf 72 9e cb 40 eb 42 19 1f 8a 59 94 f2 3b 
-            9b a8 95 8e 82 2f e7 7c 11 a9 21 ce a3 0e 7f cf 
-            23 1b fa e0 6a 9d c1 b3 c3 29 d7 32 ca 27 e6 1c 
-            d3 3c a5 a3 4b 9a 5c 0f fe 53 7c 1d 46 f1 0e d1 
-            34 50 81 23 f4 e6 74 7d ab 0e 65 37 9b f0 82 bc 
-            1c d0 b9 2c 31 33 d1 8d 05 76 0c 35 b6 af 96 01 
-            73 01 ab bf ef b4 39 16 bb 9f d1 7d 02 97 f8 63 
-            20 c6 46 f7 da 4e 54 d8 a8 6e 7d 82 88 d5 10 20 
-            28 ea 33 79 b4 e1 04 f3 f8 b4 bc 10 f6 0b 70 a8 
-            29 19 8e e5 49 a7 40 60 0f 13 5f 0f f8 7f 3d 10 
-            27 fc 60 e3 2d 27 94 ac 79 6e 59 22 b4 a0 21 55 
-            4b 6b ff 44 67 2f 59 45 de a9 71 7d b3 10 d9 e4 
-            bd 6f c7 bf 30 49 d3 9e e7 95 f5 2f 86 9b ad c0 
-            e2 bc 46 46 6e a4 f7 86 dc d5 cb 68 fd c8 63 11 
-            38 55 2f f9 58 d4 85 e8 82 dc b1 a5 a5 53 18 64 
-            5d 2e d8 4b 4a e2 1c ed 35 5e aa dd 09 0a b6 17 
-            c3 84 61 d5 b9 bc cd ba 28 a4 ca 8c 38 09 eb 61 
-            1d da b5 bf c6 3e d1 14 a9 54 68 d3 90 3f 08 ed 
-            4f 71 0a c5 c0 50 ce 53 a6 21 e3 d9 8d 91 b3 60 
-            0b cb 33 6c 57 4b 90 9d 06 a7 cd 6f 2a 55 29 21 
-            e5 10 5e ea c4 6d 6c e9 22 1b 87 1d 06 6f 73 7f 
-            0d 95 f0 e9 a0 61 0b cf 58 ca 28 f2 8c b2 46 21 
-            ee a2 5c 4a 54 da cf 72 8d 0f 6a 7f cd af 3a 96 
-            4f c0 bd 7a 08 6f 05 d7 80 da b8 d7 0b 72 f4 e3 
-            ba 8b 18 15 ef 82 1f 60 f4 29 c0 b7 31 67 1f fb 
-            d2 c4 2a 1c 04 69 ec ab 5e a8 47 41 14 9e ce e8 
-            80 f3 5a d3 cb f3 74 84 ec 17 53 78 4d e5 f7 24 
-            91 08 6b 53 fe 4d db 19 f4 0b a5 87 34 31 6f 1d 
-            0f 65 3f d8 c7 3e 91 02 77 dd 2d db d6 3a c7 81 
-            cd 14 33 da dd 59 1d 98 f1 ca 8d 93 4d be 55 40 
-            a0 3d c6 10 67 c6 37 26 44 9f d9 87 a9 8a 74 4a 
-            d3 2d e0 ec 29 1c 13 9e 9e ec 4a 47 39 d5 9d 46 
-            2c c3 2d 64 d8 4a 61 ed 89 d8 46 6c 9c 13 ce 5b 
-            ad 80 4d e4 ac 3f 67 87 24 ce 67 4c 5c 23 a8 10 
-            8e fb c6 80 5e 4b 69 27 49 6e da 27 49 61 77 31 
-            81 98 4e 7f 58 ef 58 11 bb f5 77 f5 44 6a 95 4d 
-            ca bd 99 c3 b4 5b 35 98 a8 2a 58 08 24 ea 6e a6 
-            b4 13 77 a1 67 e9 76 7c 8a 99 2b 0d 7d b8 f1 f9 
-            6c b9 ce a4 8d df 54 ab 59 ae a7 24 5e 9a f9 54 
-            e6 b6 03 08 3c b1 bc 00 23 71 c7 5f 27 e7 ab 52 
-            7f 76 68 ae 9e 93 28 67 df cf f4 42 5f 51 f4 ae 
-            85 3e 5b be 84 68 b1 c5 0f 07 e9 ba be e2 d3 41 
-            bc 78 f1 d5 c8 de 35 52 96 e5 1a e0 84 89 a6 83 
-            a4 6f 54 82 c4 39 f0 03 a8 6d e5 89 b8 b7 61 73 
-            cf 49 72 b4 86 9f 9e 98 e2
-            </mark>
+            <mark class='under red'>17 03 03 0a 04</mark> <mark class='under dodgerblue'>84 ef 8c ec 32 b4 9f da 96 81 de 
+            e1 95 e3 1c 13 dc cf 70 da d2 f9 30 c6 70 49 47 
+            f1 78 eb b6 eb 7e ba c7 7b 22 3a 18 6b 2e 29 fe 
+            f8 d6 46 62 21 89 d8 84 05 a5 29 28 23 bc a8 05 
+            2b 0f 77 95 bb e2 ba 20 14 c5 5d 89 5d 11 c2 df 
+            5d 46 f0 4d 38 5e 2c ca 1f 46 4f 05 4e 8d 6d f8 
+            7a 0a 30 22 78 49 08 3f 40 bd e6 52 99 39 19 7d 
+            59 8c 19 3c 9f b4 f5 0f 68 e7 51 00 47 71 4a 12 
+            a2 97 35 8e e9 12 65 01 88 17 7e fd 85 c1 e6 f1 
+            0f ca bf 0d 08 88 8c b9 d4 c4 5f 4b 18 bf ba 26 
+            f6 15 84 92 df be e5 83 15 d7 3b 6c 92 d7 66 e5 
+            a6 ad 42 77 0d eb 24 f2 21 fb 60 04 c4 a5 ab 8e 
+            7b df 2f c9 74 a3 83 a5 29 bd b6 c3 e4 d7 d1 e9 
+            b3 78 91 af c3 00 1a 0f 3a 61 19 ce 2a 9b 43 1e 
+            d1 f7 02 6c 93 90 46 0a 8b 6c 96 37 56 6d dd 3d 
+            3b a0 68 ad 30 e6 f4 3b 02 b5 05 73 8b a9 4b 3f 
+            2e 0d 26 e2 f4 be ad 30 9a 52 83 73 65 b4 b2 e8 
+            6b b2 0d 66 ba dd 58 8d 5c 2e 34 13 e0 52 0b 91 
+            66 dd ed 30 2c b9 9e 7a 14 4b 52 06 8d 3f bd 01 
+            72 dc b2 68 0d 83 64 c4 00 01 12 b4 34 4a c4 bd 
+            15 eb e6 1c 62 ec 92 e5 ea 5b 6f d6 94 1f 89 6b 
+            c7 37 82 ad 28 2f 33 ff ac 63 13 47 e8 81 fb 4e 
+            6c ac 27 d5 f1 7c 0a 23 20 4d 15 77 7f 70 dd 4d 
+            e4 f3 18 6c b6 42 00 4f 5c 97 11 9b 4a 5d 46 90 
+            c4 53 d4 1c 57 94 b9 ba 06 2d 53 ab f9 b8 f7 bf 
+            4f 60 4d 28 f7 6e e1 be 83 e1 36 2f 61 65 d3 31 
+            67 90 1f e0 ae 84 92 e8 d5 26 74 fc 15 82 37 cf 
+            33 ed 86 df 7c e7 12 a9 c1 48 b3 53 23 e5 55 0d 
+            50 7f 2b 9a 65 dd eb 40 1c 2a 1f b0 fa 44 97 49 
+            99 cb a9 f0 f6 cd 95 1e a8 f3 b9 4b 2e 6a 09 cd 
+            03 90 ec 04 a9 b7 6d ba 20 fe 38 cc e5 a6 cc e6 
+            b2 62 f3 fb 2f 00 ae 9d 59 cb 9a 31 2c 74 5e e0 
+            35 47 58 d8 68 25 9d fd 32 51 9a 82 a4 66 32 df 
+            6b fa 4f e7 40 a3 31 6f cd ee 23 e5 fe 14 41 06 
+            e2 cb b9 3a c3 85 c7 fa d7 aa dd e1 3a b9 5c 46 
+            0d 17 9b e2 21 5a 3c b6 8f 97 a2 a6 5d 4f 8e 4a 
+            b0 3d 50 66 04 0f 9a 42 f0 42 bc 79 0f 0b 68 d6 
+            a3 36 dd 36 f4 06 7d f9 51 69 18 5d 13 2f 6a 54 
+            b5 8c f0 ee 0d 86 67 f5 85 54 51 30 06 48 5b f6 
+            f9 e5 e1 d8 4a 45 f2 75 da 17 69 60 c2 c4 09 36 
+            0d 76 9c 3e 30 0d ce ed 1c 55 aa d1 d0 c8 62 6f 
+            18 41 cf f9 0c 49 df 19 15 a5 c5 25 57 5d f0 2f 
+            14 86 e3 37 49 46 a3 01 5e c0 58 38 d6 20 70 4a 
+            36 67 2c 5b d3 26 cf ed 46 12 d1 3e 83 a8 69 57 
+            0e b0 8e f9 87 2e 69 dd fe e9 88 22 fb eb 74 0f 
+            a3 4a 3e 39 f5 cb b2 42 32 b8 3d b0 8e 72 3a 87 
+            7f 79 ec 51 24 7e 34 7c a5 e3 e7 22 b0 05 bd 62 
+            f8 75 da 28 0a 55 16 78 f2 ed 06 e1 5d d8 6e 56 
+            2b 88 78 93 2d fd 4d da 8e 59 eb b6 f4 12 86 d9 
+            c3 f6 7b 85 56 05 01 5d 1d ac 35 1a 4b 41 91 b6 
+            aa 79 00 90 a7 47 0c 1c 9e 82 b6 43 f2 30 29 19 
+            1b b4 72 e2 61 b9 24 77 1e 53 47 57 7d cf e3 4e 
+            97 ae f2 88 01 5e 7a 8d 55 1f 7a a3 06 a7 4f 0c 
+            56 72 c9 5b b1 41 73 5a 38 c0 fb 16 a3 d8 f8 da 
+            e3 fc a4 e3 91 4e ab 5a 94 1b 5a 02 69 d3 11 e9 
+            06 e0 95 1a 21 bd 3c f5 ef ec e2 f3 ed be 5d b0 
+            0d a7 49 7b 5c 66 4d e6 4d 2f 89 52 b9 d2 3c 2f 
+            c1 ec 26 73 8d 52 c5 d7 20 49 c9 57 3f f8 f2 da 
+            d5 46 13 a1 30 a1 24 60 27 cb 95 ab 7f 15 1c 6c
+            9b 98 0c a8 80 ce 9b 17 06 3b 3d 6e c2 24 0b e3 
+            29 36 b0 41 df 6b 94 97 8f e4 be e8 d8 5b fb 99 
+            f8 01 e8 c8 9b fd 6e fd 67 74 74 02 27 9e dc c4 
+            52 a8 18 dc 83 25 19 5e 34 5d e1 33 d9 55 cb 39 
+            10 78 66 5a 88 65 44 de 11 3b 38 d2 94 42 26 4b 
+            4e 64 c7 17 5a 62 f3 e8 83 46 37 15 01 94 f5 21 
+            3e 81 03 17 05 7d fd ef 33 b6 2c 55 66 6a c2 36 
+            a2 5b 7f 12 78 0a fb e1 a1 8f a1 7c 2a c9 19 cc 
+            bc 39 a5 e5 27 b6 e2 1c 2f 8e af fc 71 17 09 1b 
+            1d 26 e5 ac ff 27 09 d7 20 16 43 42 8e 9e 4c f5 
+            bb 2e 4f 57 bc 41 79 a1 93 d5 ca f5 23 36 56 82 
+            7d 02 b5 0b af ef 35 d1 5a d0 f3 8a 92 8b 83 55 
+            8d 0e e4 77 78 45 5a 57 01 19 a5 e5 d3 46 1b 06 
+            e8 4a 18 ce 63 6e e9 4d 90 19 a1 6a 3e 86 d2 60 
+            4f 45 84 56 a5 fd f4 b4 ef 55 cf 6e d3 08 40 a6 
+            08 c7 2d e1 fe bd 25 0c 13 0f 08 4a ff d9 3d 92 
+            e5 db 9d 22 53 5d e2 8a c5 65 74 14 f2 ff 81 54 
+            04 2b bd 49 ee 02 ed 5c 64 35 f3 bb aa 50 8d a6 
+            a9 5b ae 4b 93 82 ce a5 87 c2 65 4c c3 ab 05 f0 
+            3d 4d 75 b7 ad d4 68 de b2 94 88 07 ce 31 ac 20 
+            0e 97 41 e1 d4 89 af b9 e5 92 3c ce 56 e3 f5 c6 
+            c8 f5 4f b7 94 db cc 30 f0 30 f1 49 4a 15 03 6d 
+            bc 64 85 6e 95 82 14 c1 5b 6c d7 43 81 f3 da b0 
+            e1 6b a5 e3 59 5d 4e 41 38 7d d5 9a aa cb ef 12 
+            8d 97 88 90 03 d3 92 91 90 96 7b 02 00 6a cc c3 
+            01 f9 c1 fe 2c 8d a7 49 0b c3 7f 16 77 45 4b 9f 
+            3d 5d f5 96 f6 94 3e f1 65 0b 33 90 f9 f0 6a ef 
+            c9 2b 9c 8c 92 53 e2 c9 26 30 6e fc fa b7 df 70 
+            38 ee b9 02 16 5e d5 69 97 25 a1 ae a4 19 9f f8 
+            93 31 85 7e 2b 78 29 b7 a0 fb f3 b9 15 71 59 ca 
+            e1 b5 6d 61 b9 df 8d 93 35 6d 25 ff ba 80 e1 b9 
+            d0 32 b3 4a 08 7f 4f 1f 83 49 f3 61 59 59 18 7d 
+            40 b2 f8 97 44 61 fa d9 a3 9f d5 d6 41 64 ee ef 
+            22 3d f7 ba b6 47 a2 65 8f 50 7b d1 83 59 c0 51 
+            0e 38 06 d5 03 17 d2 87 0c 38 bd 72 b3 1b 16 33 
+            ca 41 91 d7 1f 73 bd 4a 88 d4 f7 58 1f 92 24 a5 
+            80 51 ea 97 3c c9 67 3e 42 1d 70 4f 58 f2 e3 1b 
+            49 e0 67 12 c4 35 37 3e 22 cc 3a 90 2d ea 23 4c 
+            39 57 8f fb e8 6e 9c df bb c3 38 ae b5 e5 e5 ee 
+            18 d0 b6 c5 c7 e0 a6 ad 5c 9e f7 59 ce 53 71 eb 
+            fe 09 c2 3b 39 fc d2 8d f8 bb 5c 37 c9 61 e3 94 
+            3a de 42 85 b7 7b ca e8 c9 06 29 f8 e1 41 12 d5 
+            1a 63 24 75 66 ee cf a2 bf 22 ae 55 33 49 4c 43 
+            fa a1 1c a1 5b cb fb 0a 4d 07 cd d8 c2 16 e1 35 
+            23 af a8 96 c6 a7 8d fc f6 c3 1b 85 70 2e ae 56 
+            d4 6a af 1a 96 eb cd ac 25 5d c4 a3 00 fd 1b 8c 
+            29 75 75 68 eb d6 2d 15 45 98 90 75 31 24 ac ec 
+            87 70 34 ee 23 eb 15 3c 54 dd 8f ff 34 74 81 ae 
+            ea c6 19 45 6c 9a 88 0f 43 b0 f9 9c 4a 13 cc 6f 
+            56 f1 f5 b7 c9 16 47 1d 54 f5 99 95 ba ac 5e c4 
+            02 7e fd a2 66 76 92 fe 5b 06 63 cb b9 29 14 f2 
+            2c 70 58 36 89 a8 84 af 60 aa 41 a0 21 84 d0 43 
+            b7 1b f5 eb 3a 43 8f f9 c2 ec 6b 76 94 5b 7f e9 
+            17 e7 7f 9d c8 19 28 c6 fe a1 7f 84 49 31 45 68 
+            2f cc fc 0e a1 85 ef 79 e7 0f f5 65 b6 65 45 59 
+            af 5b 3b 27 0f bf e6 5b 75 63 35 c5 03 e6 51 57 
+            81 48 00 f9 b5 4f dd 0b 1e 41 45 ef 90 c4 4e 26 
+            b4 15 c8 fc e2 60 be b9 a7 2f e5 73 06 0c d7 56 
+            f2 e8 fc 70 64 e0 2e be 62 df a9 14 a1 ab 3d f8 
+            dc 93 d8 32 77 d7 38 1d 6e ae ce 29 92 d9 90 9b 
+            cb cd 6c 5c 57 ce 91 05 16 72 64 5b 6a 9a 54 3b 
+            eb 42 8c b8 6e 6d ac 74 5c b0 c0 4c b6 f8 61 f1 
+            a2 c5 aa b3 ed 6b e9 76 e1 9a c1 b8 70 43 d3 b9 
+            8a 5e 0a c2 a6 f1 39 7d d9 fe 46 a0 17 56 f1 49 
+            5d ed f9 2e 8e a1 56 4c fc a9 39 7c 95 a6 77 e2 
+            e0 7c db ea a2 be ff 14 f7 04 ea 23 cf 6a 8a 02 
+            18 bf 40 ce 2d de e4 b0 34 90 d4 c3 c3 15 bf 7b 
+            e7 03 de f7 5a d8 8f 27 5c 5f b8 37 c1 f9 54 22 
+            39 52 e7 e9 78 a3 df ce 98 96 7a a4 ea 8b 62 28 
+            00 25 3b 2c ce 1a 68 ae 46 1d 6c a1 f2 9c 16 29 
+            91 05 18 3e ab fb a3 d4 fd d0 ed e0 54 5e c1 13 
+            65 2b 59 ee 4f 6f bc 37 75 ff ab 1b 63 5e 7c fa 
+            f7 3b 91 46 ae 0c f5 5f f8 5f 43 5a 2c f4 82 b5 
+            1d 10 ae 59 92 f9 fc 61 86 06 ec d1 43 18 c2 8e 
+            be fd 9a 41 2f 81 58 d4 c9 8a 49 43 2a 81 f5 d9 
+            92 e9 b2 dd 23 5d 94 fb 7b 29 b3 7b cc 49 57 8d 
+            26 63 1d 15 9d f7 12 87 df 7d c4 4c 0d fd 29 81 
+            79 0b e0 9a c0 0b 27 93 ca d1 02 d0 ba 37 e1 67 
+            53 dd 6c 1d b5 bd 99 11 c5 1a 84 06 6a 08 82 c8 
+            fc 2b 92 fb b7 c3 dc 4a 4a eb 29 04 b4 42 1c 8f 
+            4d a2 39 41 a7 d3 d6 ad c0 71 f3 ba c3 ad 00 0b 
+            a5 c7 60 6a 1a 5d 87 a3 80 5c 08 97 7a 04 4c 13 
+            f5 6b 0c a4 90 78 fa 1d b6 d5 df 4c c3 27 a4 a9 
+            ae a3 a8 db 37 cd 0e b0 ba a3 6f 7d 7f 40 b4 fc 
+            c3 35 59 ef 4e b7 dc 27 32 79 0a 30 e4 a4 58 f2 
+            47 d7 f8 38 24 d1 41 41 53 de c8 ff f2 65 ff 1a 
+            f7 88 17 f3 59 84 4d 2d 5b ad 7d 3e d6 c2 c2 e7 
+            5f 4e f5 d5 da 56 e5 1c a4 30 6a f7 60 5d 51 ff 
+            4e ec 0d f7 60 5a 69 53 0e 63 d7 f8 af b7 e2 81 
+            37 99 0a 4f 1f a5 9b fc ff 6a 11 dc 2b 1f f2 4e 
+            06 e2 2d 53 b7 0f 65 9a 9c 6a 52 e1 7c 13 af 56 
+            7b 50 f4 16 37 f2 67 12 a4 54 11 48 3a cd 9f bb 
+            d6 4f eb da d4 1c b9 47 db 2c 7e 3b 85 e3 77 03 
+            aa 12 e8 af 4f 5f df e5 da 5a c9 53 14 2c 86 ed 
+            02 5e 9c e3 77 f6 bf 18 ad 25 51 47 75 73 72 85 
+            c6 0a 45 bf 2a 14 2c d8 07 5d 9f e6 e4 e2 6f 2c 
+            5c e0 84 4f 50 16 6c 23 75 87 63 d9 2f 43 22 ef 
+            31 2a c1 f9 be ce c3 54 64 5d 3c d7 71 06 9d 5f 
+            85 b0 c2 26 87 dc 3f 33 f9 e5 5e 6c d3 7b 07 cd 
+            41 35 80 ab 5c 6a 97 ec a1 c6 60 23 6d 3d c4 c3 
+            f2 ea b2 59 fd 5b 38 b8 9d aa 24 bf 32 b0 fd 3f 
+            e6 c3 94 29 05 98 5c f7 39</mark>
             ```
 
     + ### Alert protocol
@@ -1135,11 +1136,11 @@
             <br><span style="padding-left:1em">`15`：Content Type: Alert (21)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 1a`：Length，(26)；
-            <br><span style="padding-left:1em">`3e b7 b5 ea dd ...... 48 4b c8 e5 77`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`84 ef 8c ec 32 ...... a3 c8 ca 1f 77`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup
-            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>3e b7 b5 ea dd e0 9e 44 af d9 1c 
-            df 98 72 4e 8e 15 5a fa 67 13 48 4b c8 e5 77</mark>
+            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>84 ef 8c ec 32 b4 9f db a9 11 e8 
+            3f 18 d6 fe 11 34 13 20 11 ce a3 c8 ca 1f 77</mark>
             ```
 
         - #### Alert-EncryptedMsg-Client 实例分析
@@ -1148,11 +1149,11 @@
             <br><span style="padding-left:1em">`15`：Content Type: Alert (21)；
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 1a`：Length，(26)；
-            <br><span style="padding-left:1em">`00 00 00 00 00 ...... f3 1f 41 b1 29`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><span style="padding-left:1em">`00 00 00 00 00 ...... bb aa 34 65 a9`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在客户端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
 
             ```markup
-            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 02 80 d7 0f 
-            d3 8c c6 0d 7e d5 44 34 5c bc f3 1f 41 b1 29</mark>
+            <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>00 00 00 00 00 00 00 02 3a f7 82 
+            f2 00 2e 34 39 8a 72 77 2b c0 bb aa 34 65 a9</mark>
             ```
 
 * ## Reference
