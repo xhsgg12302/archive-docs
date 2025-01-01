@@ -228,28 +228,29 @@
             * https://www.jianshu.com/p/406a4d06b788
         <!-- tabs:end -->
 
-## reload
-```shell
-alias reload='source ~/.zshrc \!:1'
+* ## reload
 
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/stevenobelia/.oh-my-zsh"
-export RANGER_LOAD_DEFAULT_RC=FALSE
+    ```shell
+    alias reload='source ~/.zshrc \!:1'
 
-if [ $# -eq 2 ]; then
-	ZSH_THEME=$2
-else
-	ZSH_THEME="random"
-fi
-plugins=(git)
+    # Path to your oh-my-zsh installation.
+    export ZSH="/Users/stevenobelia/.oh-my-zsh"
+    export RANGER_LOAD_DEFAULT_RC=FALSE
 
-source $ZSH/oh-my-zsh.sh
-source ~/.bash_profile
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-#export PATH="/usr/local/lib/ruby/gems/3.1.0/bin:$PATH"
-___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_VMOPTIONS_SHELL_FILE}" ]; then . "${___MY_VMOPTIONS_SHELL_FILE}"; fi
-```
+    if [ $# -eq 2 ]; then
+        ZSH_THEME=$2
+    else
+        ZSH_THEME="random"
+    fi
+    plugins=(git)
+
+    source $ZSH/oh-my-zsh.sh
+    source ~/.bash_profile
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    export PATH="/usr/local/opt/ruby/bin:$PATH"
+    #export PATH="/usr/local/lib/ruby/gems/3.1.0/bin:$PATH"
+    ___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_VMOPTIONS_SHELL_FILE}" ]; then . "${___MY_VMOPTIONS_SHELL_FILE}"; fi
+    ```
 
 * ## Reference
 
