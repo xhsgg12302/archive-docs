@@ -1543,7 +1543,7 @@
 
     + ### 工具解密(wireshark)
 
-        > [!NOTE] wireshark 可以通过 **预主密匙（Pre Master Secret）** 或 **主密匙（Master Secret）** 来对报文进行解密，这两个密匙没太大区别，**因为主密匙就是在知道 hash 算法和两端随机数后，通过预主密匙来生成的** 。有一种叫 [SSLKEYLOGFILE](https://www.ietf.org/archive/id/draft-thomson-tls-keylogfile-00.html) 的文件，一般web客户端都会遵循某种规则，如果存在环境变量 **SSLKEYLOGFILE** ，就会将会话过程的主密匙写入到这个文件中。比如 [curl](https://curl.se/libcurl/c/libcurl-env.html#:~:text=SSLKEYLOGFILE)，[谷歌](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Agoogle.com)，[火狐](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Amozilla.org)等。
+        > [!NOTE] wireshark 可以通过 **预主密匙（Pre Master Secret）** 或 **主密匙（Master Secret）** 来对报文进行解密，这两个密匙没太大区别，**因为主密匙就是在知道 hash 算法和两端随机数后，通过预主密匙来生成的** 。有一种叫 [SSLKEYLOGFILE](https://www.ietf.org/archive/id/draft-thomson-tls-keylogfile-00.html) 的文件，一般web客户端都会遵循某种规则，如果存在环境变量 **SSLKEYLOGFILE** ，就会将会话过程的主密匙写入到这个文件中。比如 [curl](https://curl.se/libcurl/c/libcurl-env.html#:~:text=SSLKEYLOGFILE)，[谷歌](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Agoogle.com)，[火狐](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Amozilla.org)，[openssl-s_client](https://docs.openssl.org/master/man1/openssl-s_client/#:~:text=Wireshark)等。
         <br>所有我们可以根据 SSLKEYLOGFILE 的格式，模拟一个类似的文件。因为我们本次使用的是 Java BC TLS 库，这次会话，即使存在环境变量，也没有写入任何数据。
 
         ```markup [data-file:manual-secret.txt]

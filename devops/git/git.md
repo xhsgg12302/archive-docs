@@ -228,6 +228,12 @@ weight: 60
 	<br>指定時間進行提交：`git commit -S -m 'update something' --date="2023-03-15 10:24:06"`
 	<br><br>获取文件首次创建的时间：`git log --follow --diff-filter=A -- devops/git/git.md`
 	<br>获取文件最新的更新时间：`git log --follow --diff-filter=M -- devops/build/gcc/library.md | head -n 1`
+	
+	> [!TIP] git 删除未追踪的文件，对于分支切换后遗留的文件或者编译后的文件。主要选项如下：
+	<br>`-d`：递归删除，当指定 **pathspec** 的时候 -d 失效。`-f`：强制。`-e`：排除 pattern。`-i`：交互删除。`[-n | --dry-run]`：空转。`-x`：包括忽略文件。`-X`：只在忽略文件中移除。
+	<br><br>查看追踪的文件：`git ls-files | awk -F'/' '{print $1}' | sort -u`，`git ls-files | cut -d'/' -f1 | sort -u`。
+	<br>最佳删除：`git clean -e '.idea' -dx -n`。✅
+	<br><br>![](/.images/devops/git/git-clean-01.png ':size=50%')
 
 	* ### learngitbranching常用命令
 
