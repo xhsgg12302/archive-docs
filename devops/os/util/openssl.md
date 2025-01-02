@@ -131,6 +131,9 @@
         openssl s_client -connect wtfu.site:443 > cer.pem
         # 删除多余的信息，然后查看证书内容
         openssl x509 -in cer.pem -text -noout
+
+        # 添加代理，并且写入 master secret
+        openssl s_client -keylogfile ~/Desktop/tls_secrets  -proxy 127.0.0.1:7890 -connect music.163.com:443
         ```
 
 * ## Reference
