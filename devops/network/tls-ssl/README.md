@@ -1173,7 +1173,7 @@
     > [!TIP] 完整代码参见:[github: DecryptDemo.java](https://github.com/12302-bak/idea-test-project/blob/spring-mvc/_4_springmvc/src/main/java/site/wtfu/framework/utils/DecryptDemo.java)
     <br> IDEA 控制台输出及 wireshark 抓包数据参见：[md: tls-record-console-output](./tls-record-console-output.2ed.md)。
 
-    + ### 前置需求
+    + ### 前置需求(material)
         
         > [?] 包括 Cipher 构造，以及相关工具方法
 
@@ -1543,11 +1543,21 @@
 
     + ### 工具解密(wireshark)
 
-        > [!NOTE] wireshark 可以通过 **预主密匙（Pre Master Secret）** 或 **主密匙（Master Secret）** 来对报文进行解密，这两个密匙没太大区别，**因为主密匙就是在知道 hash 算法和两端随机数后，通过预主密匙来生成的** 。有一种叫 [SSLKEYLOGFILE](https://www.ietf.org/archive/id/draft-thomson-tls-keylogfile-00.html) 的文件，一般web客户端都会遵循某种规则，如果存在环境变量 **SSLKEYLOGFILE** ，就会将会话过程的主密匙写入到这个文件中。比如 [curl](https://curl.se/libcurl/c/libcurl-env.html#:~:text=SSLKEYLOGFILE)，[谷歌](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Agoogle.com)，[火狐](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Amozilla.org)，[openssl-s_client](https://docs.openssl.org/master/man1/openssl-s_client/#:~:text=Wireshark)等。
-        <br>所有我们可以根据 SSLKEYLOGFILE 的格式，模拟一个类似的文件。因为我们本次使用的是 Java BC TLS 库，这次会话，即使存在环境变量，也没有写入任何数据。
+        > [!NOTE] wireshark 可以通过 **预主密匙（Pre Master Secret）** 或 **主密匙（Master Secret）** 来对报文进行解密，这两个密匙没太大区别，**因为主密匙就是在知道 hash 算法和两端随机数后，通过预主密匙来生成的** 。有一种叫 [SSLKEYLOGFILE](https://www.ietf.org/archive/id/draft-thomson-tls-keylogfile-00.html) 的文件，一般web客户端都会遵循某种规则，如果存在环境变量 **SSLKEYLOGFILE** ，就会将会话过程的主密匙写入到这个文件中。比如 [curl](https://curl.se/libcurl/c/libcurl-env.html#:~:text=SSLKEYLOGFILE)，[谷歌](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Agoogle.com)，[火狐](https://www.google.com/search?q=SSLKEYLOGFILE+site%3Amozilla.org)，[openssl-s_client](https://docs.openssl.org/master/man1/openssl-s_client/#:~:text=Wireshark)，[nodejs](https://nodejs.org/docs/latest/api/all.html#all_cli_--tls-keylogfile) 等。
+        <br>所以可以根据 SSLKEYLOGFILE 的格式，模拟一个类似的文件。因为本次使用的是 Java BC TLS 库，这次会话，即使存在环境变量，也没有写入任何数据。
+        
+        > [!WARNING] 对于 chrome 有些版本可能环境变量不起作用，需要指定启动参数的时候，可以参考 [chrome-not-firefox-are-not-dumping-to-sslkeylogfile-variable](https://stackoverflow.com/questions/42332792/chrome-not-firefox-are-not-dumping-to-sslkeylogfile-variable/43618193#43618193)，[run-chromium-with-flags](https://www.chromium.org/developers/how-tos/run-chromium-with-flags/) 等。
+        <br>`chrome://quit`
+        <br>`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ssl-key-log-file=/Users/stevenobelia/Desktop/tls_secrets`。（版本 131.0.6778.205）验证没问题。
+        <br><br><span> 对于 curl 是否写入密匙到指定文件，也分情况。有可能和 curl 的启用特性有关系，也有可能是 TLS 版本的问题。
+            <input type="checkbox" class="span toggle"><span class='content'>
+                <br><br><span style="padding-left:2em"> 如下图所示的两个 curl 版本，都可以对 wtfu.site (TLSv1.2) 进行密匙写入，但是只有 brew 安装的才可以写入 music.163.com (TLSv1.3) 的密匙。</span>
+                <br><span style="padding-left:2em"> ![](/.images/devops/network/tls-ssl/tls-curl-ssl-key-log-file-01.png ':size=70%') </span>
+            </span>
+        </span>
 
         ```markup [data-file:manual-secret.txt]
-        CLIENT_RANDOM e3e50a0cc0f1f7494c1489459c280539fab4e9ce0877f0941f444e0534d64bc0 f404af8dad38c6560b52641bc79281fb7c4344e32a87401eff999735b1b239233c1ad86847808750fb181b80fa44d6a5 
+        CLIENT_RANDOM e3e50a0cc0f1f7494c1489459c280539fab4e9ce0877f0941f444e0534d64bc0 <mark class='under  red'>f404af8dad38c6560b52641bc79281fb7c4344e32a87401eff999735b1b239233c1ad86847808750fb181b80fa44d6a5</mark>
         ```
 
         - #### 解密展示

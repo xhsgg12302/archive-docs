@@ -18,7 +18,7 @@ weight: 20
         <br><br>7). 然而，一些类获取不是来源于文件，而是来自诸如网络的情况，或者被一个应用程序构造生成。`defineClass`转换一个字节数组到类的实例。可以使用`Class.newInstance`创建新定义的类的实例。
         <br><br>8). 类加载器创建的对象的方法和构造函数可以引用其他类。为了确定引用的类，Java 虚拟机调用最初创建该类的类加载器的 loadClass 方法。[参考](https://stackoverflow.com/questions/61711187/what-does-the-methods-and-constructors-of-objects-created-by-a-class-loader-may) , [代码实现](https://github.com/12302-bak/idea-test-project/tree/v2.0.0-BAK/_0_base-learning/src/main/java/_jvm/classLoader/load_reference)
         <!-- div:right-panel-59 -->
-        ```java [data-cc:747px]
+        ```java [data-cc:587px]
         /**
          * A class loader is an object that is responsible for loading classes. The
          * class ClassLoader is an abstract class.  Given the binary name of a class, a class loader should attempt to

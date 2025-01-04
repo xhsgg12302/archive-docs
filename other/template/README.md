@@ -154,7 +154,7 @@ tags: [template, demo]
 
             <!-- panels:start -->
             <!-- div:left-panel-78 -->
-            ```java {5,14-15,24} [data-file:site.wtfu.framework.HelloWorld.java,data-cc:420px]
+            ```java {5,14-15,24} [data-file:site.wtfu.framework.HelloWorld.java,data-cc:340px]
             package site.wtfu.framework;
 
             /**
