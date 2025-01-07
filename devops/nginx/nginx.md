@@ -15,28 +15,61 @@ weight: 40
 		* 静态服务器
 		* 邮箱服务器
 
-	+ ### 负载均衡方式
+	+ ### 3.负载均衡方式
 
-		|name | explain | feature|
-		|-    | - | - |  
-		| 轮询  	| 默认方式 		| |
-		| weight 	| 权重方式		| 根据权重分发请求,权重大的分配到请求的概率大 |
-		| ip_hash	| ip 分配 		| 根据客户端请求的IP地址计算hash值， 根据hash值来分发请求, 同一个IP发起的请求, 会发转发到同一个服务器上 |
-		| url_hash	| url 分配 		| 根据客户端请求url的hash值，来分发请求, 同一个url请求, 会发转发到同一个服务器上 |
-		| fair		| 智能响应		| 优先把请求分发给处理请求时间短的服务器 |
-		| least_conn| 最少连接		| 哪个服务器当前处理的连接少, 请求优先转发到这台服务器 |
+		| name       | explain  | feature                                                                                               |
+		| ---------- | -------- | ----------------------------------------------------------------------------------------------------- |
+		| 轮询       | 默认方式 |                                                                                                       |
+		| weight     | 权重方式 | 根据权重分发请求,权重大的分配到请求的概率大                                                           |
+		| ip_hash    | ip 分配  | 根据客户端请求的IP地址计算hash值， 根据hash值来分发请求, 同一个IP发起的请求, 会发转发到同一个服务器上 |
+		| url_hash   | url 分配 | 根据客户端请求url的hash值，来分发请求, 同一个url请求, 会发转发到同一个服务器上                        |
+		| fair       | 智能响应 | 优先把请求分发给处理请求时间短的服务器                                                                |
+		| least_conn | 最少连接 | 哪个服务器当前处理的连接少, 请求优先转发到这台服务器                                                  |
 
-* ## 编译
+* ## 编译安装
 
+	> [!TIP] 官方源码下载 [1.16.1](https://nginx.org/download/nginx-1.16.1.tar.gz) 、[1.26.2](https://nginx.org/download/nginx-1.26.2.tar.gz)。
+	<br>（可选）编译用的 openssl 源码库，主要为了支持 [TLSv1.3](https://nginx.org/en/CHANGES-1.14#:~:text=Feature:%20the%20%22TLSv1.3%22,directive.)。
+	<br><br>![](/.images/devops/nginx/nginx-build-info-01.png ':size=70%')
+
+	> [!ATTENTION] 切换完依赖的 openssl 库后记得重启服务器，要不然可能会存在配置的 TLSv1.3 的功能，即使通过`-s reload`但依然死活不生效，误以为配置出问题了。
+
+	<!-- tabs:start -->
+	### **Ubuntu源码安装**
 	```bash
+	# 安装依赖库
+	sudo apt-get install libpcre3-dev libssl-dev
+
+	wget -c https://nginx.org/download/nginx-1.16.1.tar.gz
+	tar -zxf nginx-1.16.1.tar.gz
 	cd nginx-1.16.1/
-	./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --without-http_fastcgi_module
+
+	# （可选）修改版本信息
+	vim src/http/ngx_http_header_filter_module.c # 49-50
+	
+	# （可选）指定编译用的 openssl 库
+	wget -P /data/ https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz
+	tar -zxf openssl-1.1.1w.tar.gz
+
+	# 配置与编译
+	# 编译选项：https://nginx.org/en/docs/configure.html
+	./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module 
+		[--without-http_fastcgi_module] 
+		[--with-openssl=/data/openssl-1.1.1w] 
+		[--with-openssl-opt=enable-tls1_3]
+		[--with-debug]
 	make
 	objs/nginx -V
-	objs/nginx -h
-	objs/nginx -c /usr/local/nginx/conf/nginx.conf -t
-	# make install
+
+	# 安装
+	make install
 	```
+
+	### **Docker**
+	```docker
+	# placeholder
+	```
+	<!-- tabs:end -->
 
 * ## 配置文件
 
@@ -223,7 +256,7 @@ weight: 40
 			server 127.0.0.1:8161;
 		}
 
-	#=======================================
+		#=======================================
 		server {
 			listen       80;
 			server_name  example.com;
@@ -353,9 +386,22 @@ weight: 40
 			ssl_certificate 3_www.wtfu.site_bundle.crt;
 			ssl_certificate_key 3_www.wtfu.site.key;
 			ssl_session_timeout 5m;
-			ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-			ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
+
+			# ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+			# ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
+			# ssl_prefer_server_ciphers on;
+			
+			ssl_protocols TLSv1.2 TLSv1.3;
+			ssl_ciphers HIGH:!aNULL:!MD5:!RC4:!DHE:ECDHE-RSA-AES128-GCM-SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
 			ssl_prefer_server_ciphers on;
+
+			# 启用 OCSP Stapling
+			ssl_stapling on;
+			ssl_stapling_verify on;
+			# 缓存 OCSP 响应的时间
+			resolver 8.8.8.8 8.8.4.4 valid=300s;  # 使用 Google DNS 解析器，设置缓存有效期为 5 分钟
+			resolver_timeout 10s;
+
 			# HSTS
 			# add_header Strict-Transport-Security "max-age=172800; includeSubDomains" always;
 

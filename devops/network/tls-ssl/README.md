@@ -1140,6 +1140,7 @@
             <br><span style="padding-left:1em">`03 03`：Legacy version，TLS 1.2 (0x0303)；
             <br><span style="padding-left:1em">`00 1a`：Length，(26)；
             <br><span style="padding-left:1em">`84 ef 8c ec 32 ...... a3 c8 ca 1f 77`：Protocol message(s)，因为类型 **0x15** 是一个 Alert 包，<span style='color: red'>但这个是在服务端 [CCS](#changecipherspec-protocol) 之后的，所以是加密过得，得解密之后才能看到消息内容。</span>
+            <br><br>解密参见 [Alert-Server 解密](#alert-server-解密)
 
             ```markup
             <mark class='under red'>15 03 03 00 1a</mark> <mark class='under dodgerblue'>84 ef 8c ec 32 b4 9f db a9 11 e8 
@@ -1480,6 +1481,49 @@
             // 16 03 03 00 28 00 00 00 00 00 00 00 00 04 c1 4c a1 7a c3 ed ad 20 45 0a 2c 32 08 b2 db 6c 79 76 d8 5b 3d ae 76 ff 1e 28 6e 4e 12 56 8e 
             ```
         
+        - #### Alert-Server 解密
+
+            > [?] 这个对应 [AP-EncryptedMsg-Server 实例分析](#alert-encryptedmsg-server-实例分析) 中的加密数据。
+
+            ```java {36}
+            @Test
+            public void testDecodeCipherForAlert() throws IOException {
+                TlsAEADCipher tlsAEADCipher = testCreateConstructor();
+                TlsAEADCipherImpl decryptCipher = tlsAEADCipher.decryptCipher;
+                byte[] decryptNonce = tlsAEADCipher.decryptNonce;
+                int record_iv_length = tlsAEADCipher.record_iv_length;
+                int macSize = tlsAEADCipher.macSize;
+
+                /*
+                * decodeCipherText
+                *
+                * params:
+                *      byte[] ciphertext,
+                *      int ciphertextOffset,
+                *      int ciphertextLength
+                */
+                byte[] alert = hexStringToByteArray("15 03 03 00 1a 84 ef 8c ec 32 b4 9f db a9 11 e8 \n" +
+                        "3f 18 d6 fe 11 34 13 20 11 ce a3 c8 ca 1f 77");
+                byte[] ciphertext = alert;
+                int ciphertextOffset = 5;
+                int ciphertextLength = ciphertext.length - ciphertextOffset;
+                byte[] nonce = new byte[decryptNonce.length + record_iv_length];
+                System.arraycopy(decryptNonce, 0, nonce, 0, decryptNonce.length);
+                System.arraycopy(ciphertext, ciphertextOffset, nonce, nonce.length - record_iv_length, record_iv_length);
+                decryptCipher.init(nonce, macSize);
+
+                int encryptionOffset = ciphertextOffset + record_iv_length;
+                int encryptionLength = ciphertextLength - record_iv_length;
+                int innerPlaintextLength = decryptCipher.getOutputSize(encryptionLength);
+
+                byte[] additionalData = additionalData(2L,(short)0x15, ProtocolVersion.TLSv12, 0, innerPlaintextLength, null);
+                decryptCipher.doFinal(additionalData, ciphertext, encryptionOffset, encryptionLength, ciphertext, encryptionOffset);
+                System.out.println(TLSTest.bytesToHex(ciphertext));
+            }
+
+            // 15 03 03 00 1a <mark class='box green'>84 ef 8c ec 32 b4 9f db</mark> 01 00 <mark class='under red'>e8 3f 18 d6 fe 11 34 13 20 11 ce a3 c8 ca 1f 77</mark>
+            ```
+
         - #### AP-Server 解密
 
             > [?] 这个对应 [AP-EncryptedMsg-Server 实例分析](#ap-encryptedmsg-server-实例分析) 中的加密数据，也即服务器对 http response 的响应数据。
@@ -1574,6 +1618,9 @@
     + 
     + TLS/SSL 测试报告
     + https://www.ssllabs.com/ssltest/analyze.html?d=tech.wtfu.site&latest
+    + https://myssl.com/tech.wtfu.site?domain=tech.wtfu.site&status=q
+    + https://www.cdn77.com/tls-test
+    + https://domsignal.com/tls-test
     + 
     + TLS-HP-finished decrypt
     + https://osqa-ask.wireshark.org/questions/57384/tls-finished-packet-renamed-encrypted-handshake-message/
