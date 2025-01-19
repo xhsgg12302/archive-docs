@@ -449,7 +449,7 @@ tags: [template, demo]
             hello
         </details>
         <details>
-            <summary>This is a super cool title</summary><!-- Good place for a CTA (Call to Action) -->
+            <summary>This is a super cool(cow's vagina) title</summary><!-- Good place for a CTA (Call to Action) -->
             <!-- leave an empty line *️⃣  -->
             <p>This is a super cool paragraph</p>
             <small>This is a super cool small paragraph</small>
