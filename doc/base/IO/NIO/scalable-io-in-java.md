@@ -244,7 +244,6 @@
                 //run()
             }
             ```
-            <!-- panels:start -->
             <!-- div:left-panel-30 -->
             ```java
             // Reactor 5: Request Handling
@@ -297,7 +296,6 @@
                 }
             }
             ```
-            <!-- panels:end -->
             <!-- panels:end -->
 
             ---
