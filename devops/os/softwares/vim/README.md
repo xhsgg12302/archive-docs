@@ -135,7 +135,7 @@
         <br><span style='padding-left: 1.8em'/>通过`vim -c 'e ++enc=utf-16le' /Users/stevenobelia/Downloads/temporary-download/百度mac个性短语导出2024_09_24`
         <br><span style='padding-left: 1.8em'/>或者 通过`:e ++enc=utf-16le`进行设置
 
-    - ### __colon__wq 和 __colon__x 的区别
+    - ### :wq 和 :x 的区别
 
         > [?] 作用和`:wq`相同，但是`:x`<span style='color: blue'>只有文件内容发生改变的时候才会发生写入操作</span>。[参考](https://stackoverflow.com/questions/13844098/difference-between-wq-and-x-in-vi)
         <br>而`:wq`不管有没有改变，都会写入，所以即使没有修改文件内容，只要执行`:wq`，就会重新写入，文件属性发生改变。可以通过命令验证，比如执行命令`stat -f%Sm file`查看文件的修改时间。

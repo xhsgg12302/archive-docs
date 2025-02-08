@@ -363,6 +363,47 @@ tags: [template, demo]
             \,d\xi
         $$
 
+        <hr/>
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        Aligned equations work quite well:
+
+        $$
+        \begin{aligned}
+        a &= b + c \\ &= e + f \\
+        \end{aligned}
+        $$
+
+        <!-- div:right-panel-50 -->
+        And matrices
+
+        $$
+        \begin{bmatrix}
+        1 & 2 & 3 \\
+        a & b & c
+        \end{bmatrix}
+        $$
+
+        $$
+        \begin{pmatrix}
+        1 & 2 & 3 \\
+        4 & 5 & 6 \\
+        7 & 8 & 9
+        \end{pmatrix}
+        $$
+
+        $$
+        \begin{bmatrix}
+        1 & 2 & 3 \\
+        4 & 5 & 6 \\
+        7 & 8 & 9
+        \end{bmatrix}
+        $$
+        
+        <!-- panels:end -->
+
+
     + ### 09-查看mermaid版本号
 
         > [?] [参考](https://github.com/orgs/community/discussions/37498#discussioncomment-7152968)
