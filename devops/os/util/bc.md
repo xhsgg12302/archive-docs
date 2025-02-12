@@ -1,4 +1,4 @@
-* ## Intro(bc)
+* ## Intro(BC | basic calculator)
 
     + ### 保留位数
 

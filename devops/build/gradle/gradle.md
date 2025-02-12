@@ -6,7 +6,7 @@
     <br><br>Groovy的优势是什么呢？Groovy增强了Java的很多功能。比如解析xml文件，文件读写等，Groovy只需要几行代码就能搞定，而如果用Java则需要几十行代码，简单说就是使用Groovy实现某些功能比Java要少些很多代码。
     <br><br>好了，说了那么多"废话"，下面就具体来了解一下Groovy语言，我们只需要了解其中核心的一些使用就可以了，没必要完全了解，作为一门语言Groovy也算比较复杂的，但是我们学习Groovy是为了编写Gradle插件那就只需要了解其核心部分就可以了，其实从我的经验来说学习Groovy更多是为了写更少的代码来实现一些功能，否则我直接用Java写不就完了。
 
-    1. #### Groovy的变量和方法声明
+    - #### 1.Groovy的变量和方法声明
 
         + Groovy使用def来声明变量，声明变量可以不加类型，运行的时候可以自动推断出变量类型，并且声明语句可以不加分号结尾，如下：
 
@@ -33,7 +33,7 @@
             }
             ```
 
-    2. #### Groovy的字符串
+    - #### 2.Groovy的字符串
 
         > [!] Groovy中字符串分为三种，我们一个个来看。
 
@@ -65,7 +65,7 @@
             println str3
             ```
 
-    3. #### Groovy的数据类型
+    - #### 3.Groovy的数据类型
 
         _Groovy数据类型主要包括以下三种：_
 
@@ -245,7 +245,7 @@
             }
             ```
     
-    4. #### Groovy中的文件操作
+    - #### 4.Groovy中的文件操作
 
         > [?] 假设对in.txt与out.txt文件进行IO操作。
 
@@ -311,7 +311,7 @@
             des << '''i love groovy'''
             ```
     
-    5. #### XML解析 & JSON处理
+    - #### 5.XML解析 & JSON处理
 
         <!-- tabs:start -->
 
@@ -388,10 +388,8 @@
         <!-- tabs:end -->
         <!-- tabs:end -->
 
-    ##### Reference
+    - #### Reference
         * https://groovy-lang.org/documentation.html
-
-        
 
 
 * ### Gradle概览

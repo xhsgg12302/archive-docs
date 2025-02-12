@@ -1,3 +1,7 @@
+---
+weight: 10
+---
+
 ## 简介
 ```shell
 grep(global regular expression print):
