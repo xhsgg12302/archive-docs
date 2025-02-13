@@ -1033,7 +1033,7 @@ weight: 20
 
     + ### Double colon operator(::)
 
-        > [?] 双引号，也叫 **方法引用操作符** (method reference operator)，写法如下：
+        > [?] 双冒号，也叫 **方法引用操作符** (method reference operator)，写法如下：
         <br>`ClassName::methName`，`instanceRef::methName`。
         <br><br>区别：
         <br>`1).` 对于实例方法来说，如果使用`ClassName::methName`，则必须传递实例对象为第一个泛型参数，如果使用`instanceRef::methName`，不需要实例参数，对于泛型来说只有返回值就行。
@@ -1105,8 +1105,15 @@ weight: 20
             * https://cr.openjdk.org/%7Ebriangoetz/lambda/lambda-state-final.html
             * https://github.com/12302-bak/idea-test-project/blob/master/_0_base-learning/src/main/java/_base/lambda/functionalInterface/function/Test.java
 
+    + ### 数字字面值中的下划线
+
+        > [?] 参考：[Enhancements in Java SE 7:(Underscores in Numeric Literals)](https://docs.oracle.com/javase/7/docs/technotes/guides/language/enhancements.html#:~:text=Underscores%20in%20Numeric%20Literals,readability%20of%20your%20code.)
+        <br>在 java 7 中，任意数量的下划线字符（_）可以出现在数字字面值中数字之间的任何位置。例如，该特性使您能够在数字字面值中分隔一组数字，这可以提高代码的可读性。
+        <br> 比如 `int i = 10____000_000;`，反编译后就是把_删除了。具体参见 [详情规则](https://docs.oracle.com/javase/7/docs/technotes/guides/language/underscores-literals.html)。
+
 * ## 新特性
 
 * ## Reference
 
-  + https://drive.google.com/file/d/13OR290XMvjjkMZ9pzOumxas6eEvU7NNa/view?usp=sharing
+    + https://docs.oracle.com/javase/7/docs/technotes/guides/language/enhancements.html#javase7
+    + https://drive.google.com/file/d/13OR290XMvjjkMZ9pzOumxas6eEvU7NNa/view?usp=sharing
