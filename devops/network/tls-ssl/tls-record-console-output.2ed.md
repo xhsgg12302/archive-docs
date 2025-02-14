@@ -5,8 +5,8 @@ draft : false
 
 [wireshark capture package: instance-tls-ssl.pcapng](/.images/devops/network/tls-ssl/instance-tls-ssl-2ed.pcapng)，use filter：`ip.addr == 47.94.20.18 && tcp.port == 443`
 
-![](/.images/devops/network/tls-ssl/tls-record-show-interaction.gif ':size=38%')
-![](/.images/devops/network/tls-ssl/tls-record-wireshark.png ':size=47%')
+![data-gifcontrol-disabled](/.images/devops/network/tls-ssl/tls-record-show-interaction.gif ':size=51%')
+![](/.images/devops/network/tls-ssl/tls-record-wireshark.png ':size=47%:cc=date')
 
 
 ```markup [data-cc:800px]
