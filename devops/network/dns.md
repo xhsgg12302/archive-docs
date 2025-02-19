@@ -7,3 +7,7 @@
     + https://datatracker.ietf.org/doc/html/rfc1035#section-4.1
     + https://github.com/EmilHernvall/dnsguide/blob/b52da3b32b27c81e5c6729ac14fe01fef8b1b593/chapter1.md
     + https://www.cloudns.net/blog/understanding-dot-and-doh-dns-over-tls-vs-dns-over-https/
+    + 
+    + 域名相关
+    + https://dnsviz.net/d/wtfu.site/dnssec/ [DNS visual]
+    + https://crt.sh/?q=wtfu.site
