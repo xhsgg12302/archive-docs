@@ -2,7 +2,7 @@
 weight: 10
 ---
 
-* ## Intro(MySql)
+* ## Intro(MySQL是怎样运行的：从根儿上理解MySQL)
 
     + ### 目录结构
 

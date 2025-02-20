@@ -460,3 +460,5 @@
     + ### 总结图
 
         > [?] 小册微信交流群2群中一个昵称为 think 同学非常有心的为表空间画了一个全局图，希望能对各位有帮助（这种学习态度实在让我感动😹）：
+        
+        ![](/.images/doc/framework/mysql/book/09_innodb_table_space/its-17.png ':size=100%')
