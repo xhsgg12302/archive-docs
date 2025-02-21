@@ -141,7 +141,7 @@
 
         - #### 链表小结
 
-            > [!NOTE] 综上所述，表空间是由若干个区组成的，每个区都对应一个 XDES Entry 的结构，直属于表空间的区对应的 XDESEntry 结构可以分成 FREE 、 FREE_FRAG 和 FULL_FRAG 这3个链表；每个段可以附属若干个区，每个段中的区对应的 XDES Entry 结构可以分成 FREE 、 NOT_FULL 和 FULL 这3个链表。每个链表都对应一个 List Base Node 的结构，这个结构里记录了链表的头、尾节点的位置以及该链表中包含的节点数。正是因为这些链表的存在，管理这些区才变成了一件so easy的事情。
+            > [!NOTE] 综上所述，表空间是由若干个区组成的，每个区都对应一个 XDES Entry 的结构，直属于表空间的区对应的 XDES Entry 结构可以分成 FREE 、 FREE_FRAG 和 FULL_FRAG 这3个链表；每个段可以附属若干个区，每个段中的区对应的 XDES Entry 结构可以分成 FREE 、 NOT_FULL 和 FULL 这3个链表。每个链表都对应一个 List Base Node 的结构，这个结构里记录了链表的头、尾节点的位置以及该链表中包含的节点数。正是因为这些链表的存在，管理这些区才变成了一件so easy的事情。
 
     + ### 段的结构
 
@@ -189,8 +189,8 @@
                 | Space Flags                             | 4 字节       | 表空间的一些占用存储空间比较小的属性                                                   |
                 | FRAG_N_USED                             | 4 字节       | FREE_FRAG链表中已使用的页面数量                                                        |
                 | List Base Node for FREE List            | 16 字节      | FREE链表的基节点                                                                       |
-                | List Base Node for FREE_FRAG List       | 16 字节      | FREE_FREG链表的基节点                                                                  |
-                | List Base Node for FULL_FRAG List       | 16 字节      | FULL_FREG链表的基节点                                                                  |
+                | List Base Node for FREE_FRAG List       | 16 字节      | FREE_FRAG链表的基节点                                                                  |
+                | List Base Node for FULL_FRAG List       | 16 字节      | FULL_FRAG链表的基节点                                                                  |
                 | Next Unused Segment ID                  | 8 字节       | 当前表空间中下一个未使用的 Segment ID                                                  |
                 | List Base Node for SEG_INODES_FULL List | 16 字节      | SEG_INODES_FULL链表的基节点                                                            |
                 | List Base Node for SEG_INODES_FREE List | 16 字节      | SEG_INODES_FREE链表的基节点                                                            |
@@ -221,7 +221,7 @@
 
                     > [!ATTENTION|label:小贴士] 不同MySQL版本里 SPACE_FLAGS 代表的属性可能有些差异，我们这里列举的是5.7.21版本的。不过大家现在不必深究它们的意思，因为我们一旦把这些概念展开，就需要非常大的篇幅，主要怕大家受不了。我们还是先挑重要的看，把主要的表空间结构了解完，这些 SPACE_FLAGS 里的属性的细节就暂时不深究了。
                 6. `List Base Node for SEG_INODES_FULL List` 和 `List Base Node for SEG_INODES_FREE List`
-                <br>每个段对应的 INODE Entry 结构会集中存放到一个类型位 INODE 页中，如果表空间中的段特别多，则会有多个 INODE Entry 结构，可能一个页放不下，这些 INODE 类型的页会组成两种列表：
+                <br>每个段对应的 INODE Entry 结构会集中存放到一个类型为 INODE 页中，如果表空间中的段特别多，则会有多个 INODE Entry 结构，可能一个页放不下，这些 INODE 类型的页会组成两种列表：
 
                     1. SEG_INODES_FULL 链表，该链表中的 INODE 类型的页面都已经被 INODE Entry 结构填充满了，没空闲空间存放额外的 INODE Entry 了。
                     2. SEG_INODES_FREE 链表，该链表中的 INODE 类型的页面都已经仍有空闲空间来存放 INODE Entry 结构。
@@ -268,7 +268,7 @@
             <br><span style='padding-left:2em'>`SEG_INODES_FREE 链表`：该链表中的 INODE 类型的页面中还有空闲空间来存储额外的 INODE Entry 结构了。
 
             想必大家已经认出这两个链表了，我们前边提到过这两个链表的基节点就存储在 File Space Header 里边，也就是说这两个链表的基节点的位置是固定的，所以我们可以很轻松的访问到这两个链表。以后每当我们新创建一个段（创建索引时就会创建段）时，都会创建一个 INODE Entry 结构与之对应，存储 INODE Entry 的大致过程就是这样的：
-            <br><span style='padding-left:2em'>先看看 SEG_INODES_FREE 链表是否为空，如果不为空，直接从该链表中获取一个节点，也就相当于获取到一个仍有空闲空间的 INODE 类型的页面，然后把该 INODE Entry 结构防到该页面中。当该页面中无剩余空间时，就把该页放到 SEG_INODES_FULL 链表中。
+            <br><span style='padding-left:2em'>先看看 SEG_INODES_FREE 链表是否为空，如果不为空，直接从该链表中获取一个节点，也就相当于获取到一个仍有空闲空间的 INODE 类型的页面，然后把该 INODE Entry 结构放到该页面中。当该页面中无剩余空间时，就把该页放到 SEG_INODES_FULL 链表中。
             <br><span style='padding-left:2em'>如果 SEG_INODES_FREE 链表为空，则需要从表空间的 FREE_FRAG 链表中申请一个页面，修改该页面的类型为 INODE ，把该页面放到 SEG_INODES_FREE 链表中，与此同时把该 INODE Entry 结构放入该页面。
 
     + ### Segment Header 结构的运用
