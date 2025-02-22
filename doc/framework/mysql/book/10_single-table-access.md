@@ -1,14 +1,14 @@
 
 * ## 开场序言
 
-    > [!CAUTION] 对于我们这些 MySQL 的使用者来说， MySQL 其实就是一个软件，平时用的最多的就是查询功能。DBA 时不时丢过来一些慢查询语句让优化，我们如果连查询是怎么执行的都不清楚还优化个毛线，所以是时候掌握真正的技术了。我们在第一章的时候就曾说过， MySQL Server 有一个称为 **查询优化器** 的模块，一条查询语句进行语法解析之后就会被交给查询优化器来进行优化，优化的结果就是生成一个所谓的 **执行计划** ，这个执行计划表明了应该使用哪些索引进行查询，表之间的连接顺序是啥样的，最后会按照执行计划中的步骤调用存储引擎提供的方法来真正的执行查询，并将查询结果返回给用户。不过查询优化这个主题有点儿大，在学会跑之前还得先学会走，所以本章先来瞅瞅 MySQL 怎么执行单表查询（就是 FROM 子句后边只有一个表，最简单的那种查询～）。不过需要强调的一点是，在学习本章前务必看过前边关于记录结构、数据页结构以及索引的部分，如果你不能保证这些东西已经完全掌握，那么本章不适合你。
+    > [!NOTE|style:flat] 对于我们这些 MySQL 的使用者来说， MySQL 其实就是一个软件，平时用的最多的就是查询功能。DBA 时不时丢过来一些慢查询语句让优化，我们如果连查询是怎么执行的都不清楚还优化个毛线，所以是时候掌握真正的技术了。我们在第一章的时候就曾说过， MySQL Server 有一个称为 **查询优化器** 的模块，一条查询语句进行语法解析之后就会被交给查询优化器来进行优化，优化的结果就是生成一个所谓的 **执行计划** ，这个执行计划表明了应该使用哪些索引进行查询，表之间的连接顺序是啥样的，最后会按照执行计划中的步骤调用存储引擎提供的方法来真正的执行查询，并将查询结果返回给用户。不过查询优化这个主题有点儿大，在学会跑之前还得先学会走，所以本章先来瞅瞅 MySQL 怎么执行单表查询（就是 FROM 子句后边只有一个表，最简单的那种查询～）。不过需要强调的一点是，在学习本章前务必看过前边关于记录结构、数据页结构以及索引的部分，如果你不能保证这些东西已经完全掌握，那么本章不适合你。
     <br><br>为了故事的顺利发展，我们先得建个如下的表：
     <br>我们为这个 *single_table* 表建立了1个聚簇索引和4个二级索引，分别是：
     <br><span style='padding-left:2em'>`1.` 为 id 列建立的聚簇索引。
-    <br><span style='padding-left:2em'>`1.` 为 key1 列建立的 idx_key1 二级索引。
-    <br><span style='padding-left:2em'>`1.` 为 key2 列建立的 idx_key2 二级索引，而且该索引是唯一二级索引。
-    <br><span style='padding-left:2em'>`1.` 为 key3 列建立的 idx_key3 二级索引。
-    <br><span style='padding-left:2em'>`1.` 为 key_part1 、 key_part2 、 key_part3 列建立的 idx_key_part 二级索引，这也是一个联合索引。
+    <br><span style='padding-left:2em'>`2.` 为 key1 列建立的 idx_key1 二级索引。
+    <br><span style='padding-left:2em'>`3.` 为 key2 列建立的 idx_key2 二级索引，而且该索引是唯一二级索引。
+    <br><span style='padding-left:2em'>`4.` 为 key3 列建立的 idx_key3 二级索引。
+    <br><span style='padding-left:2em'>`5.` 为 key_part1 、 key_part2 、 key_part3 列建立的 idx_key_part 二级索引，这也是一个联合索引。
     <br><br>然后我们需要为这个表插入10000行记录，除 id 列外其余的列都插入随机值就好了，具体的插入语句我就不写了，自己写个程序插入吧（id列是自增主键列，不需要我们手动插入）。
 
     ```sql
@@ -113,13 +113,202 @@
 
 * ## 注意事项
     + ### 重温 二级索引 + 回表
+
+        > [!WARNING] 一般情况下只能利用单个二级索引执行查询，比方说下边的这个查询：
+        <br><span style='padding-left:1.2em'>`SELECT * FROM single_table WHERE key1 = 'abc' AND key2 > 1000;`
+        <br>查询优化器会识别到这个查询中的两个搜索条件：
+        <br><span style='padding-left:2em'>*key1 = 'abc'*
+        <br><span style='padding-left:2em'>*key2 > 1000*
+        <br>优化器一般会根据 single_table 表的统计数据来判断到底使用哪个条件到对应的二级索引中查询扫描的行数会更少，选择那个扫描行数较少的条件到对应的二级索引中查询（关于如何比较的细节我们后边的章节中会唠叨）。然后将从该二级索引中查询到的结果经过回表得到完整的用户记录后再根据其余的 WHERE 条件过滤记录。一般来说，等值查找比范围查找需要扫描的行数更少（也就是 ref 的访问方法一般比 range 好，但这也不总是一定的，也可能采用 ref 访问方法的那个索引列的值为特定值的行数特别多），所以这里假设优化器决定使用
+        idx_key1 索引进行查询，那么整个查询过程可以分为两个步骤：
+        <br><span style='padding-left:2em'>`步骤1`：使用二级索引定位记录的阶段，也就是根据条件 *key1 = 'abc'* 从 idx_key1 索引代表的 B+ 树中找到对应的二级索引记录。
+        <br><span style='padding-left:2em'>`步骤2`：回表阶段，也就是根据上一步骤中找到的记录的主键值进行 回表 操作，也就是到聚簇索引中找到对应的完整的用户记录，再根据条件 key2 > 1000 到完整的用户记录继续过滤。将最终符合过滤条件的记录返回给用户。
+        <br><br><span style='color:blue'>这里需要特别提醒大家的一点是，因为二级索引的节点中的记录只包含索引列和主键，所以在步骤1中使用 idx_key1 索引进行查询时只会用到与 key1 列有关的搜索条件，其余条件，比如 *key2 > 1000* 这个条件在步骤1中是用不到的，只有在步骤2完成回表操作后才能继续针对完整的用户记录中继续过滤。</span>
+        <br><br>小贴士：
+        <br><span style='color:red'>需要注意的是，我们说一般情况下执行一个查询只会用到单个二级索引，不过还是有特殊情况的，我们后边会详细唠叨的。
+
     + ### 明确range访问方法使用的范围区间
+
+        > [!WARNING] 其实对于 B+ 树索引来说，只要索引列和常数使用 _=_ 、 _<=>_ 、 _IN_ 、 _NOT IN_ 、 _IS NULL_ 、 _IS NOT NULL_ 、_>_ 、 _<_ 、 _>=_ 、 _<=_ 、 _BETWEEN_ 、 _!=_ （不等于也可以写成 _<>_ ）或者 _LIKE_ 操作符连接起来，就可以产生一个所谓的 **区间** 。
+        <br><br>小贴士：
+        <br><span style='color: red'>LIKE操作符比较特殊，只有在匹配完整字符串或者匹配字符串前缀时才可以利用索引，具体原因我们在前边的章节中唠叨过了，这里就不赘述了。_IN_ 操作符的效果和若干个等值匹配操作符 _=_ 之间用 _OR_ 连接起来是一样的，也就是说会产生多个单点区间，比如下边这两个语句的效果是一样的：
+        <br><span style='padding-left:2em'>SELECT * FROM single_table WHERE key2 IN (1438, 6328);</span>
+        <br><span style='padding-left:2em'>SELECT * FROM single_table WHERE key2 = 1438 OR key2 = 6328;</span></span>
+        <br><br>不过在日常的工作中，一个查询的 WHERE 子句可能有很多个小的搜索条件，这些搜索条件需要使用 _AND_ 或者 _OR_ 操作符连接起来，虽然大家都知道这两个操作符的作用，但我还是要再说一遍：
+        <br><span style='padding-left:2em'>_cond1 AND cond2_ ：只有当 cond1 和 cond2 都为 TRUE 时整个表达式才为 TRUE 。
+        <br><span style='padding-left:2em'>_cond1 OR cond2_ ：只要 cond1 或者 cond2 中有一个为 TRUE 整个表达式就为 TRUE 。
+        <br><br>当我们想使用 range 访问方法来执行一个查询语句时，重点就是找出该查询可用的索引以及这些索引对应的范围区间。下边分两种情况看一下怎么从由 AND 或 OR 组成的复杂搜索条件中提取出正确的范围区间。
+
         - #### 所有搜索条件都可以使用某个索引的情况
+
+            > [!ATTENTION|label:所有搜索条件都可以使用某个索引的情况] 有时候每个搜索条件都可以使用到某个索引，比如下边这个查询语句：
+            <br>`SELECT * FROM single_table WHERE key2 > 100 AND key2 > 200;`
+            <br>这个查询中的搜索条件都可以使用到 key2 ，也就是说每个搜索条件都对应着一个 idx_key2 的范围区间。这两个小的搜索条件使用 _AND_ 连接起来，也就是要取两个范围区间的交集，在我们使用 range 访问方法执行查询时，使用的 idx_key2 索引的范围区间的确定过程就如下图所示：
+            <br>![](/.images/doc/framework/mysql/book/10_single-table-access/sta-06.png ':size=70%')
+            <br><br>_key2 > 100_ 和 _key2 > 200_ 交集当然就是 _key2 > 200_ 了，也就是说上边这个查询使用 idx_key2 的范围区间就是 _(200, +∞)_ 。这东西小学都学过吧，再不济初中肯定都学过。我们再看一下使用 _OR_ 将多个搜索条件连接在一起的情况：`SELECT * FROM single_table WHERE key2 > 100 OR key2 > 200;`_OR_ 意味着需要取各个范围区间的并集，所以上边这个查询在我们使用 range 访问方法执行查询时，使用的idx_key2 索引的范围区间的确定过程就如下图所示：
+            <br>![](/.images/doc/framework/mysql/book/10_single-table-access/sta-07.png ':size=70%')
+            <br>也就是说上边这个查询使用 idx_key2 的范围区间就是 _(100， +∞)_ 。
+
         - #### 有的搜索条件无法使用索引的情况
+
+            > [!ATTENTION|label:有的搜索条件无法使用索引的情况] 比如下边这个查询：
+            <br>`SELECT * FROM single_table WHERE key2 > 100 AND common_field = 'abc';`
+            <br>请注意，这个查询语句中能利用的索引只有 idx_key2 一个，而 idx_key2 这个二级索引的记录中又不包含 common_field 这个字段，所以在使用二级索引 idx_key2 定位记录的阶段用不到 _common_field = 'abc'_ 这个条件，这个条件是在回表获取了完整的用户记录后才使用的，而 范围区间 是为了到索引中取记录中提出的概念，所以在确定 范围区间 的时候不需要考虑 _common_field = 'abc'_ 这个条件，我们在为某个索引确定范围区间的时候只需要把用不到相关索引的搜索条件替换为 TRUE 就好了。
+            <br><br>小贴士：
+            <br><span style='color:red'>之所以把用不到索引的搜索条件替换为TRUE，是因为我们不打算使用这些条件进行在该索引上进行过滤，所以不管索引的记录满不满足这些条件，我们都把它们选取出来，待到之后回表的时候再使用它们过滤。</span>
+            <br><br>我们把上边的查询中用不到 idx_key2 的搜索条件替换后就是这样：
+            <br>`SELECT * FROM single_table WHERE key2 > 100 AND TRUE;`
+            <br>化简之后就是这样：
+            <br>`SELECT * FROM single_table WHERE key2 > 100;`
+            <br>也就是说最上边那个查询使用 idx_key2 的范围区间就是： _(100, +∞)_ 。
+            <br>再来看一下使用 OR 的情况：
+            <br>`SELECT * FROM single_table WHERE key2 > 100 OR common_field = 'abc';`
+            <br>同理，我们把使用不到 idx_key2 索引的搜索条件替换为 TRUE ：
+            <br>`SELECT * FROM single_table WHERE key2 > 100 OR TRUE;`
+            <br>接着化简：
+            <br>`SELECT * FROM single_table WHERE TRUE;`
+            <br>额，这也就说明如果我们强制使用 idx_key2 执行查询的话，对应的范围区间就是 _(-∞, +∞)_ ，也就是需要将全部二级索引的记录进行回表，这个代价肯定比直接全表扫描都大了。也就是说一个使用到索引的搜索条件和没有使用该索引的搜索条件使用 _OR_ 连接起来后是无法使用该索引的。
+
         - #### 复杂搜索条件下找出范围匹配的区间
+
+            ```sql
+            SELECT * FROM single_table WHERE
+                (key1 > 'xyz' AND key2 = 748 ) OR
+                (key1 < 'abc' AND key1 > 'lmn') OR
+                (key1 LIKE '%suf' AND key1 > 'zzz' AND (key2 < 8000 OR common_field = 'abc')) ;
+            ```
+            > [!ATTENTION|label:复杂搜索条件下找出范围匹配的区间] 有的查询的搜索条件可能特别复杂，光是找出范围匹配的各个区间就挺烦的，比方说上边这个：
+            <br>我滴个神，这个搜索条件真是绝了，不过大家不要被复杂的表象迷住了双眼，按着下边这个套路分析一下：
+
+            * ##### 首先查看 WHERE 子句中的搜索条件都涉及到了哪些列，哪些列可能使用到索引。
+
+                这个查询的搜索条件涉及到了 key1 、 key2 、 common_field 这3个列，然后 key1 列有普通的二级索引 idx_key1 ， key2 列有唯一二级索引 idx_key2 。
+                
+            * ##### 对于那些可能用到的索引，分析它们的范围区间。
+
+                + ###### 假设我们使用 idx_key1 执行查询
+
+                    * 我们需要把那些用不到该索引的搜索条件暂时移除掉，移除方法也简单，直接把它们替换为 TRUE 就好了。上边的查询中除了有关 key2 和 common_field 列不能使用到 idx_key1 索引外， _key1 LIKE '%suf'_ 也使用不到索引，所以把这些搜索条件替换为 TRUE 之后的样子就是这样：
+
+                         `(key1 > 'xyz' AND TRUE ) OR`
+                         <br>`(key1 < 'abc' AND key1 > 'lmn') OR`
+                         <br>`(TRUE AND key1 > 'zzz' AND (TRUE OR TRUE))`
+                         <br><br>化简一下上边的搜索条件就是下边这样：
+                         <br>`(key1 > 'xyz') OR`
+                         <br>`(key1 < 'abc' AND key1 > 'lmn') OR`
+                         <br>`(key1 > 'zzz')`
+
+                    * 替换掉永远为 TRUE 或 FALSE 的条件
+
+                        因为符合 _key1 < 'abc' AND key1 > 'lmn'_ 永远为 FALSE ，所以上边的搜索条件可以被写成这样：
+                        <br>`(key1 > 'xyz') OR (key1 > 'zzz')`
+
+                    * 继续化简区间
+
+                        _key1 > 'xyz'_ 和 _key1 > 'zzz'_ 之间使用 OR 操作符连接起来的，意味着要取并集，所以最终的结果化简的到的区间就是： _key1 > xyz_ 。也就是说：<span style='color:red'>上边那个有一坨搜索条件的查询语句如果使用 idx_key1 索引执行查询的话，需要把满足 _key1 > xyz_ 的二级索引记录都取出来，然后拿着这些记录的 id 再进行回表，得到完整的用户记录之后再使用其他的搜索条件进行过滤。</span>
+                
+                + ###### 假设我们使用 idx_key2 执行查询
+
+                    * 我们需要把那些用不到该索引的搜索条件暂时使用 TRUE 条件替换掉，其中有关 key1 和 common_field 的搜索条件都需要被替换掉，替换结果就是：
+
+                        `(TRUE AND key2 = 748 ) OR`
+                        <br>`(TRUE AND TRUE) OR`
+                        <br>`(TRUE AND TRUE AND (key2 < 8000 OR TRUE))`
+                        <br><br>哎呀呀， _key2 < 8000 OR TRUE_ 的结果肯定是 TRUE 呀，也就是说化简之后的搜索条件成这样了：
+                        <br>`key2 = 748 OR TRUE`
+                        <br><br>这个化简之后的结果就更简单了：
+                        <br>`TRUE`
+                        <br><br>这个结果也就意味着如果我们要使用 idx_key2 索引执行查询语句的话，需要扫描 idx_key2 二级索引的所有记录，然后再回表，这不是得不偿失么，所以这种情况下不会用 idx_key2 索引的。
+
     + ### 索引合并
+
+        > [!WARNING] 我们前边说过 MySQL 在一般情况下执行一个查询时最多只会用到单个二级索引，但不是还有特殊情况么，在这些特殊情况下也可能在一个查询中使用到多个二级索引，设计 MySQL 的大叔把这种使用到多个索引来完成一次查询的执行方法称之为： index merge ，具体的索引合并算法有下边三种。
+        
         - #### Intersection合并
+
+            > [!ATTENTION|label:Intersection合并] Intersection 翻译过来的意思是 **交集** 。这里是说某个查询可以使用多个二级索引，将从多个二级索引中查询到的结果取交集，比方说下边这个查询：
+            <br>`SELECT * FROM single_table WHERE key1 = 'a' AND key3 = 'b';`
+            <br><br>假设这个查询使用 Intersection 合并的方式执行的话，那这个过程就是这样的：
+            <br><span style='padding-left:2em'>从 idx_key1 二级索引对应的 B+ 树中取出 key1 = 'a' 的相关记录。
+            <br><span style='padding-left:2em'>从 idx_key3 二级索引对应的 B+ 树中取出 key3 = 'b' 的相关记录。
+            <br><span style='padding-left:2em'>二级索引的记录都是由 索引列 + 主键 构成的，所以我们可以计算出这两个结果集中 id 值的交集。
+            <br><span style='padding-left:2em'>按照上一步生成的 id 值列表进行回表操作，也就是从聚簇索引中把指定 id 值的完整用户记录取出来，返回给用户。
+            <br><br>这里有同学会思考：为啥不直接使用 idx_key1 或者 idx_key3 只根据某个搜索条件去读取一个二级索引，然后回表后再过滤另外一个搜索条件呢？这里要分析一下两种查询执行方式之间需要的成本代价。
+            <br><br>只读取一个二级索引的成本：
+            <br><span style='padding-left:2em'>按照某个搜索条件读取一个二级索引
+            <br><span style='padding-left:2em'>根据从该二级索引得到的主键值进行回表操作，然后再过滤其他的搜索条件
+            <br><br>读取多个二级索引之后取交集成本：
+            <br><span style='padding-left:2em'>按照不同的搜索条件分别读取不同的二级索引
+            <br><span style='padding-left:2em'>将从多个二级索引得到的主键值取交集，然后进行回表操作
+            <br><br>虽然读取多个二级索引比读取一个二级索引消耗性能，但是读取二级索引的操作是 顺序I/O ，而回表操作是 随机I/O ，所以如果只读取一个二级索引时需要回表的记录数特别多，而读取多个二级索引之后取交集的记录数非常少，当节省的因为 回表 而造成的性能损耗比访问多个二级索引带来的性能损耗更高时，读取多个二级索引后取交集比只读取一个二级索引的成本更低。
+            <br><br>MySQL 在某些特定的情况下才可能会使用到 Intersection 索引合并：
+            <br><br><span style='padding-left:1em'>`情况一`：**二级索引列是等值匹配的情况，对于联合索引来说，在联合索引中的每个列都必须等值匹配，不能出现只出现匹配部分列的情况。**
+            <br><br><span style='padding-left:3em'>比方说下边这个查询可能用到 idx_key1 和 idx_key_part 这两个二级索引进行 Intersection 索引合并的操作：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 = 'a' AND key_part1 = 'a' AND key_part2 = 'b' AND key_part3 = 'c';`
+            <br><br><span style='padding-left:3em'>而下边这两个查询就不能进行 Intersection 索引合并：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 > 'a' AND key_part1 = 'a' AND key_part2 = 'b' AND key_part3 = 'c';`
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 = 'a' AND key_part1 = 'a';`
+            <br><br><span style='padding-left:3em'>第一个查询是因为对 key1 进行了范围匹配，第二个查询是因为联合索引 idx_key_part 中的 key_part2 列并没有出现在搜索条件中，所以这两个查询不能进行 Intersection 索引合并。
+            <br><br><span style='padding-left:1em'>`情况二`：**主键列可以是范围匹配**
+            <br><br><span style='padding-left:3em'>比方说下边这个查询可能用到主键和 idx_key1 进行 Intersection 索引合并的操作：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE id > 100 AND key1 = 'a';`
+            <br><br>为啥呢？凭啥呀？突然冒出这么两个规定让大家一脸懵逼，下边我们慢慢品一品这里头的玄机。这话还得从InnoDB 的索引结构说起，你要是记不清麻烦再回头看看。对于 InnoDB 的二级索引来说，记录先是按照索引列进行排序，如果该二级索引是一个联合索引，那么会按照联合索引中的各个列依次排序。而二级索引的用户记录是由 索引列 + 主键 构成的，二级索引列的值相同的记录可能会有好多条，这些索引列的值相同的记录又是按照主键 的值进行排序的。所以重点来了，之所以在二级索引列都是等值匹配的情况下才可能使用 Intersection 索引合并，是因为<span style='color:red'>只有在这种情况下根据二级索引查询出的结果集是按照主键值排序的。</span>
+            <br><br>so？还是没看懂根据二级索引查询出的结果集是按照主键值排序的对使用 Intersection 索引合并有啥好处？小伙子，别忘了 Intersection 索引合并会把从多个二级索引中查询出的主键值求交集，如果从各个二级索引中查询的到的结果集本身就是已经按照主键排好序的，那么求交集的过程就很easy啦。假设某个查询使用 Intersection 索引合并的方式从 idx_key1 和 idx_key2 这两个二级索引中获取到的主键值分别是：
+            <br><span style='padding-left:2em'>从 idx_key1 中获取到已经排好序的主键值：1、3、5
+            <br><span style='padding-left:2em'>从 idx_key2 中获取到已经排好序的主键值：2、3、4
+            <br><br>那么求交集的过程就是这样：逐个取出这两个结果集中最小的主键值，如果两个值相等，则加入最后的交集结果中，否则丢弃当前较小的主键值，再取该丢弃的主键值所在结果集的后一个主键值来比较，直到某个结果集中的主键值用完了，如果还是觉得不太明白那继续往下看：
+            <br><span style='padding-left:2em'>先取出这两个结果集中较小的主键值做比较，因为 1 < 2 ，所以把 idx_key1 的结果集的主键值 1 丢弃，取出后边的 3 来比较。
+            <br><span style='padding-left:2em'>因为 3 > 2 ，所以把 idx_key2 的结果集的主键值 2 丢弃，取出后边的 3 来比较。
+            <br><span style='padding-left:2em'>因为 3 = 3 ，所以把 3 加入到最后的交集结果中，继续两个结果集后边的主键值来比较。
+            <br><span style='padding-left:2em'>后边的主键值也不相等，所以最后的交集结果中只包含主键值 3 。
+            <br><br>别看我们写的啰嗦，这个过程其实可快了，时间复杂度是 O(n) ，但是如果从各个二级索引中查询出的结果集并不是按照主键排序的话，那就要先把结果集中的主键值排序完再来做上边的那个过程，就比较耗时了。
+            <br><br>小贴士：
+            <br><span style='color:red'>按照有序的主键值去回表取记录有个专有名词儿，叫：Rowid Ordered Retrieval，简称ROR，以后大家在某些地方见到这个名词儿就眼熟了。</span>
+            <br><br>另外，不仅是多个二级索引之间可以采用 Intersection 索引合并，索引合并也可以有聚簇索引参加，也就是我们上边写的 情况二 ：在搜索条件中有主键的范围匹配的情况下也可以使用 Intersection 索引合并索引合并。为啥主键这就可以范围匹配了？还是得回到应用场景里，比如看下边这个查询：
+            <br>`SELECT * FROM single_table WHERE key1 = 'a' AND id > 100;`
+            <br><br>假设这个查询可以采用 Intersection 索引合并，我们理所当然的以为这个查询会分别按照 id > 100 这个条件从聚簇索引中获取一些记录，在通过 key1 = 'a' 这个条件从 idx_key1 二级索引中获取一些记录，然后再求交集，其实这样就把问题复杂化了，没必要从聚簇索引中获取一次记录。别忘了二级索引的记录中都带有主键值的，所以可以在从 idx_key1 中获取到的主键值上直接运用条件 id > 100 过滤就行了，这样多简单。所以涉及主键的搜索条件只不过是为了从别的二级索引得到的结果集中过滤记录罢了，是不是等值匹配不重要。
+            <br><br>当然，上边说的 情况一 和 情况二 只是发生 Intersection 索引合并的必要条件，不是充分条件。也就是说即使情况一、情况二成立，也不一定发生 Intersection 索引合并，这得看优化器的心情。优化器只有在单独根据搜索条件从某个二级索引中获取的记录数太多，导致回表开销太大，而通过 Intersection 索引合并后需要回表的记录数大大减少时才会使用 Intersection 索引合并。
+
         - #### Union合并
+
+            > [!ATTENTION|label:] 我们在写查询语句时经常想把既符合某个搜索条件的记录取出来，也把符合另外的某个搜索条件的记录取出来，我们说这些不同的搜索条件之间是 OR 关系。有时候 OR 关系的不同搜索条件会使用到不同的索引，比方说这样：
+            <br>`SELECT * FROM single_table WHERE key1 = 'a' OR key3 = 'b'`
+            <br><br>Intersection 是 **交集** 的意思，这适用于使用不同索引的搜索条件之间使用 AND 连接起来的情况； Union 是 **并集** 的意思，适用于使用不同索引的搜索条件之间使用 OR 连接起来的情况。与 Intersection 索引合并类似，MySQL 在某些特定的情况下才可能会使用到 Union 索引合并：
+            <br><br><span style='padding-left:1em'>`情况一`：**二级索引列是等值匹配的情况，对于联合索引来说，在联合索引中的每个列都必须等值匹配，不能出现只出现匹配部分列的情况。**
+            <br><br><span style='padding-left:3em'>比方说下边这个查询可能用到 idx_key1 和 idx_key_part 这两个二级索引进行 Union 索引合并的操作：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 = 'a' OR ( key_part1 = 'a' AND key_part2 = 'b'AND key_part3 = 'c');`
+            <br><br><span style='padding-left:3em'>而下边这两个查询就不能进行 Union 索引合并：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 > 'a' OR (key_part1 = 'a' AND key_part2 = 'b'AND key_part3 = 'c');`
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key1 = 'a' OR key_part1 = 'a';`
+            <br><br><span style='padding-left:3em'>第一个查询是因为对 key1 进行了范围匹配，第二个查询是因为联合索引 idx_key_part 中的 key_part2 列并没有出现在搜索条件中，所以这两个查询不能进行 Union 索引合并。
+            <br><br><span style='padding-left:1em'>`情况二`：**主键列可以是范围匹配**
+            <br><br><span style='padding-left:1em'>`情况三`：**使用 Intersection 索引合并的搜索条件**
+            <br><br><span style='padding-left:3em'>这种情况其实也挺好理解，就是搜索条件的某些部分使用 Intersection 索引合并的方式得到的主键集合和其他方式得到的主键集合取交集，比方说这个查询：
+            <br><span style='padding-left:3em'>`SELECT * FROM single_table WHERE key_part1 = 'a' AND key_part2 = 'b' AND key_part3 = 'c' OR (key1 = 'a' AND key3 = 'b');`
+            <br><br><span style='padding-left:3em'>优化器可能采用这样的方式来执行这个查询：
+            <br><span style='padding-left:5em'>先按照搜索条件 _key1 = 'a' AND key3 = 'b'_ 从索引 idx_key1 和 idx_key3 中使用 Intersection 索引合并的方式得到一个主键集合。
+            <br><span style='padding-left:5em'>再按照搜索条件 _key_part1 = 'a' AND key_part2 = 'b' AND key_part3 = 'c'_ 从联合索引 idx_key_part 中得到另一个主键集合。
+            <br><span style='padding-left:5em'>采用 Union 索引合并的方式把上述两个主键集合取并集，然后进行回表操作，将结果返回给用户。
+            <br><br>当然，查询条件符合了这些情况也不一定就会采用 Union 索引合并，也得看优化器的心情。优化器只有在单独根据搜索条件从某个二级索引中获取的记录数比较少，通过 Union 索引合并后进行访问的代价比全表扫描更小时才会使用 Union 索引合并。
+
         - #### Sort-Union合并
+
+            > [!ATTENTION|label:Sort-Union合并] Union 索引合并的使用条件太苛刻，必须保证各个二级索引列在进行等值匹配的条件下才可能被用到，比方说下边这个查询就无法使用到 Union 索引合并：
+            <br>`SELECT * FROM single_table WHERE key1 < 'a' OR key3 > 'z'`
+            <br><br>这是因为根据 _key1 < 'a'_ 从 idx_key1 索引中获取的二级索引记录的主键值不是排好序的，根据 _key3 > 'z'_ 从 idx_key3 索引中获取的二级索引记录的主键值也不是排好序的，但是 _key1 < 'a'_ 和 _key3 > 'z'_ 这两个条件又特别让我们动心，所以我们可以这样：
+            <br><span style='padding-left:2em'>先根据 key1 < 'a' 条件从 idx_key1 二级索引总获取记录，并按照记录的主键值进行排序
+            <br><span style='padding-left:2em'>再根据 key3 > 'z' 条件从 idx_key3 二级索引总获取记录，并按照记录的主键值进行排序
+            <br><span style='padding-left:2em'>因为上述的两个二级索引主键值都是排好序的，剩下的操作和 Union 索引合并方式就一样了。
+            <br><br>我们把上述这种先按照二级索引记录的主键值进行排序，之后按照 Union 索引合并方式执行的方式称之为 SortUnion 索引合并，很显然，这种 Sort-Union 索引合并比单纯的 Union 索引合并多了一步对二级索引记录的主键值排序的过程。
+
+            > [!TIP|label:小贴士|style:flat] 为啥有 Sort-Union 索引合并，就没有 Sort-Intersection 索引合并么？是的，的确没有 Sort-Intersection 索引合并这么一说，Sort-Union 的适用场景是单独根据搜索条件从某个二级索引中获取的记录数比较少，这样即使对这些二级索引记录按照主键值进行排序的成本也不会太高而 Intersection索引合并 的适用场景是单独根据搜索条件从某个二级索引中获取的记录数太多，导致回表开销太大，合并后可以明显降低回表开销，但是如果加入 Sort-Intersection 后，就需要为大量的二级索引记录按照主键值进行排序，这个成本可能比回表查询都高了，所以也就没有引入 Sort-Intersection 这个玩意儿。 
+
         - #### 索引合并注意事项
-        - #### 联合索引替代 Intersection 索引合并
+        
+            > [!ATTENTION|label:联合索引替代 Intersection 索引合并] `SELECT * FROM single_table WHERE key1 = 'a' AND key3 = 'b';`
+            <br><br>这个查询之所以可能使用 Intersection 索引合并的方式执行，还不是因为 idx_key1 和 idx_key3 是两个单独的 B+ 树索引，你要是把这两个列搞一个联合索引，那直接使用这个联合索引就把事情搞定了，何必用啥索引合并呢，就像这样：
+            <br>`ALTER TABLE single_table drop index idx_key1, idx_key3, add index idx_key1_key3(key1, key3);`
+            <br><br>这样我们把没用的 idx_key1 、 idx_key3 都干掉，再添加一个联合索引 idx_key1_key3 ，使用这个联合索引进行查询简直是又快又好，既不用多读一棵 B+ 树，也不用合并结果，何乐而不为？
+
+            > [!TIP|label:小贴士|style:flat]
+            不过小心有单独对 **key3** 列进行查询的业务场景，这样子不得不再把 **key3** 列的单独索引给加上。
