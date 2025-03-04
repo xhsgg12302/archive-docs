@@ -28,3 +28,5 @@ weight: 10
 * ## Reference
     + https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
     + https://www.daubnet.com/en/file-format-riff
+    + 
+    + https://drive.google.com/file/d/1lXMUerZ12Pmdk1OtycxnWvfxW0zNLiIX/view?usp=sharing
