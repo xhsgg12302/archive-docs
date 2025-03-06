@@ -108,7 +108,7 @@ weight: 20
         ![](/.images/doc/advance/advance/class-loader-01.png ':size=70%')
 
         + 加载loading，类的加载过程这一阶段，通过一个类的完全限定查找此类字节码文件，并利用字节码文件创建一个Class对象。
-        + 验证verification，目的在于确保Class文件的字节流中包含的信息符合当前虚拟机的要求，不会危害虚拟机自身的安全，主要包括四种验证， 文件格式，元数据，字节码，符号引用。
+        + 验证verification，目的在于确保Class文件的字节流中包含的信息符合当前虚拟机的要求，不会危害虚拟机自身的安全，主要包括四种验证： **文件格式**，**元数据**，**字节码**，**符号引用**。
         + 准备preparation，为类变量，（既static 修饰的字段变量）分配内存并且设置该变量的初始值即0（如static int i = 5 ；这里只将i初始化为0。 至于5的值将在初始化时赋值，这里不包含用final修饰的static,因为final在编译的时候会分配，注意这里不会为实例变量 分配初始化，类变量会分配在方法区中，而实例变量时会随着对象一起分配到Java堆中。
         + 解析resolution，主要将常量池中的符号引用替换为直接引用的过程。符号引用就是一组符号用来描述目标，可以是任何字面量，而直接引用 就是直接指向目标的指针，相对偏移量或者一个间接定位到目标的句柄。有类或接口的解析，字段解析，类方法解析， 接口方法解析等。
         + 初始化initialization、类加载的最后阶段，如该类具有超类，则对其进行初始化，执行类的初始化`<clinit>()`，包括静态初始化器和静态初始化成员变量（如前面只初始化了 默认值的static变量将会在这个阶段赋值，成员变量也将被初始化）。
@@ -1028,6 +1028,57 @@ weight: 20
 * ## 范型&通配符
 
 * ## 注解
+
+    + ### 元注解
+
+        | index         | explain                                                                                       |
+        | ------------- | --------------------------------------------------------------------------------------------- |
+        | `@Retention`  | 标明注解的生命周期                                                                            |
+        | `@Target`     | 描述自定义注解的使用范围，允许自定义注解标注在哪些Java元素上(类、方法、属性、局部属性、参数…) |
+        | `@Inherited`  | 是否可以被标注类的子类继承，比如一个注解标注到 Parent 类上，继承它的 Son 会有注解存在否       |
+        | `@Repeatable` | 是否可以重复标注                                                                              |
+        | `@Documented` | 是否在生成的 javadoc 中包含注解                                                               |
+
+    + ### 注解实质
+
+        ![](/.images/doc/advance/advance/anno-show-01.png ':size=100%')
+
+        > [?] 通过打断点可以观察到，实质上是一个 [JDK 代理](#jdk) 出来的对象（生成过程可以断点到[这儿](https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/sun/reflect/annotation/AnnotationParser.java#L305-L307)）。对于注解上面的值，以 `Map<String,Object>` 的形式保存在代理对象中。对于注解的访问操作，会调用到 `AnnotationInvocationHandler`类中的 **invoke** 方法：自定义的值将根据调用方法名在 **Map** 中取值返回。如下：
+
+        ```java [data-file:class AnnotationInvocationHandler.java] {1,19}
+        private final Map<String, Object> memberValues;
+
+        public Object invoke(Object var1, Method var2, Object[] var3) {
+            String var4 = var2.getName();
+            Class[] var5 = var2.getParameterTypes();
+            if (var4.equals("equals") && var5.length == 1 && var5[0] == Object.class) {
+                return this.equalsImpl(var3[0]);
+            } else if (var5.length != 0) {
+                throw new AssertionError("Too many parameters for an annotation method");
+            } else {
+                switch (var4) {
+                    case "toString":
+                        return this.toStringImpl();
+                    case "hashCode":
+                        return this.hashCodeImpl();
+                    case "annotationType":
+                        return this.type;
+                    default:
+                        Object var6 = this.memberValues.get(var4);
+                        if (var6 == null) {
+                            throw new IncompleteAnnotationException(this.type, var4);
+                        } else if (var6 instanceof ExceptionProxy) {
+                            throw ((ExceptionProxy)var6).generateException();
+                        } else {
+                            if (var6.getClass().isArray() && Array.getLength(var6) != 0) {
+                                var6 = this.cloneArray(var6);
+                            }
+                            return var6;
+                        }
+                }
+            }
+        }
+        ```
 
 * ## 语法糖
 

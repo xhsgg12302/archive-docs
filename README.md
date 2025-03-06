@@ -2,6 +2,9 @@
 title: "/"
 cascade:
     tags: ["sence", "demo", "article"]
+
+    # 定义基准线，方便调整页面权重
+    weight: 100
 ---
 
 ![文徵明-小楷赤壁赋](/.images/_media/home.compress.resize..jpg ':size=100% * 500')
