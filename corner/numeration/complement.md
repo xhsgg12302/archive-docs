@@ -36,9 +36,20 @@
         | 反码 | 01101001 | 10010110 | 01111111 | 10000000 |
         | 补码 | 01101001 | 10010111 | 01111111 | 10000001 |
 
-    + ### 辅助验证
+        - #### 辅助验证
 
-        ![](/.images/corner/numeration/complement/cpt-byte-show-01.png ':size=100%')
+            ![](/.images/corner/numeration/complement/cpt-byte-show-01.png ':size=100%')
+    
+    + ### 认识移码
+
+        > [?] `移码`（Bias或Offset Binary）是一种在计算机系统中用于表示有符号数的方法，特别是在 [浮点数](./README.md#浮点数) 标准如 [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) 中广泛使用。它的主要作用是为了简化数值比较和排序操作，使得所有数值——包括正数和负数——可以被视为无符号整数进行处理，从而利用硬件对无符号数的高效比较机制。
+        <br><br>对于 8 位的移码来说，相当于其补码 + 偏移量（范围个数的一半： 256 / 2 = 128 = $2^{8-1}$），比如：
+        <br><span style='padding-left:1.2em'>`1.` $-105_移 = ([-105_补 = 10010111] + 128) = 00010111$
+        <br><span style='padding-left:1.2em'>`2.` $-127_移 = ([-127_补 = 10000001] + 128) = 00000001$
+        <br><br>通过以上观察：也可以理解移码为 **其补码的符号位取反**。
+
+        > [!CAUTION] 之所以方便比较和排序是因为：可以不用考虑符号位，直接全部按位比较了。比如：
+        <br>$ {\color{red}(2, [2_移 = 1000 0010])} > {\color{#FF4500}(1,[1_移 = 1000 0001])} > {\color{#FF6347}(-2,[-2_移 = 0111 1110])} > {\color{#FF7F50}(-127,[-127_移 = 0000 0001])}$
 
 * ## Reference
     + [youtrack | Display all numbers in hex](https://youtrack.jetbrains.com/issue/IDEA-79114/Display-all-numbers-in-hex#focus=Comments-27-905868.0-0)
