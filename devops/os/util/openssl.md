@@ -1,5 +1,28 @@
 * ## Intro(OPENSSL)
 
+    + ### OPENSSL提取公私匙信息
+
+        ```shell
+        # 生成 RSA 2048 bit 私匙
+        openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+
+        # 从私匙中提取公匙
+        openssl rsa -pubout -in private_key.pem -out public_key.pem
+
+        # 查看公匙中的指数和模数( -pubin 指定输入文件是公匙，默认当私匙处理)
+        openssl rsa -pubin -modulus -text -noout -in public_key.pem
+        # 查看私匙中的指数和模数
+        openssl rsa -modulus -text -noout -in private_key.pem
+
+        # 查看 TLS/SSL 证书中的相关信息（使用 RSA 算法）
+        openssl s_client -connect zhuanlan.zhihu.com:443 > pubkey.pem
+        openssl x509 -in pubkey.pem -pubkey -noout | openssl rsa -pubin -modulus -text -noout
+
+        # 查看 TLS/SSL 证书中的相关信息（使用 ECDSA 算法）
+        openssl s_client -connect wtfu.site:443 > pubkey.pem
+        openssl x509 -in pubkey.pem -pubkey -noout | openssl ec -pubin -text -noout
+        ```
+
     + ### OPENSSL操作示例
 
         ```shell

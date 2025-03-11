@@ -8,6 +8,11 @@
         <br>3. 缓存是如何处理的？
         <br>4. 拦截器原理。
 
+    + ### Mapper接口的实现
+
+        > [?] 通过`MapperRegistry`里面的 map 类型的 knowMappers 根据 type 获取到 MapperProxyFactory ,进而调用`return mapperProxyFactory.newInstance(sqlSession);`返回一个 mapper 接口代理对象。
+        <br> 上述代理对象中使用的 InvocationHandler 叫 `MapperProxy`，里面 invoke() 的实现是将方法包装成一个`MapperMethod` mm 存放在`MapperMethodInvoker` mmi 里面，并会进行缓存，然后调用 mmi 里面的 invoke，进而执行到 mm.execute()方法，内部通过执行器拿到结果返回。
+
     + ### 拦截器实现
 
         > [?] [插件文档](https://mybatis.org/mybatis-3/zh_CN/configuration.html#plugins)

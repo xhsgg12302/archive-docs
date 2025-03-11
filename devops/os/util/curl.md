@@ -45,6 +45,9 @@ weight: 21
         curl -o example.html https://www.example.com  ==> example.html
         curl -O https://www.example.com/foo/bar.html  ==> bar.html
 
+        # 13 -T,--upload-file <file>
+        gpg --export 425B8CB8073AAC1EB005E4E648E1F1185160B400  | curl -T - https://keys.openpgp.org
+
         # 使用curl 实现 telnet .追加超时时间是因为，有的服务器有安全策略阻止，会一直等待链接超时，效果跟端口开放相差无几，造成误解。
         curl --connect-timeout 1 telnet://wtfu.site:30000
         ```
