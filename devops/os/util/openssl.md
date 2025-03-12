@@ -1,5 +1,46 @@
 * ## Intro(OPENSSL)
 
+    + ### 证书类型
+
+        > [?] 暂时记录一个 x509 ([rfc](https://www.rfc-editor.org/rfc/rfc5280.html)，[wiki](https://zh.wikipedia.org/wiki/X.509#证书组成结构))。这种格式一般广泛应用于Web浏览器和服务器之间的SSL/TLS加密通信。
+        <br>对于这种证书的编码格式有 **der**, **pem(privvaccy-enhanced mail)** 等。且可以认为 pem 是 der 二进制的一种 base64编码。可以如下验证：
+        <br><br>`1.` 获取包含证书的内容到文件：`openssl s_client -connect wtfu.site:443 > pubkey.pem` (运行可能会卡住，CTRL+c 终止就行)
+        <br>`2.` 查看 pubkey.pem 内容：删除`-----BEGIN CERTIFICATE-----`和`-----END CERTIFICATE-----`之外多余的内容。
+        <br>`3.` 提取 pem 证书中的公匙并显示相关信息：`openssl x509 -in pubkey.pem -pubkey -noout | openssl ec -pubin -text -noout`
+        <br>`4.` 转换：pem -> der，将除了第一行和最后一行的内容进行 base64 解码，然后写入文件`sed '1d;$d' pubkey.pem | base64 -d > pubkey.der`
+        <br>`5.` 提取 der 证书中的公匙并显示相关信息：`openssl x509 -in pubkey.der -pubkey -noout | openssl ec -pubin -text -noout`
+        <br><br>![](/.images/devops/os/util/openssl-cer-format-01.png ':size=100%')
+        <br><br>或者也可以通过 [asn1在线解析](https://asn1js.eu/) 查看 pubkey.der 文件是否正确（DER 本质上是 [ASN.1](https://zh.wikipedia.org/wiki/ASN.1) 格式的）。
+
+        > [!CAUTION] 上述服务器`wtfu.site`当前密匙交换算法采用的是`ECDSA`，而不是 [RSA](/doc/advance/crypto/rsa.md)，读取的时候需要按照`ECDSA`的方式解析，所以后面使用了`ec`
+        <br><br>另外可以计算 sha-256 指纹(对应 chrome 浏览器证书基本信息中的值)，包括 证书和公匙
+        <br>证书：`cat pubkey.der | shasum -a 256`，或者 `grep -v ^- pubkey.pem | base64 -d | shasum -a 256`。
+        <br>公匙：`openssl x509 -in <pubkey.der | pubkey.pem> -pubkey -noout | grep -v ^- | base64 -d | shasum -a 256`。
+        
+        - ###### Referene
+            * https://asn1js.eu/ [ASN.1 JavaScript decoder]
+            * https://stackoverflow.com/questions/22743415/what-are-the-differences-between-pem-cer-and-der
+            
+    + ### OPENSSL读取ssh-keygen生成公匙信息
+
+        > [?] 简单记录一下使用 **openssl** 读取由 **ssh-keygen** 生成 [RSA](/doc/advance/crypto/rsa.md) 类型的公匙信息，当然私匙也是可以的。
+        <br><br>准备公私匙数据：`ssh-keygen -t rsa -b 1024 -C 12302@wtfu.site`，填写生成文件路径 */path/to/ca/ssh*，就不加密码段（passphrase）了。
+        <br>比如生成的公匙叫`ssh.pub`，私匙叫`ssh`。
+        
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        > [!NOTE|label:解析 RSA 公匙信息] `1.` 直接使用 *-e* 选项导出 PEM 格式的公匙，然后去除第一，最后一行，转码后交给 openssl rsa 解析就行：`ssh-keygen -f ssh.pub -e -m PEM | sed '1d;$d' | base64 -d | openssl rsa -pubin -modulus -text --noout`。
+        <br><br>且此处的公匙文件可以用私匙文件代替，因为当前生成的私匙里包括生成公匙需要的信息。
+        <br><br>
+        <br><br>![](/.images/devops/os/util/openssl-ssh-key-01.png ':size=100%')
+        <!-- div:right-panel-50 -->
+        > [!NOTE|label:解析 RSA 私匙信息] `1.` 记得备份原来的私匙文件：`cp ssh ssh_bak`，因为后续操作会将转换后内容的对私匙进行覆写，暂时没有找到其他好办法。
+        <br>`2.` 判断起始和结束标记，是否是 `RSA` 类型的，是的进行下一步，如果是 `OPENSSH` 则进行 openssh 转换，如果是其他的，我也不知道了。
+        <br>**openssh 转 rsa**:`ssh-keygen -f ssh -m PEM -p`，一路回车，查看 ssh 文件开始结束标记已经变成 RSA 了。
+        <br>`3.` 查看私匙信息：`openssl rsa -in ssh -text -noout | head -n 15`
+        <br><br>![](/.images/devops/os/util/openssl-ssh-key-02.png ':size=100%')
+        <!-- panels:end -->
+
     + ### OPENSSL提取公私匙信息
 
         ```shell
@@ -8,6 +49,9 @@
 
         # 从私匙中提取公匙
         openssl rsa -pubout -in private_key.pem -out public_key.pem
+
+        # 公匙格式转换 pem -> der
+        openssl rsa -pubin -outform DER -in openssl.pem -out openssl.der
 
         # 查看公匙中的指数和模数( -pubin 指定输入文件是公匙，默认当私匙处理)
         openssl rsa -pubin -modulus -text -noout -in public_key.pem
