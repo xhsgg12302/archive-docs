@@ -569,7 +569,7 @@ weight: 40
 
 	+ ### 1.使用 acme.sh 自动化管理 ssl/tsl证书
 
-		```shell {18,22,27,29}
+		```shell {18,22,27,29,32}
 		# 工具安装 acme.sh (https://github.com/acmesh-official/acme.sh)
 		curl https://get.acme.sh | sh -s email=xhsgg12302@126.com
 
@@ -600,6 +600,20 @@ weight: 40
 			acme.sh --renew -d example.com [--force]
 		# 证书 更新 （批量）
 			acme.sh --cron [--force]
+
+		# 设置通知 （参见文档：https://github.com/acmesh-official/acme.sh/wiki/notify）
+			# 使用 smtp hook ：https://github.com/acmesh-official/acme.sh/wiki/notify#12-set-notification-for-smtp
+			acme.sh --set-notify --notify-hook smtp --notify-source X_eli
+
+			export SMTP_FROM="xhsgg12302@126.com"  # just the email address (no display names)
+			export SMTP_TO="xhsgg12302@qq.com,xhsgg12302@gmail.com"  # just the email address, use commas between multiple emails
+			export SMTP_HOST="smtp.126.com"
+			export SMTP_SECURE="ssl"  # one of "none", "ssl" (implicit TLS, TLS Wrapper), "tls" (explicit TLS, STARTTLS)
+			export SMTP_PORT="465"
+			export SMTP_USERNAME="xhsgg12302@126.com"
+			export SMTP_PASSWORD="xxxxxx"
+			# export SMTP_BIN="/path/to/python_or_curl"
+			# export SMTP_TIMEOUT="30"  # seconds for SMTP operations to timeout, default 30
 		```
 
 		+ Reference

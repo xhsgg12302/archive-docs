@@ -4,23 +4,32 @@
 
         > [?] 暂时记录一个 x509 ([rfc](https://www.rfc-editor.org/rfc/rfc5280.html)，[wiki](https://zh.wikipedia.org/wiki/X.509#证书组成结构))。这种格式一般广泛应用于Web浏览器和服务器之间的SSL/TLS加密通信。
         <br>对于这种证书的编码格式有 **der**, **pem(privvaccy-enhanced mail)** 等。且可以认为 pem 是 der 二进制的一种 base64编码。可以如下验证：
-        <br><br>`1.` 获取包含证书的内容到文件：`openssl s_client -connect wtfu.site:443 > pubkey.pem` (运行可能会卡住，CTRL+c 终止就行)
-        <br>`2.` 查看 pubkey.pem 内容：删除`-----BEGIN CERTIFICATE-----`和`-----END CERTIFICATE-----`之外多余的内容。
+        <br><br>`1.` 下载网站证书并写入到文件：（不是直接下载，而是在 https 握手过程中会携带 [证书数据](/devops/network/tls-ssl/README.md#hp-certificate-实例分析)，openssl 会在这个过程中打印出来，然后我们用工具提取即可）
+        <br><span style='padding-left:1.2em'>`1.1.` `openssl s_client -connect wtfu.site:443 > pubkey.pem` (运行可能会卡住，CTRL+c 终止就行)
+        <br><span style='padding-left:4.2em'>查看 pubkey.pem 内容：删除`-----BEGIN CERTIFICATE-----`和`-----END CERTIFICATE-----`之外多余的内容。
+        <br><span style='padding-left:1.2em'>`1.2.` 或者一步到位：`openssl s_client -connect wtfu.site:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' > pubkey.pem`
+        <br><br>`2.` 转换：pem -> der，将除了第一行和最后一行的内容进行 base64 解码，然后写入文件`sed '1d;$d' pubkey.pem | base64 -d > pubkey.der`
         <br>`3.` 提取 pem 证书中的公匙并显示相关信息：`openssl x509 -in pubkey.pem -pubkey -noout | openssl ec -pubin -text -noout`
-        <br>`4.` 转换：pem -> der，将除了第一行和最后一行的内容进行 base64 解码，然后写入文件`sed '1d;$d' pubkey.pem | base64 -d > pubkey.der`
-        <br>`5.` 提取 der 证书中的公匙并显示相关信息：`openssl x509 -in pubkey.der -pubkey -noout | openssl ec -pubin -text -noout`
+        <br>`4.` 提取 der &nbsp;&nbsp;证书中的公匙并显示相关信息：`openssl x509 -in pubkey.der -pubkey -noout | openssl ec -pubin -text -noout`
         <br><br>![](/.images/devops/os/util/openssl-cer-format-01.png ':size=100%')
         <br><br>或者也可以通过 [asn1在线解析](https://asn1js.eu/) 查看 pubkey.der 文件是否正确（DER 本质上是 [ASN.1](https://zh.wikipedia.org/wiki/ASN.1) 格式的）。
-
-        > [!CAUTION] 上述服务器`wtfu.site`当前密匙交换算法采用的是`ECDSA`，而不是 [RSA](/doc/advance/crypto/rsa.md)，读取的时候需要按照`ECDSA`的方式解析，所以后面使用了`ec`
         <br><br>另外可以计算 sha-256 指纹(对应 chrome 浏览器证书基本信息中的值)，包括 证书和公匙
         <br>证书：`cat pubkey.der | shasum -a 256`，或者 `grep -v ^- pubkey.pem | base64 -d | shasum -a 256`。
         <br>公匙：`openssl x509 -in <pubkey.der | pubkey.pem> -pubkey -noout | grep -v ^- | base64 -d | shasum -a 256`。
+
+        > [!CAUTION] 上述服务器`wtfu.site`当前密匙交换算法采用的是`ECDSA`，而不是 [RSA](/doc/advance/crypto/rsa.md)，读取的时候需要按照`ECDSA`的方式解析，所以后面使用了`ec`。
         
         - ###### Referene
             * https://asn1js.eu/ [ASN.1 JavaScript decoder]
             * https://stackoverflow.com/questions/22743415/what-are-the-differences-between-pem-cer-and-der
-            
+
+    + ### 证书指纹
+
+        > [!TIP] chrome 浏览器查看的指纹是 sha256 算法的，腾讯云证书控制台详情显示的是 sha1 的。
+        <br><br>![](/.images/devops/os/util/openssl-cer-finger-01.png ':size=100%')
+        <br><br>由上面信息也可以猜测到：<span style='color:blue'>**证书的指纹** 是指对当前证书所有二进制内容的算出的信息摘要</span>。一般有 sha1，sha256 等。验证如下：获取到证书的二进制内容，然后进行哈希算出摘要。
+        <br>`openssl s_client -connect static.wtfu.site:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' | grep -v ^- | base64 -d | sha1`
+
     + ### OPENSSL读取ssh-keygen生成公匙信息
 
         > [?] 简单记录一下使用 **openssl** 读取由 **ssh-keygen** 生成 [RSA](/doc/advance/crypto/rsa.md) 类型的公匙信息，当然私匙也是可以的。
@@ -58,13 +67,11 @@
         # 查看私匙中的指数和模数
         openssl rsa -modulus -text -noout -in private_key.pem
 
-        # 查看 TLS/SSL 证书中的相关信息（使用 RSA 算法）
-        openssl s_client -connect zhuanlan.zhihu.com:443 > pubkey.pem
-        openssl x509 -in pubkey.pem -pubkey -noout | openssl rsa -pubin -modulus -text -noout
+        # 查看 TLS/SSL 证书中公匙的相关信息（使用 RSA 算法）
+        openssl s_client -connect <mark class='under blue'>static.wtfu.site</mark>:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' | openssl x509  -pubkey -noout | <mark class='under deeppink'>openssl rsa -pubin -modulus -text -noout</mark>
 
-        # 查看 TLS/SSL 证书中的相关信息（使用 ECDSA 算法）
-        openssl s_client -connect wtfu.site:443 > pubkey.pem
-        openssl x509 -in pubkey.pem -pubkey -noout | openssl ec -pubin -text -noout
+        # 查看 TLS/SSL 证书中公匙的相关信息（使用 ECDSA 算法）
+        openssl s_client -connect        <mark class='under blue'>wtfu.site</mark>:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' | openssl x509  -pubkey -noout | <mark class='under deeppink'>openssl ec -pubin -text -noout</mark>
         ```
 
     + ### OPENSSL操作示例
