@@ -4,7 +4,7 @@ tags: ["hex", "editor", "tools"]
 
 * ## Intro(ImHex | 十六进制编辑器)
 
-    > [?] 一个瑞士小孩哥使用 C++23 写的开源 **十六进制编辑器**，主要包括十六进制预览（Hex editor），单多字节数据编码（data inspector）,基于节点的预处理器（data processor）,书签列表（Bookmarks），一些其他内置工具，数据分析和图表可视统计，使用向导，在线商店，其中包括各路大神写的（类库，magic文件，编码集等）。
+    > [!] 一个瑞士小孩哥使用 C++23 写的开源 **十六进制编辑器**，主要包括十六进制预览（Hex editor），单多字节数据编码（data inspector）,基于节点的预处理器（data processor）,书签列表（Bookmarks），一些其他内置工具，数据分析和图表可视统计，使用向导，在线商店，其中包括各路大神写的（类库，magic文件，编码集等）。
     <br>当然，最主要，也是最核心的就是下面需要单独介绍的 [模式语言](#imhex-pattern-language)（暂且这么翻译）。
     <br><br>使用场景：
     <br>针对某个实例文件，结合模式语言，展现结构列表，可视化二进制数据。比如[分析 java 字节码](/doc/advance/bytecode.md#使用imhex分析)，[RIFF,ANI 文件格式分析](/corner/file-format/riff.md)，或者 [分析 ext2 文件系统](/devops/os/core/fs/ext2.md) 等。
@@ -18,14 +18,45 @@ tags: ["hex", "editor", "tools"]
 
     > [?] ImHex 的精髓所在。简单的理解，就是通过模式编辑器（Pattern editor），通过编程的方式将二进制文件按照内存地址解析成对应的模式(变量)，并通过 Pattern Data 视图窗口将数据展示出来，可以自定义展示数据格式，颜色等，数据布局，格式分布一目了然。类比于 Java POJO中的 toString()。[参考文档](https://docs.werwolv.net/pattern-language)
 
+    + ### 前期准备
+
+        ```shell [data-file:字节数据]
+        4D 5A 90 00 03 00 00 00 04 00 00 00 FF 01 00 00 B8 00 00 00 00 00 00 00 40 00 00 00 00 00 1A 41 00 00 00 00 00 00 00 00 1A 2D 44 54 FB 21 09 40 00 00 00 05 00 80 C3 8D 00 01 02 00 00 00 00 00 54 C9 A7 0A F5 A0 A5 0B 52 69 63 68 F4 A0 A5 0B 00 01 02
+        ```
+
+        > [!WARNING|label:准备一份测试用的二进制数据] 复制如上字节数据，使用如下命令写入到 im-type 文件里面：`echo '4D 5A 90 ...' | tr -d ' ' | xxd -p -r > im-type`
+
     + ### 数据类型
 
         > [!NOTE] 数据类型有好多种，其中包括内建类型(Built-in)，字节序(Endianness)，字面量(Literals)，枚举(Enums)，数组(Arrays)，指针(Pointers)，位域/位段(Bitfields)，结构体(Structs)，共用体(Unions)，Using 别名声明，模板/泛型(Templates)等。
-        <br><br>`1.` 内建类型：
-        <br><span style='padding-left:1.5em'>无符号整形，范围 0 ~ $2^{8*size}-1$，分别使用 *1B*，*2B*，*3B*，*4B*，*6B*，*8B*，*12B*，*16B* 等字节表示 `u8`，`u16`，`u24`，`u32`，`u48`，`u64`，`u96`，`u128`。
-        <br><span style='padding-left:1.5em'>有符号整形，范围 $-(2^{8*size-1})$ ~ $(2^{8*size-1}) - 1 $，分别使用 *1B*，*2B*，*3B*，*4B*，*6B*，*8B*，*12B*，*16B* 等字节表示 `s8`，`s16`，`s24`，`s32`，`s48`，`s64`，`s96`，`s128`。
-        <br><span style='padding-left:1.5em'>浮点型，*4B*:`float`，*8B*:`double`。
-        <br><span style='padding-left:1.5em'>特殊类型，*1B*:`char`，*2B*:`char16`，*1B*:`bool`，仅用于函数中都的`str`和`auto`。
+
+        - #### 1.内建类型
+
+            > [?] 无符号整形，范围 $[0 , 2^{8*size}-1]$，<span style='padding-left:7.5em'>分别使用 *1B*，*2B*，*3B*，*4B*，*6B*，*8B*，*12B*，*16B* 等字节表示 `u8`，`u16`，`u24`，`u32`，`u48`，`u64`，`u96`，`u128`。
+            <br>有符号整形，范围 $[-(2^{8*size-1})$ , $(2^{8*size-1}) - 1]$，分别使用 *1B*，*2B*，*3B*，*4B*，*6B*，*8B*，*12B*，*16B* 等字节表示 `s8`，`s16`，`s24`，`s32`，`s48`，`s64`，`s96`，`s128`。
+            <br>浮点型，*4B*:`float`，*8B*:`double`。
+            <br>特殊类型，*1B*:`char`，*2B*:`char16`，*1B*:`bool`，仅用于函数中都的`str`和`auto`。
+            <br><br>![](/.images/other/misc/imhex/imhex-pattern-type-builtin-01.png ':size=100%')
+
+            ```rust
+            import std.io;
+
+            fn format_double(ref double value){
+                return std::format("{:.15f}", value);
+            };
+
+            u8     u1        @0x0c;
+            s8     s1        @0x0c;
+            u16    u2        @0x04;
+            char   c1        @0x00;
+            char16 c2        @0x00;
+            bool   b1        @0x0d;
+            bool   b2        @0x0e;
+            float  f1        @0x1c;
+            double pi        @0x28;
+            double pi_format @0x28 [[format_read("format_double")]];
+            ```
+
         <br><br>`2.` 字节序
         <br><span style='padding-left:1.5em'>默认所有的内建类型都使用原生的字节序，也就是电脑默认的（一般是小端序）。但是也提供可覆写的选项，通过`le`，`be`修饰即可。
         <br><br>`3.` 字面量

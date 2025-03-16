@@ -46,6 +46,10 @@ weight: 40
 
 	# （可选）修改版本信息
 	vim src/http/ngx_http_header_filter_module.c # 49-50
+	# http v2，字符串使用一种叫 (HPACK's Huffman encoding) 的技术
+	# https://stackoverflow.com/questions/35655448/how-does-this-code-result-in-the-string-nginx
+	vim src/http/v2/ngx_http_v2_filter_module.c  # 151 ==> static const u_char nginx[9] = "\x88\xfc\x88\x22\x64\x2\x5c\xb4\x1b";
+	# http v3，都快出来了...
 	
 	# （可选）指定编译用的 openssl 库
 	wget -P /data/ https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz
@@ -569,7 +573,7 @@ weight: 40
 
 	+ ### 1.使用 acme.sh 自动化管理 ssl/tsl证书
 
-		```shell {18,22,27,29,32}
+		```shell {18,22,27,29,32,46,50,57}
 		# 工具安装 acme.sh (https://github.com/acmesh-official/acme.sh)
 		curl https://get.acme.sh | sh -s email=xhsgg12302@126.com
 
@@ -614,8 +618,24 @@ weight: 40
 			export SMTP_PASSWORD="xxxxxx"
 			# export SMTP_BIN="/path/to/python_or_curl"
 			# export SMTP_TIMEOUT="30"  # seconds for SMTP operations to timeout, default 30
+
+		# 吊销证书
+			# https://github.com/acmesh-official/acme.sh/wiki/revokecert
+			acme.sh --revoke  -d tech.wtfu.site   --revoke-reason 0
+
+		# 算法选择
+			# https://github.com/acmesh-official/acme.sh?tab=readme-ov-file#10-issue-ecc-certificates
+			# 通过指定 --keylength [ec-256(default) | ec-384 | ec-521 | 2048 | 3072 | 4096] 等选择 ECC 或者 RSA，比如下面的选择为 2048 位的 RSA。
+			acme.sh --issue --dns dns_tencent  -d test.wtfu.site <mark class='under deeppink'>--keylength 2048</mark>
+			# 签发后查看证书中密匙交换用的算法信息如下：（rsaEncryption:RSA，id-ecPublicKey: EC/ECC）
+			openssl x509 -in /root/.acme.sh/test.wtfu.site/test.wtfu.site.cer --text --noout | grep -A 2 'Subject Public Key Info'
+
+		# 厂商选择
+			# https://github.com/acmesh-official/acme.sh/wiki/Server
+			# 通过指定 --server [zerossl(default) | letsencrypt | ... ]
+			acme.sh --issue <mark class='under deeppink'>--server letsencrypt</mark> --dns dns_tencent  -d let.wtfu.site
 		```
 
-		+ Reference
-
+		- Reference
+			* https://github.com/acmesh-official/acme.sh
 			* https://blog.freessl.cn/acme-quick-start/

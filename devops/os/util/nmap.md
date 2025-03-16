@@ -16,7 +16,7 @@
         | - | - |
         | open | 意味着目标机器上的应用程序正在该端口监听连接/报文 |
         | close | 端口没有应用程序在它上面监听 |
-        | filtered | 意味着防火墙，过滤器或者其它网络障碍阻止了该端口被访问 <br> open/close \| filtered :有可能开放/关闭 或者被过滤，拦截等。<br>比如对于`open \| filtered`来说，如果发送的报文有返回的时候认为是 close 的，那没返回的话就无法确定到底是被过滤了，还是真的 open，`close \| filtered` 同理 |
+        | filtered | 意味着防火墙，过滤器或者其它网络障碍阻止了该端口被访问 <br> open/close \| filtered :有可能开放/关闭 或者被过滤，拦截等。<br>比如对于`open \| filtered`来说，如果发送的报文有返回的时候认为是 close 的，那没返回的话就无法确定到底是被过滤了，还是真的 open。也既文档中的 [开放端口不响应](https://nmap.org/man/zh/man-port-scanning-basics.html#:~:text=开放的端口不响应,-就是一个例子) 的意思。UDP，IP协议， FIN，Null，和Xmas扫描可能把端口归入此类。`close \| filtered` 同理 ， 它只可能出现在IPID Idle扫描中。|
         | unfiltered | Nmap 根据目前的探测无法确定它们是关闭还是开放（极少出现的情况吧） |
 
     + ### 主机发现

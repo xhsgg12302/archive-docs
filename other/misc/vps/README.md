@@ -96,7 +96,7 @@
         <br><span style='padding-left:2.7em'/>`vim src/http/ngx_http_header_filter_module.c` # 49-50
         <br><span style='padding-left:2.7em'/>`./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --with-openssl=/data/openssl-1.0.2u --with-debug [--without-http_fastcgi_module]`
         <br><br>Nginx 运行配置：[nginx.conf 参考](https://github.com/12302-bak/configure-files/blob/master/conf/_other/nginx/conf/nginx.conf)
-        <br><br>证书自动化部署 [参考](/devops/nginx/nginx.md#使用-acmesh-自动化管理-ssltsl证书) 、 [tencent NGINX SSL 配置参考](https://cloud.tencent.com/document/product/400/4143)
+        <br><br>证书自动化部署 [参考](/devops/nginx/nginx.md#1使用-acmesh-自动化管理-ssltsl证书) 、 [tencent NGINX SSL 配置参考](https://cloud.tencent.com/document/product/400/4143)
 
         > [!CAUTION|style:flat|label:注意备案以及云服务商阻断策略]  Ali 443需要备案，不然就是莫名的访问不通，被服务商检测到后发送rst，然后 nginx 也以为客户端中断了。
         <br> 可以使用如下命令测试 `curl -v -k -H 'Host:wtfu.site' https://127.0.0.1`，测试网站的https配置是否正确，或者起作用。

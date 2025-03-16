@@ -10,6 +10,12 @@
 
         ![](/.images/devops/network/http/http-response-chunked-encoding-01.png ':size=70%')
 
+    + ### 响应头大小写
+
+        > [?] (参考[rfc | 7540](https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2)) 在 http2 中，**响应头的 key 必须为小写**，其他的视为畸形的，但是在 http1.1 中大小写不敏感。
+        <br><br>使用 curl 验证即可，一般浏览器应该会自动转化，比如 chrome 即使小写也会转化成首字母大写。
+        <br>下列命令查看响应头区别：`curl -I --http1.1 https://wtfu.site`，`curl -I --http2 https://wtfu.site`
+
 * ## Reference
     + https://en.wikipedia.org/wiki/Chunked_transfer_encoding
     + https://www.runoob.com/http/http-tutorial.html

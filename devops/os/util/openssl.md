@@ -196,6 +196,12 @@
         ls -hal /data/adb/modules/hy/system/etc/security/cacerts/
         ```
 
+    + ### 伪随机字节
+
+        > [?] [openssl-rand](https://docs.openssl.org/master/man1/openssl-rand/): openssl 库可以生成位随机字节，并通过 base64 编码或这 hex 十六进制的形式打印输出，而且长度可控。基本使用如下：
+        <br><br>`openssl rand -hex 32`
+        <br>`openssl rand -base64 16`
+
     + ### 记录
         ```shell
         # 查看证书详情
