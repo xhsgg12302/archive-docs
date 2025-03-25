@@ -29,7 +29,7 @@ weight: 60
 
 		> [?] 此处的三个选项不一定每个helper实现，有的helper可能没有删除选择。还得看具体实现，比如官方文档中给出的ruby脚本就没有删除选项。但是务必遵守approve和reject没有响应输出。
 
-	* ### 2.内置的两种基本helper(`store`,`cache`)
+	* ### 2.内置的基本helper
 		```shell
 		# 可以通过命令进行查看 
 		$ find /Library/Developer/CommandLineTools/usr/libexec/git-core -name "git-credential*"
@@ -127,9 +127,10 @@ weight: 60
 		| `/absolute/path/foo -xyz`	| Runs /absolute/path/foo -xyz | 
 		| `!f() { echo "password=s3cre7"; }; f`	| Code after ! evaluated in shell |
 
-	* ### 4.具体helper使用格式：`git-credential-foo [args] <action>`
+	* ### 4.具体helper使用格式
 	
-		> [?] action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject. </br>
+		> [?] `git-credential-foo [args] <action>`
+		<br><br>action 包括（get，store，erase）,这三个action 对应git-credential命令的 fill,approve,reject. </br>
 		也就是执行 git credential fill 的时候会在配置的credential helper中找到每个具体实现依次执行他们的get. </br>
 		git credential approve 依次执行每个具体helper的 store，reject -> erase同理。
 
@@ -278,10 +279,13 @@ weight: 60
 
 		* #### 分支  &nbsp;[doc](https://git-scm.com/docs/git-branch)
 			```shell
+			# 检出一个分支
+			git checkout -b <branch>  # 创建并检出分支，-B 存在覆盖
+
 			# 创建分支
 			git branch prod
-			git branch -b newBranch [origin/main] # 创建并检出分支 [可以同时设置追踪的远程分支] | 也可参见HEAD 分离中的 `在任意位置创建分支`
-			git branch -u origin/main foo # 如果当前在 foo 分支，则可以省略foo
+			git branch newBranch [origin/main] # [可以同时设置追踪的远程分支] | 也可参见HEAD 分离中的 `在任意位置创建分支`
+			git branch newBranch [commit]      # ❌ [无效分支点]
 
 			# 查看分支
 			# https://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
@@ -295,6 +299,7 @@ weight: 60
 
 			# 关联上游
 			git branch --set-upstream-to=origin/newb prod
+			git branch -u                origin/main foo      # 重置分支上游，且分支（foo）必须存在。不明确指定重置分支，则默认使用当前 HEAD 所在分支。
 			# 断联上游
 			git branch --unset-upstream prod
 
@@ -392,8 +397,9 @@ weight: 60
 				git merge            # 命令后，HEAD 在当前新节点上。
 			```
 
-		* #### 修复本地提交
-			```shell
+		* #### 乾坤大挪移
+
+			```shell {15-20,29-34,46-52}
 			# 修改commit message
 			git commit --amend  # 其实类似于重新做了一次提交
 
@@ -410,8 +416,8 @@ weight: 60
 
 				      main(*)                                                                  main(*)
 				      C5                                                            C5---C2'---C4'
-				      /                                                             /
-				C0---C1---C2---C3---C4        $(git cherry-pick C2 C4)        C0---C1---C2---C3---C4	
+				      /                        git cherry-pick C2 C4                /
+				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4	
 				                     \                                                             \
 				                      side                                                          side
 
@@ -433,6 +439,19 @@ weight: 60
 				|
 				⭕️ bugFix
 				* main $ git rebase bugFix # 会将main分之直接移动到bugFix,由于继承关系。fast-forward
+
+				# git merge [commit | branch]{1}
+				# 将当前分支或者节点 与目标分支或节点 生成共同的 merge 节点，并使用当前分支指向，被合并的分支毫无影响。
+				*bugFix $ git merge main  # 生成一个新共同节点并将当前分支指向新节点。
+				*bugFix $ git merge C5    # 如下所示，将 bugFix 与 C3 的差异合并，生成一个新节点 C7。
+
+				           main                                                          main
+				      C5---C6                                                       C5---C6
+				      /                                                             / \
+					 |                             git merge C5                    |   ﹉﹉﹉﹉﹉﹉﹉﹉﹉\
+				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4---C7
+				                     \                                                                  \
+				                      bugFix(*)                                                          bugFix(*)
 
 				# 交互式rebase -i
 				# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)

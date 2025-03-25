@@ -2,7 +2,7 @@
 tags: ["self-hosted", "email", "article"]
 ---
 
-* ## Intro(Maddy | 自建邮箱)
+* ## Intro(Maddy | 自建个人邮箱)
 
     > [?] [下载: maddy-0.8.1-x86_64-linux-musl.tar.zst ](https://github.com/foxcpp/maddy/releases/download/v0.8.1/maddy-0.8.1-x86_64-linux-musl.tar.zst)
 
@@ -37,6 +37,9 @@ tags: ["self-hosted", "email", "article"]
         <br>假设你拥有一个域名 example.com，并且你的邮件服务器 IP 地址是 192.0.2.1，你还可以通过第三方邮件服务提供商发送邮件。你可以创建如下的 SPF 记录：
         <br>`v=spf1 ip4:192.0.2.1 include:_spf.thirdpartyemailprovider.com -all`
         <br>ip4:192.0.2.1：允许 IP 地址 192.0.2.1 发送邮件，include:_spf.thirdpartyemailprovider.com：允许使用第三方邮件服务提供商的服务器发送邮件，-all：拒绝所有未明确列出的服务器发送的邮件。
+
+    + ### DKIM
+    + ### DMARC
 
 * ## Reference
     + https://maddy.email/
