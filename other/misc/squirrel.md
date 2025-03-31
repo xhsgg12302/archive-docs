@@ -473,6 +473,7 @@
     + https://github.com/rime/home/wiki
     + https://github.com/rime/squirrel/wiki
     + 
+    + https://www.hawu.me/others/2666
     + [有哪些好用且开源的输入法？](https://www.zhihu.com/question/274093588)
     + [RIME v0.16.1 小狼毫輸入法（支援Win， macOS， Linux）](https://briian.com/9216/)
     + [一位匠人的中州韵——专访Rime输入法作者佛振（图灵访谈）](https://m.ituring.com.cn/article/118072)
