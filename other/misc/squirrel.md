@@ -263,6 +263,110 @@
         ```
         <!-- panels:end -->
 
+        #### 反查配置
+
+        > [?] 在查资料的过程中，发现有其他配置文件中比较喜欢反查，于是查了一下[【反查】](https://www.mintimate.cc/zh/demo/reverseWords.html)的意思：大概就是使用其他模式来解释当前的输入，比如当前要是使用朙月拼音输入法的话，输入特定的反查前缀触发后续匹配，比如要用笔画字典中的值（㐀  shhsh），假设前缀为`Ub`，则输入码为`Ubshhsh`的话，就可以打出来【㐀】字了。
+        <br><br>处理流程：
+        <br>`1.` 先是 **matcher** 分段器结合配合 **recognizer** 中 patterns 所定义的正则对应的值为后续的输入打上标签。
+        <br>`2.` 然后此类标签段由 **reverse_lookup_translator** 或者**reverse_lookup_translator@xxx** 翻译器根据指定的字典进行查询翻译，返回候选词在候选框。
+        <br><br>注意事项　
+        <br>`1.` 配置反查可以有其他实现方案。
+        <br>`2.` 目前配置了两种反查，一种是笔画（横竖撇捺折），另一种是拆字（三木为森）。默认的配置给了 stroke（笔画），新增一个 `reverse_lookup_translator@radical_reverse_lookup` 用于 拆字。
+        <br>`3.` 且都已大写字母`U`开头，笔画是`Ub`，拆字是`Uc`。所以需要在 **speller/alphabet** 中将大写字母加进去，不然输入大写字母可能就流产了，另一个好处是可以翻译大写字母开头的单词。
+        <br>`4.` 避免默认的大写匹配，感觉这种没卵用，就覆盖了。`recognizer/patterns/uppercase: ""`
+        <br>`5.` 下方演示中的 Ub 因为有配置`preedit_format: [ "xlit/hspnz/一丨丿丶乙/"]` 这样的转换，所以输入的 shhsh 变为了 【丨一 一 丨 一】。
+        <br><br>参考资料：
+        <br>https://github.com/mirtlecn/rime-radical-pinyin
+        <br>https://www.mintimate.cc/zh/demo/reverseWords.html
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-15.gif)
+
+        <details><summary>可以参考的完整补丁配置</summary>
+
+        ```yaml [data-file:luna_pinyin.custom.yaml]
+        patch:
+
+            # hello 是扩展的英文词库 en_dict，配置在这儿主要是利用 schema 里面的 translator 可以自动编译词典的特性，
+            # 让帮忙编译一下，然后给下面配置的 english/translator 使用，不然它自己编译不了。算是一种折中解决方案。
+            schema/dependencies: ['stroke', 'hello', 'radical_pinyin']
+
+            switches/@0/reset: 1
+            switches/@0/states: ['中', 'A']
+            switches/+:
+                - { name: soft_cursor, reset: 1 }   # 0 不展示, 1 展示 caret
+                - { name: print_segments, reset: 1 }   # 0 不展示, 1 展示 segments
+
+            #speller/delimiter: "\"'"
+            speller/delimiter: "'"
+
+            # 包含大写查表
+            speller/alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+
+            menu/page_size: 5
+
+            #engine/segmentors/@before 2/: affix_segmentor@radical_reverse_lookup
+
+            engine/translators/@before 0/: lua_translator@date_translator
+            engine/translators/@before 4/: reverse_lookup_translator@radical_reverse_lookup
+            engine/translators/@before 5/: table_translator@english
+            english:
+                dictionary: en_dict
+                # max_phrase_length: 4
+                #enable_completion: false # 是否启用英文输入联想补全
+                #enable_sentence: false # 混输时不出现带有图案的英文
+                #initial_quality: -0.5 # 英文候选词的位置, 数值越大越靠前。
+                enable_sentence: false   # 禁止造句
+                enable_user_dict: false  # 禁用用户词典
+                initial_quality: 1.1     # 英文权重 1.1
+                comment_format: # 自定义提示码
+                - xform/~(.*)/\[$1\]/           # 清空提示码（就是没有那个小尾巴）
+
+            translator:
+                dictionary: luna_pinyin_compact
+                initial_quality: 1.2
+                enable_completion: true
+                always_show_comments: true
+                preedit_format:
+                - xform/([nl])v/$1ü/            # 将用户输入「nv」、「lv」显示为「nü」、「lü」
+                - xform/([nl])ue/$1üe/
+                - xform/([jqxy])v/$1u/
+                # comment_format:
+                #- xform/(.*)/\[$1\]/
+
+            # https://github.com/mirtlecn/rime-radical-pinyin
+            reverse_lookup:
+                comment_format:
+                - "xform/([nl])v/$1ü/"
+                dictionary: stroke
+                enable_completion: true
+                preedit_format:
+                - "xlit/hspnz/一丨丿丶乙/"
+                prefix: Ub
+                suffix: "'"
+                tips: "〔筆畫〕"
+
+            radical_reverse_lookup:
+                tag: radical_lookup
+                comment_format:
+                - "xform/([nl])v/$1ü/"
+                dictionary: radical_pinyin
+                enable_completion: true
+                prefix: Uc
+                suffix: "'"
+                tips: "〔拆字〕"
+
+
+            recognizer/patterns/reverse_lookup: "Ub[a-z]*'?$"
+            recognizer/patterns/radical_lookup: "Uc[a-z]*'?$"
+            # 避免大写反查
+            recognizer/patterns/uppercase: ""
+
+            punctuator/import_preset: symbols_updated
+
+            editor/bindings/Return: confirm
+
+        ```
+        </details>
+
         #### 微信表情快捷输入
 
         > [?] 翻找表情比较麻烦，还不知道什么意思，所以利用输入法配置一下。
@@ -408,7 +512,7 @@
         <br><br>具体操作如下：
         <br>`1).`: 修改 **symbols_updated.yaml** 中的 **half_shape** 如下图第一个片段。
         <br><span style='padding-left:2.9em'>正常来说应该已经生效了，但是配置文件中还有其他影响的部分，比如 反查前缀等。所以还需要进行 2，3两步。
-        <br>`2).`: 补丁覆写：`reverse_lookup/prefix: ")"` ，目前不知道这个反查是什么东西，影响不大。
+        <br>`2).`: 补丁覆写：`reverse_lookup/prefix: ")"` ，~目前不知道这个反查是什么东西，影响不大~。[【反查释义】](https://www.mintimate.cc/zh/demo/reverseWords.html)
         <br>`3).`: 补丁覆写：`recognizer/patterns/reverse_lookup: "R:[a-z]*'?$"`。
         <br>`4).`: 重新部署查看效果。(gif中第一次输入后出现两个`` ` ``，是 clion 的自动补全效果，后面就正常了)
         <br><br>![](/.images/other/misc/squirrel/squirrel-config-12.gif) ![](/.images/other/misc/squirrel/squirrel-config-11.png ':size=38%') 
