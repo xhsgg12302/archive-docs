@@ -1,15 +1,20 @@
-* ## Intro(RIME | SQUIRREL)
+* ## Intro(RIME | SQUIRREL | 自定义输入法)
     
     > [!CAUTION] 因为需要输入法配置灵活度高，所以找到开源的**鼠须管**，基于**中州韵**输入法引擎的一个 macosx 端实现。[详细介绍(自序、历史、概念、项目构成、开发计划)](https://github.com/rime/home/wiki/Introduction)
-    <br><br>重新部署：[参考](https://github.com/rime/squirrel/issues/320)
-    <br><span style='padding-left:2.7em'/>`/Library/Input\ Methods/Squirrel.app/Contents/MacOS/Squirrel --reload`
-    <br><span style='padding-left:2.7em'/>`control + option + . `
+    <br>另外本文主要针对 **【朙月拼音】** 和 **【小鹤双拼】** 等方案进行配置，当然其他方案也可以局部参考。
+    <br><br>贴一些使用过程中的感受：
+    <br><span style='padding-left:1.2em'/>`1.` 好用是真好用，但是学习成本是真 TM 高。如果只是想简单使用，默认配置基本够用。如果想打造成满心欢喜的神兵利器，还是需要时间滋养的。可以循序渐进。
+    <br><span style='padding-left:1.2em'/>`2.` 官方的概念多且杂，但是还又不能不看，建议有个全局了解。这样碰见其他人分享的配置文件，也能看个大概，汲取精华，去其糟粕。因为外部资料更是一搜一大堆。
+    <br><span style='padding-left:1.2em'/>`3.` 因为这东西大概在 13 年左右出来的，出道早，以至于滋生出各式各样的输入法编码，完备方案等，不懂大概运行流程及配置关系只会懵逼树下懵逼果，偷鸡的话只能祈求上天保佑好使了。
 
     + ### 下载安装
 
         > [?] [下载页面](https://rime.im/download/)，[macOS 鼠须管 1.0.2 pkg 安装包](https://github.com/rime/squirrel/releases/download/1.0.2/Squirrel-1.0.2.pkg)(属于将引擎中州韵代码作为 git 子模块，编译成动态链接库供鼠须管使用)
         <br><br> [macOS 编译指南](https://github.com/rime/squirrel/blob/master/INSTALL.md)
         <br>[鼠鬚管 Wiki](https://github.com/rime/squirrel/wiki)
+        <br><br>重新部署：[参考](https://github.com/rime/squirrel/issues/320)
+        <br><span style='padding-left:1.2em'/>`/Library/Input\ Methods/Squirrel.app/Contents/MacOS/Squirrel --reload`
+        <br><span style='padding-left:1.2em'/>`control + option + . `
         <br><br>![](/.images/other/misc/squirrel/squirrel-intro-01.png ':size=60%')
 
     + ### 配置
@@ -43,7 +48,7 @@
 
             > [!CAUTION] 因为官方不建议修改的 **Shared** 文件的原因，所以有些属性就得通过 **custom** 文件进行覆盖或者补丁。
 
-    - ### 自定义及解释
+    + ### 朙月拼音【自定义及解释】
 
         #### 外观相关参数
 
@@ -65,8 +70,8 @@
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
-        > [?] ~修改翻页为~`-|=`: 在位置`default.custom.yaml`。
-        <br>key_binder: 增加两个 bindings <span style='color: blue'>（结果没生效）</span>
+        > [?] ~修改翻页为~`-|=`: [预定义](https://github.com/rime/rime-prelude/blob/3803f09458072e03b9ed396692ce7e1d35c88c95/key_bindings.yaml)。
+        <br>在位置`default.custom.yaml`，key_binder: 增加两个 bindings <span style='color: blue'>（结果没生效）</span>
         <br><span style='padding-left:2.7em'/>`{ when: paging, accept: minus, send: Page_Up}`
         <br><span style='padding-left:2.7em'/>`{ when: has_menu, accept: equal, send: Page_Down}`
         <br> 大意了，原来预置的`key_bindings.yaml`里买就有相关快捷键的定义，但是自己手贱，又重新在`default.custom.yaml`里面重新定义了，并且没有绑定相关键位，发现不生效，以为原来的预置的键位没有绑定上去。其实应该是在 custom 文件里面进行追加或者修改的，不是直接定义<span style='color: blue'>(会覆盖)</span>。
@@ -104,7 +109,7 @@
         <br><span style='color:blue;padding-left:2.7em'>需要注意的是：</span>
         <br><span style='padding-left:2.7em'>`a).`: 这次编译出来的 Release 版本大小为`3.4M`，原来的为`7.0M`，~不知道什么区别，仅供测试~。(后来发现跟插件有关系，比如 lua)
         <br><span style='padding-left:2.7em'>`b).`: 浏览器中编辑框中最后的那个竖线`|`是闪动的光标，正好闪动的时候截的图。
-        <br><br>![](/.images/other/misc/squirrel/squirrel-config-04.gif)  ![](/.images/other/misc/squirrel/squirrel-config-03.png ':size=40%')
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-04.gif)  ![](/.images/other/misc/squirrel/squirrel-config-03.png ':size=42%')
 
         #### 添加LUA脚本
 
@@ -240,9 +245,11 @@
         use_preset_vocabulary: true
         import_tables: [ en_primary, en_ext ]
         ...
+        
         ```
         ```yaml
         patch:
+        
             engine/translators/@before 2/: table_translator@english
             english:
                 dictionary: en_dict
@@ -265,7 +272,7 @@
 
         #### 反查配置
 
-        > [?] 在查资料的过程中，发现有其他配置文件中比较喜欢反查，于是查了一下[【反查】](https://www.mintimate.cc/zh/demo/reverseWords.html)的意思：大概就是使用其他模式来解释当前的输入，比如当前要是使用朙月拼音输入法的话，输入特定的反查前缀触发后续匹配，比如要用笔画字典中的值（㐀  shhsh），假设前缀为`Ub`，则输入码为`Ubshhsh`的话，就可以打出来【㐀】字了。
+        > [?] 在查资料的过程中，发现有其他配置文件中比较喜欢反查，于是查了一下[【反查】](https://www.mintimate.cc/zh/demo/reverseWords.html)的意思：大概就是使用其他方案来解释当前的输入，比如当前要是使用朙月拼音输入法的话，输入特定的反查前缀触发后续匹配，比如要用笔画字典中的值（㐀  shhsh），假设前缀为`Ub`，则输入码为`Ubshhsh`的话，就可以打出来【㐀】字了。
         <br><br>处理流程：
         <br>`1.` 先是 **matcher** 分段器结合配合 **recognizer** 中 patterns 所定义的正则对应的值为后续的输入打上标签。
         <br>`2.` 然后此类标签段由 **reverse_lookup_translator** 或者**reverse_lookup_translator@xxx** 翻译器根据指定的字典进行查询翻译，返回候选词在候选框。
@@ -364,6 +371,118 @@
 
             editor/bindings/Return: confirm
 
+        ```
+        </details>
+
+        #### 辅助码解决方案
+
+        > [?] 辅助码这种技术一般是跟随着双拼出现的，根据出现背景了解到其实是为了解决同音字候选项较多，不能精准定位，需要多次翻页才可以找到的情况。比如在小鹤双拼中`vi`这个编码可能有好几百个候选词，如何精准定位到某一个就需要辅助码了。比如 [【小鹤音形】](https://flypy.com/) 就是一种辅助码的形式，采用 音码 + [形码](http://react.xhup.club/search) 的方式精准定位。
+        <br><br>知道大概怎么回事儿后，就可以发现其实也可以用于其他各种编码方案，包括我们使用的 **朙月拼音**。
+        <br><br>目前知道的在 rime 中发挥作用的辅助码有如下两种形式：
+        <br><br><span style='padding-left:1.2em'>第一个是混合编码: 如 [rime-flypy-zrmfast](https://github.com/functoreality/rime-flypy-zrmfast) 中所采用的方式
+        <br><span style='padding-left:3.2em'>其实就是将编码已`音码]形码`的方式硬编码在字典文件 [flypy_zrmfast.dict.yaml](https://github.com/functoreality/rime-flypy-zrmfast/blob/master/flypy_zrmfast.dict.yaml) 中。例如：[`智	vi[uo`](https://github.com/functoreality/rime-flypy-zrmfast/blob/36fb2f5e2703065be9cb4d705a6a5a7f6b3af4b8/flypy_zrmfast.dict.yaml#L14888)，后面的形码采用的方式是小鹤音形的。（[形码速查网址](http://react.xhup.club/search)）
+        <br><span style='padding-left:3.2em'>当用户输入`vi`的时候，会显示 **zhi** 音相关词汇，继续输入`[uo`，会直接匹配到字典表中的`智`。
+        <br><br><span style='padding-left:1.2em'>第二个是单独编码（目前所采用的形式）: 如 [rime-lua-aux-code](https://github.com/HowcanoeWang/rime-lua-aux-code)，使用单独的辅助码字典和 lua 脚本即可完成过滤，而且可以根据情况触发，比较灵活。如下运作过程：
+        <br><span style='padding-left:3.2em'>`1.` 正常输入过程不会涉及到辅助码，进而调用到 lua 脚本处理候选项。
+        <br><span style='padding-left:3.2em'>`2.` 当输入触发符号`;`(可配置)的时候，并且继续输入的时候就会发挥作用，将`;`之后的输入当形码，在单独的辅助码字典中查找并过滤。
+        <br><span style='padding-left:3.2em'>`3.` 将过滤结果已候选词的形式展示，供用户选择。
+        <br><br>注意事项：
+        <br>跟 [反查配置](#反查配置) 中的 **speller/alphabet** 一样，需要对上屏字母进行排除，不然流产。
+        <br><br>当前将第二种形式集成到使用的两个方案中，下图展示了分别在 **朙月拼音** 和 **小鹤双拼** 中如何根据形码快速定位`智`。（因为之前输入过，排在前面了，不影响效果，换成其他的也无妨）
+        <br>![](/.images/other/misc/squirrel/squirrel-config-16.gif)
+
+        <details><summary>可以参考的完整补丁配置</summary>
+        
+        ```yaml {19,20,29,30} [data-file:luna_pinyin.custom.yaml]
+        patch:
+
+            # hello 是扩展的英文词库 en_dict，配置在这儿主要是利用 schema 里面的 translator 可以自动编译词典的特性，
+            # 让帮忙编译一下，然后给下面配置的 english/translator 使用，不然它自己编译不了。算是一种折中解决方案。
+            # 后期整理到了 en_dict 里面
+            schema/dependencies: ['en_dict', 'stroke', 'radical_pinyin']
+
+            switches/@0/reset: 1
+            switches/@0/states: ['中', 'A']
+            switches/+:
+                - { name: soft_cursor, reset: 1 }   # 0 不展示, 1 展示 caret
+                - { name: print_segments, reset: 1 }   # 0 不展示, 1 展示 segments
+
+            #speller/delimiter: "\"'"
+            speller/delimiter: "'"
+
+            # 呃，倒背字母表完全是個人喜好
+            # 包含大写查表
+            speller/alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA;
+            speller/initials: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+
+            menu/page_size: 5
+
+            #engine/segmentors/@before 2/: affix_segmentor@radical_reverse_lookup
+
+            engine/translators/@before 0/: lua_translator@*date_translator
+            engine/translators/@before 4/: reverse_lookup_translator@radical_reverse_lookup
+            engine/translators/@before 5/: table_translator@english
+            engine/filters/@next/+: lua_filter@*aux_code@flypy_full
+            # engine/filters/@next/+: lua_filter@*aux_code@ZRM_Aux-code_4.3
+            english:
+                dictionary: en_dict
+                # max_phrase_length: 4
+                #enable_completion: false # 是否启用英文输入联想补全
+                #enable_sentence: false # 混输时不出现带有图案的英文
+                #initial_quality: -0.5 # 英文候选词的位置, 数值越大越靠前。
+                enable_sentence: false   # 禁止造句
+                enable_user_dict: false  # 禁用用户词典
+                initial_quality: 1.1     # 英文权重 1.1
+                comment_format: # 自定义提示码
+                - xform/~(.*)/\[$1\]/           # 清空提示码（就是没有那个小尾巴）
+
+            translator:
+                dictionary: luna_pinyin_compact
+                initial_quality: 1.2
+                enable_completion: true
+                always_show_comments: true
+                # 設定多少字以內候選標註完整帶調拼音，换句话说就是候选项中超过几个字的时候不显示拼音，
+                # always_show_comments = true，才行。对于拼音输入发来说好像没什么用，因为我知道怎么打出来的，就不用显示，
+                # 如果不知道读音的话，还好，比如，反查之类的。但是反查好像默认会显示。
+                # spelling_hints: 1
+                preedit_format:
+                - xform/([nl])v/$1ü/            # 将用户输入「nv」、「lv」显示为「nü」、「lü」
+                - xform/([nl])ue/$1üe/
+                - xform/([jqxy])v/$1u/
+                # comment_format:
+                #- xform/(.*)/\[$1\]/
+
+            # https://github.com/mirtlecn/rime-radical-pinyin
+            reverse_lookup:
+                comment_format:
+                - "xform/([nl])v/$1ü/"
+                dictionary: stroke
+                enable_completion: true
+                preedit_format:
+                - "xlit/hspnz/一丨丿丶乙/"
+                prefix: Ub
+                suffix: "'"
+                tips: "〔筆畫〕"
+
+            radical_reverse_lookup:
+                tag: radical_lookup
+                comment_format:
+                - "xform/([nl])v/$1ü/"
+                dictionary: radical_pinyin
+                enable_completion: true
+                prefix: Uc
+                suffix: "'"
+                tips: "〔拆字〕"
+
+
+            recognizer/patterns/reverse_lookup: "Ub[a-z]*'?$"
+            recognizer/patterns/radical_lookup: "Uc[a-z]*'?$"
+            # 避免大写反查
+            recognizer/patterns/uppercase: ""
+
+            punctuator/import_preset: symbols_updated
+
+            editor/bindings/Return: confirm
         ```
         </details>
 
@@ -515,7 +634,7 @@
         <br>`2).`: 补丁覆写：`reverse_lookup/prefix: ")"` ，~目前不知道这个反查是什么东西，影响不大~。[【反查释义】](https://www.mintimate.cc/zh/demo/reverseWords.html)
         <br>`3).`: 补丁覆写：`recognizer/patterns/reverse_lookup: "R:[a-z]*'?$"`。
         <br>`4).`: 重新部署查看效果。(gif中第一次输入后出现两个`` ` ``，是 clion 的自动补全效果，后面就正常了)
-        <br><br>![](/.images/other/misc/squirrel/squirrel-config-12.gif) ![](/.images/other/misc/squirrel/squirrel-config-11.png ':size=38%') 
+        <br><br>![](/.images/other/misc/squirrel/squirrel-config-12.gif) ![](/.images/other/misc/squirrel/squirrel-config-11.png ':size=40%') 
 
         #### 配置回车直接上屏
 
@@ -543,24 +662,25 @@
                     Eisu_toggle: noop
         ```
 
+    + ### 小鹤双拼
     + ### Rime引擎
 
         <p style="text-align: center;">  <strong><a href="https://github.com/rime/librime/tree/aaaaaec344c22c1b3b8059190a00e4c532a2ab54" target="_blank" rel="noopener">版本：[2024/09/29]：https://github.com/rime/librime/tree/aaaaaec344c22c1b3b8059190a00e4c532a2ab54</a></strong></p>
 
         - #### 源码处理参考
 
-            > [!COMMENT|style:flat] 
+            > [!TIP|style:flat] 
             `engine` 中的所有模块组合 [gears_module.cc](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/gear/gears_module.cc)
             <br>`engine` 中对于按键的处理流程 [ConcreteEngine::ProcessKey](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/engine.cc#L99C1-L122C2)
             <br>`engine` 中处理器`processor`中 **fluid_editor/fluency_editor** 和 **express_editor** 的处理 [异同](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/gear/editor.cc#L189-L218)
 
         - #### 编译与调试
 
-            > [!NOTE|style:flat] 由于需要查看 yaml 文件生成后到底是什么样的，以及配置了为什么没有生效等问题。所以将源代码拉取下来，进行分析，结合日志打印出的信息以及 AIGC 等问答，最后修改 librime 输入法引擎部分代码，实现测试，验证等效果。
+            > [!NOTE|style:flat] ~由于需要查看 yaml 文件生成后到底是什么样的，以及配置了为什么没有生效等问题。所以将源代码拉取下来，进行分析，结合日志打印出的信息以及 AIGC 等问答，最后修改 librime 输入法引擎部分代码，实现测试，验证等效果。~
+            <br><span style='color:red'>上述部分可以使用更方便的方式查看，在后续学习中发现的。其实在用户目录下的 **~/Library/Rime/build** 目录就包含完整（补丁后）的方案 yaml 以及编译好的词典文件。</span>
             <br><br>修改的commit为： [aaaaaec3](https://github.com/rime/librime/tree/aaaaaec344c22c1b3b8059190a00e4c532a2ab54)
             <br>编译参考文档： [Rime with Mac](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/README-mac.md)
-            <br>文件变更：[feat: add yaml dump to temp dir for test and verify.
-    ](https://github.com/12302-bak/librime/commit/2758163b9716914ac534339b06a39045001e3a0b)
+            <br>文件变更：[feat: add yaml dump to temp dir for test and verify.](https://github.com/12302-bak/librime/commit/2758163b9716914ac534339b06a39045001e3a0b)
 
             ![](/.images/other/misc/squirrel/squirrel-core-01.gif)
 
@@ -571,11 +691,11 @@
 
 * ## Reference
     + https://rime.im
-    + https://github.com/ssnhd/rime
-    + 
-    + wiki
     + https://github.com/rime/home/wiki
     + https://github.com/rime/squirrel/wiki
+    + 
+    + https://github.com/ssnhd/rime
+    + [Where can I find the documentation on the key "speller/initials"?](https://github.com/rime/home/issues/1607)
     + 
     + https://www.hawu.me/others/2666
     + [有哪些好用且开源的输入法？](https://www.zhihu.com/question/274093588)
