@@ -12,7 +12,7 @@
         <br>`3.` 提取 pem 证书中的公匙并显示相关信息：`openssl x509 -in pubkey.pem -pubkey -noout | openssl ec -pubin -text -noout`
         <br>`4.` 提取 der &nbsp;&nbsp;证书中的公匙并显示相关信息：`openssl x509 -in pubkey.der -pubkey -noout | openssl ec -pubin -text -noout`
         <br><br>![](/.images/devops/os/util/openssl-cer-format-01.png ':size=100%')
-        <br><br>或者也可以通过 [asn1在线解析](https://asn1js.eu/) 查看 pubkey.der 文件是否正确（DER 本质上是 [ASN.1](https://zh.wikipedia.org/wiki/ASN.1) 格式的）。
+        <br><br>或者也可以通过 [asn1在线解析](https://asn1js.eu/) 查看 pubkey.der 文件是否正确（DER 本质上是 [ASN.1](https://zh.wikipedia.org/wiki/ASN.1) 结构类型的）。
         <br><br>另外可以计算 sha-256 指纹(对应 chrome 浏览器证书基本信息中的值)，包括 证书和公匙
         <br>证书：`cat pubkey.der | shasum -a 256`，或者 `grep -v ^- pubkey.pem | base64 -d | shasum -a 256`。
         <br>公匙：`openssl x509 -in <pubkey.der | pubkey.pem> -pubkey -noout | grep -v ^- | base64 -d | shasum -a 256`。

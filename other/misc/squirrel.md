@@ -270,6 +270,88 @@
         ```
         <!-- panels:end -->
 
+        #### 中英自动添加空格
+
+        > [?] 想要实现在中西文中间自动加入空格的这种功能，官方在引擎部分可能不打算实现了，参考[issues:24](https://github.com/rime/home/issues/24)。不过我们可以借助 Lua 脚本辅助解决一下，虽然不是那么完美，但对于我来说，够了。
+        <br>对于实现部分，照猫画虎，参照 [issues:238](https://github.com/hchunhui/librime-lua/issues/238) 实现思路，以及[aux_code.lua](https://github.com/HowcanoeWang/rime-lua-aux-code/blob/main/lua/aux_code.lua) 语法中通知部分。最后实现的 **append_space.lua**  如下折叠的 Lua 脚本。
+        <br><br>大致思路是：通过 [通知功能](https://github.com/hchunhui/librime-lua/wiki/Objects#notifier) 将上一次上屏的内容类型记录在 rime  的某个环境变量中，供后续判断使用。然后针对当前输入所带出来的每个候选项进行过滤，逐个匹配看是否要添加空格（也就是修改候选项）。比如输入完`你好`上屏之后，此时给 **prior_commit_type** 环境变量赋值 1 表示上一段是中文，紧接着下次输入`hello`候选项里面有英文单词，短语之类的话，就替换为前置空格的候选项。相应的，如果输入其他符号，则将 变量置为 0，表示不需要转换。
+
+        > [!CAUTION] `1`：因为状态判断是存在引擎环境变量中，没有很好的时机去重置，所以如果不是相邻的地方也会存在影响。
+        <br><span style='padding-left:2.2em'>比如第一行输入`你好`了，然后在第二行输入`hello` 也会出现空格（vscode 会自己忽略，挺好，:laughing:）。
+        <br>`2`：目前只处理候选项，不会对 preedit  进行干预。
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ![](/.images/other/misc/squirrel/squirrel-config-17.gif)
+        <!-- div:right-panel-50 -->
+        ```yaml {6} [data-file:luna_pinyin.custom.yaml【部分配置】]
+        patch:
+            # ...
+            engine/translators/@before 5/: table_translator@english
+            engine/filters/+: 
+                - lua_filter@*aux_code@flypy_full
+                - lua_filter@*append_space
+            # ...
+        ```
+        <!-- panels:end -->
+
+        <details><summary>Lua 脚本</summary>
+
+        ```lua [data-file:append_space.lua]
+        -- https://github.com/boomker/rime-fast-xhup/blob/b3700709aa12e44d13970ac49936688204f0e99c/lua/word_append_space.lua
+
+        local ASpaceFilter = {}
+        -- local log = require 'log'
+        -- log.outfile = "/tmp/space_code.log"
+
+        function ASpaceFilter.is_chinese_phrase(input)
+            if not input or #input == 0 then return false end
+            local last_codepoint = nil
+            for _, codepoint in utf8.codes(input) do last_codepoint = codepoint end
+            if last_codepoint >= 19968 and last_codepoint <= 40959 then return true end
+            return false
+        end
+
+        function ASpaceFilter.distinguish_text_type(input)
+            if ASpaceFilter.is_chinese_phrase(input) then return 1 end
+            if string.match(input, "^[%w%s]+$") ~= nil then return 2 end
+            return 0
+        end
+
+        function ASpaceFilter.init(env)
+            local engine = env.engine
+            local config = engine.schema.config
+            env.prior_commit_type = 0;
+            env.commit_notifier = engine.context.commit_notifier:connect(function(ctx)
+                -- local preedit = ctx:get_preedit()
+                -- local is_cn = ASpaceFilter.is_chinese_phrase(ctx:get_commit_text())
+                -- log.info('commit_notifier', ctx:get_commit_text(), preedit.text, is_cn)
+                env.prior_commit_type = ASpaceFilter.distinguish_text_type(ctx:get_commit_text())
+                -- log.info('env.commit_type', env.prior_commit_type)
+            end)
+        end
+
+        function ASpaceFilter.func(input, env)
+            for cand in input:iter() do
+                -- log.info("xxxxxxxxx", env.prior_commit_type, type)
+                if env.prior_commit_type == 1.0 or env.prior_commit_type == 2.0 then
+                    local type = ASpaceFilter.distinguish_text_type(cand.text)
+                    if (env.prior_commit_type == 1.0 and type == 2.0) or (env.prior_commit_type == 2.0 and type == 1.0) then
+                        cand = ShadowCandidate(cand:get_genuine(), cand.type, " " .. cand.text, cand.comment)
+                    end
+                end
+                yield(cand)
+            end
+        end
+
+        function ASpaceFilter.fini(env)
+            env.commit_notifier:disconnect()
+        end
+
+        return ASpaceFilter
+        ```
+        </details>
+
         #### 反查配置
 
         > [?] 在查资料的过程中，发现有其他配置文件中比较喜欢反查，于是查了一下[【反查】](https://www.mintimate.cc/zh/demo/reverseWords.html)的意思：大概就是使用其他方案来解释当前的输入，比如当前要是使用朙月拼音输入法的话，输入特定的反查前缀触发后续匹配，比如要用笔画字典中的值（㐀  shhsh），假设前缀为`Ub`，则输入码为`Ubshhsh`的话，就可以打出来【㐀】字了。

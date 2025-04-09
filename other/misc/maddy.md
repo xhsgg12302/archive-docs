@@ -12,7 +12,7 @@ tags: ["self-hosted", "email", "article"]
 
     + ### 魔法前摇
 
-        > [!ATTENTION|label:需要注意：|style:flat] `1.` 使用 maddy 发送非本域邮件的话，必须使用 25 端口转发，根据 [PR:767](https://github.com/foxcpp/maddy/pull/767) 中说明是 RFC 中的标准吧，配置文件中`target.remote`部分并没有可以配置可选端口的选项。所以，如果你的 VPS 厂商封锁 TCP 25端口的出口流量的话，你的自建邮箱服务器给其他邮件服务器（gmail，outlook，126之类的）就 gg 了。很不幸，此次使用的是阿里的机器，然后根据搜索说是可以 [解封](https://help.aliyun.com/document_detail/56130.html)，但是发现申请后没毛用，【安全管控｜25端口解封】处仍然是红色的**审核为通过**，此时距离发送邮件就遥不可及了。但是好在可以使用其他端口委托到 SMPT 中继服务器，继续满足我们对高潮的期待。
+        > [!ATTENTION|label:需要注意：|style:flat] `1.` 使用 maddy 发送非本域邮件的话，必须使用 25 端口转发，根据 [PR:767](https://github.com/foxcpp/maddy/pull/767) 中说明是 RFC 中的标准吧，配置文件中`target.remote`部分并没有可以配置可选端口的选项。所以，如果你的 VPS 厂商封锁 TCP 25端口的出口流量的话，你的自建邮箱服务器给其他邮件服务器（gmail，outlook，126之类的）就 gg 了。很不幸，此次使用的是阿里的机器，然后根据搜索说是可以 [解封](https://help.aliyun.com/document_detail/56130.html)，但是发现申请后没毛用，【安全管控｜25端口解封】处仍然是红色的**审核未通过**，此时距离发送邮件就遥不可及了。但是好在可以使用其他端口委托到 SMPT 中继服务器，继续满足我们对高潮的期待。
 
     + ### 邮箱服务器形态
     + ### 配置文件参悟
