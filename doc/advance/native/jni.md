@@ -90,6 +90,7 @@ $ java -Djava.library.path=. HelloJNI
 1. Set environment variable JAVA_HOME to point to the JDK installed directory (which shall contains the include subdirectory to be used in the next step):
 ```shell
 $ export JAVA_HOME=/your/java/installed/dir
+    // 
 $ echo $JAVA_HOME
 ```
 2. Compile the C program HelloJNI.c into share module libhello.so using gcc, which is included in all Unixes:

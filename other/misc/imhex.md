@@ -310,6 +310,8 @@ tags: ["hex", "editor", "tools"]
         <br><br>如下使用`pointer_base`动态计算分割的地址(真正的地址 0x45 分别保存在 0x94 的后四位和 0x5F 的前四位)，模拟 [x86 GDT](https://zh.wikipedia.org/wiki/全局描述符表#/media/File:SegmentDescriptor.svg) 中的情况：
         <br>![](/.images/other/misc/imhex/imhex-pattern-placement-01.png ':size=100%')
 
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
         ```rust
         import std.ptr;
 
@@ -327,6 +329,33 @@ tags: ["hex", "editor", "tools"]
         };
         Parent pa @0x65;
         ```
+        <!-- div:right-panel-50 -->
+        ```rust [data-file:另外的访问方式记录]
+        struct Bytes {
+            u8 bytes[parent.size];
+        };
+
+        struct Test01 {
+            // A pointer to an u8 array of size bytes.
+            $ += 4;
+            u32 size;
+            $ -= 8;
+            Bytes *offset : u32;
+        };
+
+        u32 offset = 0x08;
+        Test01 test01 @offset;
+
+        struct Test02 {
+            // A pointer to an u8 array of size bytes
+            u32 offset;
+            u32 size;
+        };
+        Test02 test02 @offset;
+        //u8 bytes[test02.size] @test02[offset]; not work
+        u8 bytes[test02.size] @test02.offset;
+        ```
+        <!-- panels:end -->
 
     + ### 命令空间
     + ### 表达式

@@ -128,7 +128,7 @@ tags: ["self-hosted", "email", "article"]
             250-SMTPUTF8
             250-PIPELINING
             250 STARTTLS
-            STARTTLS
+            <mark class="box dodgerblue">STARTTLS</mark>
             220 Go ahead
             ^]
             telnet> quit
@@ -156,7 +156,7 @@ tags: ["self-hosted", "email", "article"]
             250-SMTPUTF8
             250-SIZE 33554432
             250 LIMITS RCPTMAX=20000
-            STARTTLS
+            <mark class="box dodgerblue">STARTTLS</mark>
             220 2.0.0 Ready to start TLS
             ^]
             telnet> quit

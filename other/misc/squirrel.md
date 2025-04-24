@@ -5,7 +5,7 @@
     <br><br>贴一些使用过程中的感受：
     <br><span style='padding-left:1.2em'/>`1.` 好用是真好用，但是学习成本是真 TM 高。如果只是想简单使用，默认配置基本够用。如果想打造成满心欢喜的神兵利器，还是需要时间滋养的。可以循序渐进。
     <br><span style='padding-left:1.2em'/>`2.` 官方的概念多且杂，但是还又不能不看，建议有个全局了解。这样碰见其他人分享的配置文件，也能看个大概，汲取精华，去其糟粕。因为外部资料更是一搜一大堆。
-    <br><span style='padding-left:1.2em'/>`3.` 因为这东西大概在 13 年左右出来的，出道早，以至于滋生出各式各样的输入法编码，完备方案等，不懂大概运行流程及配置关系只会懵逼树下懵逼果，偷鸡的话只能祈求上天保佑好使了。
+    <br><span style='padding-left:1.2em'/>`3.` 因为这东西大概在 11 年左右出来的，出道早，以至于滋生出各式各样的输入法编码，完备方案等，不懂大概运行流程及配置关系只会懵逼树下懵逼果，偷鸡的话只能祈求上天保佑好使了。
 
     + ### 下载安装
 
@@ -459,13 +459,13 @@
         #### 辅助码解决方案
 
         > [?] 辅助码这种技术一般是跟随着双拼出现的，根据出现背景了解到其实是为了解决同音字候选项较多，不能精准定位，需要多次翻页才可以找到的情况。比如在小鹤双拼中`vi`这个编码可能有好几百个候选词，如何精准定位到某一个就需要辅助码了。比如 [【小鹤音形】](https://flypy.com/) 就是一种辅助码的形式，采用 音码 + [形码](http://react.xhup.club/search) 的方式精准定位。
-        <br><br>知道大概怎么回事儿后，就可以发现其实也可以用于其他各种编码方案，包括我们使用的 **朙月拼音**。
+        <br><br> 所以可以简单理解辅助码为**过滤码**。知道大概怎么回事儿后，就可以发现其实也可以用于其他各种编码方案，包括我们使用的 **朙月拼音**。
         <br><br>目前知道的在 rime 中发挥作用的辅助码有如下两种形式：
         <br><br><span style='padding-left:1.2em'>第一个是混合编码: 如 [rime-flypy-zrmfast](https://github.com/functoreality/rime-flypy-zrmfast) 中所采用的方式
         <br><span style='padding-left:3.2em'>其实就是将编码已`音码]形码`的方式硬编码在字典文件 [flypy_zrmfast.dict.yaml](https://github.com/functoreality/rime-flypy-zrmfast/blob/master/flypy_zrmfast.dict.yaml) 中。例如：[`智	vi[uo`](https://github.com/functoreality/rime-flypy-zrmfast/blob/36fb2f5e2703065be9cb4d705a6a5a7f6b3af4b8/flypy_zrmfast.dict.yaml#L14888)，后面的形码采用的方式是小鹤音形的。（[形码速查网址](http://react.xhup.club/search)）
         <br><span style='padding-left:3.2em'>当用户输入`vi`的时候，会显示 **zhi** 音相关词汇，继续输入`[uo`，会直接匹配到字典表中的`智`。
         <br><br><span style='padding-left:1.2em'>第二个是单独编码（目前所采用的形式）: 如 [rime-lua-aux-code](https://github.com/HowcanoeWang/rime-lua-aux-code)，使用单独的辅助码字典和 lua 脚本即可完成过滤，而且可以根据情况触发，比较灵活。如下运作过程：
-        <br><span style='padding-left:3.2em'>`1.` 正常输入过程不会涉及到辅助码，进而调用到 lua 脚本处理候选项。
+        <br><span style='padding-left:3.2em'>`1.` 正常输入过程不会涉及到辅助码，lua 脚本拦截后只是简单传递，并不会对候选项做其他额外的处理（包括过滤和添加提示码等）。
         <br><span style='padding-left:3.2em'>`2.` 当输入触发符号`;`(可配置)的时候，并且继续输入的时候就会发挥作用，将`;`之后的输入当形码，在单独的辅助码字典中查找并过滤。
         <br><span style='padding-left:3.2em'>`3.` 将过滤结果已候选词的形式展示，供用户选择。
         <br><br>注意事项：
@@ -775,6 +775,7 @@
     + https://rime.im
     + https://github.com/rime/home/wiki
     + https://github.com/rime/squirrel/wiki
+    + https://github.com/rime/home/wiki/SpellingAlgebra [运算子]
     + 
     + https://github.com/ssnhd/rime
     + [Where can I find the documentation on the key "speller/initials"?](https://github.com/rime/home/issues/1607)

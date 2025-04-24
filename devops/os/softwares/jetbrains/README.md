@@ -65,6 +65,14 @@
 
     ![](/.images/devops/os/softwares/idea-encoding-01.png ':size=100%')
 
+    ### Idea禁用粘贴自动格式化
+
+    > [?] 当我们粘贴代码的时候 idea 会自动格式化代码，导致出现意想不到都得效果，不过可以提供选项禁用这种功能，如下修改，参考：[How-to-disable-auto-formatting-on-paste](https://intellij-support.jetbrains.com/hc/en-us/community/posts/206596255-How-to-disable-auto-formatting-on-paste)
+    <br>`Settings | Editor | Smart Keys –> Reformat on paste = None`。或者直接搜索 **Reformat on paste**
+
+    ![](/.images/devops/os/softwares/idea-disable-auto-format-on-paste.png ':size=70%')
+
+
 * ## Reference
 
     * https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs
