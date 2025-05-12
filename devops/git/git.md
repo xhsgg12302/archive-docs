@@ -2,6 +2,29 @@
 weight: 60
 ---
 
+* ## 代理设置
+
+	> [!NOTE] 有些时候需要搞明白代理如何生效，以致 clone、fetch 等远程操作纵享丝滑。
+	<br>参考文档： [http.proxy](https://git-scm.com/docs/git-config#Documentation/git-config.txt-httpproxy) 、 [Configure Git to use a proxy](https://gist.github.com/evantoli/f8c23a37eb3558ab8765)
+
+	```shell {1,6}
+	http.proxy
+		Override the HTTP proxy, normally configured using the http_proxy, https_proxy, and all_proxy environment variables (see curl(1)). In addition to the syntax understood by curl, it is possible to specify a proxy string with a user name but no password, in which case git will attempt to acquire one in the same way it does for other credentials. See gitcredentials[7] for more information. The syntax thus is [protocol://][user[:password]@]proxyhost[:port][/path]. This can be overridden on a per-remote basis; see remote.<name>.proxy
+		【译：】可以通过`http.proxy`覆写 curl 可识别的环境变量：http_proxy, https_proxy, all_proxy 等。
+		除了 curl 可识别的语法之外，还可以给代理字符串指定用户名，不需要密码，git 会通过`凭据管理`自动获取密码填充。语法形如：[protocol://][user[:password]@]proxyhost[:port][/path]
+
+	http.<url>.proxy
+		给某个 URL 单独配置代理。
+
+	# 【添加代理】
+	git config --global http.proxy http://proxyUsername:proxyPassword@proxy.server.com:port
+	git config --global http.https://domain.com.proxy http://proxyUsername:proxyPassword@proxy.server.com:port
+	
+	# 【删除代理】
+	git config --global --unset http.proxy
+	git config --global --unset http.https://domain.com.proxy
+	```
+
 * ## 凭据管理
 
 	* ### 1.基本操作

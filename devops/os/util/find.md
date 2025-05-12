@@ -47,6 +47,9 @@
 
             # 模糊查找pdf文件，比如 忽略大小写 带mysql关键字的pdf文件
             find / -name '*.pdf' 2>/dev/null | grep -i 'mysql'
+
+            # 删除  number 开头或 emoji 开头的文件。
+            find cmake-build-debug/bin/build \( -name "number*" -or -name "emoji*" \) -exec rm -rf {} \;
             ```
 
 * ## Reference
