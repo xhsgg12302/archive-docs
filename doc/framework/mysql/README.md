@@ -76,5 +76,18 @@
     `\! clear` `\! cls`
     + https://stackoverflow.com/questions/8807836/how-to-clear-mysql-screen-console-in-windows
 
+* ## 报错ERROR 2026 (HY000)
+
+    > [!] mysql 本地客户端连接 docker 内部报错ERROR 2026 (HY000): SSL connection error: error:0A000102:SSL routines::unsupported protocol
+    <br>临时解决， 命令行追加 `--ssl-mode=DISABLED`、JDBC 追加 `useSSL=false&requireSSL=false`(或者使用[最新版本](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-security.html#:~:text=This%20property%20replaced%20the%20deprecated%20legacy%20properties) 的`sslMode=DISABLED`替换这两个属性)。
+    <br><br>参考方案: [Cannot conect MySQL (error 2026)](https://serverfault.com/questions/1016796/cannot-conect-mysql-error-2026-after-upgrade-to-ubuntu-20-04)、[How to disable JDBC MySQL SSL](https://discourse.metabase.com/t/how-to-disable-jdbc-mysql-ssl/5858)
+
+    <!-- panels:start -->
+    <!-- div:left-panel-50 -->
+    ![](/.images/doc/framework/mysql/readme-04.png ':size=100%')
+    <!-- div:right-panel-50 -->
+    ![](/.images/doc/framework/mysql/readme-05.png ':size=100%')
+    <!-- panels:end -->
+
 * ## Reference
 
