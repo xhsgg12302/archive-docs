@@ -178,6 +178,8 @@
             - [ ] https://jrebel.speedcow.top/e74fd726-f540-4dda-77fa-df484c286d3b
             - [ ] http://42.193.18.168:8088/4e7defb7-09ad-45da-bf9c-11eda2ab0f6a (879271507@qq.com) (https://www.jpy.wang/page/jrebel.html)
             - [x] https://jrebel.haitim.cn/05b4a954-84f2-48ae-8cc2-02dc09a7468e
+            - [x] https://jyoryo.com/{uuid}
+            - [x] https://jrebel.wtfu.site/3c9fc43d-0e48-4370-9b9c-6c2520685ade
             - [ ] http://42.193.18.168:8088/8c9dca0b-19e6-4a7a-894e-0299d0fd9f5a (971122716@qq.com) (https://www.jpy.wang/page/jrebel.html) (兼容 2023.4.0 +)
 
 * ## References
