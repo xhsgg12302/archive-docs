@@ -1397,9 +1397,9 @@
                 *      int ciphertextOffset,
                 *      int ciphertextLength
                 */
-                byte[] finished = hexStringToByteArray("16 03 03 00 28 84 ef 8c ec 32 b4 9f d9 a5 e6 04 \n" +
-                        "70 54 90 69 44 14 84 ce ad d3 03 e0 eb 66 36 3e \n" +
-                        "01 28 88 6e d7 5c ed f6 80 58 e6 6d a4");
+                byte[] finished = hexStringToByteArray("<mark class="under red">16 03 03 00 28 84 ef 8c ec 32 b4 9f d9</mark> a5 e6 04 \n" +
+                        "70 54 90 69 44 14 84 ce ad d3 03 e0 eb <mark class="under blue">66 36 3e</mark> \n" +
+                        "<mark class="under blue">01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>");
                 byte[] ciphertext = finished;
                 int ciphertextOffset = 5;
                 int ciphertextLength = ciphertext.length - ciphertextOffset;
@@ -1418,9 +1418,11 @@
                 byte[] target = new byte[ciphertext.length];
                 decryptCipher.doFinal(additionalData, ciphertext, encryptionOffset, encryptionLength, ciphertext, encryptionOffset);
                 System.out.println(TLSTest.bytesToHex(ciphertext));
+                System.out.println(TLSTest.bytesToHex(ciphertext, encryptionOffset, innerPlaintextLength));
             }
 
-            // 16 03 03 00 28 84 ef 8c ec 32 b4 9f d9 14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b 66 36 3e 01 28 88 6e d7 5c ed f6 80 58 e6 6d a4 
+            // <mark class="under red">16 03 03 00 28 84 ef 8c ec 32 b4 9f d9</mark> 14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b <mark class="under blue">66 36 3e 01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>
+            // <mark class='under green'>14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b</mark>    EOF( 消息类型 0x14=20[Finished 结构]，长度 12 个字节的 verify_data)
             ```
 
         - #### HP-Finished-Client 加密
@@ -1522,6 +1524,7 @@
             }
 
             // 15 03 03 00 1a <mark class='box green'>84 ef 8c ec 32 b4 9f db</mark> 01 00 <mark class='under red'>e8 3f 18 d6 fe 11 34 13 20 11 ce a3 c8 ca 1f 77</mark>
+            // 01 00   EOF(level[0x01: warning] description[0x00: Close notify])
             ```
 
         - #### AP-Server 解密

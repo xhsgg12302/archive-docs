@@ -7,7 +7,7 @@ cascade:
     weight: 100
 ---
 
-![文徵明-小楷赤壁赋](/.images/_media/home.compress.resize..jpg ':size=100% * 500')
+![文徵明-小楷赤壁赋](/.images/_media/home.compress.resize..jpg ':size=75% :align=center')
 
 <!-- http://s4m156k8j.hb-bkt.clouddn.com/home.compress.resize..jpg -->
 <!-- https://img.wtfu.site/home.compress.resize..jpg -->

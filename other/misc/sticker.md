@@ -1,46 +1,6 @@
-<style>
-    .sticker {
-        width: 506px;
-        height: 694px;
-        font-size: 0;
-        text-indent: -999em;
-        background: url('https://static.wtfu.site/.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
-    }
-
-    .small {
-        background: url('https://static.wtfu.site/.images/other/misc/wechat-sticker-02.png') 0 0 no-repeat;
-        vertical-align: middle;
-        height: 53px !important;
-        width: 53px;
-        /* transform: scale(0.50); */
-        /* margin-top: -5px;
-        margin-left: -3px; */
-    }
-    .markdown-section {
-        max-width: 100%;
-    }
-</style>
-
-<div style="display: none">
-    <div class="sticker"></div>
-    <div>
-        <div style='display: flex; margin-left: 90px ;margin-bottom: 40px'>
-            <div class="small" style="margin-left: 10px; background-position: 0 0;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -50px 0;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -100px 0;"></div>
-        </div>
-        <div style='display: flex; margin-left: 90px ;margin-bottom: 40px'>
-            <div class="small" style="margin-left: 10px; background-position: 0 -80px;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -50px -80px;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -100px -80px;"></div>
-        </div>
-        <div style='display: flex; margin-left: 90px ;margin-bottom: 40px'>
-            <div class="small" style="margin-left: 10px; background-position: 0 -160px;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -50px -160px;"></div>
-            <div class="sticker small" style="margin-left: 10px; background-position: -100px -160px;"></div>
-        </div>
-    </div>
-</div>
+---
+layout: sticker
+---
 
 <!-- ![](/.images/other/misc/wechat-sticker.png ':size=50%') -->
 
