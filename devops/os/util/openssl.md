@@ -17,7 +17,7 @@
         <br>证书：`cat pubkey.der | shasum -a 256`，或者 `grep -v ^- pubkey.pem | base64 -d | shasum -a 256`。
         <br>公匙：`openssl x509 -in <pubkey.der | pubkey.pem> -pubkey -noout | grep -v ^- | base64 -d | shasum -a 256`。
 
-        > [!CAUTION] 上述服务器`wtfu.site`当前密匙交换算法采用的是`ECDSA`，而不是 [RSA](/doc/advance/crypto/rsa.md)，读取的时候需要按照`ECDSA`的方式解析，所以后面使用了`ec`。
+        > [!CAUTION] 上述服务器`wtfu.site`当前密匙交换算法采用的是`ECDHE`，而不是 [RSA](/doc/advance/crypto/rsa.md)，读取的时候需要按照`ECDHE`的方式解析，所以后面使用了`ec`。
         
         - ###### Referene
             * https://asn1js.eu/ [ASN.1 JavaScript decoder]
@@ -70,7 +70,7 @@
         # 查看 TLS/SSL 证书中公匙的相关信息（使用 RSA 算法）
         openssl s_client -connect <mark class='under blue'>static.wtfu.site</mark>:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' | openssl x509  -pubkey -noout | <mark class='under deeppink'>openssl rsa -pubin -modulus -text -noout</mark>
 
-        # 查看 TLS/SSL 证书中公匙的相关信息（使用 ECDSA 算法）
+        # 查看 TLS/SSL 证书中公匙的相关信息（使用 ECDHE 算法）
         openssl s_client -connect        <mark class='under blue'>wtfu.site</mark>:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' | openssl x509  -pubkey -noout | <mark class='under deeppink'>openssl ec -pubin -text -noout</mark>
         ```
 
