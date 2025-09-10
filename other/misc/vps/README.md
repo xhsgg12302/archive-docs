@@ -177,6 +177,12 @@
     + ### 安装 sub-converter
 
         > [?] `docker run -d --restart=always --name subconverter  -p 13500:25500 tindy2013/subconverter:0.7.2`
+        <br><br>Index digest (sha256:01d184d6219389e71294e010408b8743ba0ca7bd39016e2567a611fe0c01b77d)
+        <br>`docker run -d --restart=always --name subconverter  -p 13500:25500 asdlokj1qpi23/subconverter:latest` 
+        <br><br>删除全部缓存
+        <br>`docker exec subconverter /bin/sh`,`docker exec subconverter /bin/sh -c 'rm -rf cache/*'`
+        <br>删除单个，md5 url `md5 -s https://ghfast.top/https://raw.githubusercontent.com/sub` ==> bed4d2778988ea1c65afbea18d3b4476
+        <br>指定删除 `docker exec subconverter /bin/sh -c 'rm -rf cache/bed4d2778988ea1c65afbea18d3b4476*'` * 包括 http 请求头
 
     + ### 部署文档细节
 

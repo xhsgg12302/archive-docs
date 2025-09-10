@@ -59,3 +59,4 @@
 ## Reference
 * https://www.runoob.com/design-pattern/design-pattern-tutorial.html
 * https://www.liaoxuefeng.com/wiki/1252599548343744/1264742167474528
+* https://refactoringguru.cn/design-patterns

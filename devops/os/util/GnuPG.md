@@ -213,6 +213,15 @@
         <br><span style='padding-left:2em'>或者通过重启 agent，全部清除。
         <br><br>![](/.images/devops/os/util/gpg-suite-01.png ':size=60%')
 
+        - #### IPC connect call failed
+
+            ```shell
+            gpg-preset-passphrase: can't connect to '/Users/stevenobelia/.gnupg/S.gpg-agent': IPC connect call failed
+            gpg-preset-passphrase: caching passphrase failed: IPC connect call failed
+
+            通过重启 agent  解决：`gpg-connect-agent reloadagent /bye`
+            ```
+
 * ## Reference
 
     + https://wiki.archlinuxcn.org/wiki/GnuPG

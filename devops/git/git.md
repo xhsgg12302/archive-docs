@@ -175,7 +175,7 @@ weight: 60
 		<!-- panels:start -->
 		<!-- div:left-panel-50 -->
 		> [?] **.gitmodules**
-		```shell
+		```shell [data-file:.gitmodules]
 		[submodule "helloworld"]
 			path = helloworld
 			url = https://github.com/xhsgg12302/helloworld.git
@@ -185,7 +185,7 @@ weight: 60
 		```
 		<!-- div:left-panel-50 -->
 		> [?] **.git/config**
-		```shell
+		```shell [data-file:.git/config]
 		[submodule "helloworld"]
 			active = true
 			url = https://github.com/xhsgg12302/helloworld.git
@@ -422,7 +422,7 @@ weight: 60
 
 		* #### 乾坤大挪移
 
-			```shell {15-20,29-34,46-52}
+			```shell {18-23,35-41,47-52}
 			# 修改commit message
 			git commit --amend  # 其实类似于重新做了一次提交
 
@@ -432,17 +432,6 @@ weight: 60
 			$ git restore <file>... to discard changes in working directory
 
 			# 移动提交记录
-
-				# cherry-pick [level move1]
-				# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
-				*main $ git cherry-pick C2 C4
-
-				      main(*)                                                                  main(*)
-				      C5                                                            C5---C2'---C4'
-				      /                        git cherry-pick C2 C4                /
-				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4	
-				                     \                                                             \
-				                      side                                                          side
 
 				# git rebase [commit | branch]
 				# 将当前分支或者节点 与目标分支或节点 不一致的节点复制到目标分支节点上。
@@ -475,6 +464,17 @@ weight: 60
 				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4---C7
 				                     \                                                                  \
 				                      bugFix(*)                                                          bugFix(*)
+
+				# cherry-pick [level move1]
+				# 将一些提交记录复制到HEAD指向的节点 (注意:提交记录不包含HEAD上游节点)
+				*main $ git cherry-pick C2 C4
+
+				      main(*)                                                                  main(*)
+				      C5                                                            C5---C2'---C4'
+				      /                        git cherry-pick C2 C4                /
+				C0---C1---C2---C3---C4        ----------------------->        C0---C1---C2---C3---C4	
+				                     \                                                             \
+				                      side                                                          side
 
 				# 交互式rebase -i
 				# Rebase 1c6ae4f..f795a91 onto 1c6ae4f (5 commands)
@@ -669,7 +669,7 @@ weight: 60
 
 * ## GIT仓库瘦身
 
-	> [?] 使用的工具是 [**bfg-repo-cleaner**](https://rtyley.github.io/bfg-repo-cleaner/)，可以参考官方 usage，example 等，下载连接在官网右侧，是一个jar包。
+	> [?] 使用的工具是 [**bfg-repo-cleaner**](https://rtyley.github.io/bfg-repo-cleaner/)，可以参考官方 usage，example 等，下载链接在官网右侧，是一个jar包。
 	<br><br>使用步骤：
 	<br>`1). `: 克隆原仓库镜像：`git clone --mirror https://github.com/xhsgg12302/knownledges.git`
 	<br>`2). `: 依照给出的样例结合自己的需求进行删除文件：比如文件夹：`java -jar ../bfg-1.14.0.jar --delete-folders .images`、文件：`java -jar ../bfg-1.14.0.jar --delete-files _sidebar.md`
@@ -677,7 +677,7 @@ weight: 60
 	<br>`4). `: 推送到远程：`git push`
 	<br>`5). `: 可以使用命令查看当前仓库中的状态：`git count-objects -vH`
 	<br><br>实操背景：
-	<br>原来的仓库 **knownledges** 里面使用的是 docsify 文档工具来记录的，有一些问题：并非静态文件(通过js实时渲染)，文档，图片资源跟框架本身在一起管理，如果说需要更换框架的话，比校费事儿的是怎么保留文档本身的历史提交记录和修改，另外想使用 git submodule 功能一次性将 markdown 文档和 images 资源文件分开管理，好处就是资源文件的提交记录不用参杂在 markdown 里面，因为提交记录对于二进制大文件来说并没有什么作用，我们只需要最终版的，所以也方便直接覆盖。
+	<br>原来的仓库 **knownledges** 里面使用的是 docsify 文档工具来记录的，有一些问题：并非静态文件(而是通过js实时渲染)，文档，图片资源跟框架本身在一起管理，如果说需要更换框架的话，比校费事儿的是怎么保留文档本身的历史提交记录和修改，另外想使用 git submodule 功能一次性将 markdown 文档和 images 资源文件分开管理，好处就是资源文件的提交记录不用参杂在 markdown 里面，因为提交记录对于二进制大文件来说并没有什么作用，我们只需要最终版的，所以也方便直接覆盖。
 	<br><br>实际操作：
 	<br>将原来的 **knownledges** 备份成三个仓库 **archive**，**archive-docs**，**archive-asserts**。
 	<br>**archive** 用来整理文档框架比如(docsify, hugo ,...) 可以有多个分支，使用 submodule 的方式整合另外两个（docs,asserts）仓库。
