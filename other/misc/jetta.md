@@ -3,7 +3,7 @@
 tags: []
 ---
 
-* ## Intro(2024款 280TSI 手动先锋版)
+* ## Intro([2024款 280TSI 手动先锋版](https://www.autohome.com.cn/spec/67292#pvareaid=3454492))
 
     - #### 确认
         1. 有没有现车，颜色有哪些？几月份生产的？合格证？
@@ -64,3 +64,8 @@ tags: []
         2. 今天一个人来的，身份证都带来了，价格诚意，立马付款提车。
         3. 来之前了解过这边的价格，
         4. ...
+
+* ## Reference
+
+    + https://www.autohome.com.cn/spec/67292#pvareaid=3454492
+    + https://jiage.autohome.com.cn/price/carlist/p-67292-2-0-0-0-610100-1-0#pvareaid=2094106
