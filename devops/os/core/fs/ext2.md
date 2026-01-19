@@ -18,7 +18,7 @@
         <br>挂载：`mount -o loop fs1m-with-data /mnt`
         <br>进入目录并写入数据：`cd /mnt && mkdir 12302 && cd 12302 && echo 'something' > Hello.java`
         <br>卸载：`umount /mnt`
-        <br><br>使用xxd查看十六进制信息：`xxd -a -u -g1 -s 1024 -l 16 fs1m` //使用*代替连续00，大写字母输出，一个字节分割，offset=1024, len=16。
+        <br><br>使用 [xxd](/devops/os/util/xxd.md) 查看十六进制信息：`xxd -a -u -g1 -s 1024 -l 16 fs1m` //使用*代替连续00，大写字母输出，一个字节分割，offset=1024, len=16。
 
     + ### 解析
 

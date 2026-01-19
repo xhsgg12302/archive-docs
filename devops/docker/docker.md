@@ -30,6 +30,8 @@ weight: 50
         <br>`docker build -t **:1.0 --no-cache -f Dockerfile . `
         <br>docker 清理构建缓存
         <br>`docker builder prune`、或者更深层次的`docker system prune -a`
+        <br><br>docker 进入内核查看 MacOSX 本地挂载卷 /var/lib/docker/volume
+        <br>`docker run -it --privileged --pid=host debian nsenter -t 1 -m -u -n -i sh`
         <br>
 
     + ### DAEMON-CONFIG

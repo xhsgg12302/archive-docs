@@ -58,6 +58,8 @@ weight: 40
 	# 配置与编译
 	# 编译选项：https://nginx.org/en/docs/configure.html
 	./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module 
+		[--with-http_addition_module]
+		[--with-http_sub_module]
 		[--without-http_fastcgi_module] 
 		[--with-openssl=/data/openssl-1.1.1w] 
 		[--with-openssl-opt=enable-tls1_3]

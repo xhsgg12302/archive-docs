@@ -257,10 +257,36 @@ tags: [template, demo]
             https://github.com/docsifyjs/docsify/issues/742
         -->
     
-    + ### 06-反斜杠转义
+    + ### 06-符号转义
 
-        > [?] 反斜杠 转义 `` # https://github.com/docsifyjs/docsify/issues/1881
-        <br>single backslash (status: opening)
+        - #### 反斜杠
+
+            > [?] 反斜杠 转义 `` # https://github.com/docsifyjs/docsify/issues/1881
+            <br>single backslash (status: opening)
+        
+        - #### $符号
+
+            > [!] hugo 版本中，使用 tabs 包含的内容中 `$` 的转义，通过两个`$`符号，其实是后期使用正则替换造成的捕获组引用。
+            <br> 如下代码中的`$'`: https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions?#:~:text=$'
+
+            <!-- tabs:start -->
+            ##### **nasm**
+            ```nasm
+            section .text
+                global _start
+
+            _start:
+                mov ax, 2h
+                mov bx, 3h
+                times 3 add ax,bx
+
+                mov ax, 4c00h
+                int 21h
+
+            section .data
+                msg db 'Hello, world!$$'
+            ```
+            <!-- tabs:end -->
 
     + ### 07-段落逃逸
 
