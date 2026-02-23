@@ -134,6 +134,17 @@
         <br><br>vim 查看 **UTF-16** 文件 `file format ==> : Unicode text, UTF-16, little-endian text` [参考](https://unix.stackexchange.com/questions/608452/how-do-i-properly-convert-the-file-to-utf-16le-encoding-without-strange-characte)
         <br><span style='padding-left: 1.8em'/>通过`vim -c 'e ++enc=utf-16le' /Users/stevenobelia/Downloads/temporary-download/百度mac个性短语导出2024_09_24`
         <br><span style='padding-left: 1.8em'/>或者 通过`:e ++enc=utf-16le`进行设置
+    
+    - ### 设置和查看文件格式
+
+        <!-- panels:start -->
+        <!-- div:left-panel-40 -->
+        > [?] 检查当前文件的格式：`:set ff?`，格式 MS-Window 默认 **dos**, Unix,macOS 默认 **unix**
+        <br><br>设置文件格式：`:set ff=dos`，通过 `:help ff`阅读详情。
+        <br><br>在 macOS 上用 vim 编辑的文件，在 dos里面打开就是如下情况。需要通过上述指令设置文件格式，才可正常显示。
+        <!-- div:right-panel-50 -->
+        ![](/.images/devops/os/softwares/vim/vim-readme-02.png ':size=45%')
+        <!-- panels:end -->
 
     - ### :wq 和 :x 的区别
 
