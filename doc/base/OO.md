@@ -65,6 +65,259 @@ weight: 10
 
             * ##### protected详解
 
+                > [?] 画出关系图后，从被可见的角度去看，就是：“从当前类(包括)到定义方法的继承路径上的所有类，以及定义方法类同包”。比如：
+                <br><span style='padding-left:2.3em'>1、对于 Son01#f()，就是 Son01，Fahter，Son03，Test01 中可见。
+                <br><span style='padding-left:2.3em'>2、对于 Son01#clone()，就是 Son01，Fahter，Object 及 Object所处同包中可见。
+                <br><span style='padding-left:2.3em'>3、对于 Son02#f()，就是 Son02，Son01，Test02 中可见。
+                <br><br>用到的代码样例 [参见](https://github.com/12302-bak/idea-test-project/tree/modifier/_0_base-learning/src/main/java/_base/modifier/intro)
+
+                ![](/.images/doc/base/oo/modifier/modifier-protected-intro-01.png ':size=99%')
+
+                <!-- tabs:start -->
+                ###### **Father**
+                ```java {12}
+                public void testWithFather() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();
+                    father.clone();
+
+                    Son01 son01 = new Son01();
+                    son01.f();
+                    son01.clone();
+
+                    Son02 son02 = new Son02();
+                    son02.f();                      // compile error
+                    son02.clone();
+
+                    Son03 son03 = new Son03();
+                    son03.f();
+                    son03.clone();
+
+                    Son04 son04 = new Son04();
+                    son04.f();
+                    son04.clone();
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();
+                    grandChild0401.clone();
+                }
+                ```
+                ###### **Son01**
+                ```java {4-5,13,16-17,20-21,25-26}
+                public void testWithSon01() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();                     // compile error
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();
+                    son01.clone();
+
+                    Son02 son02 = new Son02();
+                    son02.f();
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();                      // compile error
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();                      // compile error
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();             // compile error
+                    grandChild0401.clone();         // compile error
+                }
+                ```
+                ###### **Son02**
+                ```java {4-5,8-9,16-17,20-21,25-26}
+                public void testWithSon02() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();                     // compile error
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();                      // compile error
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();
+                    son02.clone();
+
+                    Son03 son03 = new Son03();
+                    son03.f();                      // compile error
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();                      // compile error
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();             // compile error
+                    grandChild0401.clone();         // compile error
+                }
+                ```
+                ###### **Son03**
+                ```java {5,9,12-13,21,26}
+                public void testWithSon03() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();                      // compile error
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();
+                    son03.clone();
+
+                    Son04 son04 = new Son04();
+                    son04.f();
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();
+                    grandChild0401.clone();         // compile error
+                }
+                ```
+                ###### **Son04**
+                ```java {4-5,8-9,12-13,16-17}
+                public void testWithSon04() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();                     // compile error
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();                      // compile error
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();                      // compile error
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();                      // compile error
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();
+                    son04.clone();
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();
+                    grandChild0401.clone();
+                }
+                ```
+                ###### **GrandChild0401**
+                ```java {4-5,8-9,12-13,16-17,20-21}
+                public void testWithGrandChild0401() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();                     // compile error
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();                      // compile error
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();                      // compile error
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();                      // compile error
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();                      // compile error
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();
+                    grandChild0401.clone();
+                }
+                ```
+                ###### **Test01**
+                ```java {5,9,12-13,17,21,26}
+                public void testWithTest01() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();                      // compile error
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();
+                    grandChild0401.clone();         // compile error
+                }
+                ```
+                ###### **Test02**
+                ```java {4-5,8-9,13,16-17,20-21,25-26}
+                public void testWithTest02() throws CloneNotSupportedException {
+
+                    Father father = new Father();
+                    father.f();                     // compile error
+                    father.clone();                 // compile error
+
+                    Son01 son01 = new Son01();
+                    son01.f();                      // compile error
+                    son01.clone();                  // compile error
+
+                    Son02 son02 = new Son02();
+                    son02.f();
+                    son02.clone();                  // compile error
+
+                    Son03 son03 = new Son03();
+                    son03.f();                      // compile error
+                    son03.clone();                  // compile error
+
+                    Son04 son04 = new Son04();
+                    son04.f();                      // compile error
+                    son04.clone();                  // compile error
+
+                    // Specifically for the scenario of multiple inheritance
+                    GrandChild0401 grandChild0401 = new GrandChild0401();
+                    grandChild0401.f();             // compile error
+                    grandChild0401.clone();         // compile error
+                }
+                ```
+                <!-- tabs:end -->
+
+                <details><summary>旧备份，有部分表述错误</summary>
+
                 > [?] 简单介绍：`protected` 表示 `同包 + 继承`。
                 <br><span style='padding-left: 2.9em'/>继承可以理解为将 protected 方法的可见性传递到子类中。比如 case02 中 `son2.f()、this.f()`可以访问。
                 <br><br>`a).` 在同包中
@@ -73,7 +326,7 @@ weight: 10
                 <br><span style='padding-left: 2.9em'/>例如 **case01#Test01#son1.f()** 访问的方法的类 Test01 与重写的方法 f() 都在 p1 包中。
                 <br><span style='padding-left: 2.9em'/>例如 **case03#Father#test01()** Son1 中的 f() 在 同包 p0 中，而 Son2 中的方法 f() 在 p2 中
                 <br><br>`b).` 在子类中
-                <br><span style='padding-left: 2.9em'/>只能访问自己继承或重写的方法`this|super.f()`，<span style='color:blue'>不能访问父类实例或其他后代实例的方法`new Father1().f() 、 new OtherSon().f()`。</span>
+                <br><span style='padding-left: 2.9em'/>只能访问自己继承或重写的方法`this|super.f()`，<span style='color:blue'>~不能访问父类实例或其他后代实例的方法`new Father1().f() 、 new OtherSon().f()`~。</span>
                 <br><span style='padding-left: 2.9em'/>例如 **case02#Son2** 只能访问自己 Son2实例 中的 f() 方法(可能是继承或者重写而来)，而不能访问父类实例或者其他子类实例中的方法。
                 <br><br>参考：[Java protected 关键字详解](https://blog.csdn.net/justloveyou_/article/details/61672133)
 
@@ -85,6 +338,7 @@ weight: 10
                 ###### **case03**
                 ![](/.images/doc/base/oo/modifier/modifier-protected-03.png ':size=99%')
                 <!-- tabs:end -->
+                </details>
 
 ## Reference
 * https://github.com/openjdk/jdk/blob/jdk8-b120/hotspot/src/share/vm/oops/markOop.hpp

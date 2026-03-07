@@ -766,6 +766,12 @@
 
             ![](/.images/other/misc/squirrel/squirrel-core-01.gif)
 
+        - #### 各种bin文件解析
+
+            ?> 使用 java 对项目中使用到的各种 bin 文件进行解析，参考[代码](https://github.com/12302-bak/rime-bin-parser.git)
+            
+        - #### 用户习惯数据探索
+
     + ### 其他
 
         > [!CAUTION] `1).`: 在计算机科学和编程中，`grave` 通常指的是“重音符”或“倒尖号”，在键盘上通常位于数字 1 键的左边，形状像一个倾斜的撇号，有时也被称为反引号 `` ` ``。 --- 来自阿里通义

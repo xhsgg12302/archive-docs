@@ -14,6 +14,10 @@
 ## IDEA 配置截图
 ![](/.images/devops/build/gradle/usage/gradle-usage-01.png ':size=80%')
 
+## Groovy语法解析支持
+在 gradle 中定义 task 有如下图所示的形式，也就是说针对这种语法在脚本解析中 groovy 是支持的。
+![](/.images/devops/build/gradle/groovy/task-syntax-parse-01.png ':size=80%')
+
 ## gradle单独设置caches目录
 
 ## Reference
