@@ -23,7 +23,7 @@
     'cd' -> 无法表示，字符集xiaohaizi不包含字符'c'和'd'
 
 ### 比较规则简介
-在我们确定了 xiaohaizi 字符集表示字符的范围以及编码规则后，怎么比较两个字符的大小呢？最容易想到的就是直接比较这两个字符对应的二进制编码的大小，比方说字符 'a' 的编码为 0x01 ，字符 'b' 的编码为 0x02 ，所以 'a' 小于 'b' ，这种简单的比较规则也可以被称为二进制比较规则，英文名为 binary collation 。二进制比较规则是简单，但有时候并不符合现实需求，比如在很多场合对于英文字符我们都是不区分大小写的，也就是说 'a' 和 'A' 是相等的，在这种场合下就不能简单粗暴的使用二进制比较规则了，这时候我们可以这样指定比较规则：
+在我们确定了 xiaohaizi 字符集表示字符的范围以及编码规则后，怎么比较两个字符的大小呢？最容易想到的就是直接比较这两个字符对应的二进制编码的大小，比方说字符 'a' 的编码为 0x01 ，字符 'b' 的编码为 0x02 ，所以 'a' 小于 'b' ，这种简单的比较规则也可以被称为二进制比较规则，英文名为`binary collation` 。二进制比较规则是简单，但有时候并不符合现实需求，比如在很多场合对于英文字符我们都是不区分大小写的，也就是说 'a' 和 'A' 是相等的，在这种场合下就不能简单粗暴的使用二进制比较规则了，这时候我们可以这样指定比较规则：
 1. 将两个大小写不同的字符全都转为大写或者小写。
 2. 再比较这两个字符对应的二进制数据。
 
@@ -119,12 +119,17 @@ like_or_where: {
     | _ci | case insensitive |不区分大小写| 
     | _cs | case sensitive |区分大小写| 
     | _bin | binary |以二进制方式比较|
-1. `show collation where charset = 'utf8mb4';`
+
+<!-- panels:start -->
+<!-- div:left-panel-50 -->
+1. `show collation like '%utf8mb4%';`
    
    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-03.png)
+<!-- div:right-panel-50 -->
 2. `show collation where charset = 'utf8mb4';`
    
    ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-04.png)
+<!-- panels:end -->
 
 ## 字符集和比较规则的应用
 
@@ -291,7 +296,7 @@ show variables like 'character_set_results';
 ```
 ![](/.images/doc/framework/mysql/book/03_character_and_collation/cac-13.png)
 
-大家可以看到这几个系统变量的值都是 utf8 ，为了体现出字符集在请求处理过程中的变化，我们这里特意修改一个系统变量的值：
+大家可以看到这几个系统变量的值都是 ~utf8~ ，为了体现出字符集在请求处理过程中的变化，我们这里特意修改一个系统变量的值：
 ```sql
 mysql> set character_set_connection = gbk;
 Query OK, 0 rows affected (0.00 sec)
@@ -351,12 +356,12 @@ default-character-set=utf8
 
 ## 比较规则的应用
 结束了字符集的漫游，我们把视角再次聚焦到 比较规则 ， 比较规则 的作用通常体现比较字符串大小的表达式以及对某个字符串列进行排序中，所以有时候也称为 排序规则 。比方说表 t 的列 col 使用的字符集是 gbk ，使用的比较规则是 gbk_chinese_ci ，我们向里边插入几条记录：
-如果输入不了中文，参考 [mysql安装](/doc/framework/mysql/install.md#压缩包安装)
+如果输入不了中文，参考 [mysql docker 安装](/doc/framework/mysql/install.md#docker)
 ```sql
 # 创建表t
-CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE t( col VARCHAR(10) ) CHARACTER SET gbk COLLATE gbk_chinese_ci;
 
-mysql> INSERT INTO t(col) VALUES('a'), ('b'), ('A'), ('B');
+mysql> INSERT INTO t(col) VALUES ('a'), ('b'), ('A'), ('B'), ('我');
 Query OK, 4 rows affected (0.00 sec)
 Records: 4 Duplicates: 0 Warnings: 0
 

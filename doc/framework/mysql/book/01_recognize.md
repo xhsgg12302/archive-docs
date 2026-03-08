@@ -2,7 +2,7 @@
 
 * ### 查看目录
 
-    ```shell
+    ```shell {6,15-17}
     # tree -L 3 /usr/local/opt/mysql@5.7/bin/
 
     /usr/local/opt/mysql@5.7/bin/
