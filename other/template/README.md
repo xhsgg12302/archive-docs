@@ -1,6 +1,8 @@
 ---
 # layout: review
 tags: [template, demo]
+tocStartLevel: 2
+tocEndLevel: 4
 ---
 
 <!-- [toc] -->
@@ -484,6 +486,9 @@ tags: [template, demo]
         > [!COMMENT]
         > An alert of type 'comment' using style 'callout' with default settings.
 
+        > [!COMMENT|style:flat]
+        > An alert of type 'comment' using style 'flat' with default settings.
+
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
         > [!TIP]
@@ -535,6 +540,7 @@ tags: [template, demo]
         [样例2](/doc/advance/jvm/tools/jvisualvm.md#reference) 
 
     + ### 14-控制p标签宽高以及代码块大小
+    + ### 15-针对单个页面的 TOC 进行如本页面参数的控制
 
 * ## Reference
 
