@@ -82,7 +82,9 @@
         ```
 
         不过在本地 MacOSX 上运行的时候，会出现如下错误：<br>ERROR: attach: task_for_pid(13871) failed: '(os/kern) failure' (5) <br>Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can't attach to the process. Could be caused by an incorrect pid or lack of privileges.<br>sun.jvm.hotspot.debugger.DebuggerException: sun.jvm.hotspot.debugger.DebuggerException: Can't attach to the process. Could be caused by an incorrect pid or lack of privileges。
-        <br>貌似是一个在 macosx 平台 jdk1.8 的 bug，需要切换jdk，严谨起见，我选择切换平台（ubuntu 22.04, java-8-openjdk-amd64[1.8.0_482]）。另外还需要注意可能会出现”Metadata does not appear to be polymorphic“之类的错误，解决方案[参考](https://stackoverflow.com/questions/33733445/java-heap-dump-error-metadata-does-not-appear-to-be-polymorphic):`sudo apt-get install openjdk-8-dbg`
+        <br><br>现在可以添加 sudo 权限去应对这个，但也有可能出现其他的问题，比如[Can’t attach symbolicator to the process](../trouble/README.md#cant-attach-symbolicator-to-the-process)。貌似是 MacOS 内核的安全策略问题。
+        <br><br>暂时先选择切换平台（ubuntu 22.04, java-8-openjdk-amd64[1.8.0_482]）。另外还需要注意可能会出现”Metadata does not appear to be polymorphic“之类的错误。
+        <br>解决方案[参考](https://stackoverflow.com/questions/33733445/java-heap-dump-error-metadata-does-not-appear-to-be-polymorphic):`sudo apt-get install openjdk-8-dbg`
 
         ![](/.images/doc/advance/jvm/stringtable/st-with-sun-code-01.png ':size=99%')
 
