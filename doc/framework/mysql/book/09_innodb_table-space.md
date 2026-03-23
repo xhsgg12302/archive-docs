@@ -11,7 +11,7 @@
         <br><br>因为页面类型前边都有个 FIL_PAGE 或者 FIL_PAGE_TYPE 的前缀，为简便起见我们后边唠叨页面类型的时候就把这些前缀省略掉了，比方说 FIL_PAGE_TYPE_ALLOCATED 类型称为 ALLOCATED 类型， FIL_PAGE_INDEX 类型称为INDEX 类型。
 
         | 类型名称 | 十六进制 | 描述 | 
-        | :--:  | :--: | :--: |
+        | :--  | :--: | :--: |
         | FIL_PAGE_TYPE_ALLOCATED | 0x0000 | 最新分配，还没使用 |
         | FIL_PAGE_UNDO_LOG | 0x0002 | Undo日志页 |
         | FIL_PAGE_INODE | 0x0003 | 段信息节点 |
