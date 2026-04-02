@@ -47,6 +47,7 @@
             ![](/.images/other/misc/squirrel/squirrel-config-01.png ':size=100%')
 
             > [!CAUTION] 因为官方不建议修改的 **Shared** 文件的原因，所以有些属性就得通过 **custom** 文件进行覆盖或者补丁。
+            <br>另外 yaml 配置文件里面绝不可以出现有 key，没有 value 的情况，可能由于将`-` 形式数组里面的值都注释没了。不然就是输入法 crushed，都不知道哪儿的问题，我是 debug 出来的。:stuck_out_tongue_closed_eyes:
 
     + ### 朙月拼音【自定义及解释】
 
@@ -771,6 +772,56 @@
             ?> 使用 java 对项目中使用到的各种 bin 文件进行解析，参考[代码](https://github.com/12302-bak/rime-bin-parser.git)
             
         - #### 用户习惯数据探索
+
+            > [?] 在使用以及学习的过程中，发现在`~/Library/Rime`配置路径下面存在一些以 **userdb** 结尾的目录，应该就是用户数据目录了，用来保存输入习惯，符合 leveldb 形式。所以就用[leveldb-viewer](https://github.com/arkantos1482/leveldb-viewer)来确认里面到底是什么。
+            <br><br>以`普朗特`为例，目前用户习惯里面是没有的，先拷贝一份为 example.userdb。查看里面是否存在`pu lang te`，通过 esc 聚焦到输入框，然后键入。
+            <br>没有的情况下，输入`普朗特`，让 rime 记录一下，然后重新拷贝，这时候就发现里面已经出现了，enter 可以展示 value 值在右侧。
+
+            ![](/.images/other/misc/squirrel/squirrel-userdb-01.gif )
+
+        - #### 指定 Lua 依赖库编译
+
+            > [!COMMENT] 在很长一段时间之后没有使用 brew 更新过系统依赖，直到最近在使用 three.js 绘画 3D 的时候发现 npm 需要的 node 的版本号得 >= 18，以致于安装了最新的，进而牵一发动全身，莫名的 Lua 版本也跟着从 5.4.6 更新到了 5.5.0。然后启动输入法就报错了`Symbol not found: _luaL_openlibs`。
+            <br><br>现在就有两种解决办法，第一，lua 版本回退回去，也就是我目前使用的。第二种就是使用现有的 5.5.0 版本重新编译 rime 库。两种都尝试过。下面简单记录一下过程。
+            <br><br>顺带一提：rime 的插件库是可以通过`BUILD_MERGED_PLUGINS`选项选择和主库进行合并的，也就是生成一个 librime.1.11.2.dylib，或者单独生成。squirrel 里面就是使用的单独生成，可以看到单独的依赖库在`/Library/Input Methods/Squirrel.app/Contents/Frameworks/rime-plugins`下面。
+            <br><br>第二种没什么好说的，直接修改`plugins/lua/CMakeLists.txt`里面的版本，让 cmake 重新构建，完事儿后从新编译替换就行。但是有个问题，5.5.0版本的 lua 由于安全考虑，不允许在 for 循环里面修改迭代变量，也就是需要修改 lua 脚本，目前不好调试，另外有好几个需要修改的，也就放弃了。
+
+            + ##### Lua 版本降级
+
+                由于是 brew 安装的，好像直接给系统链接最新的，而且也不太好链接老版本，所以只能通过修改`plugins/lua/CMakeLists.txt`单独给 rime 指定版本。如下主要代码。
+                
+                然后就是重新编译，其他错误可以把刚才构建的缓存删了，重新 cmake 构建，然后编译 **rime** 和 **rime-lua** 就可以生成 librime.1.11.2.dylib，librime-lua.dylib。然后替换，部署就行。
+
+                另外还可以通过 otool 工具查看刚才编译出来的 librime-lua.dylib 里面所依赖的 lua 相关路径，是不是所希望的指定位置。如下图
+
+                <!-- panels:start -->
+                <!-- div:left-panel-50 -->
+                ```shell {3,7}
+                # 由于5.4版本的位置在 /usr/local/opt/lua@5.4，所以配置到 pkg-config 搜索路径里面。
+                set(LUA_VERSION "lua" CACHE STRING "lua version")
+                set(ENV{PKG_CONFIG_PATH} "/usr/local/opt/lua@5.4/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}")
+                if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/lua5.4/lua.h")
+                find_package(PkgConfig)
+                if(PkgConfig_FOUND)
+                    foreach(pkg ${LUA_VERSION} lua5.4 lua53 lua52 luajit lua51)
+                    pkg_check_modules(LUA IMPORTED_TARGET GLOBAL ${pkg})
+                    if(LUA_FOUND)
+                    break()
+                    endif()
+                    endforeach()
+                endif()
+                if(LUA_FOUND)
+                    set(LUA_TARGET PkgConfig::LUA)
+                    include_directories(${LUA_INCLUDE_DIRS})
+                else()
+                    message(FATAL_ERROR "Lua not found, consider using `bash action-install.sh` to download.")
+                endif()
+                else()
+                ```
+                <!-- div:right-panel-50 -->
+                ![](/.images/other/misc/squirrel/squirrel-source-lua-01.png 'size:90%')
+                <!-- panels:end -->
+
 
     + ### 其他
 
