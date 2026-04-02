@@ -1311,7 +1311,7 @@
         <!-- div:title-panel -->
         > [?] 下面，我们通过一个 C语言程序编译后的汇编语言程序，看一下栈在参数传递中的应用。要注意的是，在C语言中，局部变量也在栈中存储。
         <br><br>从汇编代码中可以分析得知：
-        <br><span style='padding-left:2.3em'>`1)`、有些局部变量放在寄存器里面了（a->di，c->si），有些放在栈里面了（b->stack）。
+        <br><span style='padding-left:2.3em'>`1)`、有些局部变量用寄存器接收（a->di，c->si），有些临时存在栈里面了（b->stack），但是最终都是通过复制入栈传递。
         <br><span style='padding-left:2.3em'>`2)`、在调用方法之前所有的参数会入栈，相当于变量复制，拷贝供函数使用，所以修改这些值并不会影响到原来的值。
         <br><span style='padding-left:2.3em'>`3)`、`XOR SI,SI` 是一种高效清零的方式。
         <!-- div:left-panel-55 -->
