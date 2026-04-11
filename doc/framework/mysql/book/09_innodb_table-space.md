@@ -273,7 +273,7 @@
 
     + ### Segment Header 结构的运用
 
-        > [?] 我们知道一个索引会产生两个段，分别是叶子节点段和非叶子节点段，而每个段都会对应一个 INODE Entry 结构，那我们怎么知道某个段对应哪个 INODE Entry 结构呢？所以得找个地方记下来这个对应关系。希望你还记得我们在唠叨数据页，也就是 INDEX 类型的页时有一个 Page Header 部分，当然我不能指望你记住，所以把 PageHeader 部分再抄一遍给你看：[Page Header部分（为突出重点，省略了好多属性)]
+        > [?] 我们知道一个索引会产生两个段，分别是叶子节点段和非叶子节点段，而每个段都会对应一个 INODE Entry 结构，那我们怎么知道某个段对应哪个 INODE Entry 结构呢？所以得找个地方记下来这个对应关系。希望你还记得我们在唠叨数据页，也就是 INDEX 类型的页时有一个 Page Header 部分，当然我不能指望你记住，所以把 [Page Header](./05_innodb-page-struct/#page-header页面头部) 部分再抄一遍给你看：[Page Header部分（为突出重点，省略了好多属性)]
 
         | 名称              | 占用空间大小 | 描述                                       |
         | ----------------- | ------------ | ------------------------------------------ |
@@ -340,7 +340,7 @@
             | SYS_DATAFILES    | 整个InnoDB存储引擎中所有的表空间对应文件系统的文件路径信息 |
             | SYS_VIRTUAL      | 整个InnoDB存储引擎中所有的虚拟生成列的信息                 |
 
-            > [!NOTE] 这些系统表也被称为 数据字典 ，它们都是以 B+ 树的形式保存在系统表空间的某些页面中，其中 `SYS_TABLES` 、 `SYS_COLUMNS` 、 `SYS_INDEXES` 、 `SYS_FIELDS` 这四个表尤其重要，称之为 **基本系统表（basic system tables）**，我们先看看这4个表的结构：
+            > [!NOTE] 这些系统表也被称为 **数据字典** ，它们都是以 B+ 树的形式保存在系统表空间的某些页面中，其中 `SYS_TABLES` 、 `SYS_COLUMNS` 、 `SYS_INDEXES` 、 `SYS_FIELDS` 这四个表尤其重要，称之为 **基本系统表（basic system tables）**，我们先看看这4个表的结构：
 
             * ##### SYS_TABLES表
 
@@ -419,10 +419,10 @@
 
             **Data Dictionary Header页面**
             > [!NOTE] 只要有了上述 4 个基本系统表，也就意味着可以获取其他系统表以及用户定义的表的所有元数据。比方说我们想看看 SYS_TABLESPACES 这个系统表里存储了哪些表空间以及表空间对应的属性，那就可以：
-            <br><span style='padding-left:1.2em'>`A.` 到 SYS_TABLES 表中根据表名定位到具体的记录，就可以获取到 SYS_TABLESPACES 表的 TABLE_ID 
-            <br><span style='padding-left:1.2em'>`B.` 使用这个 TABLE_ID 到 SYS_COLUMNS 表中就可以获取到属于该表的所有列的信息。
-            <br><span style='padding-left:1.2em'>`C.` 使用这个 TABLE_ID 还可以到 SYS_INDEXES 表中获取所有的索引的信息，索引的信息中包括对应的 INDEX_ID ，还记录着该索引对应的 B+ 数根页面是哪个表空间的哪个页面。
-            <br><span style='padding-left:1.2em'>`D.`使用 INDEX_ID 就可以到 SYS_FIELDS 表中获取所有索引列的信息。
+            <br><span style='padding-left:1.2em'>`A.` 到 *SYS_TABLES* 表中根据表名定位到具体的记录，就可以获取到 SYS_TABLESPACES 表的 TABLE_ID 
+            <br><span style='padding-left:1.2em'>`B.` 使用这个 TABLE_ID 到 *SYS_COLUMNS* 表中就可以获取到属于该表的所有列的信息。
+            <br><span style='padding-left:1.2em'>`C.` 使用这个 TABLE_ID 还可以到 *SYS_INDEXES* 表中获取所有的索引的信息，索引的信息中包括对应的 INDEX_ID ，还记录着该索引对应的 B+ 数根页面是哪个表空间的哪个页面。
+            <br><span style='padding-left:1.2em'>`D.`使用 INDEX_ID 就可以到 *SYS_FIELDS* 表中获取所有索引列的信息。
             <br><br>也就是说这 4 个表是表中之表，那这 4 个表的元数据去哪里获取呢？没法搞了，只能把这 4 个表的元数据，就是它们有哪些列、哪些索引等信息硬编码到代码中，然后设计 InnoDB 的大叔又拿出一个固定的页面来记录这 4 个表的聚簇索引和二级索引对应的 B+树 位置，这个页面就是页号为 7 的页面，类型为 SYS ，记录了 Data Dictionary Header ，也就是数据字典的头部信息。除了这 4 个表的 5 个索引的根页面信息外，这个页号为 7 的页面还记录了整个InnoDB存储引擎的一些全局属性，说话太啰嗦，直接看这个页面的示意图：
             <br><br>![](/.images/doc/framework/mysql/book/09_innodb_table_space/its-14.png ':size=90%')
             <br>可以看到这个页面由下边几个部分组成：
@@ -435,7 +435,7 @@
             | Empty Space            | 尚未使用空间     | 16272 字节   | 用于页结构的填充，没啥实际意义                                 |
             | File Trailer           | 文件尾部         | 8 字节       | 校验页是否完整                                                 |
 
-            > [!NOTE] 可以看到这个页面里竟然有 Segment Header 部分，意味着设计InnoDB的大叔把这些有关数据字典的信息当成一个段来分配存储空间，我们就姑且称之为 数据字典段 吧。由于目前我们需要记录的数据字典信息非常少（可以看到 Data Dictionary Header 部分仅占用了56字节），所以该段只有一个碎片页，也就是页号为 7 的这个页。
+            > [!NOTE] 可以看到这个页面里竟然有 Segment Header 部分，意味着设计InnoDB的大叔把这些有关数据字典的信息当成一个段来分配存储空间，我们就姑且称之为 **数据字典段** 吧。由于目前我们需要记录的数据字典信息非常少（可以看到 Data Dictionary Header 部分仅占用了56字节），所以该段只有一个碎片页，也就是页号为 7 的这个页。
             <br><br>接下来我们需要细细唠叨一下 Data Dictionary Header 部分的各个字段：
             <br><span style='padding-left:1.2em'>`Max Row ID` ：我们说过如果我们不显式的为表定义主键，而且表中也没有 UNIQUE 索引，那么 InnoDB 存储引擎会默认为我们生成一个名为 row_id 的列作为主键。因为它是主键，所以每条记录的 row_id 列的值不能重复。原则上只要一个表中的 row_id 列不重复就可以了，也就是说表a和表b拥有一样的 row_id 列也没啥关系，不过设计InnoDB的大叔只提供了这个 Max Row ID 字段，不论哪个拥有 row_id 列的表插入一条记录时，该记录的 row_id 列的值就是 Max Row ID 对应的值，然后再把 Max Row ID 对应的值加1，也就是说这个 Max Row ID 是全局共享的。
             <br><span style='padding-left:1.2em'>`Max Table ID` ：InnoDB存储引擎中的所有的表都对应一个唯一的ID，每次新建一个表时，就会把本字段的值作为该表的ID，然后自增本字段的值。Max Index ID ：InnoDB存储引擎中的所有的索引都对应一个唯一的ID，每次新建一个索引时，就会把本字段的值作为该索引的ID，然后自增本字段的值。
