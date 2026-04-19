@@ -1,15 +1,37 @@
-## brew
+---
+tocEndLevel: 5
+---
 
-* ### 切换版本
+## Intro(brew | homebrew)
+
+* ### 基础命令
 
     > [!NOTE]
-    `brew unlink node@18`
+    **切换版本**
+    <br>`brew unlink node@18`
     <br>`brew link --overwrite --force node@14`
+    <br>
+    <br>**编辑配方**
+    <br>`brew edit 12302/cmake/cmake@3.20.5`
+
+* ### 目录位置
+
+    ```shell
+    # 主目录
+    /usr/local/Homebrew
+    # 库文件
+    /usr/local/Homebrew/Library/Homebrew
+    # 配方仓库
+    /usr/local/Homebrew/Library/Taps/
+                            [官方]   homebrew/homebrew-core/Formula ==>  https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/
+                            [自建]   12302/homebrew-gdb/Formula     ==>  ⭕️
+                            [自建]   12302/homebrew-lua/Formula     ==>  ⭕️
+    ```
 
 * ### 安装软件
 
     <!-- tabs:start -->
-    #### **1、官网旧版本Formula**
+    #### **1、官网旧版本Formula（gdb）**
     > [?] gdb example
     ```shell
     # ref from: https://stackoverflow.com/questions/62785290/installing-previous-versions-of-a-formula-with-brew-extract
@@ -26,7 +48,7 @@
     ```
     ![](/.images/devops/os/mac/brew-search-01.png)
 
-    #### **2、自定义仓库**
+    #### **2、自定义仓库（aria2）**
     > [!] brew安装
     ```shell
     # 修改了 max-connection-per-server from 16 to 128,
@@ -63,7 +85,8 @@
     ```
 
     ![](/.images/devops/os/mac/brew-aria2c-01.png)
-    ---
+    <hr/>
+
     ![](/.images/devops/os/mac/brew-aria2c-02.png)
 
     + ##### Reference
@@ -78,3 +101,4 @@
 * https://github.com/Homebrew
 * https://stackoverflow.com/questions/62785290/installing-previous-versions-of-a-formula-with-brew-extract
 * https://stackoverflow.com/questions/3987683/homebrew-install-specific-version-of-formula
+* https://superuser.com/questions/741099/how-does-one-change-the-editor-that-brew-uses #[$HOMEBREW_EDITOR]
