@@ -639,6 +639,27 @@ weight: 60
 	<br>2、cd helloworld.git
 	<br>3、git push --mirror https://github.com/new.git
 
+	<!-- panels:start -->
+	<!-- div:left-panel-50 -->
+	**or create a new repository on the command line**
+	```shell
+	echo "# innodb-idb-parser" >> README.md
+	git init
+	git add README.md
+	git commit -m "first commit"
+	git branch -M main
+	git remote add origin https://github.com/12302-bak/innodb-idb-parser.git
+	git push -u origin main
+	```
+	<!-- div:right-panel-50 -->
+	**or push an existing repository from the command line**
+	```shell
+	git remote add origin https://github.com/12302-bak/innodb-idb-parser.git
+	git branch -M main
+	git push -u origin main
+	```
+	<!-- panels:end -->
+
 * ## GIT管理项目
 	> [?] `1).` 在github创建仓库 *https://github.com/user/repo.git*
 	<br>`2).` 本地项目`git init`
