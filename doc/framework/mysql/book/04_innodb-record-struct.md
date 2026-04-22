@@ -98,6 +98,8 @@ tocEndLevel: 5
                     > [?] InnoDB在读记录的变长字段长度列表时先查看表结构，如果某个变长字段允许存储的最大字节数大于255时，该怎么区分它正在读的某个字节是一个单独的字段长度还是半个字段长度呢？设计InnoDB的大叔使用该字节的第一个二进制位作为标志位：如果该字节的第一个位为0，那该字节就是一个单独的字段长度（使用一个字节表示不大于127的二进制的第一个位都为0），如果该字节的第一个位为1，那该字节就是半个字段长度。<span style='color: blue'>具体计算方法参见如下:`变长字段长度列表验证`</span>
                     <br>对于一些占用字节数非常多的字段，比方说某个字段长度大于了16KB，那么如果该记录在单个页面中无法存储时，InnoDB会把一部分数据存放到所谓的溢出页中（我们后边会唠叨），在变长字段长度列表处只存储留在本页面中的长度，所以使用两个字节也可以存放下来。
 
+                <h6 id="变长字段长度列表验证"></h6>
+
                 > [!CAUTION|label:变长字段长度列表验证] 建表
                 <br>`CREATE TABLE variables_length_demo ( c1 VARCHAR(300), c2 VARCHAR(10) ) CHARSET=ascii ROW_FORMAT=COMPACT;`
                 <br><br> 插值
@@ -192,6 +194,13 @@ tocEndLevel: 5
             > [!] 实际上这几个列的真正名称其实是：`DB_ROW_ID`、`DB_TRX_ID`、`DB_ROLL_PTR`，我们为了美观才写成了row_id、transaction_id和roll_pointer。
 
             这里需要提一下 InnoDB 表对主键的生成策略：<span style="color: blue">优先使用用户自定义主键作为主键，如果用户没有定义主键，则选取一个 Unique 键作为主键，如果表中连 Unique 键都没有定义的话，则 InnoDB 会为表默认添加一个名为row_id 的隐藏列作为主键</span>。所以我们从上表中可以看出：**InnoDB存储引擎会为每条记录都添加 transaction_id和 roll_pointer 这两个列，但是 row_id 是可选的（在没有自定义主键以及Unique键的情况下才会添加该列）**。这些隐藏列的值不用我们操心， InnoDB 存储引擎会自己帮我们生成的。
+
+            <details><summary>展开【自定义主键记录】数据构成</summary>
+            
+            > [?] 主要用来和刚开始的那个[变长字段长度列表验证](#变长字段长度列表验证) 里面的图片做对比，了解结构，方便 ibd 数据解析。
+
+            ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07-02.png ':size=99%')
+            </details>
 
             因为表 record_format_demo 并没有定义主键，所以 MySQL 服务器会为每条记录增加上述的3个列。现在看一下加上 记录的真实数据 的两个记录长什么样吧：
 
