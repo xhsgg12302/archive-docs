@@ -2,6 +2,8 @@
 #title:  笔记
 tags: []
 bookHidden: true
+sitemap: { disable: true }
+rss: { disable: true }
 ---
 
 * ## Intro(Honda | Yamaha)
@@ -83,7 +85,7 @@ bookHidden: true
     + ### 二三
 
         看你自己的情况，如果需要练习，就去学一下。我看到的网上最少的费用 <span style='color:red'>99￥</span> 无限练车，不过距离比较偏远，去个一两次还是可以的。
-        <br>因为这个赶时间，就约的时间近的，一般人少，但比较偏远。
+        <br>因为这个赶时间，就约的时间近的考场，一般人少，但比较偏远。
         
         二里面的项目包括：①半坡起步，②单边桥，③绕桩。
         <br>三里面的项目包括：①起步+10米换二档，②掉头，③直行+人行横道，④左转，⑤靠边停车。

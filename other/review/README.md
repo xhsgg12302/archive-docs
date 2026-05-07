@@ -1,6 +1,8 @@
 ---
 title: "REVIEW"
 bookHidden: true
+sitemap: { disable: true }
+rss: { disable: true }
 ---
 
 ## TODO

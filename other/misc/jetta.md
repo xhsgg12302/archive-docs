@@ -2,6 +2,8 @@
 #title:  笔记
 tags: []
 bookHidden: true
+sitemap: { disable: true }
+rss: { disable: true }
 ---
 
 * ## Intro([2024款 280TSI 手动先锋版](https://www.autohome.com.cn/spec/67292#pvareaid=3454492))
