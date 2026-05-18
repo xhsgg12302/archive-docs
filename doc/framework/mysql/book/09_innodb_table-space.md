@@ -1,4 +1,7 @@
 
+---
+# tocEndLevel: 5
+---
 * ## 书接上文
 
     > [!CAUTION|label:prerequirement] 通过前边儿的内容大家知道， [表空间](./08_data_home_with_datadir.md#:~:text=为了更好的管理这些页,的概念) 是一个抽象的概念，对于 [系统表空间](./08_data_home_with_datadir.md#系统表空间system-tablespace) 来说，对应着文件系统中一个或多个实际文件；对于每个 [独立表空间](./08_data_home_with_datadir.md#独立表空间file-per-table-tablespace) 来说，对应着文件系统中一个名为 表名.ibd 的实际文件。大家可以把表空间想象成被切分为许许多多个 **页** 的池子，当我们想为某个表插入一条记录的时候，就从池子中捞出一个对应的页来把数据写进去。本章内容会深入到表空间的各个细节中，带领大家在 InnoDB 存储结构的池子中畅游。由于本章中将会涉及比较多的概念，虽然这些概念都不难，但是却相互依赖，所以奉劝大家在看的时候：<span style='color:blue'>不要跳着看! 不要跳着看! 不要跳着看!</span>
@@ -31,7 +34,7 @@
         <br>从上图中可以看出，任何类型的页都会包含这两个部分：
         <br>`1).` File Header ：记录页面的一些通用信息
         <br>`2).` File Trailer ：校验页是否完整，保证从内存到磁盘刷新时内容的一致性。
-        <br><br>对于 File Trailer 我们不再做过多强调，全部忘记了的话可以到将数据页的那一章回顾一下。我们这里再强调一遍 File Header 的各个组成部分：
+        <br><br>对于 File Trailer 我们不再做过多强调，全部忘记了的话可以到将数据页的那一章[回顾](./05_innodb-page-struct.md#file-trailer文件尾部) 一下。我们这里再强调一遍 File Header 的各个组成部分：
 
         | 名称 | 占用空间大小 | 描述 |
         | :--: | :--: | :--: |
@@ -40,7 +43,7 @@
         | FIL_PAGE_PREV | 4 字节 | 上一个页的页号|
         | FIL_PAGE_NEXT | 4 字节 | 下一个页的页号|
         | FIL_PAGE_LSN | 8 字节 | 页面被最后修改时对应的日志序列位置（英文名是：Log Sequence Number）|
-        | FIL_PAGE_TYPE | 2 字节 | 该页的类型|
+        | FIL_PAGE_TYPE | 2 字节 | 该页的[类型](#页面类型)|
         | FIL_PAGE_FILE_FLUSH_LSN | 8 字节 | 仅在系统表空间的一个页中定义，代表文件至少被刷新到了对应的LSN值|
         | FIL_PAGE_ARCH_LOG_NO_OR_SPACE_ID | 4 字节 | 页属于哪个表空间|
 

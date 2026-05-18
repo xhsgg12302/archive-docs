@@ -1,7 +1,7 @@
 
 * ## 开场序言
 
-    > [!CAUTION] 一条查询语句在经过 MySQL 查询优化器的各种基于成本和规则的优化会后生成一个所谓的 执行计划 ，这个执行计划展示了接下来具体执行查询的方式，比如多表连接的顺序是什么，对于每个表采用什么访问方法来具体执行查询等等。设计 MySQL 的大叔贴心的为我们提供了 **EXPLAIN 语句** 来帮助我们查看某个查询语句的具体执行计划，本章的内容就是为了帮助大家看懂 EXPLAIN 语句的各个输出项都是干嘛使的，从而可以有针对性的提升我们查询语句的性能。
+    > [!CAUTION] 一条查询语句在经过 MySQL 查询优化器的各种基于成本和规则的优化会后生成一个所谓的 **执行计划** ，这个执行计划展示了接下来具体执行查询的方式，比如多表连接的顺序是什么，对于每个表采用什么访问方法来具体执行查询等等。设计 MySQL 的大叔贴心的为我们提供了 **EXPLAIN 语句** 来帮助我们查看某个查询语句的具体执行计划，本章的内容就是为了帮助大家看懂 EXPLAIN 语句的各个输出项都是干嘛使的，从而可以有针对性的提升我们查询语句的性能。
     <br><br>如果我们想看看某个查询的执行计划的话，可以在具体的查询语句前边加一个 EXPLAIN ，就像这样：`EXPLAIN SELECT 1;`
     <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-01.png ':size=80%')
     <br><br>然后这输出的一大坨东西就是所谓的 **执行计划** ，我的任务就是带领大家看懂这一大坨东西里边的每个列都是干啥用的，以及在这个 执行计划 的辅助下，我们应该怎样改进自己的查询语句以使查询执行起来更高效。其实除了以 SELECT 开头的查询语句，其余的 DELETE 、 INSERT 、 REPLACE 以及 UPDATE 语句前边都可以加上 EXPLAIN 这个词儿，用来查看这些语句的执行计划，不过我们这里对 SELECT 语句更感兴趣，所以后边只会以 SELECT 语句为例来描述 EXPLAIN 语句的用法。为了让大家先有一个感性的认识，我们把 EXPLAIN 语句输出的各个列的作用先大致罗列如下左：
@@ -40,7 +40,7 @@
         UNIQUE KEY idx_key2 (key2),
         KEY idx_key3 (key3),
         KEY idx_key_part(key_part1, key_part2, key_part3)
-    ) Engine=InnoDB CHARSET=utf8;
+    ) Engine=InnoDB CHARSET=utf8 ROW_FORMAT=COMPACT;
     CREATE TABLE s1 LIKE single_table; insert into s1 select * from single_table; CREATE TABLE s2 LIKE single_table; insert into s2 select * from single_table;
 
     // CREATE TABLE s1 AS SELECT * FROM single_table;
@@ -91,7 +91,7 @@
 
     + ### select_type
 
-        > [?] 通过上边的内容我们知道，一条大的查询语句里边可以包含若干个 SELECT 关键字，每个 SELECT 关键字代表着一个小的查询语句，而每个 SELECT 关键字的 FROM 子句中都可以包含若干张表（这些表用来做连接查询），每一张表都对应着执行计划输出中的一条记录，对于在同一个 SELECT 关键字中的表来说，它们的 id 值是相同的。设计 MySQL 的大叔为每一个 SELECT 关键字代表的小查询都定义了一个称之为 **select_type** 的属性，意思是我们只要知道了某个小查询的 select_type 属性，就知道了这个小查询在整个大查询中扮演了一个什么角色，口说无凭，我们还是先来见识见识这个 select_type 都能取哪些值（为了精确起见，我们直接使用文档中的英文做简要描述，随后会进行详细解释的）：
+        > [?] 通过上边的内容我们知道，一条大的查询语句里边可以包含若干个 SELECT 关键字，每个 SELECT 关键字代表着一个小的查询语句，而每个 SELECT 关键字的 FROM 子句中都可以包含若干张表（这些表用来做连接查询），每一张表都对应着执行计划输出中的一条记录，对于在同一个 SELECT 关键字中的表来说，它们的 id 值是相同的。设计 MySQL 的大叔为每一个 SELECT 关键字代表的小查询都定义了一个称之为 **select_type** 的属性，意思是我们只要知道了某个小查询的 select_type 属性，就知道了这个小查询在整个大查询中扮演了一个什么角色，口说无凭，我们还是先来见识见识这个 select_type 都能取哪些值（为了精确起见，我们直接使用[文档](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain_select_type) 中的英文做简要描述，随后会进行详细解释的）：
 
         | 名称 | 描述 | 
         | -- | -- |
@@ -103,7 +103,7 @@
         | DEPENDENT SUBQUERY | First SELECT in subquery, dependent on outer query |
         | DEPENDENT UNION | Second or later SELECT statement in a UNION, dependent on outer query |
         | DERIVED | Derived table |
-        | MATERIALIZED | Materialized subquery |
+        | [MATERIALIZED](https://www.qianwen.com/share/chat/7902659b44d24b28961ddb9a6c23789c) | Materialized subquery |
         | UNCACHEABLE SUBQUERY | A subquery for which the result cannot be cached and must be re-evaluated for each row of the outer query |
         | UNCACHEABLE UNION | The second or later select in a UNION that belongs to an uncacheable subquery (see UNCACHEABLE SUBQUERY) |
 
@@ -134,7 +134,7 @@
         
             > [!NOTE] 如果包含子查询的查询语句不能够转为对应的 semi-join 的形式，并且该子查询是不相关子查询，并且查询优化器决定采用将该子查询物化的方案来执行该子查询时，该子查询的第一个 SELECT 关键字代表的那个查询的 select_type 就是 SUBQUERY ，比如下边这个查询：`EXPLAIN SELECT * FROM s1 WHERE key1 IN (SELECT key1 FROM s2) OR key3 = 'a';`
             <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-06.png ':size=80%')
-            <br><br>可以看到，外层查询的 select_type 就是 PRIMARY ，子查询的 select_type 就是 SUBQUERY 。需要大家注意的是，<span style='color:red'>由于select_type为SUBQUERY的子查询由于会被物化，所以只需要执行一遍</span>。
+            <br><br>可以看到，外层查询的 select_type 就是 PRIMARY ，子查询的 select_type 就是 SUBQUERY 。需要大家注意的是，<span style='color:red'>由于select_type为SUBQUERY的子查询由于会被[物化](https://www.qianwen.com/share/chat/7902659b44d24b28961ddb9a6c23789c)，所以只需要执行一遍</span>。
 
         - #### DEPENDENT SUBQUERY
         
@@ -160,12 +160,12 @@
         
             > [!NOTE] 当查询优化器在执行包含子查询的语句时，选择将子查询物化之后与外层查询进行连接查询时，该子查询对应的 select_type 属性就是 MATERIALIZED ，比如下边这个查询：`EXPLAIN SELECT * FROM s1 WHERE key1 IN (SELECT key1 FROM s2);`
             <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-13.png ':size=99%')
-            <br><br>执行计划的第三条记录的 id 值为 2 ，说明该条记录对应的是一个单表查询，从它的 select_type 值为 MATERIALIZED 可以看出，查询优化器是要把子查询先转换成物化表。然后看执行计划的前两条记录的 id 值都为 1 ，说明这两条记录对应的表进行连接查询，需要注意的是第二条记录的 table 列的值是 <subquery2> ，说明该表其实就是 id 为 2 对应的子查询执行之后产生的物化表，然后将 s1 和该物化表进行连接查询。
+            <br><br>执行计划的第三条记录的 id 值为 2 ，说明该条记录对应的是一个单表查询，从它的 select_type 值为 MATERIALIZED 可以看出，查询优化器是要把子查询先转换成物化表。然后看执行计划的前两条记录的 id 值都为 1 ，说明这两条记录对应的表进行 **连接查询**，需要注意的是第二条记录的 table 列的值是 <subquery2> ，说明该表其实就是 id 为 2 对应的子查询执行之后产生的物化表，然后将 s1 和该物化表进行连接查询。
 
-        - #### UNCACHEABLE SUBQUERY
+        - #### ~UNCACHEABLE SUBQUERY~
             不常用，就不多唠叨了。
 
-        - #### UNCACHEABLE UNION
+        - #### ~UNCACHEABLE UNION~
             不常用，就不多唠叨了。
 
     + ### partitions
@@ -195,13 +195,15 @@
 
         - #### eq_ref
         
-            > [!NOTE] 在连接查询时，如果被驱动表是通过主键或者唯一二级索引列等值匹配的方式进行访问的（如果该主键或者唯一二级索引是联合索引的话，所有的索引列都必须进行等值比较），则对该被驱动表的访问方法就是 eq_ref ，比方说：`EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.id = s2.id;` 
+            > [!NOTE] 在连接查询时，如果被驱动表是通过主键或者唯一二级索引列等值匹配的方式进行访问的（如果该主键或者唯一二级索引是联合索引的话，所有的索引列都必须进行等值比较），则对该被驱动表的访问方法就是 eq_ref ，比方说：`EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.id = s2.id;` ✅
             <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-17.png ':size=80%')
             <br><br>从执行计划的结果中可以看出， MySQL 打算将 s2 作为驱动表， s1 作为被驱动表，重点关注 s1 的访问方法是 eq_ref ，表明在访问 s1 表的时候可以通过主键的等值匹配来进行访问。
 
         - #### ref
         
             > [!NOTE] 当通过普通的二级索引列与常量进行等值匹配时来查询某个表，那么对该表的访问方法就可能是 ref ，最开始举过例子了，就不重复举例了。
+            <br>比方说：`EXPLAIN select * from single_table where key1 = 'gamma_9ttp';` 
+            <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-17-02.png ':size=80%')
 
         - #### fulltext
 
@@ -214,7 +216,7 @@
 
         - #### index_merge
         
-            > [!NOTE] 一般情况下对于某个表的查询只能使用到一个索引，但我们唠叨单表访问方法时特意强调了在某些场景下可以使用 Intersection 、 Union 、 Sort-Union 这三种索引合并的方式来执行查询，忘掉的回去补一下哈，我们看一下执行计划中是怎么体现 MySQL 使用索引合并的方式来对某个表执行查询的：`EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' OR key3 = 'a';`
+            > [!NOTE] 一般情况下对于某个表的查询只能使用到一个索引，但我们唠叨单表访问方法时特意强调了在某些场景下可以使用 Intersection 、 Union 、 Sort-Union 这三种[索引合并](./10_single-table-access.md#索引合并) 的方式来执行查询，忘掉的回去补一下哈，我们看一下执行计划中是怎么体现 MySQL 使用索引合并的方式来对某个表执行查询的：`EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' OR key3 = 'a';`
             <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/15_explain-key-01/ek-19.png ':size=99%')
             <br><br>从执行计划的 type 列的值是 index_merge 就可以看出， MySQL 打算使用索引合并的方式来执行对 s1 表的查询。
 

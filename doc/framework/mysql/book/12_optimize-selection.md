@@ -90,7 +90,7 @@
             UNIQUE KEY idx_key2 (key2),
             KEY idx_key3 (key3),
             KEY idx_key_part(key_part1, key_part2, key_part3)
-        ) Engine=InnoDB CHARSET=utf8;
+        ) Engine=InnoDB CHARSET=utf8 ROW_FORMAT=COMPACT;
         ```
 
     + ### 基于成本的优化步骤
@@ -127,7 +127,7 @@
             > [?] 对于 InnoDB 存储引擎来说，全表扫描的意思就是把聚簇索引中的记录都依次和给定的搜索条件做一下比较，把符合搜索条件的记录加入到结果集，所以需要将聚簇索引对应的页面加载到内存中，然后再检测记录是否符合搜索条件。由于查询成本= I/O 成本+ CPU 成本，所以计算全表扫描的代价需要两个信息：
             <br><span style='padding-left:1.2em'>聚簇索引占用的页面数
             <br><span style='padding-left:1.2em'>该表中的记录数
-            <br><br>这两个信息从哪来呢？设计 MySQL 的大叔为每个表维护了一系列的 统计信息 ，关于这些统计信息是如何收集起来的我们放在本章后边详细唠叨，现在看看怎么查看这些统计信息哈。设计 MySQL 的大叔给我们提供了 `SHOW TABLE STATUS` 语句来查看表的统计信息，如果要看指定的某个表的统计信息，在该语句后加对应的 LIKE 语句就好了，比方说我们要查看 **single_table** 这个表的统计信息可以这么写：`SHOW TABLE STATUS LIKE 'single_table'\G`
+            <br><br>这两个信息从哪来呢？设计 MySQL 的大叔为每个表维护了一系列的 **统计信息** ，关于这些统计信息是如何收集起来的我们放在本章后边详细唠叨，现在看看怎么查看这些统计信息哈。设计 MySQL 的大叔给我们提供了 `SHOW TABLE STATUS` 语句来查看表的统计信息，如果要看指定的某个表的统计信息，在该语句后加对应的 LIKE 语句就好了，比方说我们要查看 **single_table** 这个表的统计信息可以这么写：`SHOW TABLE STATUS LIKE 'single_table'\G`
             <br><span style='padding-left:1.2em'>![](/.images/doc/framework/mysql/book/12_optimize-selection/ops-01.png ':size=50%')
             <br>虽然出现了很多统计选项，但我们目前只关心两个：
             <br><br>**Rows**
@@ -255,7 +255,7 @@
         <br><br>我们把对驱动表进行查询后得到的记录条数称之为驱动表的 扇出 （英文名： fanout ）。很显然驱动表的扇出值越小，对被驱动表的查询次数也就越少，连接查询的总成本也就越低。当查询优化器想计算整个连接查询所使用的成本时，就需要计算出驱动表的扇出值，有的时候扇出值的计算是很容易的，比如下边这两个查询：
         <br><span style='padding-left:1.2em'>**查询一**：`SELECT * FROM single_table AS s1 INNER JOIN single_table2 AS s2;`
         <br>假设使用 s1 表作为驱动表，很显然对驱动表的单表查询只能使用全表扫描的方式执行，驱动表的扇出值也很明确，那就是驱动表中有多少记录，扇出值就是多少。我们前边说过，统计数据中 s1 表的记录行数是9693 ，也就是说优化器就直接会把 9693 当作在 s1 表的扇出值。
-        <br><span style='padding-left:1.2em'>**查询二**：`SELECT * FROM single_table AS s1 INNER JOIN single_table2 AS s2 WHERE s1.key2 >10 AND s1.key2 < 1000;`
+        <br><span style='padding-left:1.2em'>**查询二**：`SELECT * FROM single_table AS s1 INNER JOIN single_table2 AS s2 WHERE s1.key2 > 10 AND s1.key2 < 1000;`
         <br>仍然假设 s1 表是驱动表的话，很显然对驱动表的单表查询可以使用 idx_key2 索引执行查询。此时 idx_key2 的范围区间 (10, 1000) 中有多少条记录，那么扇出值就是多少。我们前边计算过，满足 idx_key2 的范围区间 (10, 1000) 的记录数是95条，也就是说本查询中优化器会把 95 当作驱动表 s1 的扇出值。
         <br><br>事情当然不会总是一帆风顺的，要不然剧情就太平淡了。有的时候扇出值的计算就变得很棘手，比方说下边几个查询：
         <br><span style='padding-left:1.2em'>**查询三**：`SELECT * FROM single_table AS s1 INNER JOIN single_table2 AS s2 WHERE s1.common_field > 'xyz';`
