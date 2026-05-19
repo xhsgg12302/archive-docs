@@ -57,9 +57,18 @@
     3.  每个段貌似是 16 Byte  对齐的。
     4.  搜索命令`s cs:0 l ffff <B8 01 00 BB 01 00...>`.
 
+
+    + ### 8086 工具集
+
+        下载[8086.rar](https://drive.usercontent.google.com/download?id=1LxcL2FIuhhWb0_IJqrXsexDtXsfBPwRW&export=download&authuser=0)，直接解压到新建目录 8086 里面。
+
+    + ### Trubo C 2.0 c语言开发环境搭建
+
+        从[页面](https://archive.org/details/msdos_borland_turbo_c_2.01) 找到 download options 区域，选中 zip 格式 [BorlandTurboC201-megapack.zip](https://archive.org/download/msdos_borland_turbo_c_2.01/BorlandTurboC201-megapack.zip) 下载 Trubo C 2.0 开发环境。直接解压就好了，里面包含 TC 目录就是，复制到 8086 里面，方便环境变量配置。
+
     + ### Trubo debugger 1.5 环境安装
 
-        在[这儿](https://mega.nz/file/05dxkCZD#GCNozF8KAGWjVqSQBIC4-bVkH9Yp89VuqAg6Dq-2sTg)下载所需要的软盘文件。解压后里面有三个文件 img、scp、txt。
+        在[这儿](https://mega.nz/file/05dxkCZD#GCNozF8KAGWjVqSQBIC4-bVkH9Yp89VuqAg6Dq-2sTg)下载所需要的软盘文件（Turbo Debugger SN Y1F0111452 1988 Borland 3.5 720k gw27 F7Plus Disk1of1.rar）。解压后里面有三个文件 img、scp、txt。
         将解压的文件及里面的三个文件重命名为**TDB3_5**，因为当前环境对文件名的限制。并在 DOSBox 的配置文件 _~/Library/Preferences/DOSBox\ 0.74-3-3\ Preferences_ 中通过命令`imgmount f /Users/stevenobelia/Documents/project_assembly_test/floppy/TDB3_5/TDB3_5.img -t floppy`挂载。
 
         启动 DOSBox，切换到 f 盘，通过 dir 可以看到里面的内容。
