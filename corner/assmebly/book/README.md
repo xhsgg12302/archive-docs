@@ -81,7 +81,7 @@
 
 * ## Reference
 
-    - https://www.eng.auburn.edu/~sylee/ee2220/8086_instruction_set.html 【8086/iAPX 86 指令集】[backup](https://htmlpreview.github.io/?https://github.com/xhsgg12302/archive-docs/blob/master/corner/assmebly/8086_instruction_set.html)
+    - https://www.eng.auburn.edu/~sylee/ee2220/8086_instruction_set.html 【8086/iAPX 86 指令集】[backup](https://htmlpreview.github.io/?https://github.com/xhsgg12302/archive-assets/blob/d4be8742ae69e7b493be336346c057fa82ecc2e8/corner/assembly/book/8086_instruction_set.html)
     - https://en.wikipedia.org/wiki/Intel_8086#Registers_and_instruction 【8086/iAPX 86 寄存器】
     - https://en.wikibooks.org/wiki/X86_Assembly/16,_32,_and_64_Bits
     - https://ee.usc.edu/~redekopp/cs356/slides/CS356Unit4_x86_ISA.pdf
