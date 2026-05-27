@@ -5,6 +5,8 @@
         ![](/.images/devops/os/softwares/vim/vim-readme-01.png ':size=100%')
 
     - ### 基本操作配置
+
+        通过`:set option?` 的方式可以查看当前 option 的值，`:set` 列出所有非默认值（即被修改过）的选项及其当前值。
     
         <details><summary>命令和解释</summary>
 
@@ -21,9 +23,9 @@
         | `filetype indent on`                          | 开启文件类型检查                                             |
         |                                               |                                                              |
         | 缩进                                          |                                                              |
-        | `set autoindet`                               | 按下回车，自动缩进，跟上一行保持一致                         |
         | `set tabstop=2`                               | 按下Tab键，vim显示的空格数                                   |
         | `set shiftwidth=4`                            | \>> << ==                                                    |
+        | `set autoindent`                               | 按下回车，自动缩进，跟上一行保持一致                         |
         | `set expandtab`                               | 将TAB 转为空格                                               |
         | `set softtabstop=2`                           | Tab转为多个空格                                              |
         |                                               |                                                              |
