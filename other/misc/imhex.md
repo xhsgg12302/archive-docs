@@ -501,6 +501,84 @@ tags: ["hex", "editor", "tools"]
 
         u32 value @ 0x00 in mySection;
         ```
+* ## 补丁
+
+    + ### ELF
+
+        ```rust
+        struct Elf64_Dynamic {
+            u64 d_tag;
+            
+            match(d_tag){
+                (0xc | 0xd | 0x19 | 0x1a) : u8* d_ptr: u64;
+                (_) : u64 d_val;
+            }
+        };
+
+        fn format_hex(auto value) {
+            return std::format("0x{:02X}", value);
+        };
+
+        struct Elf64_Vernaux {
+            u32 vna_hash;
+            u16 vna_flags;
+            u16 vna_other;      // 对应的版本索引号
+            u32 vna_name;
+            u32 vna_next;       // 到下一个辅助结构的字节偏移
+        };
+
+        struct Elf64_Verneed {
+            u16 vn_version;
+            u16 vn_cnt;         // 内部包含多少个 Vernaux 结构
+            u32 vn_file;        // 库文件名的 dynstr 偏移
+            u32 vn_next;        // 到下一个 Verneed 结构的字节偏移
+            u32 vn_aux;         // 到第一个 Vernaux 结构的字节偏移
+            
+            Elf64_Vernaux aux_entries[vn_cnt];
+        };
+
+        struct Elf64_Shdr {
+            u32 sh_name;
+            SHT sh_type;
+            SHF sh_flags;
+            padding[4];
+            u64 sh_addr;
+            u64 sh_offset [[format("format_hex")]];
+            Elf64_Xword sh_size [[format("format_hex")]];
+            Elf64_Word sh_link;
+            Elf64_Word sh_info;
+            Elf64_Xword sh_addralign;
+            Elf64_Xword sh_entsize;
+
+            if (sh_size > 0 && sh_offset + sh_size < std::mem::size()) {
+                if (sh_type == SHT::NOBITS || sh_type == SHT::NULL) {
+                    // Section has no data
+                } else if (sh_type == SHT::STRTAB) {
+                    String stringTable[while($ < (sh_offset + sh_size))] @ sh_offset;
+                } else if (sh_type == SHT::SYMTAB || sh_type == SHT::DYNSYM) {
+                    Elf64_Sym symbolTable[sh_size / sh_entsize] @ sh_offset;
+                } else if (sh_type == SHT::REL) {
+                    Elf64_Rel relTable[sh_size / sh_entsize] @ sh_offset;
+                } else if (sh_type == SHT::DYNAMIC) {
+                    Elf64_Dynamic entities[sh_size / sh_entsize] @ sh_offset;
+                } else if (sh_type == SHT::GNU_versym) {
+                    u16 versions[while($ < (sh_offset + sh_size))] @ sh_offset;
+                } else if (sh_type == SHT::GNU_verneed) {
+                    Elf64_Verneed verneed[while($ < (sh_offset + sh_size))] @ sh_offset;
+                } else if (sh_type == SHT::RELA) {
+                    Elf64_Rela relaTable[sh_size / sh_entsize] @ sh_offset;
+                } else if (sh_type == SHT::INIT_ARRAY || sh_type == SHT::FINI_ARRAY) {
+                    u32 pointer[while($ < (sh_offset + sh_size))] @ sh_offset;
+                    
+                } else if (sh_name == 140) {
+                    u128 plts[sh_size / sh_entsize] @ sh_offset;
+                } else {
+                    u8 data[sh_size] @ sh_offset [[sealed]];
+                }
+            }
+            std::print("{}", "hello world");
+        } [[format("format_section_header")]];
+        ```
 
 * ## Reference
 
