@@ -6,7 +6,6 @@
         <!-- div:left-panel-60 -->
         ```makefile
         # makefile 对空格相当挑剔，必须是制表符
-        # https://stackoverflow.com/questions/24145650/makefile6-missing-separator-stop
         OBJS = main.o tool1.o tool2.o
         CC = gcc
         CFLAGS += -c -Wall -g
@@ -24,10 +23,9 @@
             @$(RM) *.o mytool -r
         ```
         <!-- div:right-panel-40 -->
-        ![](/.images/devops/build/make-process-01.png ':size=85%')
+        ![](/.images/devops/build/make/make-process-01.png ':size=85%')
         <!-- panels:end -->
 
-        * https://github.com/junegunn/fzf/blob/master/Makefile
 
     + ### Spec
 
@@ -64,7 +62,7 @@
             <br>`   echo 'this is the source' > source.txt`
             <br><br>上面代码中，source.txt后面没有前置条件，就意味着它跟其他文件都无关。没有就构建，<span style='color: blue'>有的话，不会判断是否更改过，也就不会重新构建，因为没有可判断的时间戳</span>。
             <br>所以后面即使手动修改了`source.txt`，在一下次make的时候并不会重新参与构建。
-            <br>![](/.images/devops/build/make-process-02.png ':size=50%')
+            <br>![](/.images/devops/build/make/make-process-02.png ':size=50%')
 
         - #### commands
 
@@ -81,7 +79,7 @@
             <br>`①` 一个解决办法是将两行命令写在一行，中间用分号分隔。
             <br>`②` 另一个解决办法是在换行符前加反斜杠转义。
             <br>`③` 最后一个方法是加上`.ONESHELL:`命令。
-            <br>![](/.images/devops/build/make-process-03.png ':size=50%')
+            <br>![](/.images/devops/build/make/make-process-03.png ':size=50%')
 
             > [!CAUTION] `.ONESHELL:` 语法在`make 3.81`之后支持。相关参考[链接1](https://stackoverflow.com/questions/32153034/oneshell-not-working-properly-in-makefile)，[链接2](https://stackoverflow.com/questions/31911699/oneshell-target-a-phony-target-has-no-effect-on-makefile)
 
@@ -96,6 +94,7 @@
             <br>有时，变量的值可能指向另一个变量。
             <br>例：`v1 = $(v2)`，变量 v1 的值是另一个变量 v2。这时会产生一个问题，v1 的值到底在定义时扩展（静态扩展），还是在运行时扩展（动态扩展）？如果 v2 的值是动态的，这两种扩展方式的结果可能会差异很大。为了解决类似问题，Makefile一共提供了四个赋值运算符 （=、:=、？=、+=），它们的区别请看[StackOverflow](https://stackoverflow.com/questions/448910/what-is-the-difference-between-the-gnu-makefile-variable-assignments-a)。
             <br>`VARIABLE = value`: 在执行时扩展，允许递归扩展。`VARIABLE := value`: 在定义时扩展。 `VARIABLE ?= value`: 只有在该变量为空时才设置值。 `VARIABLE += value`": 将值追加到变量的尾端。
+            <br><span style='padding-left:1.0em'>![](/.images/devops/build/make/make-process-05.png ':size=95%')</span>
             <br><br>`6).` 内置变量（Implicit Variables）
             <br>Make命令提供一系列内置变量，比如，\$(CC) 指向当前使用的编译器，\$(MAKE) 指向当前使用的Make工具。这主要是为了跨平台的兼容性，详细的内置变量清单见[手册](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)。
             <br><br>`7).` 自动变量（Automatic Variables）
@@ -112,17 +111,22 @@
             <br>`   cp $< $@`
             <br>上面代码将 src 目录下的 txt 文件，拷贝到 dest 目录下。首先判断 dest 目录是否存在，如果不存在就新建，然后，\$< 指代前置文件（src/%.txt）， \$@ 指代目标文件（dest/%.txt）。
             <br><br>`8).` 判断和循环: Makefile使用 Bash 语法，完成判断和循环。
-            <br>![](/.images/devops/build/make-process-04.png ':size=60%')
+            <br>![](/.images/devops/build/make/make-process-04.png ':size=60%')
             <br><br>`9).` 函数: 格式`$(function arguments)` 或`${function arguments}`，Makefile提供了许多[内置函数](http://www.gnu.org/software/make/manual/html_node/Functions.html)，可供调用。下面是几个常用的内置函数。
             <br>&nbsp;&nbsp;&nbsp;`9.1). shell`: shell 函数用来执行 shell 命令，`srcfiles := $(shell echo src/{00..99}.txt)`
             <br>&nbsp;&nbsp;&nbsp;`9.2). wildcard`: wildcard 函数用来在 Makefile 中，替换 Bash 的通配符。`srcfiles := $(wildcard src/*.txt)`
             <br>&nbsp;&nbsp;&nbsp;`9.3). subst`: subst 函数用来文本替换，格式如`$(subst from,to,text)`，将字符串"feet on the street"替换成"fEEt on the strEEt": `$(subst ee,EE,feet on the street)`
             <br>&nbsp;&nbsp;&nbsp;`9.4). patsubst`: patsubst 函数用于模式匹配的替换，格式：`$(patsubst pattern,replacement,text)`。将文件名"x.c.c bar.c"，替换成"x.c.o bar.o"：`$(patsubst %.c,%.o,x.c.c bar.c)`
-            <br>&nbsp;&nbsp;&nbsp;`9.5). 替换后缀名`: 替换后缀名函数的写法是：变量名 + 冒号 + 后缀名替换规则。它实际上patsubst函数的一种简写形式。将变量OUTPUT中的后缀名 .js 全部替换成 .min.js: `min: $(OUTPUT:.js=.min.js)`
+            <br>&nbsp;&nbsp;&nbsp;`9.5). 替换后缀名`: 替换后缀名函数的写法是：变量名 + 冒号 + 后缀名替换规则。
+            <br><span style='padding-left:4.0em'>它实际上 patsubst 函数的一种简写形式。将变量 OUTPUT 中的后缀名 .js 全部替换成 .min.js: `min: $(OUTPUT:.js=.min.js)` <==> `min: $(patsubst %.js,%.min.js,$(OUTPUT))`。
+            <br><span style='padding-left:4.0em'>假设 Makefile 里定义了这样一个变量 OUTPUT = app.js utils.js index.js，替换之后就是：min: app.min.js utils.min.js index.min.js
 
 * ## Reference
 
     + https://www.gnu.org/software/make/manual/make.html
     + https://www.ruanyifeng.com/blog/2015/02/make.html
     + https://www.bilibili.com/video/BV1hE411N7BK/
+    + https://stackoverflow.com/questions/24145650/makefile6-missing-separator-stop
     + https://stackoverflow.com/questions/2209827/why-is-no-one-using-make-for-java
+    + 
+    + https://github.com/junegunn/fzf/blob/master/Makefile
