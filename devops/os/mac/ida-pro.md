@@ -208,3 +208,7 @@
     + https://xclient.info/s/ida.html
     + https://github.com/google/binexport/issues/159
     + https://github.com/HexRaysSA/ida-sdk/releases/tag/v9.2
+    + 
+    + 插件
+    + https://hcli.docs.hex-rays.com/   # 插件管理客户端 HCLI,hcli
+    + https://plugins.hex-rays.com/     # 官方插件库
