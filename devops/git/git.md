@@ -41,8 +41,10 @@ tocEndLevel: 5
 		
 		为了避免这种，可以按照 commit 拉取： `git fetch origin a0efa77`，然后强制合并到本地仓库`git reset --hard FETCH_HEAD`，然后继续拉取其他 commit，通过这种方式**切分差值**，达到缓存或者续传的目的。在实验过程中也可以看到 **接收对象中：x%(x/all)** 的 all 值逐渐减小。
 
-		> [!WARNING|label:怎么查看仓库是不是 shallow 的？] 
-		`git rev-parse --is-shallow-repository`、`git repo info layout.shallow`
+		> [!WARNING]
+		怎么查看仓库是不是 shallow 的：`git rev-parse --is-shallow-repository`、`git repo info layout.shallow`
+		<br>查看对象总数量：`git count-objects -v`
+		<br>整理本地仓库：`git gc`
 
 	* ### GITHUB 获取第一次 commit
 

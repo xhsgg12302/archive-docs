@@ -201,6 +201,15 @@
 
             根据 README 编译 [bindiff](https://github.com/google/bindiff.git) 。这个编译的过程和上面那个基本一致，不过除了需要 ids-sdk 之外，还依赖上一个 binexport，最终生成 [bindiff8_ida64.dylib](https://github.com/xhsgg12302/archive-assets/blob/044e381f5d1878072e75d65434ee9b5302503800/devops/os/mac/ida-pro/bindiff8_ida64.dylib)
 
+        3. #### Built-in 内建插件
+
+            拉取代码：`git clone --depth 1 --single-branch  -b v9.2.0-sdk.1 --recurse-submodules https://github.com/HexRaysSA/ida-sdk.git`
+            <br>根据 README 编译 [ida-sdk,tag:v9.2.0-sdk.1](https://github.com/HexRaysSA/ida-sdk.git)。按照[文档提示](https://github.com/HexRaysSA/ida-sdk/blob/v9.2.0-sdk.1/README.md#run) 可以复制`src/bin/plugins/*` 到`/Applications/IDA Professional 9.2.app/Contents/MacOS/plugins/`里面，或者用户环境 `~/.idapro/plugins/`里面，这里我选择在`~/.idapro/`目录里面挂软链`ln -sf /Users/stevenobelia/Documents/project_clion_test/ida-sdk/src/bin/plugins plugins`。
+
+            ![](/.images/devops/os/mac/ida-pro/ida-92-plugins-01.png ':size=70%')
+
+        4. #### 通过 hcli 安装插件仓库里面的
+
 * ## Reference
 
     + https://ycc77.com/2025/09/04/15-IDA_PRO_9.2%E7%A0%B4%E8%A7%A3%E7%89%88/
