@@ -574,6 +574,8 @@ tocEndLevel: 5
 
 			git fetch; git merge origin/main; git push
 			git pull; git push
+
+			git fetch --depth=1 origin +refs/heads/docsify*:refs/remotes/origin/docsify*
 			```
 			![](/.images/devops/git/remote-rebase-01.gif)
 			![](/.images/devops/git/remote-merge-01.gif)

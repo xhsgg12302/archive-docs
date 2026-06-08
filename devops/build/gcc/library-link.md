@@ -4,6 +4,260 @@ tocEndLevel: 5
 
 * ## Intro(DLL | SO | 静态链接库 | 动态链接库 | 程序员的自我修养--链接、装载与库(高清带完整书签版).pdf.[阅读笔记])
 
+    + ### [数据结构(ELF)](https://github.com/torvalds/linux/blob/master/include/uapi/linux/elf.h)
+
+        <!-- tabs:start -->
+        ###### **Section**
+        ```c
+        readelf -S -W build/Lib.so
+
+        typedef struct elf64_shdr {
+          // 段名（段名是个字符串，它位于一个叫做“.shstrtab”的字符串表。sh_name 是段名字符串在“.shstrtab”中字符串数据的偏移
+          Elf64_Word sh_name;		/* Section name, index in string tbl */
+          // 段的类型
+          Elf64_Word sh_type;		/* Type of section */
+          // 段的标志位
+          Elf64_Xword sh_flags;		/* Miscellaneous section attributes */
+          // 段虚拟地址2（如果该段可以被加载，则 sh_addr 为该段被加载后在进程地址空间中的虚拟地址；否则 sh_addr 为 0
+          Elf64_Addr sh_addr;		/* Section virtual addr at execution */
+          // 段偏移（如果该段存在于文件中,则表示该段在文件中的偏移;否则无意义。比如 sh_offset 对于 BSS 段来说就没有意义
+          Elf64_Off sh_offset;		/* Section file offset */
+          // 段的长度
+          Elf64_Xword sh_size;		/* Size of section in bytes */
+          // 段链接信息
+          Elf64_Word sh_link;		/* Index of another section */
+          Elf64_Word sh_info;		/* Additional section information */
+          // 段地址对齐（有些段对段地址对齐有要求,比如我们假设有个段刚开始的位置包含了一个 double 变量,因为 Intel x86 系统要求浮点数的存储地址必须是本身的整数倍，
+          // 也就是说保存 double 变量的地址必须是 8 字节的整数倍。这样对一个段来说，它的 sh_addr 必须是 8 的整数倍。
+          // 由于地址对齐的数量都是 2 的指数倍，sh_addralign 表示是地址对齐数量中的指数，即 sh addrlign=3表示对齐为2的3次方倍，即8倍，依此类推。
+          // 所以一个段的地址 sh_addr 必须满足下面的条件，即 sh addr % (2**sh addralign) = 0。 **表示指数运算。如果 sh_addralign 为 0 或 1，则表示该段没有对齐要求
+          Elf64_Xword sh_addralign;	/* Section alignment */
+          // 项的长度（有些段包含了一些固定大小的项，比如符号表，它包含的每个符号所占的大小都是一样的。对于这种段，sh_entsize 表示每个项的大小。如果为 0，则表示该段不包含固定大小的项
+          Elf64_Xword sh_entsize;	/* Entry size if section holds table */
+        } Elf64_Shdr;
+        ```
+        <details><summary>属性值</summary>
+
+        <!-- tabs:start -->
+        ###### **sh_type**
+        | 常量 | 值 | 含义 |
+        | :--- | :--- | :--- |
+        | SHT_NULL | 0 | 无效段 |
+        | SHT_PROGBITS | 1 | 程序段、代码段、数据段都是这种类型的 |
+        | SHT_SYMTAB | 2 | 表示该段的内容为**符号表** |
+        | SHT_STRTAB | 3 | 表示该段的内容为**字符串表** |
+        | SHT_RELA | 4 | 重定位表。该段包含了重定位信息，具体参考“静态地址决议和重定位”这一节 |
+        | SHT_HASH | 5 | 符号表的哈希表。见“符号表”这一节 |
+        | SHT_DYNAMIC | 6 | 动态链接信息。具体见“动态链接”一章 |
+        | SHT_NOTE | 7 | 提示性信息 |
+        | SHT_NOBITS | 8 | 表示该段在文件中没内容，比如 .bss 段 |
+        | SHT_REL | 9 | 该段包含了重定位信息，具体参考“静态地址决议和重定位”这一节 |
+        | SHT_SHLIB | 10 | 保留 |
+        | SHT_DNYSYM | 11 | 动态链接的符号表。具体见“动态链接”一章 |
+
+        ###### **sh_flags**
+        | 常量 | 值 | 含义 |
+        | :--- | :--- | :--- |
+        | SHF_WRITE | 1 | 表示该段在进程空间中可写 |
+        | SHF_ALLOC | 2 | 表示该段在进程空间中必须要分配空间。有些包含指示或控制信息的段不须要在进程空间中被分配空间，它们一般不会有这个标志。像代码段、数据段和 .bss 段都会有这个标志位 |
+        | SHF_EXECINSTR | 4 | 表示该段在进程空间中可以被执行，一般指代码段 |
+
+        ###### **sh_link/sh_info**
+        | sh_type | sh_link | sh_info |
+        | :--- | :--- | :--- |
+        | SHT_DYNAMIC | 该段所使用的字符串表在段表中的下标 | 0 |
+        | SHT_HASH | 该段所使用的符号表在段表中的下标 | 0 |
+        | SHT_REL<br>SHT_RELA | 该段所使用的相应符号表在段表中的下标 | 该重定位表所作用的段在段表中的下标 |
+        | SHT_SYMTAB<br>SHT_DYNSYM | 操作系统相关的 | 操作系统相关的 |
+        | other | SHN_UNDEF | 0 |
+
+        <!-- tabs:end -->
+        </details>
+
+        ###### **.shstrtab**
+        ```c
+        readelf -p .shstrtab build/Lib.so
+        String dump of section '.shstrtab':
+        [     1]  .symtab
+        [     9]  .strtab
+        [    11]  .shstrtab
+        [    1b]  .note.gnu.build-id
+        [    2e]  .gnu.hash
+        [    38]  .dynsym
+        [    40]  .dynstr
+        [    48]  .gnu.version
+        [    55]  .gnu.version_r
+        [    64]  .rel.dyn
+        [    6d]  .rel.plt
+        [    76]  .init
+        [    7c]  .plt.got
+        [    85]  .text
+        [    8b]  .fini
+        [    91]  .rodata
+        [    99]  .eh_frame_hdr
+        [    a7]  .eh_frame
+        [    b1]  .init_array
+        [    bd]  .fini_array
+        [    c9]  .dynamic
+        [    d2]  ...
+        ```
+
+        ###### **.strtab**
+        ```c
+        readelf -p .strtab build/Lib.so
+        String dump of section '.strtab':
+        [     1]  crtstuff.c
+        [    21]  __do_global_dtors_aux
+        [    43]  __do_global_dtors_aux_fini_array_entry
+        [    76]  __frame_dummy_init_array_entry
+        [    95]  Lib.c
+        [    9b]  __FRAME_END__
+        [    a9]  __x86.get_pc_thunk.bx
+        [    bf]  _fini
+        [    c5]  __x86.get_pc_thunk.dx
+        [    db]  __dso_handle
+        [    e8]  _DYNAMIC
+        [    f1]  __GNU_EH_FRAME_HDR
+        [   104]  __TMC_END__
+        [   110]  _GLOBAL_OFFSET_TABLE_
+        [   126]  _init
+        [   12c]  _ITM_deregisterTMCloneTable
+        [   148]  printf@GLIBC_2.0
+        [   159]  foobar
+        [   160]  __cxa_finalize@GLIBC_2.1.3
+        [   17b]  puts@GLIBC_2.0
+        [   18a]  __gmon_start__
+        [   199]  _ITM_registerTMCloneTable
+        ```
+
+        ###### **.symtab**
+        <!-- panels:start -->
+        `readelf --syms -W build/Lib.so`，这个也会将动态符号表读取出来
+        <!-- div:left-panel-49 -->
+        ```c
+        typedef struct elf32_sym {
+          // 符号名（这个成员包含了该符号名在字符串表中的下标
+          Elf32_Word	st_name;
+          // 符号相对应的值（这个值跟符号有关，可能是一个绝对值，也可能是一个地址等，不同的符号，它所对应的值含义不同
+          // 1. 在目标文件中，如果是符号的定义并且该符号不是“COMMON 块”类型的(即 st_shndx 不为 SHN_COMMON)，则 st_value 表示该符号在段中的偏移。即符号所对应的函数或变量位于由 st_shndx 指定的段，偏移 st_value 的位置。这也是目标文件中定义全局变量的符号的最常见情况，比如 SimpleSection.o 中的“funcl”、“main”和“global_init_var”。
+          // 2. 在目标文件中，如果符号是“COMMON 块”类型的(即 st_shndx 为 SHN_COMMON)，则st_value 表示该符号的对齐属性。比如SimpleSection.o 中的“global_uninit_var”。
+          // 3. 在可执行文件中，st_value 表示符号的虚拟地址。这个虚拟地址对于动态链接器来说十分有用。
+          Elf32_Addr	st_value;
+          // 符号大小（对于包含数据的符号，这个值是该数据类型的大小。比如一个 double 型的符号它占用 8 个字节。如果该值为 0，则表示该符号大小为 0 或未知
+          Elf32_Word	st_size;
+          // 符号类型和绑定信息（见下文“符号类型与绑定信息”
+          unsigned char	st_info;
+          // 该成员目前为 0、没用
+          unsigned char	st_other;
+          // 符号所在的段（见下文“符号所在段”
+          Elf32_Half	st_shndx;
+        } Elf32_Sym;
+        ```
+        <!-- div:right-panel-49 -->
+        ```c
+        typedef struct elf64_sym {
+          Elf64_Word st_name;		/* Symbol name, index in string tbl */
+          unsigned char	st_info;	/* Type and binding attributes */
+          unsigned char	st_other;	/* No defined meaning, 0 */
+          Elf64_Half st_shndx;		/* Associated section index */
+          Elf64_Addr st_value;		/* Value of the symbol */
+          Elf64_Xword st_size;		/* Associated symbol size */
+        } Elf64_Sym;
+         
+         
+
+
+
+
+
+
+
+        ```
+        <!-- panels:end -->
+        <details><summary>属性值</summary>
+
+        <!-- tabs:start -->
+        ###### **st_info**
+        | type（4bit） | 值 | 说明 |
+        | :--- | :--- | :--- |
+        | STT_NOTYPE | 0 | 未知类型符号 |
+        | STT_OBJECT | 1 | 该符号是个数据对象，比如变量、数组等 |
+        | STT_FUNC | 2 | 该符号是个函数或其他可执行代码 |
+        | STT_SECTION | 3 | 该符号表示一个段，这种符号必须是 STB_LOCAL 的 |
+        | STT_FILE | 4 | 该符号表示文件名，一般都是该目标文件所对应的源文件名，它一定是 STB_LOCAL 类型的，并且它的 st_shndx 一定是 SHN_ABS |
+
+        | binding（4bit） | 值 | 说明 |
+        | :--- | :--- | :--- |
+        | STB_LOCAL | 0 | 局部符号，对于目标文件的外部不可见 |
+        | STB_GLOBAL | 1 | 全局符号，外部可见 |
+        | STB_WEAK | 2 | 弱引用，详见“弱符号与强符号” |
+
+        ###### **st_shndx**
+        | 宏定义名 | 值 | 说明 |
+        | :--- | :--- | :--- |
+        | SHN_ABS | 0xfff1 | 表示该符号包含了一个绝对的值。比如表示文件名的符号就属于这种类型的 |
+        | SHN_COMMON | 0xfff2 | 表示该符号是一个“COMMON块”类型的符号，一般来说，未初始化的全局符号定义就是这种类型的，比如 SimpleSection.o 里面的 global_uninit_var。有关“COMMON”详见“深入静态链接”之“COMMON块” |
+        | SHN_UNDEF | 0 | 表示该符号未定义。这个符号表示该符号在本目标文件被引用到，但是定义在其他目标文件中 |
+
+        <!-- tabs:end -->
+        </details>
+
+        ###### **.dynamic**
+        ```c
+        // readelf -d -W build/Lib.so
+        // 数组结构，data 里面每个数据项如下，包含各种信息。
+        // 比如依赖于哪些共享对象、动态链接符号表的位置、动态链接重定位表的位置、共享对象初始化代码的地址等。
+
+        typedef struct {
+          Elf64_Sxword d_tag;		/* entry tag value */
+          union {
+            Elf64_Xword d_val;
+            Elf64_Addr d_ptr;
+          } d_un;
+        } Elf64_Dyn;
+        ```
+        <details><summary>属性值</summary>
+
+        | d_tag 类型 | d_un 的含义 |
+        | :--- | :--- |
+        | DT_SYMTAB | 动态链接符号表的地址，d_ptr 表示 “.dynsym” 的地址 |
+        | DT_STRTAB | 动态链接字符串表地址，d_ptr 表示 “.dynstr” 的地址 |
+        | DT_STRSZ | 动态链接字符串表大小，d_val 表示大小 |
+        | DT_HASH | 动态链接哈希表地址，d_ptr 表示 “.hash” 的地址 |
+        | DT_SONAME | 本共享对象的“SO-NAME”，我们在后面会介绍“SO-NAME” |
+        | DT_RPATH | 动态链接共享对象搜索路径 |
+        | DT_INIT | 初始化代码地址 |
+        | DT_FINIT | 结束代码地址 |
+        | DT_NEED | 依赖的共享对象文件， 值指 .dynstr 字符串段下标 |
+        | DT_REL<br>DT_RELA | 动态链接重定位表地址 |
+        | DT_RELENT<br>DT_RELAENT | 动态重读位表入口数量 |
+        </details>
+
+        ###### **rel**
+        ```c
+        typedef struct elf64_rel {
+          Elf64_Addr r_offset;	/* Location at which to apply the action */
+          Elf64_Xword r_info;	/* index and type of relocation */
+        } Elf64_Rel;
+        typedef struct elf64_rela {
+          Elf64_Addr r_offset;	/* Location at which to apply the action */
+          Elf64_Xword r_info;	/* index and type of relocation */
+          Elf64_Sxword r_addend;	/* Constant addend used to compute value */
+        } Elf64_Rela;
+        ```
+
+        ###### **.got**
+        ```c
+        typedef struct {
+          Elf64_Sxword d_tag;		/* entry tag value */
+          union {
+            Elf64_Xword d_val;
+            Elf64_Addr d_ptr;
+          } d_un;
+        } Elf64_Dyn;
+        ```
+        <!-- tabs:end -->
+
     + ### 使用工具
 
         | - | [readelf](#readelf) | [objdump](#objdump) | [nm](#nm) |
@@ -14,10 +268,12 @@ tocEndLevel: 5
         | 查看动态符号 .dynsym       | `readelf --dyn-syms -W  /bin/cat` <br> `readelf -sD -W  /bin/cat` | `objdump -t -w build/ab` | -- |
         | 查看版本 .gnu.*             | `readelf -V -W /bin/cat` | -- | -- |
         | 查看动态字符表 .dynstr     | `readelf -p .dynstr  /bin/cat` | -- | -- |
-        | 查看跳转 .plt | -- | `objdump -d -j .plt /bin/cat` | -- |
+        | 查看跳转 .plt | -- | `objdump -d -j .plt -M i386,att build/Program1` | -- |
         | 查看符号 | -- | -- | -- |
 
         另外还有，file、size等
+
+        <details><summary>help</summary>
 
         <!-- tabs:start -->
         #### **readelf**
@@ -807,10 +1063,39 @@ tocEndLevel: 5
         <https://bugs.launchpad.net/ubuntu/+source/glibc/+bugs>.
         ```
         <!-- tabs:end -->
+        </details>
 
     + ### 答疑
 
+        - #### 入参规则
+
+
+            | 架构/场景 | 系统调用号 | 第1参数 | 第2参数 | 第3参数 | 第4参数 | 第5参数 | 第6参数 | 超过的参数 | 返回值 |
+            | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+            | **x86 用户态** | — | 栈 | 栈 | 栈 | 栈 | 栈 | 栈 | 全部压栈 | EAX |
+            | **x86 系统调用** | EAX | EBX | ECX | EDX | ESI | EDI | EBP | 不支持 | EAX |
+            | **x64 用户态** | — | RDI | RSI | RDX | RCX | R8 | R9 | 压入栈中 | RAX |
+            | **x64 系统调用** | RAX | RDI | RSI | RDX | R10 | R8 | R9 | 不支持 | RAX |
+
         - #### 静态共享库
+
+            在没有虚拟内存机制管理的时代，为了节省内存，也就是多个进程共享一份物理内存代码，催生了 **静态共享库（Static Shared Library）** 的概念。一份物理内存要被多个程序共享，里面的内容是固定的，不可重定位。
+            <br><br>加载地址固定的原因如下：
+            <br>编译器的“位置无关代码”（PIC）技术在当年尚未诞生，缺少“动态链接器”这个中间调度员，旧文件格式（a.out / COFF）无法表达这种复杂的依赖关系等。
+            <br>不可重定位的原因如下：
+            <br>装载时重定位：如果库里面有一条修改数据的指令，对于程序 A、B 来说数据私有，所以地址肯定不一样，都要修改为自己的数据地址，造成冲突。
+            <br><br>所以加载地址是固定的，也就是它的核心为 **加载地址在库编译时就已经被硬编码（固定分配）了**。
+
+            <br>这种折中方案的流程如下：
+            <br>1、**预分配地址**：操作系统或系统管理员为每个共享库分配一段固定的、独占的虚拟内存地址空间（例如，库 A 必须加载到 0x60000000，库 B 必须加载到 0x61000000）。
+            <br>2、**编译期绑定**：在编译静态共享库时，库内部的所有函数和数据地址都按照这个固定地址硬编码。
+            <br>3、**链接期记录**：当你的应用程序链接这个库时，链接器不会拷贝库的代码（这有别于常规静态库），而是在可执行文件中记录“该程序依赖位于 0x60000000 的库 A”。
+            <br>4、**运行时加载**：程序启动时，操作系统直接将库 A 加载到它专属的 0x60000000 地址上。因为地址是固定的，程序不需要做任何运行时重定位，直接就能调用。
+
+            虽然它实现了“多进程共享同一份物理内存代码”的目的（节省了内存），但也导致了以下灾难性的维护问题，这也是它最终被历史淘汰的原因：
+            <br>1、**地址空间碎片化与冲突（所谓的“黄页”问题）**：由于每个库的地址必须固定且不能重叠，系统必须有一张全局的“地址分配表”。如果两个第三方开发者不小心把自己的库都定在了相同的地址，这两个库就无法在同一个程序里同时使用。
+            <br>2、**库更新极其痛苦**：如果库更新后体积变大，超出了原本预留的地址空间范围，就会侵占邻近其他库的地址。这会导致整张全局地址表重新分配，并且所有依赖这些库的应用程序都必须重新编译。
+
         - #### 延迟绑定PLT
         - #### 动态链接时进程堆栈初始化信息
 
