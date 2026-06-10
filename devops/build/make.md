@@ -38,6 +38,11 @@
             <br>"目标"是必需的，不可省略；<span style='color: blue'>"前置条件"和"命令"都是可选的，但是两者之中必须至少存在一个</span>。每条规则就明确两件事：构建目标的前置条件是什么，以及如何构建。举例如下：
             <br><br>`a.txt: b.txt c.txt`
             <br>`   cat b.txt c.txt > a.txt`
+            
+            > [!WARNING|label:隐式规则|style:flat] 
+            GNU Make 内置了一套默认的编译规则。当 Make 发现目标 build-id 依赖于 build-id.o，但在当前文件中找不到生成 build-id.o 的具体命令时，它会自动寻找同名的 C 源文件（build-id.c），并使用默认的 C 编译器命令来生成它：（Make 内部自动执行的隐式规则等价于）：
+            <br>`build-id.o: build-id.c`
+            <br>`   $(CC) $(CPPFLAGS) $(CFLAGS) -c build-id.c -o build-id.o`
 
         - #### target
 

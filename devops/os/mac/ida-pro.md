@@ -212,6 +212,7 @@
 
 * ## Reference
 
+    + https://hexrays.su/
     + https://ycc77.com/2025/09/04/15-IDA_PRO_9.2%E7%A0%B4%E8%A7%A3%E7%89%88/
     + https://mrx.hk/posts/0f4e4b9537a2da059095327c45b5b227/
     + https://xclient.info/s/ida.html
