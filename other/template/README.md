@@ -157,7 +157,7 @@ tocEndLevel: 4
 
             <!-- panels:start -->
             <!-- div:left-panel-78 -->
-            ```java {5,14-15,24} [data-file:site.wtfu.framework.HelloWorld.java,data-cc:340px,data-filter:20]
+            ```java {5,14-15,24} [data-file:site.wtfu.framework.HelloWorld.java,data-cc:340px,data-filter:15]
             filter-column    package site.wtfu.framework;
 
             filter-column    /**
