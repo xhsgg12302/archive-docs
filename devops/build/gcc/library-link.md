@@ -54,14 +54,12 @@ tocEndLevel: 5
         | SHT_REL | 9 | 该段包含了重定位信息，具体参考“静态地址决议和重定位”这一节 |
         | SHT_SHLIB | 10 | 保留 |
         | SHT_DNYSYM | 11 | 动态链接的符号表。具体见“动态链接”一章 |
-
         ###### **sh_flags**
         | 常量 | 值 | 含义 |
         | :--- | :--- | :--- |
         | SHF_WRITE | 1 | 表示该段在进程空间中可写 |
         | SHF_ALLOC | 2 | 表示该段在进程空间中必须要分配空间。有些包含指示或控制信息的段不须要在进程空间中被分配空间，它们一般不会有这个标志。像代码段、数据段和 .bss 段都会有这个标志位 |
         | SHF_EXECINSTR | 4 | 表示该段在进程空间中可以被执行，一般指代码段 |
-
         ###### **sh_link/sh_info**
         | sh_type | sh_link | sh_info |
         | :--- | :--- | :--- |
@@ -76,7 +74,8 @@ tocEndLevel: 5
 
         ###### **.shstrtab**
         ```c
-        readelf -p .shstrtab build/Lib.so
+        // readelf -p .shstrtab build/Lib.so
+
         String dump of section '.shstrtab':
         [     1]  .symtab
         [     9]  .strtab
@@ -104,7 +103,8 @@ tocEndLevel: 5
 
         ###### **.strtab**
         ```c
-        readelf -p .strtab build/Lib.so
+        // readelf -p .strtab build/Lib.so
+        
         String dump of section '.strtab':
         [     1]  crtstuff.c
         [    21]  __do_global_dtors_aux
@@ -130,10 +130,29 @@ tocEndLevel: 5
         [   199]  _ITM_registerTMCloneTable
         ```
 
-        ###### **.symtab**
+        ###### **.dynstr**
+        ```c
+        // readelf -p .dynstr -W build/Lib.so
+
+        String dump of section '.dynstr':
+          [     1]  __gmon_start__
+          [    10]  _ITM_deregisterTMCloneTable
+          [    2c]  _ITM_registerTMCloneTable
+          [    46]  __cxa_finalize
+          [    55]  foobar
+          [    5c]  printf
+          [    63]  puts
+          [    68]  libc.so.6
+          [    72]  GLIBC_2.1.3
+          [    7e]  GLIBC_2.0
+        ```
+
+        ###### **.symtab/.dynsym**
         <!-- panels:start -->
         `readelf --syms -W build/Lib.so`，这个也会将动态符号表读取出来
-        <!-- div:left-panel-49 -->
+        <br>`readelf --dyn-syms -W  build/Lib.so`、`readelf -sD -W  build/Lib.so`，动态符号表
+
+        <!-- div:left-panel-46 -->
         ```c
         typedef struct elf32_sym {
           // 符号名（这个成员包含了该符号名在字符串表中的下标
@@ -152,9 +171,8 @@ tocEndLevel: 5
           // 符号所在的段（见下文“符号所在段”
           Elf32_Half	st_shndx;
         } Elf32_Sym;
-        ```
-        <!-- div:right-panel-49 -->
-        ```c
+        
+         
         typedef struct elf64_sym {
           Elf64_Word st_name;		/* Symbol name, index in string tbl */
           unsigned char	st_info;	/* Type and binding attributes */
@@ -163,16 +181,9 @@ tocEndLevel: 5
           Elf64_Addr st_value;		/* Value of the symbol */
           Elf64_Xword st_size;		/* Associated symbol size */
         } Elf64_Sym;
-         
-         
-
-
-
-
-
-
-
         ```
+        <!-- div:right-panel-52 -->
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-syms-01.png ':size=99%')
         <!-- panels:end -->
         <details><summary>属性值</summary>
 
@@ -191,7 +202,6 @@ tocEndLevel: 5
         | STB_LOCAL | 0 | 局部符号，对于目标文件的外部不可见 |
         | STB_GLOBAL | 1 | 全局符号，外部可见 |
         | STB_WEAK | 2 | 弱引用，详见“弱符号与强符号” |
-
         ###### **st_shndx**
         | 宏定义名 | 值 | 说明 |
         | :--- | :--- | :--- |
@@ -203,6 +213,8 @@ tocEndLevel: 5
         </details>
 
         ###### **.dynamic**
+        <!-- panels:start -->
+        <!-- div:left-panel-46 -->
         ```c
         // readelf -d -W build/Lib.so
         // 数组结构，data 里面每个数据项如下，包含各种信息。
@@ -215,7 +227,18 @@ tocEndLevel: 5
             Elf64_Addr d_ptr;
           } d_un;
         } Elf64_Dyn;
+        typedef struct {
+          Elf32_Sword d_tag;
+          union {
+            Elf32_Sword	d_val;
+            Elf32_Addr	d_ptr;
+          } d_un;
+        } Elf32_Dyn;
         ```
+        <!-- div:right-panel-53 -->
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-dynamic-01.png ':size=99%')
+        <!-- panels:end -->
+        
         <details><summary>属性值</summary>
 
         | d_tag 类型 | d_un 的含义 |
@@ -233,29 +256,140 @@ tocEndLevel: 5
         | DT_RELENT<br>DT_RELAENT | 动态重读位表入口数量 |
         </details>
 
-        ###### **rel**
+        ###### **.rel**
+
+        `readelf -r build/Lib.so`、`objdump -r build/Lib.so`（静）、`objdump -R build/Lib.so`（动，合）
+        <!-- panels:start -->
+        <!-- div:left-panel-55 -->
         ```c
         typedef struct elf64_rel {
+          // 重定位入口的偏移
+          // 对于可重定位文件来说，这个值是该重定位入口所要修正的位置的第一个字节相对于段起始的偏移;
+          // 对于可执行文件或共享对象文件来说，这个值是该重定位入口所要修正的位置的第一个字节的虚拟地址。
+          // 我们这里只关心可重定位文件的情况,可执行文件或共享对象文件的情况,将在下一章“动态链接”再作分析
           Elf64_Addr r_offset;	/* Location at which to apply the action */
+          // 重定位入口的类型和符号。
+          // 这个成员的低8位表示重定位入口的类型，高24位表示重定位入口的符号在符号表中的下标。
+          // 因为各种处理器的指令格式不一样，所以重定位所修正的指令地址格式也不一样。每种处理器都有自己一套重定位入口的类型。
+          // 对于可执行文件和共享目标文件来说，它们的重定位入口是动态链接类型的,请参考“动态链接”一章
           Elf64_Xword r_info;	/* index and type of relocation */
         } Elf64_Rel;
+
         typedef struct elf64_rela {
           Elf64_Addr r_offset;	/* Location at which to apply the action */
           Elf64_Xword r_info;	/* index and type of relocation */
           Elf64_Sxword r_addend;	/* Constant addend used to compute value */
         } Elf64_Rela;
         ```
+        <!-- div:right-panel-45 -->
+        <!-- tabs:start -->
+        ###### **static**
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-rel-static-01.png ':size=99%')
+        ###### **dynamic**
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-rel-01.png ':size=99%')
+        <!-- tabs:end -->
+        <!-- panels:end -->
 
-        ###### **.got**
+        ###### **.got/.got.plt**
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        `readelf -x .got -x .got.plt build/Lib.so`、`objdump -s -j.got -j.got.plt build/Lib.so`
+        <br>ELF将 GOT 拆分成了两个表叫做“got”和“.got.plt”。其中“.got”用来保存全局变量引用的地址，“got.plt”用来保存函数引用的地址,也就是说,所有对于外部函数的引用全部被分离出来放到了“.got.plt”中。另外“.got.plt”还有一个特殊的地方是它的前三项是有特殊意义的,分别含义如下:第一项保存的是“.dynamic”段的地址，第二项保存的是本模块的ID，三项保存的是_dl_runtime_resolve()的地址。
+        <br><br>如果当前库中调用了自己定义的函数，也一并放入 .got.plt 中(涉及到符号介入 Symbol Interposition)。
+        <br>也可以传递 -Wl,-Bsymbolic，它让动态链接器优先绑定库内部的同名符号，不再允许主程序挟持。它可能仍会在 .got 中占个位置，但动态链接器在初始化时会把库自身的内部 st_value 填进去。
+        <br>如果函数是私有的，则只会存在在 .symtab 中，调用的方式：直接将其硬编码为相对近跳转指令（如汇编中的 call 相对偏移量）。这种调用不需要动态链接器的任何介入，速度极快。
+        <!-- div:left-panel-45 -->
         ```c
-        typedef struct {
-          Elf64_Sxword d_tag;		/* entry tag value */
-          union {
-            Elf64_Xword d_val;
-            Elf64_Addr d_ptr;
-          } d_un;
-        } Elf64_Dyn;
+        .got 段里面包含进程地址空间中的虚拟地址（0x00003fe4），以及各个变量的地址数组。
+
+        .got.plt 也是一样，它的虚拟地址为（0x00003ff4），
+        特殊前三项为         .dynamic 虚拟地址（043f0000）
+        以及装载时需要处理的  module_id
+                           _dl_runtime_resolve() 的地址。
+                           36100000 ==> .ptl 中 <printf@ptl> 1036 那个地址。跳到查找函数。
+                           46100000
         ```
+        <!-- div:right-panel-55 -->
+        ![](/.images/devops/build/gcc/library-link/ll-elf-got-01.png ':size=99%')
+        <!-- panels:end -->
+        
+        ###### **.plt/.plt.got**
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        `objdump -d -j .plt -j .plt.got build/Lib.so`
+        <br>这些代码的主要作用就是辅助 GOT 完成地址填充，也就是完善 .got.plt 。没其他。
+        <br><br>其中\<printf@plt-0x10\> 其实就是 PLT0（公共入口），对应 _dl_runtime_resolve()，printf@plt 地址往前 16 个字节的意思。
+        在进入这个函数之前会将 .got.plt 的地址保存到 ebx 中。
+        所以此处的 0x4(%ebx) 对应 module_id，*0x8(%ebx) 对应 _dl_runtime_resolve。
+        其他下面的一一对应就行，比如\<puts@plt\> 中的 *0x10(%ebx) 表示 .got.plt 中的第四项，首次为下一条指令（0x1046），解析之后就是真实地址。
+        至于其他代码段中的 push n，在原文中是这么描述的：【这个数字是 bar 这个符号引用在重定位表“rel.plt” 中的下标。】下标有误，应为偏移量最佳。
+        <!-- div:left-panel-45 -->
+        ```c
+        ```
+        <!-- div:right-panel-55 -->
+        ![](/.images/devops/build/gcc/library-link/ll-elf-plt-01.png ':size=99%')
+        <!-- panels:end -->
+
+        ###### **.gnu.\***
+        <!-- panels:start -->
+        <!-- div:title-panel -->
+        `readelf -V -W build/Lib.so`
+
+        这三个段（Section）都是 Linux ELF 文件中为了优化动态链接（Dynamic Linking）性能和进行版本控制而引入的扩展数据结构。它们是由 GNU（主要是 Red Hat 和 GLIBC）独立设计的，极大地提升了现代 Linux 程序的加载速度。
+
+        1. .gnu.hash：一个经过高度硬件优化的布隆过滤器（Bloom Filter）+ 哈希桶（Hash Buckets）数组。可以[参考](https://www.cnblogs.com/orange-snow/p/14824095.html)
+        2. .gnu.version：一个紧凑的16位无符号整数（uint16_t）数组。用来记录动态符号表（.dynsym）中每一个符号的具体版本号，根据下标一一对应。
+        3. .gnu.version_r：一个由链表结构体（Version Requirement Tables）组成的索引表。
+
+        <!-- div:left-panel-45 -->
+        ```rust
+        //.gnu.version
+        // 和 .dynsym 动态链接符号数组一一对应。比如当前都是 8 个。
+        // value {0: local, 1: global, other -> .gnu.version_r}
+        u16 version[];        
+
+        //.gnu.version_r
+        struct Elf32_Verneed {
+            u16 vn_version;
+            u16 vn_cnt;         // 内部包含多少个 Vernaux 结构
+            u32 vn_file;        // 库文件名的 .dynstr 偏移
+            u32 vn_next;        // 到下一个 Verneed 结构的字节偏移
+            u32 vn_aux;         // 到第一个 Vernaux 结构的字节偏移
+
+            Elf32_Vernaux aux_entries[vn_cnt];
+        };
+        struct Elf32_Vernaux {
+            u32 vna_hash;
+            u16 vna_flags;
+            u16 vna_other;      // 对应的版本索引号
+            u32 vna_name;
+            u32 vna_next;       // 到下一个辅助结构的字节偏移
+        };
+        ```
+        <!-- div:right-panel-55 -->
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-gnu-01.png ':size=99%')
+        <!-- panels:end -->
+
+        ###### **.note.\***
+        <!-- panels:start -->
+        <!-- div:left-panel-72 -->
+        ```rust
+        // readelf -n build/Lib.so
+
+        // .note.gnu.build-id
+        // ELF Note Header 结构定义 (对应 ElfW(Nhdr))
+        struct Elf32_Nhdr {
+            u32 n_namesz;         // Name 字段的大小
+            u32 n_descsz;         // Description (即 Build ID) 的大小
+            u32 n_type;           // Note 的类型 (对于 GNU Build ID，该值为 3)
+            char fixed_str[];     // GNU\0;
+            u8 build_id[n_descsz];// build_id [20]
+        };
+        ```
+        <!-- div:right-panel-28 -->
+        <br>![](/.images/devops/build/gcc/library-link/ll-elf-note-01.png ':size=99%')
+        <!-- panels:end -->
+
         <!-- tabs:end -->
 
     + ### 使用工具
@@ -263,15 +397,17 @@ tocEndLevel: 5
         | - | [readelf](#readelf) | [objdump](#objdump) | [nm](#nm) |
         | -- | -- | -- | -- |
         | 查看段头 section-header   | `readelf -S SimpleSection.o` <br> ![](/.images/devops/build/gcc/library-link/ll-section-readelf-01.png ':size=10%') | `objdump -h SimpleSection.o` <br> ![](/.images/devops/build/gcc/library-link/ll-section-objdump-01.png ':size=10%')  | -- |
-        | 查看代码 .text.* | -- | `objdump -d -S -w build/a.o` | -- |
-        | 查看重定位 .rel* | `readelf -r -W build/Lib.so` | `objdump -r -w build/a.o` | -- |
-        | 查看动态符号 .dynsym       | `readelf --dyn-syms -W  /bin/cat` <br> `readelf -sD -W  /bin/cat` | `objdump -t -w build/ab` | -- |
-        | 查看版本 .gnu.*             | `readelf -V -W /bin/cat` | -- | -- |
-        | 查看动态字符表 .dynstr     | `readelf -p .dynstr  /bin/cat` | -- | -- |
+        | 查看代码 .text.* | -- | `objdump -d -S -w build/Lib.so` | -- |
+        | 查看重定位 .rel* | `readelf -r -W build/Lib.so` | `objdump -r -w build/Lib.so` | -- |
+        | 查看动态符号 .dynsym       | `readelf --dyn-syms -W  build/Lib.so` <br> `readelf -sD -W  build/Lib.so` | `objdump -t -w build/Lib.so` | -- |
+        | 查看版本 .gnu.*             | `readelf -V -W build/Lib.so` | -- | -- |
+        | 查看动态字符表 .dynstr     | `readelf -p .dynstr  build/Lib.so` | -- | -- |
         | 查看跳转 .plt | -- | `objdump -d -j .plt -M i386,att build/Program1` | -- |
         | 查看符号 | -- | -- | -- |
 
         另外还有，file、size等
+
+        汇编字节互转: `rasm2 -a x86 -b 32 "xor eax,eax;"`、`rasm2 -S att -a x86 -b 32 -d "31c0"`、`printf "\x31\xc0" \| ndisasm -b 32 -`
 
         <details><summary>help</summary>
 
@@ -482,6 +618,45 @@ tocEndLevel: 5
           header      Display the file header
           sections    Display the section headers
         Report bugs to <https://sourceware.org/bugzilla/>.
+        ```
+
+        #### **rasm2**
+        ```sh
+        # brew install radare2
+        ➜  Desktop rasm2 --help
+        Usage: rasm2 [-ACdDehHLBvw] [-a arch] [-b bits] [-s addr] [-S syntax]
+           [-f file] [-o file] [-F fil:ter] [-i skip] [-l len] 'code'|hex|0101b|-
+         -a [arch]    set architecture to assemble/disassemble (see -L)
+         -A           show Analysis information from given hexpairs
+         -b [bits]    set cpu register size (8, 16, 32, 64) (RASM2_BITS)
+         -B           binary input/output (-l is mandatory for binary input)
+         -c [cpu]     select specific CPU (depends on arch)
+         -C           output in C format
+         -d, -D       disassemble from hexpair bytes (-D show hexpairs)
+         -e           use big endian instead of little endian
+         -E           display ESIL expression (same input as in -d)
+         -f [file]    read data from file
+         -F [parser]  specify which parse filter use (see -LL)
+         -h, -hh      show this help, -hh for long
+         -H ([var])   display variable
+         -i [len]     ignore/skip N bytes of the input buffer
+         -j           output in json format
+         -k [kernel]  select operating system (linux, windows, darwin, android, ios, ..)
+         -l [len]     input/Output length
+         -L ([name])  list RArch plugins: (a=asm, d=disasm, e=esil, p=parse)
+         -LL ([name]) list RAsm parse plugins
+         -N           same as r2 -N (or R2_NOPLUGINS) (not load any plugin)
+         -o [file]    output file name (rasm2 -Bf a.asm -o a)
+         -p           run SPP over input for assembly
+         -q           quiet mode
+         -r           output in radare commands
+         -s,-@ [addr] define initial start/seek address (default 0)
+         -S [syntax]  select syntax (intel, att)
+         -v           show version information
+         -x           use hex dwords instead of hex pairs when assembling.
+         -w           what's this instruction for? describe opcode
+         If '-l' value is greater than output length, output is padded with nops
+         If the last argument is '-' reads from stdin
         ```
 
         #### **nm**
@@ -1097,6 +1272,60 @@ tocEndLevel: 5
             <br>2、**库更新极其痛苦**：如果库更新后体积变大，超出了原本预留的地址空间范围，就会侵占邻近其他库的地址。这会导致整张全局地址表重新分配，并且所有依赖这些库的应用程序都必须重新编译。
 
         - #### 延迟绑定PLT
+
+            * ##### 解释
+
+                > [?] 在大型程序中，可能会引用成百上千个外部动态库函数（如 printf、malloc、socket 等）。如果不使用延迟绑定（立即绑定）：程序启动时，动态链接器必须在初始化阶段把这几千个外部函数的地址全部找到并填好。这会导致程序启动出现明显的卡顿/延迟。更浪费的是，许多复杂的错误处理函数或分支函数，在程序运行期间可能一次都不会被调用。使用延迟绑定：程序启动时直接“装出已经填好的样子”，把地址解析的开销平均分摊到程序运行的每一个阶段，从而实现秒开。
+
+                对书中概念的确认：【ELF 把上面例子中的最后两条指令放到 PLT 中的第一项。并且规定每一项的长度是 16 个字节，刚好用来存放 3 条指令】
+                <br>第一个就是 提取公共代码到 PLT0。
+                <br>第二个不管是 PLT0，还是 bar@glt，也好，只让使用 16 个字节，如果少于 16，使用其他机器码填充对其。
+                <br>比如 PLT0: `ff b3 04 00 00 00 ff a3 08 00 00 00`（机器码）,`00 00 00 00`（填充）。
+                <br>其他刚好 16 字节，共 3 条指令。
+                
+            * ##### 图解
+
+                ```sh
+                [你的代码] 
+                    │
+                    ▼
+                1. call puts@plt  ───> 进入 .plt 代码段 
+                                            │
+                                            ▼
+                                        2. jmp *0x10(%ebx)  ───(读取 .got.plt 中对应的指针)─────┐
+                                            ▲                                                 │
+                                            │  由于是【第一次】，.got.plt 里面没填真实地址，       │
+                                            │  而是故意填了紧随其后的 push 指令地址 (0x1046)      │
+                                            │                                                 │
+                                            └─────────────────────────────────────────────────┘
+                                            │
+                                            ▼
+                                        3. push $0x8        ───(压入该函数在重定位表 .rel.plt 中的偏移量)
+                                            │
+                                            ▼
+                                        4. jmp 1020         ───> 跳转到 PLT0（公共入口）
+                                                                    │
+                                                                    ▼
+                                                                5. push 0x4(%ebx)  (压入当前库的标识 module_id)
+                                                                6. jmp *0x8(%ebx)   (跳转到动态链接器处理函数)
+                                                                    │
+                                                                    ▼
+                                                            [ _dl_runtime_resolve ] 
+                                                            1. 拿着 0x8 查到函数名叫 "puts"
+                                                            2. 在内存中搜寻到 puts 的真正绝对地址
+                                                            3. 核心：把真正地址覆写进 .got.plt+0x10 处
+                                                            4. 直接顺手执行真正的 puts 函数
+
+                ```
+
+            * ##### 安全隐患
+
+                漏洞原理：因为 .got.plt 必须在运行时被动态链接器修改，所以它在内存中必须具备可写（Writable）权限。这成了黑客的圣地——黑客可以通过缓冲区溢出等漏洞，强行修改 .got.plt 里的指针，将其指向恶意代码（这就是大名鼎鼎的 GOT Hook 或 Ret2PLT 攻击）。
+
+                现代防护技术：Full RELRO由于现代计算机性能严重过剩，启动时那几毫秒的动态解析开销已经微不足道。为了安全，现代 Linux（如 Ubuntu 20.04+）在编译安全级别高的程序时，默认会开启 Full RELRO (Relocation Read-Only)：
+                <br>怎么做：程序启动时，动态链接器强行一次性解析完所有外部函数（废除延迟绑定）。
+                <br>结果：解析完成后，立刻将 .got 和 .got.plt 的内存权限修改为 严格只读（Read-Only），彻底断绝了黑客篡改指针的念头。
+            
         - #### 动态链接时进程堆栈初始化信息
 
             如[l-dynamic/Makefile](https://github.com/12302-bak/project-vscode-remote/blob/c41ecd9bc226abb6522679aeb3ac246545183c5e/book/l-dynamic/Makefile) 一样构建程序 Program1，然后使用 gdb 进行辅佐验证。或者手动扫描栈内存获取相关数据。
