@@ -96,3 +96,34 @@
         For bug reporting instructions, please see:
         <file:///usr/share/doc/gcc-13/README.Bugs>.
         ```
+
+    + ### 内嵌汇编
+
+        ```c
+        // gcc -g -m32 inline-assembly.c -o inline-assembly && ./inline-assembly
+        
+        #include <stdio.h>
+
+        int main() {
+            int src = 10;
+            int dst = 20;
+
+            // 将 src 和 dst 相加，结果存入 dst
+            // __asm__：声明接下来是汇编代码。
+            // __volatile__：可选，告诉编译器不要优化、不要移动这段汇编代码。
+            // 为了让 C 语言变量与汇编寄存器正确映射，GCC 使用了限制符（Constraints）：
+            //      "r"：使用任意通用的寄存器。
+            //      "m"：直接使用内存地址，不占用寄存器。
+            //      "i"：使用立即数（常数）。
+            //      "="：输出操作数专用的修饰符，表示修改该变量的值。
+            //      "+"：表示该变量既是输入又是输出。
+            __asm__ __volatile__(
+                "add %1, %0"  // %0 代表第0个操作数(dst)，%1 代表第1个操作数(src)
+                : "=r" (dst)   // 输出：= 表示只写，r 表示让编译器分配任意通用寄存器
+                : "r" (src), "0" (dst) // 输入：0 表示该操作数必须与第0个操作数使用同一个寄存器
+            );
+
+            printf("Result: %d\n", dst); // 输出 30
+            return 0;
+        }
+        ```

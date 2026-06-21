@@ -188,3 +188,13 @@
 
         > [?] docs of knownledges
         <br><br>采用`easingthemes/ssh-deploy@v2.2.11`通过私匙`github_rsa_2048`部署方式。<span style='color:blue'>（注意开放云服务商 IP 白名单）</span>
+
+    + ### 禁用 ubuntu needrestart
+
+        这个提示是 Ubuntu 22.04 引入的新特性，由系统默认安装的 needrestart 工具触发。参考[how-to-stop-ubuntu-pop-up-daemons...](https://stackoverflow.com/questions/73397110/how-to-stop-ubuntu-pop-up-daemons-using-outdated-libraries-when-using-apt-to-i)
+        <br>当你使用 apt 安装或升级软件包时，如果更新了某些底层的动态链接库（例如 glibc、systemd 等），正在运行的后台守护进程（Daemons）可能仍然在内存中加载着旧版本的库文件。为了安全起见，needrestart 会扫描这些进程，并弹出一个交互式的对话框，询问你哪些服务需要重启以加载新版库文件。
+        
+        如果你不想在每次 apt 操作时都被这个弹窗打断（特别是在自动化运维或脚本执行时），可以通过修改 needrestart 的配置文件`/etc/needrestart/needrestart.conf`来改变它的行为。
+        
+        修改配置文件（永久生效）找到`#$nrconf{restart} = 'i';`（默认），`$nrconf{restart} = 'a'`（自动重启，不再弹窗），`$nrconf{restart} = 'l';`（仅列出，不弹窗也不重启）。
+        <br>临时：追加`NEEDRESTART_MODE=a command`

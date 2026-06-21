@@ -321,7 +321,7 @@ tocEndLevel: 5
         <br><br>其中\<printf@plt-0x10\> 其实就是 PLT0（公共入口），对应 _dl_runtime_resolve()，printf@plt 地址往前 16 个字节的意思。
         在进入这个函数之前会将 .got.plt 的地址保存到 ebx 中。
         所以此处的 0x4(%ebx) 对应 module_id，*0x8(%ebx) 对应 _dl_runtime_resolve。
-        其他下面的一一对应就行，比如\<puts@plt\> 中的 *0x10(%ebx) 表示 .got.plt 中的第四项，首次为下一条指令（0x1046），解析之后就是真实地址。
+        其他下面的一一对应就行，比如\<puts@plt\> 中的 *0x10(%ebx) 表示 .got.plt 中的第五项，首次为下一条指令（0x1046），解析之后就是真实地址。
         至于其他代码段中的 push n，在原文中是这么描述的：【这个数字是 bar 这个符号引用在重定位表“rel.plt” 中的下标。】下标有误，应为偏移量最佳。
         <!-- div:left-panel-45 -->
         ```c
