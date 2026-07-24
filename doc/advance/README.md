@@ -447,23 +447,24 @@ weight: 20
             import net.sf.cglib.proxy.MethodProxy;
 
             public class StudentNoIntfs$$EnhancerByCGLIB$$81f8e23d extends StudentNoIntfs implements Factory {
-            private boolean CGLIB$BOUND;
-            public static Object CGLIB$FACTORY_DATA;
-            private static final ThreadLocal CGLIB$THREAD_CALLBACKS;
-            private static final Callback[] CGLIB$STATIC_CALLBACKS;
-            private MethodInterceptor CGLIB$CALLBACK_0;
-            private static Object CGLIB$CALLBACK_FILTER;
-            private static final Method CGLIB$sayHello$0$Method;
-            private static final MethodProxy CGLIB$sayHello$0$Proxy;
-            private static final Object[] CGLIB$emptyArgs;
-            private static final Method CGLIB$equals$1$Method;
-            private static final MethodProxy CGLIB$equals$1$Proxy;
-            private static final Method CGLIB$toString$2$Method;
-            private static final MethodProxy CGLIB$toString$2$Proxy;
-            private static final Method CGLIB$hashCode$3$Method;
-            private static final MethodProxy CGLIB$hashCode$3$Proxy;
-            private static final Method CGLIB$clone$4$Method;
-            private static final MethodProxy CGLIB$clone$4$Proxy;
+                
+                private boolean CGLIB$BOUND;
+                public static Object CGLIB$FACTORY_DATA;
+                private static final ThreadLocal CGLIB$THREAD_CALLBACKS;
+                private static final Callback[] CGLIB$STATIC_CALLBACKS;
+                private MethodInterceptor CGLIB$CALLBACK_0;
+                private static Object CGLIB$CALLBACK_FILTER;
+                private static final Method CGLIB$sayHello$0$Method;
+                private static final MethodProxy CGLIB$sayHello$0$Proxy;
+                private static final Object[] CGLIB$emptyArgs;
+                private static final Method CGLIB$equals$1$Method;
+                private static final MethodProxy CGLIB$equals$1$Proxy;
+                private static final Method CGLIB$toString$2$Method;
+                private static final MethodProxy CGLIB$toString$2$Proxy;
+                private static final Method CGLIB$hashCode$3$Method;
+                private static final MethodProxy CGLIB$hashCode$3$Proxy;
+                private static final Method CGLIB$clone$4$Method;
+                private static final MethodProxy CGLIB$clone$4$Proxy;
 
                 static void CGLIB$STATICHOOK1() {
                     CGLIB$THREAD_CALLBACKS = new ThreadLocal();

@@ -1422,7 +1422,8 @@
             }
 
             // <mark class="under red">16 03 03 00 28 84 ef 8c ec 32 b4 9f d9</mark> 14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b <mark class="under blue">66 36 3e 01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>
-            // <mark class='under green'>14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b</mark>    EOF( 消息类型 0x14=20[Finished 结构]，长度 12 个字节的 verify_data)
+            // 
+            //                                        <mark class='under green'>14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b</mark>    EOF( 消息类型 0x14=20[Finished 结构]，长度 12 个字节的 verify_data)
             ```
 
         - #### HP-Finished-Client 加密

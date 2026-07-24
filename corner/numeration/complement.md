@@ -51,6 +51,16 @@
         > [!CAUTION] 之所以方便比较和排序是因为：可以不用考虑符号位，直接全部按位比较了。比如：
         <br>$ {\color{red}(2, [2_移 = 1000 0010])} > {\color{#FF4500}(1,[1_移 = 1000 0001])} > {\color{#FF6347}(-2,[-2_移 = 0111 1110])} > {\color{#FF7F50}(-127,[-127_移 = 0000 0001])}$
 
+    + ### 任意宽度负数计算方式
+
+        比如计算 4bit 负数的值：
+        <br><span style='padding-left:1.2em'>0b1010(-6) ==> `printf "%d\n" "0b1010 - 1 << 4"`
+        <br><span style='padding-left:1.2em'>-6(0b1010) ==> `echo 'ibase=10;obase=2; -6 + 2 ^ 4' | bc`
+        
+        比如计算 8bit 负数的值：
+        <br><span style='padding-left:1.2em'>0xfe(-2)   ==> `printf "%d\n" "0xfe - 1 << 8"`
+        <br><span style='padding-left:1.2em'>-2(0xfe)   ==> `echo 'ibase=10;obase=16; -2 + 2 ^ 8' | bc`
+
 * ## Reference
     + [youtrack | Display all numbers in hex](https://youtrack.jetbrains.com/issue/IDEA-79114/Display-all-numbers-in-hex#focus=Comments-27-905868.0-0)
     + https://www.bilibili.com/video/BV1vx4y1z7n9

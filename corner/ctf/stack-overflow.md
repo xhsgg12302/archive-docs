@@ -876,6 +876,33 @@
         ![](/.images/corner/ctf/stack-overflow/05-return-to-libc_01.gif ':size=99%')
         </details>
 
+    + ### 其他
+
+        `compile`
+        <br>`gdb -x script.gdb build/vuln`
+
+        <!-- panels:start -->
+        <!-- div:left-panel-50 -->
+        ```c
+        ```
+        <!-- div:right-panel-50 -->
+
+        ```masm {46-50} [data-filter:35]
+        ```
+        <!-- panels:end -->
+
+        ```sh
+        // 刚进入 main 函数时的初始化状态
+        --------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------
+         4 byte +                                                                                                                       +  Addr + argc  + argv  |
+        --------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------
+                                                                                                                               esp
+        ```
+        <details><summary>script.gdb</summary>
+
+        ```sh [data-file:script.gdb]
+        ```
+        </details>
 
 * ## Reference
 

@@ -168,7 +168,7 @@
             或者开启一个读写事务和一致性读，就可以这样写：
             <br>`START TRANSACTION READ WRITE, WITH CONSISTENT SNAPSHOT`
             
-        不过这里需要大家注意的一点是， READ ONLY 和 READ WRITE 是用来设置所谓的事务 **访问模式** 的，就是以只读还是读写的方式来访问数据库中的数据，一个事务的访问模式不能同时既设置为 **只读** 的也设置为 读写 的，所以我们不能同时把 READ ONLY 和 READ WRITE 放到 START TRANSACTION 语句后边。另外，如果我们不显式指定事务的访问模式，那么该事务的访问模式就是 **读写** 模式。
+        不过这里需要大家注意的一点是， READ ONLY 和 READ WRITE 是用来设置所谓的事务 **访问模式** 的，就是以只读还是读写的方式来访问数据库中的数据，一个事务的访问模式不能同时既设置为 **只读** 的也设置为 **读写** 的，所以我们不能同时把 READ ONLY 和 READ WRITE 放到 START TRANSACTION 语句后边。另外，如果我们不显式指定事务的访问模式，那么该事务的访问模式就是 **读写** 模式。
 
     + ### 提交事务
 
@@ -290,7 +290,7 @@
 
     + ### 隐式提交
 
-        当我们使用 START TRANSACTION 或者 BEGIN 语句开启了一个事务，或者把系统变量 autocommit 的值设置为 OFF 时，事务就不会进行 自动提交 ，但是如果我们输入了某些语句之后就会 悄悄的 提交掉，就像我们输入了 COMMIT 语句了一样，这种因为某些特殊的语句而导致事务提交的情况称为 隐式提交 ，这些会导致事务隐式提交的语句包括：
+        当我们使用 START TRANSACTION 或者 BEGIN 语句开启了一个事务，或者把系统变量 autocommit 的值设置为 OFF 时，事务就不会进行 自动提交 ，但是如果我们输入了某些语句之后就会 悄悄的 提交掉，就像我们输入了 COMMIT 语句了一样，这种因为某些特殊的语句而导致事务提交的情况称为 **隐式提交** ，这些会导致事务隐式提交的语句包括：
 
         - 定义或修改数据库对象的数据定义语言（Data definition language，缩写为： DDL ）。
 
@@ -350,7 +350,7 @@
 
         下边还是以狗哥向猫爷转账10元的例子展示一下 保存点 的用法，在执行完扣除狗哥账户的钱 10 元的语句之后打一个 保存点 ：
 
-        ```sql
+        ```sql {1,9,11,14,16,24,27,29}
         mysql> SELECT * FROM account;
         +----+--------+---------+
         | id | name   | balance |
@@ -364,7 +364,7 @@
         mysql> UPDATE account SET balance = balance - 10 WHERE id = 1;
         Query OK, 1 row affected (0.01 sec)
         Rows matched: 1 Changed: 1 Warnings: 0
-        mysql> SAVEPOINT s1; # 一个保存点
+        mysql> <mark class='clever'>SAVEPOINT s1</mark>; # 一个保存点
         Query OK, 0 rows affected (0.00 sec)
         mysql> SELECT * FROM account;
         +----+--------+---------+
@@ -377,7 +377,7 @@
         mysql> UPDATE account SET balance = balance + 1 WHERE id = 2; # 更新错了
         Query OK, 1 row affected (0.00 sec)
         Rows matched: 1 Changed: 1 Warnings: 0
-        mysql> ROLLBACK TO s1; # 回滚到保存点s1处
+        mysql> <mark class='clever'>ROLLBACK TO s1</mark>; # 回滚到保存点s1处
         Query OK, 0 rows affected (0.00 sec)
         mysql> SELECT * FROM account;
         +----+--------+---------+

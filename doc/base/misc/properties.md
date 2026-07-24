@@ -18,6 +18,11 @@
         <br>第二个字符`'f'`，进来后执行`(value << 4) + 10 + aChar - 'a';` 此时将上一步得到的value 左移四位，得到`0100 0000` 然后与实际值(`'f'`表示的整型值 **15** `1111`)想加，即得到`0100 1111`。
         <br>依此类推：最终得到的value = `0100 1111 0110 0000` = `20320`。
 
+        <!-- tabs:start -->
+        ##### **代码**
         ![](/.images/doc/base/misc/properties/properties-unicode-01.png ':size=100%')
+        ##### **Js转换**
+        ![](/.images/doc/base/misc/properties/properties-unicode-js-01.png ':size=100%')
+        <!-- tabs:end -->
 
 * ## Reference
