@@ -89,5 +89,19 @@
     ![](/.images/doc/framework/mysql/readme-05.png ':size=100%')
     <!-- panels:end -->
 
+* ## 如何正常关闭服务器
+
+    ```shell
+    # 1. 通过内部命令（(MySQL 5.7.9+)）
+    mysql> SHUTDOWN;
+
+    # 2. 通过工具
+    mysqladmin -u root -p shutdown
+
+    # 3. 通过服务
+    net stop mysql
+    sudo systemctl stop mysqld、sudo service mysqld stop
+    ```
+
 * ## Reference
 
