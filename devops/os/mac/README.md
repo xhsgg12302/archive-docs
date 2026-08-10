@@ -1,3 +1,7 @@
+---
+weight: 300
+---
+
 * ## Intro(Mac OSX)
 
     ### zsh终端输出多一个'%'

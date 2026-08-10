@@ -1,3 +1,7 @@
+---
+weight: 400
+---
+
 * ## Intro(windows)
 
     + ### windows禁止更新
