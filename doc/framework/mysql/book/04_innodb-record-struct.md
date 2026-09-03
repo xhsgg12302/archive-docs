@@ -117,6 +117,82 @@ tocEndLevel: 5
                 ![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07.png ':size=80%')
 
                 > [!] 并不是所有记录都有这个 变长字段长度列表 部分，比方说表中所有的列都不是变长的数据类型的话，这一部分就不需要有。
+
+                如果存在主键，则对应的结构如下：
+                ```sql
+                CREATE TABLE record_format_demo (c1 int <mark class='box red'>primary key</mark>, c2 VARCHAR(10) NOT NULL, c3 CHAR(10), c4 VARCHAR(10)) CHARSET=ascii ROW_FORMAT=COMPACT;
+                INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES(13, 'bbb', 'cc', 'd'),(20, 'fff', NULL, NULL);
+                ```
+                <br>![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07-03.png ':size=100%')
+
+                目前只有两行数据，完全可以写入 root 页面 中，如果持续插入记录的话，将会进行[页分裂](./06_B+tree_index.md#:~:text=页分裂)，将 root 中的数据转移到叶子页中，同时 root 的 page_level 加1，root中插入目录项节点， 如下图：
+                <br>由上图可知，当前表结构一行数据大概 40 个字节，充满页面预计需要 `16 * 1024 / 40 ` ≈ 400 条数据。
+                <details><summary>页分裂数据插入</summary>
+
+                ```python [data-file:root_page.py]
+                import pymysql
+
+                # 1. 数据库连接配置（请根据实际情况修改）
+                config = {
+                    'host': '127.0.0.1',
+                    'user': 'root',
+                    'port': 3339,
+                    # 'password': 'your_password',
+                    'database': 'demos',
+                    'charset': 'utf8mb4'
+                }
+
+                # 2. 模拟生成 400 条测试数据
+                # 你的表结构 c1 是 int primary key（主键不能重复）
+                data_to_insert = []
+                for i in range(21, 421):
+                    c1 = i                              # 1 到 400 的唯一主键
+                    c2 = f"val_{i}"                     # NOT NULL 的字符串
+                    c3 = f"char_{i}" if i % 2 == 0 else None  # 一半是字符串，一半是 NULL
+                    c4 = f"var_{i}" if i % 3 == 0 else None   # 模拟部分为 NULL 的情况
+
+                    data_to_insert.append((c1, c2, c3, c4))
+
+                # 3. 执行数据库插入
+                connection = pymysql.connect(**config)
+                try:
+                    with connection.cursor() as cursor:
+                        # 如果表不存在，可以先创建（注意：已根据你提及的结构将 c1 改为了 int primary key）
+                        create_table_sql = """
+                        CREATE TABLE IF NOT EXISTS record_format_demo (
+                            c1 INT PRIMARY KEY,
+                            c2 VARCHAR(10) NOT NULL,
+                            c3 CHAR(10),
+                            c4 VARCHAR(10)
+                        ) CHARSET=ascii ROW_FORMAT=COMPACT;
+                        """
+                        # cursor.execute(create_table_sql)
+
+                        # 编写参数化插入语句
+                        insert_sql = """
+                        INSERT INTO record_format_demo (c1, c2, c3, c4)
+                        VALUES (%s, %s, %s, %s)
+                        """
+
+                        print("正在批量插入 400 条数据...")
+                        # 使用 executemany 进行批量插入，效率极高
+                        cursor.executemany(insert_sql, data_to_insert)
+
+                    # ！！！必须提交事务
+                    connection.commit()
+                    print(f"成功插入 {len(data_to_insert)} 条数据！")
+
+                except Exception as e:
+                    # 发生异常时回滚
+                    connection.rollback()
+                    print(f"数据插入失败，已回滚。错误信息: {e}")
+
+                finally:
+                    connection.close()
+                ```
+                </details>
+
+                <br>![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07-04.png ':size=100%')
                 
             + ##### 2.1.2 NULL值列表
 

@@ -94,6 +94,8 @@
             ![](/.images/doc/framework/mysql/book/06_B+tree_index/bti-09.png ':size=80% :align=center')
 
         > [!CAUTION]至此，针对数据页做的简易目录就搞定了。不过忘了说了，<span style='color: blue'>这个**目录**有一个别名，称为`索引`</span>。
+        <br><br>真实目录项长这样：
+        <br>![](/.images/doc/framework/mysql/book/04_innodb_record_struct/irs-07-04.png ':size=100%')
 
     + ### InnoDB中的索引方案
 
