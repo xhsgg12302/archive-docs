@@ -182,6 +182,10 @@
             - [x] https://jrebel.wtfu.site/3c9fc43d-0e48-4370-9b9c-6c2520685ade
             - [ ] http://42.193.18.168:8088/8c9dca0b-19e6-4a7a-894e-0299d0fd9f5a (971122716@qq.com) (https://www.jpy.wang/page/jrebel.html) (兼容 2023.4.0 +)
 
+        + #### 碰见问题
+
+            > [!WARNING|label:issues|style:flat] 1、`Failed to update seat. Cannot read the array length because "sigBytes" is null`，解决办法参考[issues-36](https://github.com/ilanyu/ReverseProxy/issues/36#issuecomment-2797182859)
+
 * ## References
 
     + https://stackoverflow.com/questions/28389006/how-to-decompile-to-java-files-intellij-idea
