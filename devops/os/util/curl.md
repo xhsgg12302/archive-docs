@@ -1,5 +1,6 @@
 ---
 weight: 21
+tocEndLevel: 5
 ---
 
 * ## Intro(CURL| client url)
@@ -377,6 +378,57 @@ weight: 21
             * Connection #0 to host imap.126.com left intact
             ```
             <!-- tabs:end -->
+
+        - #### 5.curl 设置替换 SNI(Server Name Indication，服务器名称指示)
+
+            > [?] 由于对于一个 https，有修改替换 SNI 的需求，所以看看 curl 可不可以支持，
+            另外现代版本的 curl 默认会自动将 URL 中的域名提取出来，作为 TLS 握手 Client Hello 中的 SNI 发送给服务器
+            在网上找到如下两种方式，开始测试。
+            <br><br>`--connect-to <HOST1:PORT1:HOST2:PORT2>`
+            <br>大概意思就是使用 HOST1 的外表（如SNI、证书验证）信息，去连接真实的 HOST2；
+            <br><br>`--resolve <[+]host:port:addr[,addr]...>`
+            <br>使用绕过 DNS 的方式也可以实现类似效果。将连接的域名使用指定的真实 IP 地址去连接，省去 DNS 解析。
+            <br>这样的话，使用了 host 的外表（如SNI、证书验证）信息，去连接真实的 IP，配合 -H 'Host: xxx'，就可以修改 SNI 了。
+            <br><br>他们两个选项在此处的区别就是，一个可以是域名（也可以是 IP），一个只能是 IP。
+
+            
+            + ##### 使用现成服务器
+
+                用下面的命令会发现一下小问题，第一个域名被某些东西 RST 阻断了，如果不确定的话，可以 wireshark 抓包查看 RST 数据包 TCP 层中的 TTL 值[248]，也可以发现蹊跷的地方，进一步确认。
+                
+                `/usr/local/Cellar/curl/8.19.0/bin/curl --http1.1 -x '' -H 'Host: icook.tw' https://icook.tw/`
+                <br>`/usr/local/Cellar/curl/8.19.0/bin/curl -kv --http1.1 -x '' --connect-to 12302.ccwu.cc:443:icook.tw:443 -H 'Host: icook.tw' https://12302.ccwu.cc`
+                <br>`/usr/local/Cellar/curl/8.19.0/bin/curl -k  --http1.1 -x '' --connect-to 12302.kdns.fr:443:icook.tw:443 -H 'Host: icook.tw' https://12302.kdns.fr`
+            
+                ![](/.images/devops/os/util/curl-update-sni-04.png ':size=99%')
+
+            + ##### 搭建私有服务器
+
+                在服务器或本地使用 mitmproxy 搭建服务，简单返回就行，打通数据流即可。
+                <br>顺便记录一下 mitmproxy 使用过程，方便后期检索。
+                <br>使用命令启动`./mitmdump -p 13443 --set block_global=false  -s mock.py` 服务，
+
+                ```python [data-file:mock.py]
+                from mitmproxy import http
+
+                def request(flow: http.HTTPFlow) -> None:
+                    if "://12302.ccwu.cc" in flow.request.pretty_url:
+                        # 直接构造响应，终止请求发送给后端
+                        flow.response = http.Response.make(200, b'{"name": "test"}', {"Content-Type": "application/json"})
+                ```
+
+                `/usr/local/Cellar/curl/8.19.0/bin/curl -k  --http1.1 -x '' --connect-to 12302.ccwu.cc:443:wtfu.site:13443 -H 'Host: wtfu.site' https://12302.ccwu.cc`
+
+                ![](/.images/devops/os/util/curl-update-sni-02.png ':size=99%')
+
+                ![](/.images/devops/os/util/curl-update-sni-03.png ':size=99%')
+
+                如下命令也一样效果，只是为了内容完整，对 `--resolve` 的测试。
+
+                `/usr/local/Cellar/curl/8.19.0/bin/curl -k  --http1.1 -x '' --resolve 12302.ccwu.cc:13443:47.94.20.18 -H 'Host: wtfu.site' https://12302.ccwu.cc:13443`
+                
+                ![](/.images/devops/os/util/curl-update-sni-05.png ':size=99%')
+
 
 * ## Reference
 
