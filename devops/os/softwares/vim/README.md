@@ -127,6 +127,9 @@
 
         > [?] 用vim打开文件`vim -b file`。*不加`-b`会在末尾追加0x0A多一个字节*
         <br>然后使用xxd工具查看`:%!xxd -u`。 *`-u`表示大写字母显示* 
+    - ### 调用脚本顺序生成字符 [A-Z]
+
+        > [!NOTE|style:flat] `:for i in range(90, 65, -1) | call append(line('.'), nr2char(i) . "\t" . nr2char(i)) | endfor`
 
     - ### 设置和查看文件编码
 
