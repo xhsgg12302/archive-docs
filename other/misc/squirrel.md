@@ -1,3 +1,7 @@
+---
+tocEndLevel: 5
+---
+
 * ## Intro(RIME | SQUIRREL | 自定义输入法)
     
     > [!CAUTION] 因为需要输入法配置灵活度高，所以找到开源的**鼠须管**，基于**中州韵**输入法引擎的一个 macosx 端实现。[详细介绍(自序、历史、概念、项目构成、开发计划)](https://github.com/rime/home/wiki/Introduction)
@@ -744,6 +748,634 @@
                     Caps_Lock: noop
                     Eisu_toggle: noop
         ```
+
+        - #### 中英互译
+
+            > [!NOTE] 中英互译和上面的 [中英混输](#中英混输) 是不一样的，中英混输是增加了英文词典，通过`table_translator@english`进行映射，产出英文候选词，和中文一并展示在候选项中。
+            <br>而现在这个是将`候选项`进行处理，达到翻译的效果，目前了解到如下两种方式，第一个 opencc 的原理和繁简转换一样，第二个是通过调用 lua 脚本，发出 http 请求，获取翻译文本并展示。
+
+            * ##### Opencc
+
+                > [?] 这个流程比较简单，参考 [文档1](https://www.mintimate.cc/zh/guide/openccEmoji.html)，[文档2](https://github.com/gaboolic/rime-shuangpin-fuzhuma/tree/main/opencc) 中对 opencc 的配置，对输入的结果进行转换。
+                <br><br>自定义的流程如下:
+                <br>1. 在用户配置目录`~/Library/Rime/`增加 `opencc/chinese_english` 目录，里面添加文件 [chinese_english.json](https://github.com/gaboolic/rime-shuangpin-fuzhuma/blob/main/opencc/chinese_english.json)、[chinese_english.txt](https://github.com/gaboolic/rime-shuangpin-fuzhuma/blob/main/opencc/chinese_english.txt)、[english_chinese.txt](https://github.com/gaboolic/rime-shuangpin-fuzhuma/blob/main/opencc/english_chinese.txt)。
+                <br>2. 在使用方案（当前使用`double_pinyin_flypy.schema.yaml`）中配置，然后绑定快捷键。
+
+                > [!CAUTION] 有一个需要注意的点是：如果输入中没有带出候选项，这个转换是不起作用的，因为它是对作用于候选项上的。
+                <br>比如英文词典中没有`abalone`，但是 **english_chinese.txt** 中有对应条目`abalone	abalone n.鲍鱼`。此时输入`abalone`，没有候选项，也就不存在转换，没有效果。
+                <br><br>所以提供 AI 味的脚本`find_diff.py`，用来将 opencc 转换表中的冗余条目写入一个新文件`en_dict_supplement.dict.yaml`，并入英文主词典。
+
+                <!-- tabs:start -->
+                ###### **double_pinyin_flypy.schema.yaml**
+                ```YAML {6} [data-file:列出主要配置]
+                # 对于中英互译的 opencc 配置
+                trans_suggestion:
+                    option_name: trans_suggestion
+                    opencc_config: chinese_english/chinese_english.json
+                    tips: all
+                    inherit_comment: false
+
+                # 将上述配置如繁简转换般引入 filter
+                engine:
+                    filters:
+                        - simplifier
+                        # - simplifier@emoji_suggestion       # https://www.mintimate.cc/zh/guide/openccEmoji.html
+                        - simplifier@trans_suggestion         # https://github.com/gaboolic/rime-shuangpin-fuzhuma/tree/main/opencc
+                        - uniquifier
+                
+                # 增加一个开关控制是否进行转换
+                switches:
+                    - name: ascii_mode
+                        reset: 1
+                        states: [ 中, A ]
+                    - name: full_shape
+                        states: [ 半角, 全角 ]
+                    - name: simplification
+                        states: [ 漢字, 汉字 ]
+                    - name: ascii_punct
+                        states: [ 。，, ．， ]
+                    # - { name: emoji_suggestion, reset: 1, states: [ "😣️","😁️"] }
+                    # reset: 0 默认不开启
+                    - { name: trans_suggestion, reset: 0, states: [ "zh","en"] }
+                ```
+                ###### **default.custom.yaml**
+                ```YAML {5} [data-file:列出主要配置]
+
+                # 增加快捷键用来控制开关，此处用的补丁的方式，根据情况自己添加
+                patch:
+                    key_binder/bindings/+:
+                    # - { when: always, accept: "Control+Shift+8", toggle: emoji_suggestion }
+                    - { when: always, accept: "Control+Shift+9", toggle: trans_suggestion }
+                ```
+                ###### **find_diff.py**
+                ```py
+                # coding: utf-8
+
+                MAIN_DICT = "../dicts/en_dict_primary.dict.yaml"                    # 你的主词典文件（缺少条目的那个）
+                TRANS_DICT = "../opencc/chinese_english/english_chinese.txt"        # 你的翻译/英文词典文件（条目齐全的那个）
+                OUTPUT_FILE = "../dicts/en_dict_supplement.dict.yaml"               # 提取出来的差异条目存放的新文件
+
+                def get_words(file_path):
+                    words = set()
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            line = line.strip()
+                            if not line or line.startswith('#'): # 跳过空行和注释
+                                continue
+                            # 假设你的词典是用 Tab (\t) 或空格分隔的，取第一个字段作为单词/编码
+                            parts = line.split('\t') 
+                            if parts:
+                                words.add(parts[0].strip())
+                    return words
+
+                def main():
+                    print("正在读取主词典...")
+                    main_words = get_words(MAIN_DICT)
+                    
+                    print(f"主词典读取完成，共 {len(main_words)} 个独立条目。")
+                    print("正在对比并提取差异...")
+                    
+                    diff_lines = []
+                    with open(TRANS_DICT, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            if not line.strip() or line.startswith('#'):
+                                continue
+                            parts = line.split('\t')
+                            word = parts[0].strip()
+                            
+                            # 如果翻译词典里的单词，在主词典里找不到
+                            if word not in main_words:
+                                diff_lines.append(word + '\t' + word + '\n')
+                                
+                    print(f"对比完成！找到 {len(diff_lines)} 个主词典缺失的条目。")
+                    print("正在写入新文件...")
+                    
+                    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+                        f.writelines(diff_lines)
+                        
+                    print(f"成功！差异条目已保存至: {OUTPUT_FILE}")
+
+                if __name__ == "__main__":
+                    main()
+                ```
+                <!-- tabs:end -->
+
+                ![](/.images/other/misc/squirrel/squirrel-config-20.gif)
+                
+            * ##### Lua 请求翻译 API
+
+                > [?] 本功能参考了 [librime-cloud](https://github.com/hchunhui/librime-cloud)、[rime-trans](https://github.com/3q-u/rime-trans)，逻辑和代码根据自己的情况适配过。
+                <br><br>目前的大概工作原理是通过 lua 提供的 processor 用来处理按键`ctrl + t`监听并获取当前选中的候选词，设置标志位，使用 translator 在映射阶段，根据标志位以及选中的候选词进行翻译，产出一个新的候选项，类型是自定的`translation`。
+                再次按键`ctrl + t` 的时候通过`context:refresh_non_confirmed_composition()`恢复翻译之前的状态，而且这次不作用于它的 translator，因为标志位为 false。
+                <br><br>lua 翻译时需要使用 http 调用 api。应该是没有原生的 http 库，所以有项目封装了一个额外的基于 curl 的简单 simplehttp.so 库，用来在 lua 中发起 http 请求，具体参考[librime-cloud](https://github.com/hchunhui/librime-cloud/blob/master/lib/Makefile#L65) 
+                <br>虽然名字叫`simplehttp.so`，但是 MacOS 端实际是 dylib 类型，不影响使用。
+                <br>另外我对这个 main.c 进行修改过，导出符号变为`luaopen_lua_lib_simplehttp`，所以必须放在`lua/lib/simplehttp.so` 中。外加 curl 的代理功能。
+                <br>对于使用，可以参考`lua/intfs/wrap_could_api.lua`，首先追加库查找路径`package.cpath = package.cpath .. ";" .. os.getenv("HOME") .. "/Library/Rime/?.so"`，然后`require("lua.lib.simplehttp")`即可。
+                <br>需要的可以在这儿下载 [simplehttp.so](https://github.com/xhsgg12302/archive-assets/blob/5f8fca749ef67b76a1842a67c8989c2d956d6d27/other/misc/squirrel/simplehttp.so)
+                <br><br>这个不只中英，如果翻译 api 支持，其他语言也可以的，调试时使用的 API 是有道的。
+                <br><br>整个目录结构如下
+                <br>![](/.images/other/misc/squirrel/squirrel-config-19.png ':size=30%')
+                <br><br>文件简单解释：
+                <br>1. `wrap_could_api`单词写错了，这个包装了各个厂家的翻译 api，使用`simplehttp.so` 提供的 http 能力请求数据。
+                <br>2. `cloud_trans_module.lua`定义 processor 和 translator。在 `rime.lua` 中全局使用，并定义了快捷键。
+                <br>3. 在双拼方案中使用即可。
+
+                <!-- tabs:start -->
+                ###### **double_pinyin_flypy.schema.yaml**
+                ```yaml {5,20} [data-file:列出主要配置]
+                engine:
+                    processors:
+                        - ascii_composer
+                        - recognizer
+                        - lua_processor@cloud_pinyin_processor
+                        - key_binder
+                        - speller
+                        - punctuator
+                        - selector
+                        - navigator
+                        - express_editor
+                    segmentors:
+                        - ascii_segmentor
+                        - matcher
+                        - abc_segmentor
+                        - punct_segmentor
+                        - fallback_segmentor
+                    translators:
+                        - lua_translator@*date_translator
+                        - lua_translator@cloud_pinyin_translator
+                        - punct_translator
+                        - table_translator@custom_phrase
+                        - reverse_lookup_translator
+                        - reverse_lookup_translator@radical_reverse_lookup
+                        - reverse_lookup_translator@emoji_reverse_lookup
+                        - table_translator@english
+                        - script_translator
+                ```
+                ###### **rime.lua**
+                ```lua
+                --- 云拼音，Control+t 为云输入触发键
+                --- 使用方法：
+                --- 将 "lua_translator@cloud_pinyin_translator" 和 "lua_processor@cloud_pinyin_processor"
+                --- 分别加到输入方案的 engine/translators 和 engine/processors 中
+                --- local cloud_pinyin_provider = require("baidu")
+                local cloud_pinyin_provider = require("intfs.wrap_could_api")
+                -- local cloud_pinyin_provider = require("sougou")
+                local cloud_pinyin = require("cloud_trans_module")("Control+t", cloud_pinyin_provider)
+                cloud_pinyin_translator = cloud_pinyin.translator
+                cloud_pinyin_processor = cloud_pinyin.processor
+                ```
+                ###### **cloud_trans_module.lua**
+                ```lua [data-cc: 340px]
+                local log = require("utils.log")
+                -- log.outfile = "/tmp/cloud_trans_module.log"
+
+                local function make(trig_key, trig_translator)
+                local translated = false
+                local origin_selected_cand = nil
+
+                log.info("make trigger with key: " .. trig_key)
+                
+                local function processor(key, env)
+                        local kAccepted = 1
+                        local kNoop = 2
+                        local engine = env.engine
+                        local context = engine.context
+
+                        -- log.info("press key: " .. key:repr())
+
+                        if key:repr() == trig_key then
+
+                            origin_selected_cand = context:get_selected_candidate()
+
+                            if origin_selected_cand and origin_selected_cand.type == "translation" then
+                                context:refresh_non_confirmed_composition()
+                                return kAccepted
+                            elseif context:is_composing() then
+                                translated = true
+                                context:refresh_non_confirmed_composition()
+                                return kAccepted
+                            end
+                        end
+
+                        return kNoop
+                end
+
+                local function translator(input, seg, env)
+                        -- log.info("translator called with input: " .. input, translated and "translated: " .. tostring(translated))
+                        if translated then
+                            translated = false
+                            local cand = origin_selected_cand
+                            if cand and cand.text and cand.text ~= "" then
+                                trig_translator(cand.text, seg, env)
+                            end
+                        end
+                end
+
+                return { processor = processor, translator = translator }
+                end
+
+                return make
+                ```
+                ###### **wrap_could_api.lua**
+                ```lua {3,8,11} [data-cc: 340px]
+                -- ref: https://github.com/3q-u/rime-trans/blob/master/lua/input_text.lua
+                local home = os.getenv("HOME")
+                package.cpath = package.cpath .. ";" .. home .. "/Library/Rime/?.so"
+
+                local log = require("utils.log")
+                local json = require("utils.json")
+                local sha = require("utils.sha2")
+                local http = require("lua.lib.simplehttp")
+                -- 全局 HTTP 超时（秒），避免网络不通时卡住引擎线程
+                http.TIMEOUT = 1.5 
+                http.PROXY = "http://127.0.0.1:7890"    -- simplehttp.so 重新编译新增的选项
+
+                -- 翻译API配置
+                local config = {
+                    -- 选择使用的翻译API: "google", "deepl", "microsoft", "deeplx", "niutrans", "youdao", "baidu" 
+                    -- 百度翻译暂时不可用，请勿使用
+                    default_api = "youdao",
+
+                    -- API密钥配置
+                    api_keys = {
+                        deepl = "YOUR_DEEPL_API_KEY", -- DeepL API密钥
+                        microsoft = {
+                            key = "YOUR_MS_TRANSLATOR_API_KEY", -- Microsoft Translator API密钥
+                            region = "global" -- 替换为您的区域
+                        },
+                        niutrans = "YOUR_NIUTRANS_API_KEY", -- 小牛云翻译API密钥
+                        youdao = {
+                            app_id = "", -- 有道翻译应用ID
+                            app_key = "" -- 有道翻译应用密钥
+                        },
+                        baidu = {
+                            app_id = "YOUR_BAIDU_APP_ID", -- 百度翻译应用ID
+                            app_key = "YOUR_BAIDU_APP_KEY" -- 百度翻译应用密钥
+                        }
+                    }
+                }
+
+                -- URL编码函数
+                local function url_encode(str)
+                    if str then
+                        str = string.gsub(str, "\n", "\r\n")
+                        str = string.gsub(str, "([^%w %-%_%.%~])",
+                            function(c)
+                                return string.format("%%%02X", string.byte(c))
+                            end)
+                        str = string.gsub(str, " ", "+")
+                    end
+                    return str
+                end
+
+                local function is_chinese_character(input)
+                    if not input or #input == 0 then return false end
+                    local last_codepoint = nil
+                    for _, codepoint in utf8.codes(input) do last_codepoint = codepoint end
+                    if last_codepoint >= 19968 and last_codepoint <= 40959 then return true end
+                    return false
+                end
+
+                -- Google翻译API
+                local function google(text)
+                    local encoded_text = url_encode(text)
+                    local url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl=en&dt=t&dt=bd&dt=rm&dt=qca&dt=at&dt=ss&dt=md&dt=ld&dt=ex&dj=1&q=" .. encoded_text
+                    
+                    log.info("google start: " .. url)
+                    local t0 = os.time()
+                    local reply = http.request(url)
+                    local dt = os.difftime(os.time(), t0)
+                    local rlen = reply and #reply or -1
+                    log.info(string.format("google done: len=%d dt=%ds", rlen, dt))
+                    local success, j = pcall(json.decode, reply)
+                    
+                    if success and j then
+                        if j.dict and j.dict[1] and j.dict[1].terms and j.dict[1].terms[1] then
+                            return j.dict[1].terms[1]
+                        end
+                        if j.sentences and j.sentences[1] and j.sentences[1].trans then
+                            return j.sentences[1].trans
+                        end
+                    end
+                    
+                    if reply then
+                        local _, _, terms = string.find(reply, '"terms":%[%"([^"]+)"')
+                        if terms then
+                            return terms
+                        end
+                        
+                        local _, _, translated = string.find(reply, '"trans":"([^"]+)"')
+                        if translated then
+                            return translated
+                        end
+                        
+                        local _, _, translated2 = string.find(reply, '%[%[%["([^"]+)"')
+                        if translated2 then
+                            return translated2
+                        end
+                    end
+                    
+                    return nil
+                end
+
+                -- DeepL翻译API
+                local function deepl(text)
+                    local api_key = config.api_keys.deepl
+                    if not api_key then
+                        return nil
+                    end
+                    
+                    local url = "https://api-free.deepl.com/v2/translate"
+                    local body = "auth_key=" .. api_key .. "&text=" .. url_encode(text) .. "&target_lang=EN"
+                    
+                    local headers = {
+                        ["Content-Type"] = "application/x-www-form-urlencoded"
+                    }
+                    
+                    local reply = http.request{
+                        url = url,
+                        method = "POST",
+                        headers = headers,
+                        data = body
+                    }
+                    local success, j = pcall(json.decode, reply)
+                    
+                    if success and j and j.translations and j.translations[1] and j.translations[1].text then
+                        return j.translations[1].text
+                    end
+                    
+                    return nil
+                end
+
+                -- Microsoft翻译API
+                local function microsoft(text)
+                    local api_key = config.api_keys.microsoft.key
+                    local region = config.api_keys.microsoft.region
+                    
+                    if not api_key then
+                        return nil
+                    end
+                    
+                    local url = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en"
+                    local body = json.encode({
+                        {["Text"] = text}
+                    })
+                    
+                    local headers = {
+                        ["Content-Type"] = "application/json",
+                        ["Ocp-Apim-Subscription-Key"] = api_key,
+                        ["Ocp-Apim-Subscription-Region"] = region
+                    }
+                    
+                    local reply = http.request{
+                        url = url,
+                        method = "POST",
+                        headers = headers,
+                        data = body
+                    }
+                    local success, j = pcall(json.decode, reply)
+                    
+                    if success and j and j[1] and j[1].translations and j[1].translations[1] and j[1].translations[1].text then
+                        return j[1].translations[1].text
+                    end
+                    
+                    return nil
+                end
+
+                -- 小牛云翻译API
+                local function niutrans(text)
+                    local api_key = config.api_keys.niutrans
+                    if not api_key then
+                        return nil
+                    end
+                    
+                    local url = "https://api.niutrans.com/NiuTransServer/translation"
+
+                    local body = json.encode({
+                        from = "zh",
+                        to = "en",
+                        apikey = api_key,
+                        src_text = text
+                    })
+                    
+                    local headers = {
+                        ["Content-Type"] = "application/json"
+                    }
+                    
+                    local reply = http.request{
+                        url = url,
+                        method = "POST",
+                        headers = headers,
+                        data = body
+                    }
+                    
+                    if not reply or reply == "" then
+                        return nil
+                    end
+                    
+                    local success, j = pcall(json.decode, reply)
+                    if not success then
+                        return nil
+                    end
+                    
+                    if j.tgt_text then
+                        if type(j.tgt_text) == "string" then
+                            local inner_success, inner_json = pcall(json.decode, j.tgt_text)
+                            if inner_success and type(inner_json) == "table" then
+                                return inner_json.content
+                            else
+                                return j.tgt_text
+                            end
+                        elseif type(j.tgt_text) == "table" then
+                            if j.tgt_text.content then
+                                return j.tgt_text.content
+                            else
+                                for k, v in pairs(j.tgt_text) do
+                                    if type(v) == "string" then
+                                        return v
+                                    end
+                                end
+                                return nil
+                            end
+                        else
+                            return nil
+                        end
+                    elseif j.translation then
+                        return j.translation
+                    elseif j.result and j.result.translatedText then
+                        return j.result.translatedText
+                    else
+                        return nil
+                    end
+                end
+
+                -- 有道翻译API
+                -- https://ai.youdao.com/DOCSIRMA/html/trans/api/wbfy/index.html#接口调用参数
+                local function youdao(text)
+                    local app_id = config.api_keys.youdao.app_id
+                    local app_key = config.api_keys.youdao.app_key
+                    
+                    if not app_id or not app_key then
+                        log.error("有道API密钥未配置")
+                        return nil
+                    end
+                    
+                    local salt = tostring(math.random(32768, 65536))
+                    local curtime = tostring(os.time())
+                    local sign_str = app_id .. text .. salt .. curtime .. app_key
+                    local sign = sha.sha256(sign_str)
+                    local form_to = is_chinese_character(text) and "&from=zh-CHS&to=en" or "&from=auto"
+                    
+                    local url = "https://openapi.youdao.com/api"
+                    local body = "q=" .. text
+                        .. form_to
+                        .. "&appKey=" .. app_id
+                        .. "&salt=" .. salt
+                        .. "&sign=" .. sign
+                        .. "&signType=v3"
+                        .. "&curtime=" .. curtime
+                    
+                    local headers = {
+                        ["Content-Type"] = "application/x-www-form-urlencoded"
+                    }
+                    
+                    -- log.info("有道翻译请求URL: " .. url)
+                    -- log.info("有道翻译请求体: " .. body)
+                    
+                    local reply = http.request{
+                        url = url,
+                        method = "POST",
+                        headers = headers,
+                        data = body
+                    }
+                    
+                    if not reply or reply == "" then
+                        log.error("有道翻译收到空响应")
+                        return nil
+                    end
+                    
+                    -- log.info("有道翻译响应: " .. reply)
+                    
+                    local success, j = pcall(json.decode, reply)
+                    if not success then
+                        log.error("有道翻译JSON解析失败: " .. tostring(j))
+                        return nil
+                    end
+                    
+                    if j and j.translation and j.translation[1] then
+                        -- log.info("有道翻译结果: " .. tostring(j.translation[1]))
+                        return j.translation[1]
+                    elseif j and j.basic and j.basic.explains and j.basic.explains[1] then
+                        log.info("有道翻译basic.explains: " .. tostring(j.basic.explains[1]))
+                        return j.basic.explains[1]
+                    else
+                        log.error("有道翻译未找到有效结果")
+                        return nil
+                    end
+                end
+
+                -- 百度翻译API
+                local function baidu(text)
+                    local app_id = config.api_keys.baidu.app_id
+                    local app_key = config.api_keys.baidu.app_key
+                    
+                    if not app_id or not app_key then
+                        log.error("百度API密钥未配置")
+                        return nil
+                    end
+                    
+                    local salt = tostring(math.random(32768, 65536))
+                    local sign = sha.md5(app_id .. text .. salt .. app_key):lower()
+                    
+                    local url = "https://fanyi-api.baidu.com/api/trans/vip/translate"
+                    local body = "q=" .. url_encode(text)
+                        .. "&from=zh&to=en"
+                        .. "&appid=" .. app_id
+                        .. "&salt=" .. salt
+                        .. "&sign=" .. sign
+                    
+                    local headers = {
+                        ["Content-Type"] = "application/x-www-form-urlencoded"
+                    }
+                    
+                    log.info("百度翻译请求URL: " .. url)
+                    log.info("百度翻译请求体: " .. body)
+                    
+                    local reply = http.request{
+                        url = url,
+                        method = "POST",
+                        headers = headers,
+                        data = body
+                    }
+                    
+                    if not reply or reply == "" then
+                        log.error("百度翻译收到空响应")
+                        return nil
+                    end
+                    
+                    log.info("百度翻译响应: " .. reply)
+                    
+                    local success, j = pcall(json.decode, reply)
+                    if not success then
+                        log.error("百度翻译JSON解析失败: " .. tostring(j))
+                        return nil
+                    end
+                    
+                    if j and j.trans_result and j.trans_result[1] and j.trans_result[1].dst then
+                        log.info("百度翻译结果: " .. tostring(j.trans_result[1].dst))
+                        return j.trans_result[1].dst
+                    else
+                        log.error("百度翻译未找到有效结果")
+                        return nil
+                    end
+                end
+
+                local function trans(text)
+                    local result
+                    
+                    if config.default_api == "google" then
+                        result = google(text)
+                    elseif config.default_api == "deepl" then
+                        result = deepl(text)
+                    elseif config.default_api == "microsoft" then
+                        result = microsoft(text)
+                    elseif config.default_api == "niutrans" then
+                        result = niutrans(text)
+                    elseif config.default_api == "youdao" then
+                        result = youdao(text)
+                    elseif config.default_api == "baidu" then
+                        result = baidu(text)
+                    else
+                        result = google(text)
+                    end
+                    
+                    return result
+                end
+
+                local function do_translator(text, seg, env)
+
+                    -- log.info("translator called with input: " .. input .. ", content: " .. content)
+                    -- local t0 = os.time()
+                    
+                    local translated_text = trans(text)
+                    -- local dt = os.difftime(os.time(), t0)
+                    -- log.info(string.format("trans end dt=%ds ok=%s", dt, tostring(translated_text ~= nil)))
+
+                    if translated_text then
+                        local c = Candidate("translation", seg.start, seg.start + string.len(translated_text), translated_text, "〘译〙")
+                        c.quality = 2
+                        -- c.preedit = env.engine.context:get_preedit().text
+                        yield(c)
+                    end
+                end
+
+                return do_translator
+                ```
+                <!-- tabs:end -->
+
+                ![](/.images/other/misc/squirrel/squirrel-config-21.gif)
+
+                > [!CAUTION] 需要注意目前有时候翻译出来的候选项插入不到最前面，二次`ctrl+t`取消之前得通过左右按键先选中翻译项。
 
     + ### 小鹤双拼
     + ### Rime引擎
