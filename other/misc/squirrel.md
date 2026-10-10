@@ -99,7 +99,7 @@ tocEndLevel: 5
 
         #### 修改插入记号(CARET)
 
-        > [?] 修改 [caret](https://en.wikipedia.org/wiki/Caret)(插入记号)：符号`‸`，此处的符号引用自 [UI Improvements / 10](https://github.com/rime/squirrel/pull/848)。
+        > [?] 修改 [caret](https://zh.wikipedia.org/wiki/插入記號) (插入记号，也叫脱字符)：符号`‸`，此处的符号引用自 [UI Improvements / 10](https://github.com/rime/squirrel/pull/848)。
         <br>~查看 librime 引擎中相关代码，发现在 [此处](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/tools/rime_api_console.cc#L46) 使用了`|`模拟了插入记号，所以感觉应该是在每个客户端(squirrel|weasel)中去自自己实现的。然后转到 squirrel，在 [此处 SquirrelInputController.swift](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L530) 发现相关代码，其中 caretPos 就是指定了位置，但是并没有看出来是怎么使用的，比如是直接将插入符号追加到编辑区 还是 在后续调用中根据位置直接设置的。swift 代码不太好看，无从下手了，所以没有解决。在此处仅做个记录。~:stuck_out_tongue_closed_eyes:
         <br><br>更新上述错误表述：后面查看代码的时候发现在 librime 引擎处有 [kCaretSymbol 定义](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/context.cc#L38)，而且在下面一行处有用户可配置的选项`soft_cursor`，大概熟悉代码后发现这只是一个开关(false|true)，用来控制是否显示插入符号的开关，通过 debug 验证后发现可行。于是添加如下图括起来的类似配置，在本地进行测试，发现在 Squirrel 端并不生效。于是查看 squirrel 端代码，发现有 [这样的判断](https://github.com/rime/squirrel/blob/b110a83c4d0a61a889afbc1e6783a6f32bb279d1/sources/SquirrelInputController.swift#L440-L443)，进而对`soft_cursor`进行了覆写，所以没生效。但是根据它的判断条件也可以进行验证，一般对于浏览器，都是进行强制内联(inline)的。所以在浏览器地址栏输入就不会出现插入符号了。
         <br>![](/.images/other/misc/squirrel/squirrel-config-05.png ':size=83%')
@@ -581,11 +581,14 @@ tocEndLevel: 5
         <br><br>具体操作如下：
         <br>`1).`: 因为默认配置里面已经写好相关引用了，所以只需要在用户目录下新建`custom_phrase.txt`文件，将微信表情相关的符号写入到里面就可以了。符号定义如下：
         <br>如果是百度输入法，则可以 [参考:baidu输入法个性短语导入](./sticker.md#baidu输入法个性短语导入)
+        <br><br>2026-10-10更新：原来的那种方式，只针对朙月拼音有效，并入主词典后，可以支持小鹤双拼。内容如：[luna_pinyin_cp_wechat_emoji.dict](#新内容)
         <br><br>![](/.images/other/misc/squirrel/squirrel-config-13.gif)
 
         <details><summary>微信表情自定义符号</summary>
 
-        ```shell
+        <!-- tabs:start -->
+        ###### **旧内容**
+        ```shell [data-file:custom_phrase.txt]
         # Rime table
         # coding: utf-8
         #@/db_name  custom_phrase.txt
@@ -709,6 +712,117 @@ tocEndLevel: 5
         [啤酒]	pijiu	10
         [咖啡]	cafei	10
         ```
+        ###### **新内容**
+        ```shell [data-file:luna_pinyin_cp_wechat_emoji.dict.yaml]
+        # Rime dictionary
+        # encoding: utf-8
+        #
+        ---
+        name: en_dict_supplement
+        version: "2026-10-10"
+        sort: by_weight
+        ...
+
+        [微笑]	wei xiao	10
+        [撇嘴]	pie zui	10
+        [色]	se	10
+        [发呆]	fa dai	10
+        [得意]	de yi	10
+        [流泪]	liu lei	10
+        [害羞]	hai xiu	10
+        [闭嘴]	bi zui	10
+        [睡]	shui	10
+        [大哭]	da ku	10
+
+        [尴尬]	gan ga	10
+        [发怒]	fa nu	10
+        [调皮]	tiao pi	10
+        [呲牙]	ci ya	10
+        [惊讶]	jing ya	10
+        [难过]	nan guo	10
+        [囧]	jiong	10
+        [抓狂]	zhua kuang	10
+        [吐]	tu	10
+        [偷笑]	tou xiao	10
+
+        [愉快]	yu kuai	10
+        [白眼]	bai yan	10
+        [傲慢]	ao man	10
+        [困]	kun	10
+        [惊恐]	jing kong	10
+        [憨笑]	han xiao	10
+        [悠闲]	you xian	10
+        [咒骂]	zhou ma	10
+        [疑问]	yi wen	10
+        [嘘]	xu	10
+
+        [晕]	yun	10
+        [衰]	shuai	10
+        [骷髅]	ku lou	10
+        [敲打]	qiao da	10
+        [再见]	zai jian	10
+        [擦汗]	ca han	10
+        [抠鼻]	kou bi	10
+        [鼓掌]	gu zhang	10
+        [坏笑]	huai xiao	10
+        [右哼哼]	you heng heng	10
+
+        [鄙视]	bi shi	10
+        [委屈]	wei qu	10
+        [快哭了]	kuai ku le	10
+        [阴险]	yin xian	10
+        [亲亲]	qin qin	10
+        [可怜]	ke lian	10
+        [笑脸]	xiao lian	10
+        [生病]	sheng bing	10
+        [脸红]	lian hong	10
+        [破涕为笑]	po ti wei xiao	10
+
+        [恐惧]	kong ju	10
+        [失望]	shi wang	10
+        [无语]	wu yu	10
+        [嘿哈]	hei ha	10
+        [捂脸]	wu lian	10
+        [奸笑]	jian xiao	10
+        [机智]	ji zhi	10
+        [皱眉]	zhou mei	10
+        [耶]	ye	10
+        [吃瓜]	chi gua	10
+
+        [加油]	jia you	10
+        [汗]	han	10
+        [天啊]	tia na	10
+        [Emm]	emm	10
+        [社会社会]	she hui she hui	10
+        [旺柴]	wang chai	10
+        [好的]	hao de	10
+        [打脸]	da lian	10
+        [哇]	wa	10
+        [翻白眼]	fan bai yan	10
+
+        [666]	liu	10
+        [让我看看]	rang wo kan kan	10
+        [叹气]	tan qi	10
+        [苦涩]	ku se	10
+        [裂开]	lie kai	10
+        [嘴唇]	zui chun	10
+        [爱心]	ai xin	10
+        [心碎]	xin sui	10
+        [拥抱]	yong bao	10
+        [强]	qiang	10
+
+        [弱]	ruo	10
+        [握手]	wo shou	10
+        [胜利]	sheng li	10
+        [抱拳]	bao quan	10
+        [勾引]	gou yin	10
+        [拳头]	quan tou	10
+        [OK]	ok	10
+        [合十]	he shi	10
+        [啤酒]	pi jiu	10
+        [咖啡]	ca fei	10
+        ```
+        <!-- tabs:end -->
         </details>
 
         #### 配置符号直接上屏(GRAVE)
@@ -732,16 +846,21 @@ tocEndLevel: 5
 
         #### 取消CTRL触发中西文切换
 
-        > [?] 平常使用 vim 的时候进行模式切换、退出会用到`ctrl + [`。因为刚开始的错误配置，很容易触发 **中西文切换**，所以用下方补丁调整一下。
+        > [?] 平常使用 vim 的时候进行模式切换、退出会用到`ctrl + [`。因为刚开始的错误配置，很容易通过 `ctrl` 触发 **中西文切换**，所以用下方补丁调整一下。
+        <br><br>261011更新：
+        <br>另外后期使用中发现中英切换的时候，会将刚才输入的码上屏，对于 vim 模式切换极其不友好（切换完之后会将刚才的垃圾字符插入进去）。
+        <br>所以切换的时候，清除刚才的输入，配置改变如下高亮第 7 行，对于第 8 行保留功能。
+        <br>对于有些文档注释描述中的 ~**Mac 系統上的鼠鬚管不能區分左、右，因此只有對 Shift_L, Control_L 的設定起作用**~ 可能过时了，目前 Mac 环境是可以的。
+        <br>代码定义在 [ascii_composer.cc](https://github.com/rime/librime/blob/aaaaaec344c22c1b3b8059190a00e4c532a2ab54/src/rime/gear/ascii_composer.cc#L21) 中。
 
-        ```yaml {9} [data-file:default.custom.yaml]
+        ```yaml {7,9} [data-file:default.custom.yaml]
         # encoding: utf-8
 
         patch:
             ascii_composer:
                 good_old_caps_lock: true
                 switch_key:
-                    Shift_L: commit_code
+                    Shift_L: clear
                     Shift_R: commit_code
                     Control_L: noop         # 调整之前为 commit_code
                     Control_R: noop
