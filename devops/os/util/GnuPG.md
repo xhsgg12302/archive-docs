@@ -1,3 +1,7 @@
+---
+tocEndLevel: 5
+---
+
 * ## Intro(GnuPG)
 
     ![](/.images/devops/os/util/gpg-intro-01.png 'https://cran.r-project.org/web/packages/gpg/vignettes/intro.html :size=70% :align=center')
@@ -6,10 +10,14 @@
 
         > [!TIP|style:flat]
         Key 管理是 GPG 的核心功能，GPG Key 不能简单的理解为非对称加密的 Private Key / Public Key / Key Pair。GPG Key 由如下信息组成：
-        <br><br>Key ID: 该 GPG Key 的唯一标识，值为主公钥的指纹，支持多种格式(Fingerprint, Long key ID, Short key ID)，更多参见：What is a OpenPGP/GnuPG key ID?。
+        <br><br>Key ID: 该 GPG Key 的唯一标识，值为主公钥的指纹，支持多种格式(Fingerprint, Long key ID, Short key ID)，更多参见：[What is a OpenPGP/GnuPG key ID?](https://superuser.com/questions/769452/what-is-a-openpgp-gnupg-key-id)。
         <br>UID: 1 个或多个，每个 UID 由 name、email、comment 组成，email 和 comment 可以为空。
         <br>Expire: 过期时间，可以为永久。
         <br>多个具有不同用途的非对称加密算法中的 Key 的集合。
+        <br><br>KeyID 是从 fingerprint（40位）后面截取出来的一段，long（16位），short（8位）。
+        <br>signature 其实就是主公匙的 KeyID（long），子跟随，所以它是识别绑定主、子的纽带。
+        <br>keygrip 是 GnuPG 内部使用的一个密钥标识符，它和之前的 KeyID 或 Fingerprint 完全不同。它的核心作用是让 gpg-agent 能够独立于具体协议（如 OpenPGP 或 S/MIME）来定位和管理私钥。
+        <br><br><span style='padding:2.3em'/>![](/.images/devops/os/util/gpg-intro-02.png ':size=70%')
 
         <!-- panels:start -->
         <!-- div:left-panel-50 -->
@@ -22,7 +30,7 @@
         | 主公钥 | Public Key    | pub  | SC           | 每个 GPG Key 有且只有一个 主公钥，可以选择一种或多种 Usage        |
         | 子公钥 | Public Subkey | sub  | S/A/E        | 每个 GPG Key 可以有多个子公钥，每个子公钥可以选择一种或多种 Usage |
         | 主私钥 | Secret Key    | sec  | SC           | 每个 GPG Key 有且只有一个 主私钥，可以选择一种或多种 Usage        |
-        | 子私钥 | Secret Subkey | ssb  | S/A/E        | 每个 GOG Key 可以有多个子私钥，每个子私钥可以选择一种或多种 Usage |
+        | 子私钥 | Secret Subkey | ssb  | S/A/E        | 每个 GPG Key 可以有多个子私钥，每个子私钥可以选择一种或多种 Usage |
 
         <!-- div:right-panel-50 -->
         > [!WARNING|label:用途参见下表]
@@ -79,6 +87,28 @@
             <!-- div:right-panel-50 -->
             ![](/.images/devops/os/util/gpg-usage-2-02.png ':size=99%')
             <!-- panels:end -->
+
+            * ##### 2.1 根据主对创建新的子对
+
+                > [!NOTE] 可以有两种方式：交互式和直接创建。如果你是为了配置 Git 签名，在 addkey 时请务必选择 Sign 用途。
+                <br><br> 如果报错：`gpg: Sorry, no terminal at all requested - can't get input`，则需要注释 gpg.conf 中的 `no-tty`
+                
+                <!-- tabs:start -->
+                ###### **交互式**
+                ```shell
+                进入编辑模式：  `gpg --edit-key <你的Key ID(8CE17C3AA5AA7D7C)或邮箱>`
+                执行添加命令：  在 gpg> 提示符下输入：`addkey`
+                回答配置问题：  GPG 会引导你完成创建过程。
+                保存更改：      创建完成后，务必输入 save 并回车，以将新的子密钥写入密钥环并退出。注意：直接输入 quit 是不会保存的。
+                同步公钥：      如果你希望其他人能用到你的新子密钥（例如用于验证你新的签名），需要将更新后的公钥上传到密钥服务器：`gpg --send-keys <你的Key ID>`
+                ```
+                ###### **直接创建**
+                ```shell
+                如果你不想进入交互模式，且使用较新版本的 GnuPG（2.1.13+），可以使用 --quick-addkey 命令。例如，创建一个有效期为 2 年的`加密`子密钥：
+                `gpg --quick-addkey <指纹> rsa2048 encr 2y`
+                `gpg --quick-addkey AB74C1C8446830BE3DCB78B78CE17C3AA5AA7D7C rsa2048 encr 0`
+                ```
+                <!-- tabs:end -->
 
         - #### 3. 输出密匙
 
