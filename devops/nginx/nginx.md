@@ -57,17 +57,22 @@ weight: 40
 
 	# 配置与编译
 	# 编译选项：https://nginx.org/en/docs/configure.html
+	cd /data/nginx-1.16.1
 	./configure --prefix=/usr/local/nginx/ --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module 
 		[--with-http_addition_module]
 		[--with-http_sub_module]
 		[--without-http_fastcgi_module] 
 		[--with-openssl=/data/openssl-1.1.1w] 
 		[--with-openssl-opt=enable-tls1_3]
-		[--with-debug]
+		[--with-debug]	# https://nginx.org/en/docs/debugging_log.html
 	make
 	objs/nginx -V
 
-	# 安装
+	# 手动安装
+	systemctl stop nginx
+	cp objs/nginx /usr/local/nginx/sbin/nginx
+
+	# 自动安装
 	make install
 	```
 
