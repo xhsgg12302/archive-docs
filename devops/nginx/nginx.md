@@ -641,6 +641,13 @@ weight: 40
 			# https://github.com/acmesh-official/acme.sh/wiki/Server
 			# 通过指定 --server [zerossl(default) | letsencrypt | ... ]
 			acme.sh --issue <mark class='under deeppink'>--server letsencrypt</mark> --dns dns_tencent  -d let.wtfu.site
+
+		# 从管理的证书列表中移除（移除之后后续定时任务就不会去申请错误的证书了，可能因为域名转失效了之类的。）
+			# 查看管理的列表
+			acme.sh --list
+
+			# 貌似是在证书下的 `.conf` 变成 `.conf.removed`，如需全部清除，可以删除证书目录。目前一次只能移除一个域名，多个 `-d` 不起作用。
+			acme.sh --remove -d wtfu.site
 		```
 
 		- Reference

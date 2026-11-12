@@ -1,5 +1,6 @@
 ---
 tocEndLevel: 5
+description: "从零开始用 gpg：先用两张表区分主公钥、子公钥与各自的 C/S/A/E 用途，再走一遍生成、补充子密钥、导出、上传到 keyserver 和导入的流程，接着拿一段 hello world 文本做加密、解密、签名、验签和签名加加密，最后是 OpenVPN 2.5.5 安装包验签与 gpg-agent 缓存密码的用法。"
 ---
 
 * ## Intro(GnuPG)
