@@ -7,8 +7,8 @@ tocEndLevel: 4
 
 <!-- [toc] -->
 <!-- varibale -->
-[12302]:http://mvn.wtfu.site
-[我的主页]:https://wtfu.site
+[12302]:http://mvn.wtfue.com
+[我的主页]:https://wtfue.com
 [dojocat]: https://octodex.github.com/images/dojocat.jpg ":size=400 The Dojocat"
 
 <h1 style="text-align:center; font-size: 50px">以下语法仅针对项目环境生效</h1>
@@ -162,7 +162,7 @@ tocEndLevel: 4
 
             filter-column    /**
             filter-column     *
-            filter-column     * Copyright <a href="<mark>https://wtfu.site</mark>">...</a> Inc. All Rights Reserved.
+            filter-column     * Copyright <a href="<mark>https://wtfue.com</mark>">...</a> Inc. All Rights Reserved.
             filter-column     * 
             filter-column     * Super long line ...                                                                                              column column column column
             filter-column     * @date <mark class="under green">2021/11/28</mark>
@@ -219,9 +219,10 @@ tocEndLevel: 4
 
         - #### 6). 引用变量
 
-            `[key]:value`
-            <br>直接把key放入[],这样显示文本是key，链接为value
-            <br>[12302] [我的主页]  ← 这里有两，只会显示第一个，估计识别成两个中括号的模式了（因为鼠标放上去显示链接是第二个变量值，两个中括号中间空格无效）
+            定义变量：`[key]:value`，一般放开头就行。
+            <br>使用：`[key]`、`[name][key]`。
+            <br>直接把 key 放入[]，这样显示文本是 key，链接为 value
+            <br>[NewName][我的主页]  ← ~这里有两，只会显示第一个，估计识别成两个中括号的模式了(因为鼠标放上去显示链接是第二个变量值，两个中括号中间空格无效)~。中间不能有括号，不然会识别成两个单独的。
             <br>[12302]
             <br>[我的主页]
 
@@ -239,6 +240,14 @@ tocEndLevel: 4
         <!-- tabs:start -->
         ##### **Ubuntu:18.4**
         End of standard support for 18.04 LTS - 31 May 2023
+        <!-- tabs:start -->
+        ##### **Desktop**
+        Fast, free, and full of new features. The latest release of Ubuntu Desktop delivers new tools and enhancements for developers, creators, gamers, and administrators. Replace your current operating system or run Ubuntu alongside it.
+        ##### **Server**
+        Whether you want to configure a simple file server or build a fifty thousand-node cloud, you can rely on Ubuntu Server and its five years of free updates.
+        ##### **WSL**
+        Access the power of a full Ubuntu terminal environment with Windows Subsystem for Linux.
+        <!-- tabs:end -->
         ##### **Ubuntu:20.4**
         嗨！你知道我们有中文站吗？立即带我去！ ›
         <!-- tabs:end -->
@@ -261,15 +270,20 @@ tocEndLevel: 4
     
     + ### 06-符号转义
 
-        - #### 反斜杠
+        - #### 反引号
 
-            > [?] 反斜杠 转义 `` # https://github.com/docsifyjs/docsify/issues/1881
+            > [?] 反引号 转义 ` # https://github.com/docsifyjs/docsify/issues/1881
             <br>single backslash (status: opening)
-        
-        - #### $符号
 
-            > [!] hugo 版本中，使用 tabs 包含的内容中 `$` 的转义，通过两个`$`符号，其实是后期使用正则替换造成的捕获组引用。
-            <br> 如下代码中的`$'`: https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions?#:~:text=$'
+            hugo 中可以使用 ``the The effect of escape backticks : 【`】 ``。
+        
+        - #### $美元符
+
+            > [!] hugo 版本中，对 tabs 包含的内容中的 `$`，需要通过两个`$`符号进行转义。
+            <br>之所以这样，其实是后期自定义代码对 tabs 标签处理的时候使用了正则替换造成的，因为 fence code 中的内容可能包含如下（捕获组引用）的字符，造成处理错误或处理超时。
+            <br><br> 如下代码中的`$'`: https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions?#:~:text=$'
+            <br> 还有一些其他符号也需要注意一下，比如 `$&`、`` $` ``、`$'`、`$+`、`$_`，这些都需要转义。
+            <br> 另外形如`$<`、`$>`的也一样，通过 goldmark 处理后，会变成`$&lt;`、`$&gt;`，其中就包含了`$&`。
 
             <!-- tabs:start -->
             ##### **nasm**
@@ -287,6 +301,12 @@ tocEndLevel: 4
 
             section .data
                 msg db 'Hello, world!$$'
+            ```
+            ##### **cmake**
+            ```cmake
+            if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+                add_compile_options($$<$$<COMPILE_LANGUAGE:C>:-gdwarf-4>)
+            endif()
             ```
             <!-- tabs:end -->
 

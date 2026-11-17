@@ -1,5 +1,5 @@
 ---
-tocEndLevel: 4
+
 ---
 
 * ## Intro(CMAKE :100:)
@@ -120,16 +120,25 @@ tocEndLevel: 4
 
     - ### 具体指令
 
-        1. #### [CMAKE\_MINIMUM\_REQUIRED](https://cmake.org/cmake/help/v3.20/command/cmake_minimum_required.html)
+        1. #### [cmake\_minimum\_required](https://cmake.org/cmake/help/v3.20/command/cmake_minimum_required.html)
         
-            > [?]  最低 CMake 版本（每个 CmakeLists.txt 文件都必须有）`CMAKE_MINIMUM_REQUIRED(VERSION 2.6)`
-            <br>其语法为 CMAKE_MINIMUM_REQUIRED(VERSION versionNumber [FATAL_ERROR])
-            <br>比如 CMAKE_MINIMUM_REQUIRED(VERSION 2.5 FATAL_ERROR)
+            > [?]  最低 CMake 版本（每个 CmakeLists.txt 文件都必须有）`cmake_minimum_required(VERSION 2.6)`
+            <br>其语法为 `cmake_minimum_required(VERSION <min>[...<max>] [FATAL_ERROR])`
+            <br>比如 `cmake_minimum_required(VERSION 2.5 FATAL_ERROR)`
             <br>如果 cmake 版本小与 2.5，则出现严重错误，整个过程中止。
 
-        2. #### [PROJECT](https://cmake.org/cmake/help/v3.20/command/project.html)
+        2. #### [project](https://cmake.org/cmake/help/v3.20/command/project.html)
         
-            > [?]  指定工程名 `PROJECT(PRJNAME)`
+            > [?]  指定工程名 `project(PRJNAME)`
+
+            ```cmake
+            project(<PROJECT-NAME> [<language-name>...])
+            project(<PROJECT-NAME>
+                [VERSION <major>[.<minor>[.<patch>[.<tweak>]]]]
+                [DESCRIPTION <project-description-string>]
+                [HOMEPAGE_URL <url-string>]
+                [LANGUAGES <language-name>...])
+            ```
 
         3. #### [MESSAGE](https://cmake.org/cmake/help/v3.20/command/message.html)
             
@@ -140,29 +149,67 @@ tocEndLevel: 4
             * **SEND_ERROR**: 产生错误，生成过程中被跳过
             * **FATAL_ERROR**: 重要错误，CMake进城终止。
         
-        4. #### [ADD\_EXECUTABLE](https://cmake.org/cmake/help/v3.20/command/add_executable.html)
+        4. #### [add\_executable](https://cmake.org/cmake/help/v3.20/command/add_executable.html)
         
+            ```cmake
+            # Normal Executables
+            add_executable(<name> [WIN32] [MACOSX_BUNDLE]
+               [EXCLUDE_FROM_ALL]
+               [source1] [source2 ...])
+            
+            # Imported Executables
+            add_executable(<name> IMPORTED [GLOBAL])
+
+            # Alias Executables
+            add_executable(<name> ALIAS <target>)
+            ```
+
             > [?]  添加要编译的可执行程序 `ADD_EXECUTABLE(hello main.c src1.c)`  # hello 为一个 target
             
-            等效于在makefile里写
+            等效于在 makefile 里写
 
             ```shell
             hello: main.c src1.c
             gcc -o hello main.c src1.c
             ```
 
-        5. #### [ADD\_SUBDIRECTORY](https://cmake.org/cmake/help/v3.20/command/add_subdirectory.html)
+        5. #### [add\_subdirectory](https://cmake.org/cmake/help/v3.20/command/add_subdirectory.html)
         
             > [?]  指定子目录
-            <br>由于子目录 src 下也有 CMakeLists.txt，是用来编译源代码的，如果不在主目录下的 cmakelists 里面声明子目录，就不会包含这部分代码，因此主目录的文件中需要添加：`ADD_SUBDIRECTORY(src bin exclude)`
+            <br>由于子目录 src 下也有 CMakeLists.txt，是用来编译源代码的，如果不在主目录下的 CMakeLists 里面声明子目录，就不会包含这部分代码，因此主目录的文件中需要添加：`add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])`
 
-            - **src**: 将源文件存放的src目录加入工程，相对于主目录，也既`PROJECT_SOURCE_DIR`
-            - **bin**: 将编译输出到bin，若不指定则输出到src中。此处的bin是相对于编译时所在目录，也即`PROJECT_BINARY_DIR`
-            - **exclude**: 编译时排出的目录
+            - **src**: 将源文件存放的 src 目录加入工程，相对于主目录，也即`PROJECT_SOURCE_DIR`
+            - **bin**: 将编译输出到 bin，若不指定则输出到 src 中。此处的 bin 是相对于编译时所在目录，也即`PROJECT_BINARY_DIR`
+            - **exclude**: 编译时排除的目录
         
-            注意：采用外部编译时，例如在build目录下面`camke ..`，那么输出目录就会以 `build/` 作为相对路径的参考，因此会在build/下生成一个bin/目录来存放二进制文件，若没有指定bin，则会生成build/src目录。
+            注意：采用外部编译时，例如在 build 目录下面`camke ..`，那么输出目录就会以 `build/` 作为相对路径的参考，因此会在 build/ 下生成一个 bin/ 目录来存放二进制文件，若没有指定bin，则会生成 build/src 目录。
 
-        6. #### 更改二进制输出目录
+        6. #### [aux\_source\_directory](https://cmake.org/cmake/help/v3.20/command/aux_source_directory.html)
+
+            > [?] 基本语法是：`aux_source_directory(<dir> <variable>)`
+            <br><br>它的作用对象是一个目录和一个变量。它会在 CMake 配置阶段扫描指定目录下的所有源文件，把文件名列表存进你给的变量里。
+            <br><br>只在配置阶段扫描一次：这是它最大的问题。如果你在目录里新增了一个 .c 文件，但没有修改任何 CMakeLists.txt，CMake 不会自动重新扫描，新文件就不会被编译进去，可能导致链接错误，而且没有任何警告。
+            <br><br>不递归：只扫描指定目录本身，不会进入子目录。
+            <br><br>CMake 官方文档本身就说明了这个命令主要是为了支持“显式模板实例化”这种特殊场景，并明确提醒“用它来避免手写源文件列表”虽然看似可行，但构建系统无法感知新增文件。
+
+            ```cmake
+            AUX_SOURCE_DIRECTORY(. SRC_LIST)
+            ADD_EXECUTABLE(main ${SRC_LIST})
+
+            # 如果想查看变量的值，可以通过如下方式：
+            message(STATUS "SRC_LIST = ${SRC_LIST}")
+
+            # CMakePrintHelpers
+            include(CMakePrintHelpers)
+            cmake_print_variables(SRC_LIST)
+
+            # 如果希望这个变量能在 CMakeCache.txt 里看到，aux_source_directory 本身不支持直接写入缓存，所以需要用 set(... CACHE ...) 把它转成缓存变量。如下：
+            set(VARIABLE_NAME "${SRC_LIST}" CACHE STRING "COMMENT" FORCE)
+            ```
+
+            你也可以通过后面提到的 FOREACH 指令来处理这个 LIST
+
+        7. #### 更改二进制输出目录
         
             > [?] 除了用命令指定二进制文件输出目录，还可以通过更改路径变量来指定目录。指定可执行文件或共享库输出目录的变量分别是
 
@@ -176,16 +223,16 @@ tocEndLevel: 4
             SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
             ```
 
-        7. #### 指定安装目录
+        8. #### 指定安装目录
         
             * (1) makefile 中如何写安装目录
 
                 ```shell
-                DESTDIR=    # 安装目录
-                PREFIX=/usr  # 目录前缀
-                install:    # 指定安装时要执行的代码
-                mkdir -p $(DESTDIR)/$(PREFIX)/bin  # 创建安装目录
-                install -m 755 hello $(DESTDIR)/$(PREFIX)/bin  # 将hello安装到指定目录，并修改权限。
+                DESTDIR=                                            # 安装目录
+                PREFIX=/usr                                         # 目录前缀
+                install:                                            # 指定安装时要执行的代码
+                    mkdir -p $(DESTDIR)/$(PREFIX)/bin               # 创建安装目录
+                    install -m 755 hello $(DESTDIR)/$(PREFIX)/bin   # 将hello安装到指定目录，并修改权限。
                 ```
 
                 常见到命令行中运行 `./configure -prefix=/usr`，其实就是修改 `PREFIX`
@@ -382,22 +429,11 @@ tocEndLevel: 4
 
                 > [?] `ENABLE_TESTING` 指令用来控制 Makefile 是否构建 test 目标，涉及工程所有目录。语法很简单，没有任何参数`ENABLE_TESTING()`，一般情况这个指令放在工程的主CMakeLists.txt 中。
                 <br><br>`ADD_TEST` 指令的语法是：`ADD_TEST(testname Exename arg1 arg2 ...)`
-                <br>testname 是自定义的 test 名称，Exename 可以是构建的目标文件也可以是外部脚本等等。后面连接传递给可执行文件的参数。如果没有在同一个 CMakeLists.txt 中打开 ENABLE_TESTING() 指令，任何 ADD_TEST 都是无效的。
+                <br>testname 是自定义的 test 名称，Exename 可以是构建的目标文件也可以是外部脚本等等。后面连接传递给可执行文件的参数。
+                <br>如果没有在同一个 CMakeLists.txt 中打开 ENABLE_TESTING() 指令，任何 ADD_TEST 都是无效的。
                 <br>比如我们前面的 Helloworld 例子，可以在工程主 CMakeLists.txt 中添加 `ADD_TEST(mytest ${PROJECT_BINARY_DIR}/bin/main)`，`ENABLE_TESTING()`生成 Makefile 后，就可以运行 make test 来执行测试了。
 
-            5. ###### AUX_SOURCE_DIRECTORY
-
-                > [?] 基本语法是：`AUX_SOURCE_DIRECTORY(dir VARIABLE)`
-                <br>作用是发现一个目录下所有的源代码文件并将列表存储在一个变量中，这个指令临时被用来自动构建源文件列表，因为目前 cmake 还不能自动发现新添加的源文件。比如：
-
-                ```cmake
-                AUX_SOURCE_DIRECTORY(. SRC_LIST)
-                ADD_EXECUTABLE(main ${SRC_LIST})
-                ```
-
-                你也可以通过后面提到的 FOREACH 指令来处理这个 LIST
-
-            6. ###### EXEC_PROGRAM
+            5. ###### EXEC_PROGRAM
 
                 > [?] 在 CMakeLists.txt 处理过程中执行命令，并不会在生成的 Makefile 中执行。具体语法为:
 
@@ -422,7 +458,7 @@ tocEndLevel: 4
                 ```
                 在 cmake 生成 Makefile 的过程中，就会执行 ls 命令，如果返回 0，则说明成功执行，那么就输出 ls *.c 的结果。关于 IF 语句，后面的控制指令会提到。
 
-            7. ###### FILE 指令
+            6. ###### FILE 指令
 
                 > [?] 文件操作指令，基本语法为:
 
@@ -442,20 +478,23 @@ tocEndLevel: 4
                 
                 这里的语法都比较简单，不在展开介绍了。
 
-            8. ###### INCLUDE 指令
+            7. ###### INCLUDE 指令
             
-                > [?] 用来载入 CMakeLists.txt 文件，也用于载入预定义的 cmake 模块.
+                > [?] 从文件或模块加载并运行 CMake 代码。
 
                 ```cmake
-                INCLUDE(file1 [OPTIONAL])
-                INCLUDE(module [OPTIONAL])
+                include(<file|module> [OPTIONAL] [RESULT_VARIABLE <var>]
+                      [NO_POLICY_SCOPE])
+
+                # 从指定文件加载并运行 CMake 代码。变量的读写操作访问的是调用者的作用域（动态作用域）。
+                #   如果 OPTIONAL 指定了变量，则当文件不存在时不会引发错误。
+                #   如果 RESULT_VARIABLE 指定了变量，则该变量 <var> 将被设置为已包含的完整文件名，如果失败则为 NOTFOUND。
+
+                # 如果指定的是模块而不是文件，则首先在模块变量 CMAKE_MODULE_PATH 路径下查找 `<modulename>.cmake` 文件。然后查找 CMake module 目录`${CMAKE_ROOT}/Modules/`。
+                # 但有一种例外情况：如果调用该文件的文件 include() 本身位于 CMake 内置模块目录中，首先搜索 CMake module 内置模块目录，然后是 CMAKE_MODULE_PATH。
                 ```
 
-                OPTIONAL 参数的作用是文件不存在也不会产生错误。
-                <br>你可以指定载入一个文件，如果定义的是一个模块，那么将在 CMAKE_MODULE_PATH 中搜索这个模块并载入。
-                <br>载入的内容将在处理到 INCLUDE 语句时直接执行。
-
-            9. ###### FIND_<\>指令
+            8. ###### FIND_<\>指令
 
                 > [?] FIND_系列指令主要包含以下指令:
 
@@ -661,6 +700,207 @@ tocEndLevel: 4
                     ```
 
                     这个指令需要注意的是，直到遇到 ENDFOREACH 指令，整个语句块才会得到真正的执行。
+
+* ## 样例
+
+    <!-- tabs:start -->
+    ###### **demo_gdb**
+    ```cmake
+    # demo_gdb
+    
+    cmake_minimum_required(VERSION 3.18)
+    project(demo_gdb C)
+
+    if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options($$<$$<COMPILE_LANGUAGE:C>:-gdwarf-4>)
+    endif()
+
+    set(CMAKE_C_STANDARD 99)
+
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+    file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+
+    add_executable(demo_gdb main.c ${SRC_LIST})
+    ```
+
+    ###### **practise_demo**
+    ```cmake
+    cmake_minimum_required(VERSION 3.10)
+
+    project(practise_demo C)
+    set(CMAKE_C_STANDARD 11)
+
+    # subdirectory
+    add_subdirectory(macosx_system_call)
+
+    # head file
+    include_directories(
+        "${PROJECT_SOURCE_DIR}/external/cJson"
+        "${PROJECT_SOURCE_DIR}/macosx_system_call/include"
+    )
+
+    # static _lib
+    #link_directories(${PROJECT_SOURCE_DIR}/external/cJson/static)
+    #link_libraries(cjson cjson_utils)
+
+    # shared _lib
+    link_directories(${PROJECT_SOURCE_DIR}/external/cJson/shared)
+
+
+    add_executable(app main.c)
+
+    target_link_libraries(app
+        # install_name_tool -id ../external/cJson/shared/libcjson.dylib ../external/cJson/shared/libcjson.dylib
+        # install_name_tool -id ../external/cJson/shared/libcjson_utils.dylib ../external/cJson/shared/libcjson_utils.dylib
+        cjson cjson_utils
+        proxy
+    )
+    ```
+    <!-- tabs:start -->
+    ###### **macosx_system_call**
+    ```cmake
+    cmake_minimum_required(VERSION 3.10)
+    project(MSC C)
+
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+
+    add_library(proxy SHARED src/proxy.c)
+
+    target_link_libraries(proxy
+            "-framework CoreFoundation" "-framework SystemConfiguration"
+    )
+    ```
+    
+    ###### **v4**
+    ```cmake
+    cmake_minimum_required(VERSION 2.8.0)
+
+    project(CALC C)
+
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+    file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+    set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+    add_library(calc SHARED ${SRC_LIST})
+    ```
+
+    ###### **v5**
+    ```cmake
+    cmake_minimum_required(VERSION 2.8.0)
+
+    project(CALC C)
+    set(CMAKE_VERBOSE_MAKEFILE ON)
+
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+
+    # set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/_lib)
+    # add_library(calc STATIC ${SRC_LIST})
+    link_directories(
+        ${PROJECT_SOURCE_DIR}/external/cJson/shared
+        ${PROJECT_SOURCE_DIR}/darts-clone/shared
+    )
+    add_executable(v5 main.c)
+
+    # install_name_tool -id libhello.dylib libhello.dylib
+    # install_name_tool 需要注意路径
+    # rpath
+    # linux
+    #   patchelf --set-soname libhello.so ../external/cJson/shared/libhello.so
+    #   readelf -d ../external/cJson/shared/libhello.so
+    target_link_libraries(v5 hello darts)
+    ```
+    <!-- tabs:end -->
+
+    ###### **my_learning_project**
+    ```cmake
+    # https://github.com/12302-bak/my-learning-project/blob/gtest/CMakeLists.txt
+
+    cmake_minimum_required(VERSION 3.20)
+    project(my_learning_project C CXX)
+
+    set(CMAKE_C_STANDARD 99)
+    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_BUILD_TYPE Debug)
+    # add_compile_options(-g)
+    # add_compile_options("-isystem" "/usr/lib/gcc/x86_64-linux-gnu/11/include")
+
+    find_package(GTest REQUIRED)
+    enable_testing()
+
+    # file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+    file(GLOB SUB_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9]*")
+
+    # 2. 遍历扫描到的目录
+    foreach(DIR ${SUB_DIRS})
+        # 确保它是一个文件夹，并且里面包含 CMakeLists.txt，防止误导入普通文件
+        if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${DIR} AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/CMakeLists.txt)
+            # message(STATUS "自动发现并导入大章节目录: ${DIR}")
+            add_subdirectory(${DIR})
+        endif()
+    endforeach()
+
+    # 3. 指定测试目录
+    add_subdirectory(tests)
+    ```
+    <!-- tabs:start -->
+    ###### **mult_exec_template.cmake**
+    ```cmake
+    file(GLOB ALL_C_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.c")
+
+    # 2. 循环处理每一个文件
+    foreach(FILE_PATH ${ALL_C_FILES})
+
+        # NAME_WE (Name Without Extension), NAME, EXT, ABSOLUTE
+        get_filename_component(TARGET_NAME ${FILE_PATH} NAME_WE)
+        
+        # 过滤掉不需要独立编译的文件（比如公共函数库 utils.c，如果没有则删掉这几行）
+        if(NOT "${TARGET_NAME}" STREQUAL "utils") 
+            # 自动注册可执行文件
+            add_executable(${TARGET_NAME} ${FILE_PATH})
+            
+            # 如果需要链接公共的 utils.c，可以在这里统一链接
+            # target_sources(${TARGET_NAME} PRIVATE utils.c)
+        endif()
+    endforeach()
+
+    file(GLOB SUB_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*")
+    foreach(DIR ${SUB_DIRS})
+        if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${DIR} AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/CMakeLists.txt)
+            # message(STATUS "自动发现并导入大章节目录: ${DIR}")
+            add_subdirectory(${DIR})
+        endif()
+    endforeach()
+    ```
+
+    ###### **sing_proj_template.cmake**
+    ```cmake
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+    file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+    file(GLOB MAINC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.c")
+    get_filename_component(TARGET_NAME  ${MAINC} NAME_WE)
+
+    # add_library(calc SHARED ${SRC_LIST})
+    add_executable(${TARGET_NAME} ${MAINC} ${SRC_LIST})
+    ```
+    ###### **tests**
+    ```cmake
+    set(SING_PROJ_DIR "94_sing_proj")
+
+    add_executable(test_calc
+        test_calc.cpp
+        ${CMAKE_SOURCE_DIR}/${SING_PROJ_DIR}/src/add.c
+        ${CMAKE_SOURCE_DIR}/${SING_PROJ_DIR}/src/sub.c
+        ${CMAKE_SOURCE_DIR}/${SING_PROJ_DIR}/src/mult.c
+        ${CMAKE_SOURCE_DIR}/${SING_PROJ_DIR}/src/div.c
+    )
+    target_include_directories(test_calc PRIVATE ${CMAKE_SOURCE_DIR}/${SING_PROJ_DIR}/include)
+    target_link_libraries(test_calc PRIVATE GTest::gtest_main)
+    include(GoogleTest)
+    gtest_discover_tests(test_calc)
+    ```
+    <!-- tabs:end -->
+    <!-- tabs:end -->
 
 * ## 补充
 

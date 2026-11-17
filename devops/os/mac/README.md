@@ -12,6 +12,10 @@ weight: 300
 
     ### 快捷键记录
     
+    `command + Shift + 5`: 自带的录屏。
+    
+    `command + Shift + 4`: 自带的截屏，一般保存在桌面，外加`ctrl`的话，保存在粘贴板。
+
     <!-- panels:start -->
     <!-- div:left-panel-50 -->
     > [!NOTE] [command+Shift+F]呼出访达聚焦搜索
