@@ -4,6 +4,20 @@ tocEndLevel: 5
 
 ## Intro(brew | homebrew)
 
+* ### 配置
+
+    ```shell
+    brew config
+
+    git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+    git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+    git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+    # bottles 二进制下载源也一起换（写进 shell 配置）
+    export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+
+    brew install --cc=llvm_clang curl-impersonate
+    ```
+
 * ### 基础命令
 
     > [!NOTE]
@@ -96,6 +110,15 @@ tocEndLevel: 5
         * https://jingsam.github.io/2018/05/23/edit-a-brew-formula.html
 
     <!-- tabs:end -->
+
+* ### Issues
+
+    1. 404 not found
+    
+        homebrew-cask-versions 官方已删
+        <br>fatal: repository 'https://github.com/Homebrew/homebrew-cask-versions/' not found
+        <br>这个 tap 在 2024 年被 Homebrew 官方归档删除了，报错是必然的，不是你配错。直接卸掉它：
+        `brew untap homebrew/cask-versions`
 
 ## Reference
 * https://github.com/Homebrew

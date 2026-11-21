@@ -27,8 +27,13 @@
         F-->G(可执行程序)
         ```
         
-        ![](/.images/devops/build/clion-base-step-01.png ':size=70%')
-        ![](/.images/devops/build/clion-base-step-02.png ':size=70%')
+        <!-- panels:start -->
+        <!-- div:left-panel-54 -->
+        ![](/.images/devops/build/clion-base-step-01.png ':size=98%')
+        <!-- div:left-panel-46 -->
+        ![](/.images/devops/build/clion-base-step-02.png ':size=100%')
+        <!-- panels:end -->
+        
 
     - ### 基本规则
 
@@ -140,9 +145,10 @@
                 [LANGUAGES <language-name>...])
             ```
 
-        3. #### [MESSAGE](https://cmake.org/cmake/help/v3.20/command/message.html)
+        3. #### [message](https://cmake.org/cmake/help/v3.20/command/message.html)
             
             > [?]  输出提示信息 `MESSAGE(STATUS "This is binary dir" ${PROJECT_BINARY_DIR})`
+            <br>`message(STATUS "自动发现并导入大章节目录: ${DIR}")`
             
             第一个参数表示输出的信息类型，有三种选项：
             * **STATUS**: 输出前缀为--的信息。
@@ -177,6 +183,7 @@
         
             > [?]  指定子目录
             <br>由于子目录 src 下也有 CMakeLists.txt，是用来编译源代码的，如果不在主目录下的 CMakeLists 里面声明子目录，就不会包含这部分代码，因此主目录的文件中需要添加：`add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])`
+            <br>`add_subdirectory(${DIR})`
 
             - **src**: 将源文件存放的 src 目录加入工程，相对于主目录，也即`PROJECT_SOURCE_DIR`
             - **bin**: 将编译输出到 bin，若不指定则输出到 src 中。此处的 bin 是相对于编译时所在目录，也即`PROJECT_BINARY_DIR`
@@ -188,6 +195,7 @@
 
             > [?] 基本语法是：`aux_source_directory(<dir> <variable>)`
             <br><br>它的作用对象是一个目录和一个变量。它会在 CMake 配置阶段扫描指定目录下的所有源文件，把文件名列表存进你给的变量里。
+            <br>*源文件* 是根据 project 中的 language-name 决定的，比如 project(name C CXX) 是不会选择 *.java 的。
             <br><br>只在配置阶段扫描一次：这是它最大的问题。如果你在目录里新增了一个 .c 文件，但没有修改任何 CMakeLists.txt，CMake 不会自动重新扫描，新文件就不会被编译进去，可能导致链接错误，而且没有任何警告。
             <br><br>不递归：只扫描指定目录本身，不会进入子目录。
             <br><br>CMake 官方文档本身就说明了这个命令主要是为了支持“显式模板实例化”这种特殊场景，并明确提醒“用它来避免手写源文件列表”虽然看似可行，但构建系统无法感知新增文件。
@@ -201,13 +209,53 @@
 
             # CMakePrintHelpers
             include(CMakePrintHelpers)
-            cmake_print_variables(SRC_LIST)
+            # cmake_print_variables(SRC_LIST)
+            foreach(file IN LISTS SRC_LIST)
+                # message(STATUS "  ${f}")
+                cmake_print_variables("	" file)
+            endforeach()
 
             # 如果希望这个变量能在 CMakeCache.txt 里看到，aux_source_directory 本身不支持直接写入缓存，所以需要用 set(... CACHE ...) 把它转成缓存变量。如下：
             set(VARIABLE_NAME "${SRC_LIST}" CACHE STRING "COMMENT" FORCE)
             ```
 
             你也可以通过后面提到的 FOREACH 指令来处理这个 LIST
+
+        7. #### [target\_sources](https://cmake.org/cmake/help/v3.20/command/target_sources.html)
+
+            > [?] 是 CMake 中用于向已存在的目标（如可执行文件或库）添加源文件的命令。它的核心优势是能精细控制源文件的“作用域”（PRIVATE/PUBLIC/INTERFACE），决定这些文件仅用于构建当前目标，还是也会传递给依赖该目标的其他目标。
+            target_sources 的参数可以使用语法为`$<...>`的“生成器表达式”。
+            <br><br>一个目标必须事先通过 add_executable()、add_library() 或 add_custom_target() 创建好。你可以对同一个目标多次调用 target_sources()，源文件会按调用顺序追加。
+
+            ```cmake
+            target_sources(<target>
+                <INTERFACE|PUBLIC|PRIVATE> [items1...]
+                [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])
+
+            # PRIVATE：  源文件仅用于构建当前目标本身，不会传递给依赖方。
+            # PUBLIC：   源文件既用于构建当前目标，也会传递给依赖方（它们会被添加到目标的 INTERFACE_SOURCES 属性中）。
+            # INTERFACE：源文件不用于构建当前目标，仅传递给依赖方。
+
+            # 基本示例
+
+            # 假设已创建库目标 MyLib
+            add_library(MyLib)
+
+            # 私有源文件：仅用于编译 MyLib 本身
+            target_sources(MyLib PRIVATE src/internal.cpp)
+
+            # 公共源文件：编译 MyLib，同时依赖 MyLib 的目标也会用到（例如头文件中的模板实现）
+            target_sources(MyLib PUBLIC include/public_header.h)
+            ```
+        8. #### [target\_include\_directories / include\_directories](https://cmake.org/cmake/help/v3.20/command/include_directories.html)
+
+        10. #### [target\_link\_directories / link\_directories](https://cmake.org/cmake/help/v3.20/command/link_directories.html)
+
+        12. #### [target\_link\_libraries / link\_libraries](https://cmake.org/cmake/help/v3.20/command/link_libraries.html)
+
+        10. #### [find\_package](https://cmake.org/cmake/help/v3.20/command/find_package.html)
+
+        11. #### [install](https://cmake.org/cmake/help/v3.20/command/install.html)
 
         7. #### 更改二进制输出目录
         
