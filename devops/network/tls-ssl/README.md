@@ -1,6 +1,55 @@
 * ## Intro(TLS/SSL)
 
     > [?] placeholder
+    
+    + ### 加密套件的类型
+
+        ![](/.images/devops/network/tls-ssl/tls-intro-cipher-01.png ':size=99%')
+
+        加密套件是一组算法的组合，决定了连接如何建立和加密。可以从以下几个维度来理解它的类型：
+
+        1. 按密钥交换与认证方式分类（决定“如何安全地协商密钥”）
+
+            这是加密套件名字中最核心的部分，常见类型包括：
+
+            ECDHE（椭圆曲线临时 Diffie-Hellman）：目前最推荐的方式。它支持前向保密，即使服务器私钥日后泄露，也无法解密之前录制的通信内容。
+
+            DHE（临时 Diffie-Hellman）：同样支持前向保密，但计算开销通常比 ECDHE 大。
+
+            RSA：传统方式，密钥交换和身份认证都依赖 RSA 算法。它不支持前向保密，安全性不如 ECDHE。
+
+            PSK（预共享密钥）：用于物联网等无法使用证书的场景，双方预先共享一个密钥来认证。
+
+        2. 按对称加密算法分类（决定“数据如何被加密”）
+
+            握手完成后，实际传输的数据用对称加密保护。常见的有：
+
+            AES-GCM：目前的主流选择，同时提供加密和完整性校验，效率高且安全。
+
+            ChaCha20-Poly1305：在移动设备等没有 AES 硬件加速的环境下性能表现很好。
+
+            AES-CBC：较老的模式，存在一些已知的攻击风险（如 Lucky Thirteen），在新版 TLS 中已逐渐被淘汰。
+
+        3. MAC 部分
+
+            在加密套件中，MAC（Message Authentication Code，消息认证码）的核心作用是防止数据在传输过程中被篡改，并验证数据确实来自合法通信方。
+
+            - 发送方：用共享密钥对消息计算出一个简短的校验值（MAC 值 / 认证标签），附在密文后面一起发送。
+            - 接收方：用相同的密钥对收到的数据重新计算 MAC 值；如果和收到的不一致，说明数据在路上被改动过，直接丢弃。
+
+    + ### 签名算法的作用
+
+        签名算法主要用在TLS 握手阶段，解决两个关键问题：
+
+        - 证明身份（证书验证）：
+        
+            服务器会出示数字证书，证书里包含了公钥和由 CA 用其私钥生成的签名。客户端用 CA 的公钥验证这个签名，就能确认证书确实是颁发给当前服务器的，且未被伪造。这防止了中间人冒充服务器。
+
+        - 确保握手消息完整性（签名握手消息）：
+            
+            在 TLS 1.3 中，服务器还会用与证书对应的私钥，对握手过程中的关键消息（如密钥交换参数）进行签名。客户端用证书里的公钥验证这个签名，确保这些关键参数在传输途中没有被攻击者篡改。
+
+        常见的签名算法包括 RSA-PSS（TLS 1.3 强制支持）、ECDSA（效率高，密钥短）和 Ed25519（现代、高性能）。而像 SHA-1 这类存在已知弱点的哈希算法，在 TLS 1.3 中已被明确禁止用于签名。
 
 * ## 协议规范(TLS-RECORD)
 
@@ -114,7 +163,7 @@
 
     `MAC and padding` ：在所有密码算法和参数都进行了协商和握手，并且发送一个 **CipherStateChange** 记录（见下文）来确认这些参数生效之前，不能在TLS记录的末尾出现 **MAC** 或者 **padding** 字段。
 
-    + ### Handshake protocol
+    + ### 1. Handshake protocol
 
         > [!TIP] 在建立TLS会话期间交换的大多数消息都基于此记录，除非发生错误或警告，并且需要通过 [Alert 协议](#alert-protocol) 记录发出信号，或者会话的加密方式被其他记录修改（比如：[ChangeCipherSpec 协议](#changecipherspec-protocol)）。
 
@@ -708,7 +757,7 @@
             01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>
             ```
 
-    + ### ChangeCipherSpec protocol
+    + ### 2. ChangeCipherSpec protocol
 
         > [?] 参考: [rfc5246: Change Cipher Spec Protocol](https://www.rfc-editor.org/rfc/rfc5246.html#page-27)，[ChangeCipherSpec Protocol in SSL](https://www.slashroot.in/changecipherspec-protocol-ssl)
         <br>**ChangeCipherSpec** 消息在 SSL 中用于指示通信从未加密变为加密，从现在开始将使用协商的密钥和密码套件进行当前通信。
@@ -716,7 +765,7 @@
         <br>密钥交换和证书验证完成后，客户端立即向服务器发送此更改密码规范消息。服务器在收到密钥交换消息后，也会发回更改密码规范消息。
         <br><br>扩展资料：
         <br><span style='padding-left:2.7em'>[Why is change cipher spec an independent protocol content type and not part of Handshake Messages?](https://security.stackexchange.com/questions/24755/why-is-change-cipher-spec-an-independent-protocol-content-type-and-not-part-of-h)
-        <br><span style='padding-left:2.7em'>[TLS中ChangeCipherSpec为什么是个单独的协议类型](https://suntus.github.io/2020/03/14/TLS中ChangeCipherSpec为什么是个单独的协议类型/)
+        <br><span style='padding-left:2.7em'>[TLS 中 ChangeCipherSpec 为什么是个单独的协议类型](https://suntus.github.io/2020/03/14/TLS中ChangeCipherSpec为什么是个单独的协议类型/)
 
         > [!ATTENTION] 如果服务器支持恢复旧的 SSL 会话（通过服务器 hello 消息中的“会话 ID”指示），并且客户端希望恢复旧的会话，则客户端会在“hello 消息”之后立即发送此更改密码规范消息。
 
@@ -777,7 +826,7 @@
             <mark class='under red'>14 03 03 00 01</mark> 01
             ```
 
-    + ### Application protocol
+    + ### 3. Application protocol
 
         > [?] placeholder
 
@@ -1042,7 +1091,7 @@
             e6 c3 94 29 05 98 5c f7 39</mark>
             ```
 
-    + ### Alert protocol
+    + ### 4. Alert protocol
 
         > [?] 这种记录应该不会被发送在正常握手和数据交换的时候。然而，这种消息是可以在握手的任何时间发送的，直到会话结束。如果用于发送致命信号，则当前会话会在发送完这个 record 后立即关闭，所以这个记录也会携带关闭的原因。如果警告级别被标记为警告，远程可以关闭这次会话，在它认为对于自身需要不太可靠的情况下。这一端发送之前，另外一方也可以发送它的相关信号。
 
@@ -1379,7 +1428,7 @@
 
             > [?] 这个对应的报文是首次使用协商好的算法进行加密过的，其实对应 [HP-EncryptedMsg-Server 实例分析](#hp-encryptedmsg-server-实例分析) 中的加密报文，解密后就是服务端握手协议中的 Finished 报文。解密如下：
 
-            ```java {41}
+            ```java {42}
             @Test
             public void testDecodeCipherForFinished() throws IOException {
 
@@ -1423,7 +1472,7 @@
 
             // <mark class="under red">16 03 03 00 28 84 ef 8c ec 32 b4 9f d9</mark> 14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b <mark class="under blue">66 36 3e 01 28 88 6e d7 5c ed f6 80 58 e6 6d a4</mark>
             // 
-            //                                        <mark class='under green'>14 00 00 0c 44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b</mark>    EOF( 消息类型 0x14=20[Finished 结构]，长度 12 个字节的 verify_data)
+            //                                        <mark class='box green'>14</mark> <mark class='under green'>00 00 0c</mark> <mark class='clever red'>44 f4 d3 7c 7d ab 88 b1 0f c9 fa 3b</mark>    EOF( 消息类型 0x14=20[Finished 结构]，长度 0x0c=12 个字节的 verify_data)
             ```
 
         - #### HP-Finished-Client 加密
@@ -1481,7 +1530,8 @@
                 System.out.println(TLSTest.bytesToHex(output));
             }
 
-            // 16 03 03 00 28 00 00 00 00 00 00 00 00 04 c1 4c a1 7a c3 ed ad 20 45 0a 2c 32 08 b2 db 6c 79 76 d8 5b 3d ae 76 ff 1e 28 6e 4e 12 56 8e 
+            // <mark class='box green'>16 03 03 00 28</mark> <mark class='under red'>00 00 00 00 00 00 00 00 04 c1 4c a1 7a c3 ed ad 20 45 0a 2c 32 08 b2 db 6c 79 76 d8 5b 3d ae 76 ff 1e 28 6e 4e 12 56 8e </mark>
+            // headerAllocation                                               encrypted data( 【additionalData + plaintext】 )
             ```
         
         - #### Alert-Server 解密
@@ -1612,6 +1662,27 @@
 
             ![](/.images/devops/network/tls-ssl/tls-decrypt-ms-01.png ':size=47%')
             ![](/.images/devops/network/tls-ssl/tls-decrypt-with-wireshark-01.gif ':size=50%')
+
+* ## Issues
+
+    + ### TlsFatalAlertReceived: handshake_failure(40)
+
+        > [!] 有可能是客户端没有发送 SNI 导致的，服务端可以直接 alert，BC 的服务端验证代码可以参考 [ProvTlsServer.java#L1170-L1194](https://github.com/bcgit/bc-java/blob/6560e91d0a164b8ab58266f141ee6daeec21a340/tls/src/main/java/org/bouncycastle/jsse/provider/ProvTlsServer.java#L1170-L1194)。
+
+        ```java
+        import org.bouncycastle.tls.*;
+
+        public class CusDefaultTlsClient extends DefaultTlsClient {
+            
+            @Override
+            protected Vector<ServerName> getSNIServerNames() {
+                if(sniHostname == null) { return null; }
+                Vector<ServerName> names = new Vector<ServerName>();
+                names.addElement(new ServerName(NameType.host_name, sniHostname.getBytes(StandardCharsets.US_ASCII)));
+                return names;
+            }
+        }
+        ```
 
 * ## Reference
     + https://www.rfc-editor.org/rfc/rfc5246.html
