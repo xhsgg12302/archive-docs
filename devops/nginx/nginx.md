@@ -1,5 +1,7 @@
 ---
 weight: 40
+description: "本文介绍 Nginx 的高性能 Web 与反向代理功能，梳理轮询、权重、ip_hash 等负载均衡方式，讲解源码编译安装与 nginx.conf 配置（含 location 匹配规则、gzip、HTTPS 与 HSTS），并演示用 fcgiwrap 搭建 Git 服务器、用 acme.sh 自动化管理 SSL/TLS 证书。"
+def_keywords: "Nginx, 反向代理, 负载均衡, nginx.conf, location, HTTPS, acme, SSL证书"
 ---
 
 * ## 简介

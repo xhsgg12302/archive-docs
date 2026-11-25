@@ -1,3 +1,8 @@
+---
+description: "本文介绍 TLS/SSL 协议的核心：先梳理加密套件与签名算法，再逐字段拆解 TLS record 结构，逐一分析握手、ChangeCipherSpec、应用数据与 Alert 四类协议，并基于真实抓包数据对 ClientHello、ServerHello、Certificate 等消息做字节级解读。最后展示借助 Java BC TLS 库与 Wireshark 解密 TLS 报文的过程，以及 handshake_failure 错误的定位方法。"
+def_keywords: "TLS, SSL, 加密套件, 签名算法, 握手协议, TLS record, 报文解密, Wireshark"
+---
+
 * ## Intro(TLS/SSL)
 
     > [?] placeholder
