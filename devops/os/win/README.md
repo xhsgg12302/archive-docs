@@ -1,5 +1,7 @@
 ---
 weight: 400
+description: "本文记录了 Windows 系统的两项常用配置：其一为禁止系统自动更新，涵盖服务管理、组策略配置与注册表编辑三种方式；其二为 Windows 激活，整理了一键激活工具 HEU_KMS_Activator 与 KMS 命令行激活的步骤、各版本密钥及激活服务器列表。"
+def_keywords: "Windows, 禁止更新, 自动更新, KMS激活, HEU_KMS_Activator, 激活密钥, 激活服务器, 注册表"
 ---
 
 * ## Intro(windows)
@@ -28,7 +30,11 @@ weight: 400
 
     + ### windows激活
 
-        > [!NOTE|label:window各种版本激活]
+        > [!TIP|label:一键激活]可以先尝试这个一键激活，2026-11-28 尝试以下方式激活 windows 7 旗舰版的时候各种问题，折腾半天也没解决。
+        <br>然后搜了其他方式，在 github 上有一个比较厉害的工具 [HEU_KMS_Activator_v64.0.0](https://github.com/zbezj/HEU_KMS_Activator)，一键就成功了。✅
+        <br>如果不行，再按照如下 KMS 去尝试。
+
+        > [!NOTE|label:window各种版本 KMS 激活]
         <br>1). 首先，查看系统的激活状态：点击桌面左下角的“Windows”按钮，从扩展面板中依次点击“设置”-“更新和安全”，并切换到“激活”选项卡，在此就可以查看到当前系统的激活状态。
         <br>2). 以管理员身份”运行cmd。输出以下命令：`slmgr.vbs /upk`复制以上命令，按回车进行确定。此时弹出窗口显未“已成功卸载了产品密钥”。
         <br>3). 接着输入以下命令：`slmgr /ipk <KMS key>` 弹出窗口提示：“成功的安装了产品密钥”。`KMS key`参见下标,例如对于**Windows 10 Pro专业版**，使用`slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX`。
@@ -36,11 +42,22 @@ weight: 400
         <br>5). 接下来输入以下命令：`slmgr /ato` 此时将弹出窗口提示：“成功的激活了产品”。
         <br>6). 最后就可以看到当前系统的激活状态了。
 
+        ```shell
+        slmgr.vbs /upk
+        
+        slmgr /ipk RHTBY-VWY6D-QJRJ9-JGQ3X-Q2289
+
+        slmgr /skms kms.03k.org
+
+        slmgr /ato
+        ```
+
         | OS | KMS key |
         | -  | -       |
         |  Windows 10 Pro专业版  | `W269N-WFGWX-YVC9B-4J6C9-T83GX` |
         |  Windows 11 Pro专业版  | `W269N-WFGWX-YVC9B-4J6C9-T83GX` |
-        |  Windows 7  Enterprise企业版  | `33PXH-7Y6KF-2VJC9-XBBR8-HVTHH` [参考](https://gist.github.com/jerodg/502bd80a715347662e79af526c98f187#windows-7) |
+        |  Windows 7  Enterprise 企业版  | `33PXH-7Y6KF-2VJC9-XBBR8-HVTHH` [参考](https://gist.github.com/jerodg/502bd80a715347662e79af526c98f187#windows-7) |
+        |  Windows 7  Ultimate 旗舰版  | `HEU_KMS_Activator` [参考](https://github.com/zbezj/HEU_KMS_Activator/releases/tag/64.0.0) |
 
         <!-- panels:start -->
         <!-- div:left-panel-54 -->
@@ -50,10 +67,14 @@ weight: 400
         ![](/.images/devops/os/windows/windows-active-03.png ':size=100%')
         <hr>
 
+
         ![](/.images/devops/os/windows/windows-active-04.png ':size=100%')
 
         <!-- div:right-panel-46 -->
         ![](/.images/devops/os/windows/windows-active-02.png ':size=100%')
+        <hr>
+
+        ![](/.images/devops/os/windows/windows-active-05.png ':size=100%')
         <!-- panels:end -->
 
         <!-- panels:start -->
@@ -61,7 +82,7 @@ weight: 400
         #### **Index**
         <!-- div:left-panel-50 -->
         > [?] **备用激活码**
-        ```shell
+        ```shell {2, 23}
         # 1、专业版：
         W269N-WFGWX-YVC9B-4J6C9-T83GX
         MH37W-N47XK-V7XM9-C7227-GCQG9

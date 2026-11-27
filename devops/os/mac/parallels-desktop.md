@@ -1,3 +1,8 @@
+---
+description: "本文整理了在 macOS 上使用 Parallels Desktop 的笔记，涵盖 19.1.0 版本与激活工具的下载、通过安装补丁完成激活的步骤，以及 Windows 10/11/7 各版本镜像的官方下载与 ed2k 资源链接。"
+def_keywords: "Parallels Desktop, PD, 激活工具, macOS, Windows 镜像, MSDN, ed2k, 虚拟机"
+---
+
 * ## Parallels Desktop(PD)
 
     <!-- panels:start -->
@@ -30,6 +35,7 @@
         <br> [Windows 10 (business editions), version 1909 (updated Jan 2020) (x64) - DVD (Chinese-Simplified)](ed2k://|file|cn_windows_10_business_editions_version_1909_updated_jan_2020_x64_dvd_b3e1f3a6.iso|5311711232|3527D2A9845FF4105F485CC364655B66|/)
         <br> [Windows 10 (Multiple Editions) (x64) - DVD (Chinese-Simplified)](ed2k://|file|cn_windows_10_multiple_editions_x64_dvd_6848463.iso|4303300608|94FD861E82458005A9CA8E617379856A|/)
         <br> [Windows 7 Ultimate (x64) - DVD (Chinese-Simplified) ](ed2k://|file|cn_windows_7_ultimate_x64_dvd_x15-66043.iso|3341268992|7DD7FA757CE6D2DB78B6901F81A6907A|/)
+        <br> ✅[Windows 7 Ultimate with Service Pack 1 (x64) - DVD (Chinese-Simplified) ](ed2k://|file|cn_windows_7_ultimate_with_sp1_x64_dvd_u_677408.iso|3420557312|B58548681854236C7939003B583A8078|/)
         <br> [Windows 7 Professional (x64) - DVD (Chinese-Simplified)](ed2k://|file|cn_windows_7_professional_x64_dvd_x15-65791.iso|3341268992|3474800521D169FBF3F5E527CD835156|/)
         <br> [Windows 7 Enterprise (x64) - DVD (Chinese-Simplified)](ed2k://|file|cn_windows_7_enterprise_x64_dvd_x15-70741.iso|3203516416|876DCF115C2EE28D74B178BE1A84AB3B|/)
         <br> Windows 11 (business editions), version 23H2 (updated April 2024) (x64) - DVD (Chinese-Simplified) 
